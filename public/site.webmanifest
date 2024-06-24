@@ -1,0 +1,10 @@
+{
+    "name": "Lanca",
+    "short_name": "Lanca",
+    "icons": [    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "start_url": "https://www.lanca.io/",
+    "display": "standalone",
+    "orientation": "portrait"
+}
