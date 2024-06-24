@@ -1,12 +1,18 @@
 {
-  "rewrites": [
+//  "rewrites": [
+//    {
+//      "source": "/posthog/:path(.*)",
+//      "destination": "https://eu.posthog.com/:path*"
+//    },
+//    {
+//      "source": "/([^.\n]*)",
+//      "destination": "/"
+//    }
+//  ],
+  "redirects": [
     {
-      "source": "/posthog/:path(.*)",
-      "destination": "https://eu.posthog.com/:path*"
-    },
-    {
-      "source": "/([^.\n]*)",
-      "destination": "/"
+      "source": "/signup",
+      "destination": "https://send.lanca.io/s/clxq1tsbr0000clnxl4mjkxzm"
     }
   ]
 }
