@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /admin/
 Disallow: /private/
-Sitemap: https://www.lanca.io/sitemap.xml
+Sitemap: https://lanca.io/sitemap.xml
