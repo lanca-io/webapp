@@ -226,6 +226,7 @@ div#root {
 }
 
 .label-text {
+	line-height: 1.7;
 	text-align: center;
 	color: #000000 !important;
 	font-size: 32px;
@@ -242,7 +243,8 @@ div#root {
 	}
 
 	.label-text {
-		padding: 0 40px;
+		line-height: 1.6;
+		padding: 0 20px;
 		font-size: 20px;
 	}
 }

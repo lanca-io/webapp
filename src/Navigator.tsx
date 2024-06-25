@@ -20,7 +20,9 @@ export const Navigator = () => {
 	const renderContent = () => {
 		return (
 			<p className="label-text">
-				Lanca early access form submissions will be open shortly.
+				Lanca early access form submissions will be open shortly
+				<br />
+				It will be on a first come first serve basis
 				<br />
 				Stay tuned to know when by following our{' '}
 				<a className="twitter-link" href="http://x.com/lanca_io">
