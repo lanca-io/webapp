@@ -1,8 +1,3 @@
 {
- "redirects": [
-    {
-      "source": "/signup",
-      "destination": "https://send.lanca.io/s/clxq1tsbr0000clnxl4mjkxzm"
-    }
-  ]
+ "redirects": []
 }
