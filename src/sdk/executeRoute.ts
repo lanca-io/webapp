@@ -1,6 +1,12 @@
 import { type Address, createPublicClient, type PublicClient, http, type WalletClient, erc20Abi } from 'viem'
 import { type Route, type RouteData, type SwapDirectionData } from './types/routeTypes'
-import { type InputSwapData, type BridgeData, type InputRouteData, type TxName, type SwapArgs } from './types/contractInputTypes'
+import {
+	type InputSwapData,
+	type BridgeData,
+	type InputRouteData,
+	type TxName,
+	type SwapArgs,
+} from './types/contractInputTypes'
 
 import ConceroJson from './assets/contractsData/Concero.json'
 

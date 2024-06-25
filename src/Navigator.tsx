@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AppScreen } from './components/screens/AppScreen/AppScreen'
 
-
 // const SwapScreen = lazy(
 // 	async () =>
 // 		await import('./components/screens/SwapScreen/SwapScreen').then(module => ({ default: module.SwapScreen })),
@@ -18,19 +17,25 @@ import { AppScreen } from './components/screens/AppScreen/AppScreen'
 // )
 
 export const Navigator = () => {
+	const renderContent = () => {
+		return (
+			<p className="label-text">
+				Lanca early access form submissions will be open shortly.
+				<br />
+				Stay tuned to know when by following our{' '}
+				<a className="twitter-link" href="http://x.com/lanca_io">
+					Twitter
+				</a>
+			</p>
+		)
+	}
 
 	return (
 		<BrowserRouter>
-				<Routes>
-					<Route
-						path={'/signup'}
-						element={null}
-					/>
-					<Route
-						path={'/'}
-						element={null}
-					/>
-				</Routes>
+			<Routes>
+				<Route path={'/signup'} element={renderContent()} />
+				<Route path={'/'} element={renderContent()} />
+			</Routes>
 		</BrowserRouter>
 	)
 }

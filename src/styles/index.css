@@ -225,15 +225,25 @@ div#root {
 	flex: 1;
 }
 
-a {
+.label-text {
+	text-align: center;
 	color: #000000 !important;
 	font-size: 32px;
+}
+
+.twitter-link {
+	color: #568dd8;
 }
 
 @media (max-width: 768px) {
 	div#root {
 		width: 100%;
 		height: 100vh;
+	}
+
+	.label-text {
+		padding: 0 40px;
+		font-size: 20px;
 	}
 }
 
