@@ -32,7 +32,8 @@ function App() {
 								<ThemeProvider>
 									<NotificationsProvider>
 										<Notifications />
-										<Navigator />
+										test
+										{/* <Navigator /> */}
 										{/* <WalletConnectModal /> */}
 									</NotificationsProvider>
 								</ThemeProvider>
