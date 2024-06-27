@@ -131,10 +131,6 @@ body::-webkit-scrollbar {
 	--color-grey-300: #2b3133;
 	--color-grey-250: #171a1b;
 
-	/* gradients */
-	--color-button-gradient-from: #4fd6fe;
-	--color-button-gradient-to: #47c4e9;
-
 	/* primary colors */
 	--color-primary-250: #0b0519;
 	--color-primary-300: #170b31;
@@ -187,6 +183,12 @@ body::-webkit-scrollbar {
 	--color-main-card-gradient: rgba(40, 40, 40, 0.06);
 	--color-tr-odd-row-gradient-from: rgba(60, 60, 60, 0);
 	--color-tr-odd-row-gradient-to: rgba(17, 17, 17, 0);
+
+	--color-button-gradient-from: #4fd6fe;
+	--color-button-gradient-to: #47c4e9;
+
+	--color-background-gradient-from: #e4f7fc;
+	--color-background-gradient-to: #fcfeff;
 }
 
 .dark {
@@ -194,19 +196,6 @@ body::-webkit-scrollbar {
 	--color-base-black: #000000;
 	--color-base-white: #fbfbfb;
 	--color-base-transparent: 'rgba(0, 0, 0, 0)';
-
-	/* primary colors */
-	--color-primary-750: #0b0519;
-	--color-primary-700: #170b31;
-	--color-primary-650: #2e1563;
-	--color-primary-600: #452094;
-	--color-primary-550: #5c2ac6;
-	--color-primary-500: #7335f7;
-	--color-primary-450: #8f5df9;
-	--color-primary-400: #ab86fa;
-	--color-primary-350: #c7aefc;
-	--color-primary-300: #e3d7fd;
-	--color-primary-250: #f7f3ff;
 
 	/* grey */
 	--color-grey-700: #0d0d0d;

@@ -1,7 +1,6 @@
-import { type FC, type ReactComponentElement, useRef, useState } from 'react'
+import { type ReactComponentElement, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
 import classNames from './SwapCard.module.pcss'
-import { type SwapCardProps } from './types'
 import { useSwapReducer } from './swapReducer/swapReducer'
 import { InsuranceProvider } from './InsuranceContext'
 import { useSwapCardEffects } from './SwapCardEffects'
@@ -77,7 +76,7 @@ export const SwapCard = () => {
 
 	return (
 		<InsuranceProvider toggleInsurance={toggleInsurance}>
-			<div className={`card ${classNames.container} ${classNames.abTestStyles}`}>
+			<div className={`card ${classNames.container}`}>
 				<SwapCardHeader swapState={swapState} swapDispatch={swapDispatch} />
 				<div className={classNames.swapContainer}>{renderSwapStage[swapState.stage]}</div>
 			</div>

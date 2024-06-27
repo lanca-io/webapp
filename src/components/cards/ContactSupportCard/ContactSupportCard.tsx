@@ -64,7 +64,7 @@ export function ContactSupportCard({ infoToCopy, handleGoBackClick }: ContactSup
 						leftIcon={<IconMail size={16} />}
 						className={classNames.f1}
 						variant="secondary"
-						onClick={() => window.open('mailto:Concerocrypto@gmail.com', '_blank')}
+						onClick={() => window.open('mailto:hello@lanca.io', '_blank')}
 					>
 						{t('socialMedia.email')}
 					</Button>
