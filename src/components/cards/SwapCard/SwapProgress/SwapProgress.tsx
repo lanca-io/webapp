@@ -33,7 +33,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, s
 		[SwapCardStage.failed]: (
 			<div className={classNames.buttonsContainer}>
 				<Button
-					leftIcon={<IconArrowLeft size={20} color={'var(--color-primary-400)'} />}
+					leftIcon={<IconArrowLeft size={20} color={'var(--color-pacific-400)'} />}
 					onClick={handleGoBack}
 					variant="secondary"
 				>
@@ -65,7 +65,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, s
 					</Button>
 				) : null}
 				<Button
-					leftIcon={<IconArrowLeft size={20} color={'var(--color-primary-400)'} />}
+					leftIcon={<IconArrowLeft size={20} color={'var(--color-pacific-400)'} />}
 					onClick={handleGoBack}
 					variant="secondary"
 				>

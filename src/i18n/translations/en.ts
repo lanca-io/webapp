@@ -88,7 +88,7 @@ export const en = {
 			insufficientGas: 'Insufficient gas',
 			insufficientFees: 'Insufficient fees',
 			insufficientBalance: 'Insufficient balance',
-			swap: 'Swap',
+			swap: 'Begin swap',
 			swapStartedSuccessfully: 'Swap started successfully!',
 			failure: 'Failure',
 			canceledByUser: 'Canceled by user',

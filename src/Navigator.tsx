@@ -11,20 +11,9 @@ const SwapScreen = lazy(
 	async () =>
 		await import('./components/screens/SwapScreen/SwapScreen').then(module => ({ default: module.SwapScreen })),
 )
-const PortfolioScreen = lazy(
-	async () =>
-		await import('./components/screens/PortfolioScreen/PortfolioScreen').then(module => ({
-			default: module.PortfolioScreen,
-		})),
-)
-const EarnScreen = lazy(
-	async () =>
-		await import('./components/screens/EarnScreen/EarnScreen').then(module => ({ default: module.EarnScreen })),
-)
 
 export const Navigator = () => {
 	const { address } = useAccount()
-	const [isNewSwapCardMode, setIsNewSwapCardMode] = useState(true)
 
 	useEffect(() => {
 		if (!address) return
@@ -34,37 +23,17 @@ export const Navigator = () => {
 	return (
 		<BrowserRouter>
 			<AppScreen>
-				<Header isNewSwapCardMode={isNewSwapCardMode} setIsNewSwapCardMode={setIsNewSwapCardMode} />
+				<Header />
 				<Routes>
 					<Route
-						path={routes.swap}
+						path={routes.home}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
-								<SwapScreen
-									isNewSwapCardMode={isNewSwapCardMode}
-									setIsNewSwapCardMode={setIsNewSwapCardMode}
-								/>
+								<SwapScreen />
 							</Suspense>
 						}
 					/>
-					<Route
-						path={routes.portfolio}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<PortfolioScreen />
-							</Suspense>
-						}
-					/>
-					<Route
-						path={routes.earn}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<EarnScreen />
-							</Suspense>
-						}
-					/>
-					<Route path={routes.root} element={<Navigate to={routes.swap} />} />
-					<Route path={'/*'} element={<Navigate to={routes.swap} />} />
+					<Route path={'/*'} element={<Navigate to={routes.home} />} />
 				</Routes>
 			</AppScreen>
 		</BrowserRouter>

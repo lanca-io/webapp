@@ -1,7 +1,6 @@
-import { type FC, type ReactComponentElement, useRef, useState } from 'react'
+import { type ReactComponentElement, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
 import classNames from './SwapCard.module.pcss'
-import { type SwapCardProps } from './types'
 import { useSwapReducer } from './swapReducer/swapReducer'
 import { InsuranceProvider } from './InsuranceContext'
 import { useSwapCardEffects } from './SwapCardEffects'
@@ -13,7 +12,7 @@ import { ContactSupportCard } from '../ContactSupportCard/ContactSupportCard'
 import posthog from 'posthog-js'
 import { SwapCardHeader } from './SwapCardHeader/SwapCardHeader'
 
-export const SwapCard: FC<SwapCardProps> = ({ isNewSwapCardMode }: SwapCardProps) => {
+export const SwapCard = () => {
 	const [swapState, swapDispatch] = useSwapReducer()
 	const [txInfo, setTxInfo] = useState<{ duration: number; hash: string } | undefined>(undefined)
 	const { address, connector } = useAccount()
@@ -42,22 +41,8 @@ export const SwapCard: FC<SwapCardProps> = ({ isNewSwapCardMode }: SwapCardProps
 	}
 
 	const renderSwapStage: Record<SwapCardStage, ReactComponentElement<any>> = {
-		[SwapCardStage.input]: (
-			<SwapInput
-				swapState={swapState}
-				swapDispatch={swapDispatch}
-				isNewSwapCardMode={isNewSwapCardMode}
-				setTxInfo={setTxInfo}
-			/>
-		),
-		[SwapCardStage.review]: (
-			<SwapInput
-				swapState={swapState}
-				swapDispatch={swapDispatch}
-				isNewSwapCardMode={isNewSwapCardMode}
-				setTxInfo={setTxInfo}
-			/>
-		),
+		[SwapCardStage.input]: <SwapInput swapState={swapState} swapDispatch={swapDispatch} setTxInfo={setTxInfo} />,
+		[SwapCardStage.review]: <SwapInput swapState={swapState} swapDispatch={swapDispatch} setTxInfo={setTxInfo} />,
 		[SwapCardStage.progress]: (
 			<SwapProgress
 				swapState={swapState}
@@ -91,7 +76,7 @@ export const SwapCard: FC<SwapCardProps> = ({ isNewSwapCardMode }: SwapCardProps
 
 	return (
 		<InsuranceProvider toggleInsurance={toggleInsurance}>
-			<div className={`card ${classNames.container} ${isNewSwapCardMode ? classNames.abTestStyles : ''}`}>
+			<div className={`card ${classNames.container}`}>
 				<SwapCardHeader swapState={swapState} swapDispatch={swapDispatch} />
 				<div className={classNames.swapContainer}>{renderSwapStage[swapState.stage]}</div>
 			</div>
