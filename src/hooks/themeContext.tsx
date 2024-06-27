@@ -21,7 +21,7 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
-	const bodyClassTheme = getItem<'light' | 'dark'>('theme', 'dark') ?? 'light'
+	const bodyClassTheme = getItem<'light' | 'dark'>('theme', 'light') ?? 'dark'
 
 	const [theme, setTheme] = useState<'light' | 'dark'>(bodyClassTheme)
 	const [colors, setColors] = useState<Colors>(
