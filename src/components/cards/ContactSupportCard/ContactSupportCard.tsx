@@ -71,7 +71,7 @@ export function ContactSupportCard({ infoToCopy, handleGoBackClick }: ContactSup
 				</div>
 				{handleGoBackClick ? (
 					<Button
-						leftIcon={<IconArrowLeft size={18} color={'var(--color-primary-400)'} />}
+						leftIcon={<IconArrowLeft size={18} color={'var(--color-pacific-400)'} />}
 						onClick={() => {
 							handleGoBackClick()
 						}}
