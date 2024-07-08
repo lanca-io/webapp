@@ -10,12 +10,17 @@ import { type providers } from 'ethers'
 import { IconArrowsUpDown } from '@tabler/icons-react'
 import { DestinationAddressInput } from './DestinationAddressInput/DestinationAddressInput'
 import { SwapCardStage } from '../swapReducer/types'
-import { executeConceroRoute } from '../swapExecution/executeConceroRoute'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action, category } from '../../../../constants/tracking'
+import { executeConceroRouteWithSdk } from '../swapExecution/executeConceroRouteWithSdk'
+import { handleSwap } from '../swapExecution/handleSwap'
+import { useContext } from 'react'
+import { type DataContextValue } from '../../../../hooks/DataContext/types'
+import { DataContext } from '../../../../hooks/DataContext/DataContext'
 
 export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true, setTxInfo }: SwapInputProps) => {
-	const { isConnected } = useAccount()
+	const { getChainByProviderSymbol } = useContext<DataContextValue>(DataContext)
+	const { isConnected, address } = useAccount()
 	const isInsuranceCardVisible =
 		swapState.selectedRoute?.insurance?.state === 'INSURABLE' ||
 		swapState.selectedRoute?.insurance?.state === 'INSURED'
@@ -56,23 +61,23 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true, s
 				label: 'concero_begin_swap',
 				data: { isNewSwapCardMode, from: swapState.from, to: swapState.to },
 			})
-			const time = await executeConceroRoute(swapState, swapDispatch)
-			setTxInfo(time)
+			await executeConceroRouteWithSdk(swapState, swapDispatch)
+			// setTxInfo(time)
 		}
 
-		// if (swapState.stage === 'input') {
-		// 	swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.review })
-		// } else {
-		// 	await handleSwap({
-		// 		swapState,
-		// 		swapDispatch,
-		// 		address,
-		// 		switchChainHook,
-		// 		getChainByProviderSymbol,
-		// 		getSigner,
-		// 		isNewSwapCardMode,
-		// 	})
-		// }
+		if (swapState.stage === 'input') {
+			swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.review })
+		} else {
+			await handleSwap({
+				swapState,
+				swapDispatch,
+				address,
+				switchChainHook,
+				getChainByProviderSymbol,
+				getSigner,
+				isNewSwapCardMode,
+			})
+		}
 	}
 
 	return (

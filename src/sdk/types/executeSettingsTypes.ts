@@ -7,6 +7,7 @@ export enum ExecuteRouteStage {
 	setAddress = 'SET_ADDRESS',
 	checkAllowance = 'CHECK_ALLOWANCE',
 	pendingTransaction = 'PENGING_TRANSACTION',
+	confirmingTransaction = 'CONFIRMING_TRANSACTION',
 	failedTransaction = 'FAILED_TRANSACTION',
 	successTransaction = 'SUCCESS_TRANSACTION',
 	internalError = 'INTERNAL_ERROR',

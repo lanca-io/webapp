@@ -1,0 +1,45 @@
+Каких полей не хватает в Route:
+const route = {
+    transaction_time_seconds - можем достать?
+    insurance - нужнен нам?
+    slippage_percent - это надо динамически изменять?
+    [from/to]: {
+        address - или будет всегда адрес владельца?
+    }
+    steps: [
+        {
+            type,
+            [from/to]: {
+                chain: {
+                    logoUri
+                },
+                amount,
+                address
+            }
+            tool: {
+                estimated_execution_time_seconds,
+                slippage_limit,
+                fees_usd,
+                gas: total_fee[],
+                gas_usd
+            }
+        }
+        ...rest steps
+    ]
+    cost: {
+        total_gas_usd,
+        total_usd,
+        total_fee_usd,
+        total_fee[] - массив физов
+    }
+}
+
+type total_fee: {
+"amount": "0.00002",
+"type": "gas",
+    "asset": {
+        "chainId": "42161",
+        "symbol": "ETH",
+        "address": "0x0000000000000000000000000000000000000000"
+    }
+}

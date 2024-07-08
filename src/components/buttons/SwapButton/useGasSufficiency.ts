@@ -107,8 +107,8 @@ async function getBalances(selectedRoute: StandardRoute, walletAddress: string):
 
 	selectedRoute.steps?.forEach((steps: Step[]) => {
 		steps.forEach((step: Step) => {
-			step.tool.gas.forEach(updateDotSeparatedAddresses)
-			step.tool.fees.forEach(updateDotSeparatedAddresses)
+			step.tool.gas?.forEach(updateDotSeparatedAddresses)
+			step.tool.fees?.forEach(updateDotSeparatedAddresses)
 		})
 	})
 

@@ -1,0 +1,684 @@
+{
+	"id": "0x3e087b92892798d0b14d0c9f060fb0d59dca8d324122710ee2a38c1314d42215",
+	"provider": "lifi",
+	"from": {
+		"token": {
+			"name": "USD Coin",
+			"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+			"symbol": "USDC",
+			"decimals": 6,
+			"price_usd": "1",
+			"amount_usd": "1.00",
+			"amount": "1000000",
+			"logo_uri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+		},
+		"chain": {
+			"id": 42161,
+			"logo_uri": "https://api.concero.io/static/icons/chains/filled/42161.svg"
+		},
+		"address": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+	},
+	"to": {
+		"token": {
+			"name": "MATIC",
+			"address": "0x0000000000000000000000000000000000000000",
+			"symbol": "MATIC",
+			"decimals": 18,
+			"price_usd": "0.4952",
+			"amount_usd": "0.89",
+			"amount": "1.805",
+			"logo_uri": "https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png"
+		},
+		"chain": {
+			"id": 137,
+			"logo_uri": "https://api.concero.io/static/icons/chains/filled/137.svg"
+		},
+		"address": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+	},
+	"steps": [
+		[
+			{
+				"id": "c8f426e3-17e2-43ec-b611-02e8098f126b",
+				"type": "cross",
+				"from": {
+					"token": {
+						"name": "USD Coin",
+						"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+						"symbol": "USDC",
+						"decimals": 6,
+						"price_usd": "1",
+						"amount": "0.998",
+						"logo_uri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+					},
+					"chain": {
+						"id": "42161",
+						"logo_uri": "https://api.concero.io/static/icons/chains/filled/42161.svg"
+					},
+					"address": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+				},
+				"to": {
+					"token": {
+						"name": "USD Coin",
+						"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+						"symbol": "USDC",
+						"decimals": 6,
+						"price_usd": "1",
+						"logo_uri": "https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png",
+						"amount": "0.898"
+					},
+					"chain": {
+						"id": "137",
+						"logo_uri": "https://api.concero.io/static/icons/chains/filled/137.svg"
+					}
+				},
+				"tool": {
+					"name": "Circle CCTP",
+					"estimated_execution_time_seconds": 1095.359,
+					"slippage_limit": 0.05,
+					"fees": [],
+					"fees_usd": 0.1,
+					"gas": [
+						{
+							"amount": "0.00001",
+							"type": "gas",
+							"asset": {
+								"chainId": "42161",
+								"symbol": "ETH",
+								"decimals": 18,
+								"address": "0x0000000000000000000000000000000000000000"
+							}
+						}
+					],
+					"gas_usd": 0.03,
+					"logo_uri": "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/bridges/circle.png"
+				}
+			}
+		],
+		[
+			{
+				"id": "57da193c-4695-4580-86ec-19e74c663b2e",
+				"type": "swap",
+				"from": {
+					"token": {
+						"name": "USD Coin",
+						"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+						"symbol": "USDC",
+						"decimals": 6,
+						"price_usd": "1",
+						"amount": "0.898",
+						"logo_uri": "https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png"
+					},
+					"chain": {
+						"id": "137",
+						"logo_uri": "https://api.concero.io/static/icons/chains/filled/137.svg"
+					},
+					"address": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+				},
+				"to": {
+					"token": {
+						"name": "MATIC",
+						"address": "0x0000000000000000000000000000000000000000",
+						"symbol": "MATIC",
+						"decimals": 18,
+						"price_usd": "0.4952",
+						"logo_uri": "https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png",
+						"amount": "1.805"
+					},
+					"chain": {
+						"id": "137",
+						"logo_uri": "https://api.concero.io/static/icons/chains/filled/137.svg"
+					}
+				},
+				"tool": {
+					"name": "LI.FI Dex Aggregator",
+					"estimated_execution_time_seconds": 30,
+					"slippage_limit": 0.05,
+					"fees": [],
+					"fees_usd": 0,
+					"gas": [
+						{
+							"amount": "0.033",
+							"type": "gas",
+							"asset": {
+								"chainId": "137",
+								"symbol": "MATIC",
+								"decimals": 18,
+								"address": "0x0000000000000000000000000000000000000000"
+							}
+						}
+					],
+					"gas_usd": 0.02,
+					"logo_uri": "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/exchanges/lifidexaggregator.svg"
+				}
+			}
+		]
+	],
+	"cost": {
+		"total_usd": "0.11",
+		"total_gas_usd": "0.07",
+		"total_fee": [
+			{
+				"amount": "0.00002",
+				"type": "gas",
+				"asset": {
+					"chainId": "42161",
+					"symbol": "ETH",
+					"address": "0x0000000000000000000000000000000000000000"
+				}
+			},
+			{
+				"amount": "0.033",
+				"type": "gas",
+				"asset": {
+					"chainId": "137",
+					"symbol": "MATIC",
+					"address": "0x0000000000000000000000000000000000000000"
+				}
+			}
+		],
+		"total_fee_usd": "0.07"
+	},
+	"tags": ["RECOMMENDED", "CHEAPEST"],
+	"insurance": {
+		"state": "NOT_INSURABLE",
+		"fee_amount_usd": "0"
+	},
+	"slippage_percent": 0.25,
+	"transaction_time_seconds": 1125.359,
+	"execution": [null, null],
+	"originalRoute": {
+		"id": "0x3e087b92892798d0b14d0c9f060fb0d59dca8d324122710ee2a38c1314d42215",
+		"fromChainId": 42161,
+		"fromAmountUSD": "1.00",
+		"fromAmount": "1000000",
+		"fromToken": {
+			"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+			"chainId": 42161,
+			"symbol": "USDC",
+			"decimals": 6,
+			"name": "USD Coin",
+			"coinKey": "USDC",
+			"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+			"priceUSD": "1"
+		},
+		"fromAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e",
+		"toChainId": 137,
+		"toAmountUSD": "0.89",
+		"toAmount": "1804982415135180288",
+		"toAmountMin": "1714733294378421273",
+		"toToken": {
+			"address": "0x0000000000000000000000000000000000000000",
+			"chainId": 137,
+			"symbol": "MATIC",
+			"decimals": 18,
+			"name": "MATIC",
+			"coinKey": "MATIC",
+			"logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png",
+			"priceUSD": "0.4952"
+		},
+		"toAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e",
+		"gasCostUSD": "0.07",
+		"containsSwitchChain": true,
+		"steps": [
+			{
+				"type": "lifi",
+				"id": "28d77d14-758c-47e3-a3ad-3d7484cf67f6",
+				"tool": "celercircle",
+				"toolDetails": {
+					"key": "celercircle",
+					"name": "Circle CCTP",
+					"logoURI": "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/bridges/circle.png"
+				},
+				"action": {
+					"fromToken": {
+						"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+						"chainId": 42161,
+						"symbol": "USDC",
+						"decimals": 6,
+						"name": "USD Coin",
+						"coinKey": "USDC",
+						"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+						"priceUSD": "1"
+					},
+					"fromAmount": "1000000",
+					"toToken": {
+						"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+						"chainId": 137,
+						"symbol": "USDC",
+						"decimals": 6,
+						"name": "USD Coin",
+						"coinKey": "USDC",
+						"logoURI": "https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png",
+						"priceUSD": "1"
+					},
+					"fromChainId": 42161,
+					"toChainId": 137,
+					"slippage": 0.05,
+					"fromAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e",
+					"toAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+				},
+				"estimate": {
+					"tool": "celercircle",
+					"approvalAddress": "0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE",
+					"toAmountMin": "898000",
+					"toAmount": "898000",
+					"fromAmount": "1000000",
+					"feeCosts": [
+						{
+							"name": "LIFI Shared Fee",
+							"description": "Fee shared between integrator and LI.FI",
+							"token": {
+								"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+								"chainId": 42161,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+								"priceUSD": "1"
+							},
+							"amount": "2000",
+							"amountUSD": "0.01",
+							"percentage": "0.0020",
+							"included": true
+						},
+						{
+							"name": "Transaction Fee",
+							"description": "Transaction Fee is used to cover the gas cost for sending your transfer on the destination chain.",
+							"token": {
+								"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+								"chainId": 42161,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+								"priceUSD": "1"
+							},
+							"amount": "100000",
+							"amountUSD": "0.10",
+							"percentage": "0.1002",
+							"included": true
+						},
+						{
+							"name": "Percentage Fee",
+							"description": "Percentage Fee is used to cover the bridges overhead.",
+							"token": {
+								"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+								"chainId": 42161,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+								"priceUSD": "1"
+							},
+							"amount": "0",
+							"amountUSD": "0.00",
+							"percentage": "0.0000",
+							"included": true
+						}
+					],
+					"gasCosts": [
+						{
+							"type": "SEND",
+							"price": "52913000",
+							"estimate": "330000",
+							"limit": "573000",
+							"amount": "17461290000000",
+							"amountUSD": "0.05",
+							"token": {
+								"address": "0x0000000000000000000000000000000000000000",
+								"chainId": 42161,
+								"symbol": "ETH",
+								"decimals": 18,
+								"name": "ETH",
+								"coinKey": "ETH",
+								"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
+								"priceUSD": "2993.2"
+							}
+						}
+					],
+					"executionDuration": 1095.359,
+					"fromAmountUSD": "1.00",
+					"toAmountUSD": "0.90"
+				},
+				"includedSteps": [
+					{
+						"id": "c28f3ee7-eebd-4503-b4e1-82e8a08315b1",
+						"type": "protocol",
+						"action": {
+							"fromChainId": 42161,
+							"fromAmount": "1000000",
+							"fromToken": {
+								"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+								"chainId": 42161,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+								"priceUSD": "1"
+							},
+							"toChainId": 42161,
+							"toToken": {
+								"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+								"chainId": 42161,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+								"priceUSD": "1"
+							},
+							"slippage": 0.05,
+							"fromAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+						},
+						"estimate": {
+							"fromAmount": "1000000",
+							"toAmount": "998000",
+							"toAmountMin": "998000",
+							"tool": "feeCollection",
+							"approvalAddress": "0xB0210dE78E28e2633Ca200609D9f528c13c26cD9",
+							"gasCosts": [
+								{
+									"type": "SEND",
+									"price": "52913000",
+									"estimate": "130000",
+									"limit": "2695000",
+									"amount": "6878690000000",
+									"amountUSD": "0.02",
+									"token": {
+										"address": "0x0000000000000000000000000000000000000000",
+										"chainId": 42161,
+										"symbol": "ETH",
+										"decimals": 18,
+										"name": "ETH",
+										"coinKey": "ETH",
+										"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
+										"priceUSD": "2993.2"
+									}
+								}
+							],
+							"feeCosts": [
+								{
+									"name": "LIFI Shared Fee",
+									"description": "Fee shared between integrator and LI.FI",
+									"token": {
+										"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+										"chainId": 42161,
+										"symbol": "USDC",
+										"decimals": 6,
+										"name": "USD Coin",
+										"coinKey": "USDC",
+										"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+										"priceUSD": "1"
+									},
+									"amount": "2000",
+									"amountUSD": "0.01",
+									"percentage": "0.0020",
+									"included": true
+								}
+							],
+							"executionDuration": 0
+						},
+						"tool": "feeCollection",
+						"toolDetails": {
+							"key": "feeCollection",
+							"name": "Integrator Fee",
+							"logoURI": "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/protocols/feeCollection.png"
+						}
+					},
+					{
+						"id": "c8f426e3-17e2-43ec-b611-02e8098f126b",
+						"type": "cross",
+						"action": {
+							"fromChainId": 42161,
+							"fromAmount": "998000",
+							"fromToken": {
+								"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+								"chainId": 42161,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+								"priceUSD": "1"
+							},
+							"toChainId": 137,
+							"toToken": {
+								"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+								"chainId": 137,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png",
+								"priceUSD": "1"
+							},
+							"slippage": 0.05,
+							"fromAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e",
+							"destinationGasConsumption": "0"
+						},
+						"estimate": {
+							"tool": "celercircle",
+							"fromAmount": "998000",
+							"toAmount": "898000",
+							"toAmountMin": "898000",
+							"approvalAddress": "0x054b95b60bfface948fa4548da8ee2e212fb7c0a",
+							"executionDuration": 1095.359,
+							"feeCosts": [
+								{
+									"name": "Transaction Fee",
+									"description": "Transaction Fee is used to cover the gas cost for sending your transfer on the destination chain.",
+									"token": {
+										"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+										"chainId": 42161,
+										"symbol": "USDC",
+										"decimals": 6,
+										"name": "USD Coin",
+										"coinKey": "USDC",
+										"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+										"priceUSD": "1"
+									},
+									"amount": "100000",
+									"amountUSD": "0.10",
+									"percentage": "0.1002",
+									"included": true
+								},
+								{
+									"name": "Percentage Fee",
+									"description": "Percentage Fee is used to cover the bridges overhead.",
+									"token": {
+										"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+										"chainId": 42161,
+										"symbol": "USDC",
+										"decimals": 6,
+										"name": "USD Coin",
+										"coinKey": "USDC",
+										"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+										"priceUSD": "1"
+									},
+									"amount": "0",
+									"amountUSD": "0.00",
+									"percentage": "0.0000",
+									"included": true
+								}
+							],
+							"gasCosts": [
+								{
+									"type": "SEND",
+									"price": "52913000",
+									"estimate": "200000",
+									"limit": "2800000",
+									"amount": "10582600000000",
+									"amountUSD": "0.03",
+									"token": {
+										"address": "0x0000000000000000000000000000000000000000",
+										"chainId": 42161,
+										"symbol": "ETH",
+										"decimals": 18,
+										"name": "ETH",
+										"coinKey": "ETH",
+										"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
+										"priceUSD": "2993.2"
+									}
+								}
+							]
+						},
+						"tool": "celercircle",
+						"toolDetails": {
+							"key": "celercircle",
+							"name": "Circle CCTP",
+							"logoURI": "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/bridges/circle.png"
+						}
+					}
+				],
+				"integrator": "concero"
+			},
+			{
+				"type": "lifi",
+				"id": "03a228a8-3992-4c8c-a77d-872711759f62",
+				"tool": "lifidexaggregator",
+				"toolDetails": {
+					"key": "lifidexaggregator",
+					"name": "LI.FI Dex Aggregator",
+					"logoURI": "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/exchanges/lifidexaggregator.svg"
+				},
+				"action": {
+					"fromToken": {
+						"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+						"chainId": 137,
+						"symbol": "USDC",
+						"decimals": 6,
+						"name": "USD Coin",
+						"coinKey": "USDC",
+						"logoURI": "https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png",
+						"priceUSD": "1"
+					},
+					"fromAmount": "898000",
+					"toToken": {
+						"address": "0x0000000000000000000000000000000000000000",
+						"chainId": 137,
+						"symbol": "MATIC",
+						"decimals": 18,
+						"name": "MATIC",
+						"coinKey": "MATIC",
+						"logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png",
+						"priceUSD": "0.4952"
+					},
+					"fromChainId": 137,
+					"toChainId": 137,
+					"slippage": 0.05,
+					"fromAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e",
+					"toAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+				},
+				"estimate": {
+					"tool": "lifidexaggregator",
+					"approvalAddress": "0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE",
+					"toAmountMin": "1714733294378421273",
+					"toAmount": "1804982415135180288",
+					"fromAmount": "898000",
+					"feeCosts": [],
+					"gasCosts": [
+						{
+							"type": "SEND",
+							"price": "206161327323",
+							"estimate": "160000",
+							"limit": "403000",
+							"amount": "32985812371680000",
+							"amountUSD": "0.02",
+							"token": {
+								"address": "0x0000000000000000000000000000000000000000",
+								"chainId": 137,
+								"symbol": "MATIC",
+								"decimals": 18,
+								"name": "MATIC",
+								"coinKey": "MATIC",
+								"logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png",
+								"priceUSD": "0.4952"
+							}
+						}
+					],
+					"executionDuration": 30,
+					"fromAmountUSD": "0.90",
+					"toAmountUSD": "0.89"
+				},
+				"includedSteps": [
+					{
+						"id": "57da193c-4695-4580-86ec-19e74c663b2e",
+						"type": "swap",
+						"action": {
+							"fromChainId": 137,
+							"fromAmount": "898000",
+							"fromToken": {
+								"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+								"chainId": 137,
+								"symbol": "USDC",
+								"decimals": 6,
+								"name": "USD Coin",
+								"coinKey": "USDC",
+								"logoURI": "https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png",
+								"priceUSD": "1"
+							},
+							"toChainId": 137,
+							"toToken": {
+								"address": "0x0000000000000000000000000000000000000000",
+								"chainId": 137,
+								"symbol": "MATIC",
+								"decimals": 18,
+								"name": "MATIC",
+								"coinKey": "MATIC",
+								"logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png",
+								"priceUSD": "0.4952"
+							},
+							"slippage": 0.05,
+							"fromAddress": "0xd2Cb8786C0Ec3680C55C9256371F3577fE1C6A9e"
+						},
+						"estimate": {
+							"tool": "lifidexaggregator",
+							"fromAmount": "898000",
+							"toAmount": "1804982415135180288",
+							"toAmountMin": "1714733294378421273",
+							"approvalAddress": "0x46B3fDF7b5CDe91Ac049936bF0bDb12c5d22202e",
+							"executionDuration": 30,
+							"feeCosts": [],
+							"gasCosts": [
+								{
+									"type": "SEND",
+									"price": "206161327323",
+									"estimate": "160000",
+									"limit": "240000",
+									"amount": "32985812371680000",
+									"amountUSD": "0.02",
+									"token": {
+										"address": "0x0000000000000000000000000000000000000000",
+										"chainId": 137,
+										"symbol": "MATIC",
+										"decimals": 18,
+										"name": "MATIC",
+										"coinKey": "MATIC",
+										"logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png",
+										"priceUSD": "0.4952"
+									}
+								}
+							]
+						},
+						"tool": "lifidexaggregator",
+						"toolDetails": {
+							"key": "lifidexaggregator",
+							"name": "LI.FI Dex Aggregator",
+							"logoURI": "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/exchanges/lifidexaggregator.svg"
+						}
+					}
+				],
+				"integrator": "concero"
+			}
+		],
+		"insurance": {
+			"state": "NOT_INSURABLE",
+			"feeAmountUsd": "0"
+		},
+		"tags": ["RECOMMENDED", "CHEAPEST"]
+	}
+}

@@ -41,7 +41,7 @@ export const Logo: FC<LogoProps> = ({ width = 110, height = 20 }) => (
       }
 
       .cls-6 {
-        fill: #323038;
+        fill: var(--color-logo-text);
       }`}
 			</style>
 			<linearGradient

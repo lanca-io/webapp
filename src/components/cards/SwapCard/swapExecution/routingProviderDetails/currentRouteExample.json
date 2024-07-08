@@ -1,0 +1,230 @@
+{
+	"id": null,
+	"from": {
+		"token": {
+			"name": "USD Coin",
+			"address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+			"symbol": "USDC",
+			"decimals": 6,
+			"price_usd": 1,
+			"logo_uri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+			"amount": "1"
+		},
+		"chain": {
+			"id": "42161",
+			"logo_uri": "https://api.concero.io/static/icons/chains/42161.svg"
+		},
+		"amount": "1",
+		"address": null
+	},
+	"to": {
+		"token": {
+			"name": "USDT",
+			"address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+			"symbol": "USDT",
+			"decimals": 6,
+			"price_usd": 0.99931,
+			"logo_uri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
+			"amount": "0.999915"
+		},
+		"chain": {
+			"id": "42161",
+			"logo_uri": "https://api.concero.io/static/icons/chains/42161.svg"
+		},
+		"amount": "0.999915",
+		"address": null
+	},
+	"steps": [
+		[
+			{
+				"from": {
+					"token": {
+						"name": "USD Coin",
+						"address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+						"symbol": "USDC",
+						"decimals": 6,
+						"price_usd": 1,
+						"logo_uri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+						"amount": "1"
+					},
+					"chain": {
+						"id": "42161",
+						"logo_uri": null
+					},
+					"amount": "1",
+					"address": null
+				},
+				"to": {
+					"token": {
+						"name": "USDT",
+						"address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+						"symbol": "USDT",
+						"decimals": 6,
+						"price_usd": 0.99931,
+						"logo_uri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
+						"amount": "0.999915"
+					},
+					"chain": {
+						"id": "42161",
+						"logo_uri": null
+					},
+					"amount": "0.999915",
+					"address": null
+				},
+				"tool": {
+					"name": "uniswapV3Single",
+					"logo_uri": "https://docs.uniswap.org/img/uni_dark_icon.svg"
+				}
+			}
+		]
+	],
+	"cost": {
+		"total_usd": null,
+		"total_gas_usd": null
+	},
+	"tags": "FASTEST",
+	"slippage_percent": 0.5,
+	"originalRoute": {
+		"success": true,
+		"data": {
+			"from": {
+				"token": {
+					"_id": "66718c0120e87710778ff47e",
+					"chain_id": "42161",
+					"address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+					"__v": 0,
+					"decimals": 6,
+					"is_popular": true,
+					"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+					"name": "USD Coin",
+					"priceUsd": 1,
+					"providers": [
+						{
+							"name": "lifi",
+							"symbol": "USDC",
+							"_id": "667524a6c75079f749f4e005"
+						},
+						{
+							"name": "rango",
+							"symbol": "USDC",
+							"_id": "667524a7c75079f749f4f6c5"
+						}
+					],
+					"symbol": "USDC"
+				},
+				"chain": {
+					"id": "42161",
+					"explorerURI": "https://arbiscan.io",
+					"logoURI": "https://api.concero.io/static/icons/chains/42161.svg",
+					"name": "Arbitrum",
+					"symbol": "ETH"
+				},
+				"amount": "1"
+			},
+			"to": {
+				"token": {
+					"_id": "66718c0120e87710778ff47d",
+					"chain_id": "42161",
+					"address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+					"__v": 0,
+					"decimals": 6,
+					"is_popular": true,
+					"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
+					"name": "USDT",
+					"priceUsd": 0.99931,
+					"providers": [
+						{
+							"name": "lifi",
+							"symbol": "USDT",
+							"_id": "667524a6c75079f749f4e004"
+						},
+						{
+							"name": "rango",
+							"symbol": "USDT",
+							"_id": "667524a7c75079f749f4e855"
+						}
+					],
+					"symbol": "USDT"
+				},
+				"chain": {
+					"id": "42161",
+					"explorerURI": "https://arbiscan.io",
+					"logoURI": "https://api.concero.io/static/icons/chains/42161.svg",
+					"name": "Arbitrum",
+					"symbol": "ETH"
+				},
+				"amount": "0.999915"
+			},
+			"steps": [
+				{
+					"from": {
+						"token": {
+							"_id": "66718c0120e87710778ff47e",
+							"chain_id": "42161",
+							"address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+							"__v": 0,
+							"decimals": 6,
+							"is_popular": true,
+							"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+							"name": "USD Coin",
+							"priceUsd": 1,
+							"providers": [
+								{
+									"name": "lifi",
+									"symbol": "USDC",
+									"_id": "667524a6c75079f749f4e005"
+								},
+								{
+									"name": "rango",
+									"symbol": "USDC",
+									"_id": "667524a7c75079f749f4f6c5"
+								}
+							],
+							"symbol": "USDC"
+						},
+						"amount": "1",
+						"chainId": "42161"
+					},
+					"to": {
+						"token": {
+							"_id": "66718c0120e87710778ff47d",
+							"chain_id": "42161",
+							"address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+							"__v": 0,
+							"decimals": 6,
+							"is_popular": true,
+							"logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
+							"name": "USDT",
+							"priceUsd": 0.99931,
+							"providers": [
+								{
+									"name": "lifi",
+									"symbol": "USDT",
+									"_id": "667524a6c75079f749f4e004"
+								},
+								{
+									"name": "rango",
+									"symbol": "USDT",
+									"_id": "667524a7c75079f749f4e855"
+								}
+							],
+							"symbol": "USDT"
+						},
+						"amount": "0.999915",
+						"chainId": "42161"
+					},
+					"tool": {
+						"name": "uniswapV3Single",
+						"logo_url": "https://docs.uniswap.org/img/uni_dark_icon.svg",
+						"fees": [],
+						"additional_info": {
+							"sqrtPriceLimitX96": ["79228773634269328527508947465"],
+							"deadline": 1720428715,
+							"fee": 100
+						}
+					}
+				}
+			]
+		}
+	}
+}
