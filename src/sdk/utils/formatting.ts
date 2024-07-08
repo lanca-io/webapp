@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import { parseUnits } from 'viem'
 
 export function isValidNumber(number: string | number) {
 	if (typeof number === 'string') {
@@ -21,5 +22,5 @@ export function addingAmountDecimals(number: number | string, decimals: number):
 }
 
 export const createBigIntAmount = (amount: string, decimals: number) => {
-	return BigInt(addingAmountDecimals(amount, decimals)!)
+	return parseUnits(amount, decimals)
 }
