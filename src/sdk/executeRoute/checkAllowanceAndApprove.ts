@@ -10,7 +10,7 @@ export const checkAllowanceAndApprove = async (
 ) => {
 	const { token, amount, chain } = txData
 
-	const conceroAddress = conceroAddressesMap[chain.id] // TODO change mock dst chain
+	const conceroAddress = conceroAddressesMap[chain.id]
 
 	const allowance = await publicClient.readContract({
 		abi: erc20Abi,

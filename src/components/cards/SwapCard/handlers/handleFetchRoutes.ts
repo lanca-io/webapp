@@ -59,14 +59,9 @@ export const handleFetchRoutes = async (
 	typingTimeoutRef: MutableRefObject<number | undefined>,
 ) => {
 	try {
-		const { from, to, settings, isTestnet } = swapState
-
 		if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
 		const typingTimeoutId = setTimeout(async () => {
 			await getRoutes(swapState, swapDispatch)
-			// if (isTestnet) {
-			// 	await getConceroRoute(swapState, swapDispatch)
-			// }
 		}, 700)
 		typingTimeoutRef.current = typingTimeoutId
 	} catch (e) {

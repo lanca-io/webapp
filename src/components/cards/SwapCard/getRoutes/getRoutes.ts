@@ -7,7 +7,6 @@ import { action, category } from '../../../../constants/tracking'
 import { findRoute } from '../../../../sdk/findRoute'
 import type { Address } from 'viem'
 import { type Route, type SwapDirectionData } from '../../../../sdk/types/routeTypes'
-import { fr } from '../../../../i18n/translations/fr'
 
 const populateRoutes = ({ routes, fromAmount, swapDispatch }: PopulateRoutes) => {
 	swapDispatch({
@@ -18,7 +17,7 @@ const populateRoutes = ({ routes, fromAmount, swapDispatch }: PopulateRoutes) =>
 }
 
 const providerDirection = (direction: SwapDirectionData): Direction => {
-	const { token, chain, amount, amount_usd, chainId } = direction
+	const { token, chain, amount, chainId } = direction
 	return {
 		token: {
 			name: token.name,
@@ -28,14 +27,14 @@ const providerDirection = (direction: SwapDirectionData): Direction => {
 			price_usd: token.priceUsd,
 			logo_uri: token.logoURI,
 			amount,
-			amount_usd,
+			amount_usd: String(Number(amount) * Number(token.priceUsd)),
 		},
 		chain: {
 			id: chain?.id ?? chainId,
 			logo_uri: chain?.logoURI ?? null,
 		},
 		amount,
-		amount_usd,
+		amount_usd: String(Number(amount) * Number(token.priceUsd)),
 		address: null,
 	}
 }
