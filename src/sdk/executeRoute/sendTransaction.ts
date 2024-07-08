@@ -19,6 +19,7 @@ export const sendTransaction = async (
 	if (srcSwapData.length > 0 && bridgeData) {
 		txName = 'swapAndBridge'
 		args = [bridgeData, srcSwapData, dstSwapData]
+		console.log('args', args)
 	}
 	if (srcSwapData.length === 0 && bridgeData) {
 		txName = 'bridge'

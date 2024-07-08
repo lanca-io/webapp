@@ -7,7 +7,6 @@ import { ExecuteRouteStage, type ExecutionConfigs, type ExecutionState } from '.
 import { checkAllowanceAndApprove } from './checkAllowanceAndApprove'
 import { sendTransaction } from './sendTransaction'
 import { buildRouteData } from './buildRouteData'
-import { checkTransactionStatus } from './checkTransactionStatus'
 
 const useSendStateHook = (executionConfigs: ExecutionConfigs) => {
 	const { executionStateUpdateHook, executeInBackground } = executionConfigs
@@ -93,7 +92,7 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 
 	const hash = await sendTransaction(inputRouteData, publicClient, walletClient, conceroAddress, clientAddress)
 
-	await checkTransactionStatus(hash, publicClient, sendState, data)
+	// await checkTransactionStatus(hash, publicClient, sendState, data)
 }
 
 // test bridge and allowance (1 hour)

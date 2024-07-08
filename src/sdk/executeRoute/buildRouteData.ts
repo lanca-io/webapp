@@ -31,7 +31,6 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 			bridgeData = {
 				tokenType: 1,
 				amount: fromAmount,
-				minAmount: 0n, // TODO this prop is WIP
 				dstChainSelector: BigInt(chainSelectorsMap[to.chainId]),
 				receiver: clientAddress,
 			}

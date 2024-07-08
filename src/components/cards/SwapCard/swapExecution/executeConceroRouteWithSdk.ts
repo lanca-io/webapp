@@ -1,11 +1,11 @@
 import { type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
-import { type Address, createWalletClient, custom } from 'viem'
-import { arbitrum, polygon } from 'wagmi/chains'
 import { type ExecutionConfigs, type ExecutionState } from '../../../../sdk/types/executeSettingsTypes'
 import { executeRoute } from '../../../../sdk/executeRoute/executeRoute'
 import { statusSwapMap } from './statusSwapMap'
 import { type Route } from '../../../../sdk/types/routeTypes'
+import { getWalletClient } from '@wagmi/core'
+import { config } from '../../../../web3/wagmi'
 
 export async function executeConceroRouteWithSdk(
 	swapState: SwapState,
@@ -15,10 +15,7 @@ export async function executeConceroRouteWithSdk(
 	swapDispatch({ type: 'SET_LOADING', payload: true })
 
 	try {
-		const walletClient = createWalletClient({
-			chain: polygon,
-			transport: custom(window.ethereum),
-		})
+		const walletClient = await getWalletClient(config, { chainId: Number(swapState.from.chain.id) })
 
 		const addExecutionListener = (state: ExecutionState) => {
 			console.log(state)
