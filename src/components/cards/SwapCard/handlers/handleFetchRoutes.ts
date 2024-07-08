@@ -3,6 +3,7 @@ import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { addingAmountDecimals, addingTokenDecimals } from '../../../../utils/formatting'
 import { ethers } from 'ethers'
 import { chainSelectorsMap, conceroAddressesMap } from '../swapExecution/executeConceroRoute'
+import { getRoutes } from '../getRoutes/getRoutes'
 
 const providerUrlsMap: Record<string, string> = {
 	'421614': 'https://arbitrum-sepolia-rpc.publicnode.com', // arb
@@ -58,14 +59,9 @@ export const handleFetchRoutes = async (
 	typingTimeoutRef: MutableRefObject<number | undefined>,
 ) => {
 	try {
-		// const { from, to, settings, isTestnet } = swapState
-
 		if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
 		const typingTimeoutId = setTimeout(async () => {
-			// await getRoutes(from, to, settings, swapDispatch)
-			if (swapState.isTestnet) {
-				await getConceroRoute(swapState, swapDispatch)
-			}
+			await getRoutes(swapState, swapDispatch)
 		}, 700)
 		typingTimeoutRef.current = typingTimeoutId
 	} catch (e) {

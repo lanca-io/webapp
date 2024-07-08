@@ -5,9 +5,9 @@
 		"from": {
 			"token": {
 				"_id": "65f30bdfeee6498fad494b32",
-				"address": "0x88A2d74F47a237a62e7A51cdDa67270CE381555e",
-				"chainId": "84532",
-				"decimals": 18,
+				"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+				"chainId": "137",
+				"decimals": 6,
 				"name": "CCIP-BnM",
 				"price": null,
 				"symbol": "BnM",
@@ -18,7 +18,7 @@
 			},
 			"chain": {
 				"_id": "65ba54ee748cee74a1f41ecc",
-				"id": "84532",
+				"id": "137",
 				"__v": 0,
 				"addressPatterns": ["^(0x)[0-9A-Fa-f]{40}$"],
 				"explorerURI": "https://arbiscan.io",
@@ -34,15 +34,15 @@
 				"symbol": "ETH",
 				"tokens": []
 			},
-			"amount": "1",
+			"amount": "0.003793952",
 			"amount_usd": "1"
 		},
 		"to": {
 			"token": {
 				"_id": "65f30c00eee6498fad49a108",
-				"address": "0x8aF4204e30565DF93352fE8E1De78925F6664dA7",
-				"chainId": "11155420",
-				"decimals": 18,
+				"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+				"chainId": "42161",
+				"decimals": 6,
 				"name": "CCIP-BnM",
 				"price": "2.233260156633671686433292024032636",
 				"symbol": "BnM",
@@ -53,7 +53,7 @@
 			},
 			"chain": {
 				"_id": "65ba54ee748cee74a1f41ecb",
-				"id": "84532",
+				"id": "42161",
 				"__v": 0,
 				"addressPatterns": ["^(0x)[0-9A-Fa-f]{40}$"],
 				"explorerURI": "https://etherscan.io",
@@ -69,7 +69,7 @@
 				"symbol": "ETH",
 				"tokens": []
 			},
-			"amount": "1",
+			"amount": "0.003793952",
 			"amount_usd": "1"
 		},
 		"gas": {
@@ -131,9 +131,9 @@
 				"from": {
 					"token": {
 						"_id": "65f30bdfeee6498fad494b32",
-						"address": "0x88A2d74F47a237a62e7A51cdDa67270CE381555e",
-						"chainId": "84532",
-						"decimals": 18,
+						"address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+						"chainId": "137",
+						"decimals": 6,
 						"name": "CCIP-BnM",
 						"price": null,
 						"symbol": "BnM",
@@ -142,16 +142,16 @@
 						"volume": "9631391236257745420083",
 						"volumeUsd": "0"
 					},
-					"chainId": "84532",
-					"amount": "1",
+					"chainId": "137",
+					"amount": "0.003793952",
 					"amount_usd": "1"
 				},
 				"to": {
 					"token": {
 						"_id": "65f30c00eee6498fad49a108",
-						"address": "0x8aF4204e30565DF93352fE8E1De78925F6664dA7",
-						"chainId": "11155420",
-						"decimals": 18,
+						"address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+						"chainId": "42161",
+						"decimals": 6,
 						"name": "CCIP-BnM",
 						"price": "2.233260156633671686433292024032636",
 						"symbol": "BnM",
@@ -160,8 +160,8 @@
 						"volume": "229807760807.667391",
 						"volumeUsd": "230130911623.6637663392248577210873"
 					},
-					"chainId": "11155420",
-					"amount": "1",
+					"chainId": "42161",
+					"amount": "0.003793952",
 					"amount_usd": "1"
 				},
 				"tool": {

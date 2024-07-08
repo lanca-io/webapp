@@ -189,6 +189,8 @@ body::-webkit-scrollbar {
 
 	--color-background-gradient-from: #e4f7fc;
 	--color-background-gradient-to: #fcfeff;
+
+	--color-logo-text: #323038;
 }
 
 .dark {
@@ -208,6 +210,19 @@ body::-webkit-scrollbar {
 	--color-grey-400: #cbcacf;
 	--color-grey-350: #e5e5e7;
 	--color-grey-300: #f7f7f7;
+
+	/* pacific */
+	--color-pacific-750: #0c2c40;
+	--color-pacific-700: #1c455d;
+	--color-pacific-650: #1c526e;
+	--color-pacific-600: #176587;
+	--color-pacific-550: #147ca6;
+	--color-pacific-500: #159cc5;
+	--color-pacific-450: #48c0e3;
+	--color-pacific-400: #71d4ef;
+	--color-pacific-350: #abe7f6;
+	--color-pacific-300: #d2f3fb;
+	--color-pacific-250: #edfbfe;
 
 	/* green */
 	--color-green-550: #20a273;
@@ -248,11 +263,17 @@ body::-webkit-scrollbar {
 	--color-main-card-gradient: rgba(40, 40, 40, 0.5);
 	--color-tr-odd-row-gradient-from: rgba(60, 60, 60, 0.2);
 	--color-tr-odd-row-gradient-to: rgba(17, 17, 17, 0.2);
+
+	--color-button-gradient-from: #44b6d7;
+	--color-button-gradient-to: #3695b1;
+
+	--color-logo-text: #f7f7f7;
 }
 
 div#root {
 	background-color: var(--color-base-background);
 	flex: 1;
+	height: 100vh;
 }
 
 @media (max-width: 768px) {

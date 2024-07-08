@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppScreen } from './components/screens/AppScreen/AppScreen'
 import { Header } from './components/layout/Header/Header/Header'
@@ -6,6 +6,7 @@ import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
+import { useFeatureFlagVariantKey } from 'posthog-js/react'
 
 const SwapScreen = lazy(
 	async () =>
@@ -14,11 +15,14 @@ const SwapScreen = lazy(
 
 export const Navigator = () => {
 	const { address } = useAccount()
+	const isWhitelisted = useFeatureFlagVariantKey('mainnet-whitelist')
 
 	useEffect(() => {
 		if (!address) return
 		posthog.identify(address)
 	}, [address])
+
+	const content = isWhitelisted ? <SwapScreen /> : 'Not access'
 
 	return (
 		<BrowserRouter>
@@ -29,6 +33,7 @@ export const Navigator = () => {
 						path={routes.home}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
+								{/* {isWhitelisted === undefined ? <FullScreenLoader /> : content} */}
 								<SwapScreen />
 							</Suspense>
 						}
