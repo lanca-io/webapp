@@ -1,6 +1,6 @@
 import type { InputRouteData, SwapArgs, TxName } from '../types/contractInputTypes'
-import type { Address, PublicClient, WalletClient } from 'viem'
-import ConceroJson from '../assets/contractsData/Concero.json'
+import { type Address, type PublicClient, type WalletClient } from 'viem'
+import { conceroAbi } from './conceroOrchestratorAbi'
 
 export const sendTransaction = async (
 	txArgs: InputRouteData,
@@ -12,7 +12,9 @@ export const sendTransaction = async (
 	const { srcSwapData, bridgeData, dstSwapData } = txArgs
 
 	let txName: TxName = 'swap'
-	let args: SwapArgs = [srcSwapData]
+	let args: SwapArgs = [srcSwapData, clientAddress]
+
+	console.log(args)
 
 	if (srcSwapData.length > 0 && bridgeData) {
 		txName = 'swapAndBridge'
@@ -37,7 +39,7 @@ export const sendTransaction = async (
 
 	return await walletClient.writeContract({
 		account: clientAddress,
-		abi: ConceroJson.abi,
+		abi: conceroAbi,
 		functionName: txName,
 		address: conceroAddress,
 		args,
