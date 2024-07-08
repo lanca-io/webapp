@@ -30,8 +30,7 @@ export function useSwapCardEffects({
 	const { selectionDispatch } = useContext(SelectionContext)
 	const { from, to, settings, selectedRoute, isTestnet } = swapState
 
-	console.log(swapState.selectedRoute)
-
+	console.log(swapState)
 	useEffect(() => {
 		setHistoryCard(selectionDispatch, from, to)
 		setSwapCard(selectionDispatch, from, to)

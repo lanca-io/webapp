@@ -85,7 +85,7 @@ const routeDataProvider = (route: Route): StandardRoute => {
 				address: null,
 			},
 			tool: {
-				name: tool.name,
+				name: 'Uniswap v3',
 				logo_uri: tool.logo_url,
 			},
 		}

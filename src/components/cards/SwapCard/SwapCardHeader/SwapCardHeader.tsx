@@ -50,18 +50,18 @@ export function SwapCardHeader({ swapState, swapDispatch }: SwapCardHeaderProps)
 			<animated.div style={titleTransition}>
 				<h5 className={'cardHeaderTitle'}>{getCardTitleByStatus(swapState.stage)}</h5>
 			</animated.div>
-			{isInputStage ? (
-				<div className={classNames.settingsContainer}>
-					<Button
-						variant="black"
-						size="sq-xs"
-						onClick={() => {
-							swapDispatch({ type: 'TOGGLE_SETTINGS_MODAL_OPEN' })
-						}}
-						leftIcon={<IconDots size={16} color={'var(--color-text-secondary)'} />}
-					/>
-				</div>
-			) : null}
+			{/* {isInputStage ? ( */}
+			{/* 	<div className={classNames.settingsContainer}> */}
+			{/* 		<Button */}
+			{/* 			variant="black" */}
+			{/* 			size="sq-xs" */}
+			{/* 			onClick={() => { */}
+			{/* 				swapDispatch({ type: 'TOGGLE_SETTINGS_MODAL_OPEN' }) */}
+			{/* 			}} */}
+			{/* 			leftIcon={<IconDots size={16} color={'var(--color-text-secondary)'} />} */}
+			{/* 		/> */}
+			{/* 	</div> */}
+			{/* ) : null} */}
 		</div>
 	)
 }

@@ -21,18 +21,27 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 	SET_ADDRESS: swapDispatch => {
 		swapDispatch({
 			type: 'SET_SWAP_STEPS',
-			payload: [{ status: 'pending', title: 'Sending transaction' }],
+			payload: [
+				{
+					title: 'Action required',
+					body: 'Please approve the transaction in your wallet',
+					status: 'await',
+					txLink: null,
+				},
+			],
 		})
 	},
 	CHECK_ALLOWANCE: (swapDispatch, state) => {
 		swapDispatch({
-			type: 'APPEND_SWAP_STEP',
-			payload: {
-				title: state.payload.title,
-				body: state.payload.body,
-				status: 'await',
-				txLink: null,
-			},
+			type: 'SET_SWAP_STEPS',
+			payload: [
+				{
+					title: 'Action required',
+					body: 'Please approve the transaction in your wallet',
+					status: 'await',
+					txLink: null,
+				},
+			],
 		})
 	},
 	PENGING_TRANSACTION: swapDispatch => {
@@ -69,9 +78,7 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 			],
 		})
 
-		setTimeout(() => {
-			swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.success })
-		}, 2000)
+		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.success })
 	},
 	FAILED_TRANSACTION: swapDispatch => {
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.failed })

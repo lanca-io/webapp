@@ -1,12 +1,14 @@
 import { type Address, erc20Abi, parseUnits, type PublicClient, type WalletClient } from 'viem'
 import type { SwapDirectionData } from '../types/routeTypes'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
+import { ExecuteRouteStage } from '../types/executeSettingsTypes'
 
 export const checkAllowanceAndApprove = async (
 	walletClient: WalletClient,
 	publicClient: PublicClient,
 	txData: SwapDirectionData,
 	clientAddress: Address,
+	sendState,
 ) => {
 	const { token, amount, chain } = txData
 
@@ -39,6 +41,16 @@ export const checkAllowanceAndApprove = async (
 	}
 
 	if (approveTxHash) {
+		sendState({
+			stage: ExecuteRouteStage.pendingTransaction,
+			payload: {
+				title: 'Swap in progress',
+				body: 'Please check info and approve the transaction in your wallet',
+				status: 'await',
+				txLink: null,
+			},
+		})
+
 		await publicClient.waitForTransactionReceipt({ hash: approveTxHash })
 	}
 }

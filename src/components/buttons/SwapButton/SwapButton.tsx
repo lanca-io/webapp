@@ -14,6 +14,7 @@ import { checkTestnetBalanceSufficiency } from './checkTestnetBalanceSufficiency
 export const SwapButton: FC<SwapButtonProps> = ({ swapState, isConnected, onClick, switchChainHook }) => {
 	const { isLoading, isTestnet } = swapState
 	const { isLoading: isFetchBalancesLoading, gasSufficiency } = useGasSufficiency(swapState)
+
 	const [testnetBalances, setTestnetBalances] = useState<{
 		linkBalanceSufficient: boolean
 		bnmBalanceSufficient: boolean
