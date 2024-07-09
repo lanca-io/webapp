@@ -111,22 +111,16 @@ const trackBridgeTransaction = async (
 		toBlock: 'latest',
 	})
 
-	console.log('CCIPSent', logCCIPSent)
+	const { ccipMessageId } = logCCIPSent.args
+	console.log('CCIPSent', ccipMessageId)
 
 	let fromBlock = latestDstChainBlock - 1000n
 	let toBlock = latestDstChainBlock
 
 	while (Number(toBlock) > Number(latestDstChainBlock - 200_000n)) {
 		const logs = await dstPublicClient.getLogs({
-			// address: conceroAddress,
-			event: parseAbiItem(
-				'event TXReleased(bytes32 indexed ccipMessageId, address indexed sender, address indexed recipient, address token, uint256 amount)',
-			),
+			address: conceroAddress,
 			abi: functionsAbi,
-			args: {
-				from: clientAddress,
-				to: clientAddress,
-			},
 			fromBlock,
 			toBlock,
 		})
@@ -140,9 +134,20 @@ const trackBridgeTransaction = async (
 					data: log.data,
 					topics: log.topics,
 				})
-				console.log('decodedLog', decodedLog)
+				console.log('decodedLog', decodedLog, decodedLog.args?.ccipMessageId)
+				if (decodedLog.eventName === 'UnconfirmedTXAdded' && decodedLog.args.ccipMessageId === logCCIPSent) {
+					sendState({
+						stage: ExecuteRouteStage.confirmingTransaction,
+						payload: {
+							title: 'Transaction confirming',
+							body: 'Checking transaction confirmation',
+							status: 'await',
+							txLink: null,
+						},
+					})
+				}
 			} catch (err) {
-				console.log(err)
+				console.log(err.message)
 			}
 		}
 
@@ -176,15 +181,6 @@ const trackBridgeTransaction = async (
 	// 	return
 	// }
 	//
-	// sendState({
-	// 	stage: ExecuteRouteStage.confirmingTransaction,
-	// 	payload: {
-	// 		title: 'Transaction confirming',
-	// 		body: 'Checking transaction confirmation',
-	// 		status: 'await',
-	// 		txLink: null,
-	// 	},
-	// })
 }
 
 export async function checkTransactionStatus(
