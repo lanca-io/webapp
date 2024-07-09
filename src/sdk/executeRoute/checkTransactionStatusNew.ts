@@ -1,11 +1,11 @@
 import type { PublicClient } from 'viem/clients/createPublicClient'
 import { getPublicClient } from '@wagmi/core'
 import { config } from '../../web3/wagmi'
-import { conceroAddressesMap } from '../../components/cards/SwapCard/swapExecution/executeConceroRoute'
-import { decodeEventLog } from 'viem'
+import { type Address, decodeEventLog } from 'viem'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import type { RouteData } from '../types/routeTypes'
 import { conceroAbi } from './conceroOrchestratorAbi'
+import { conceroAddressesMap } from '../../components/cards/SwapCard/swapExecution/executeConceroRoute'
 
 const sleep = async (ms: number) => await new Promise(resolve => setTimeout(resolve, ms))
 
@@ -54,49 +54,69 @@ const getLogByName = async (
 	})
 }
 
-export async function checkTransactionStatus(
-	txHash: string,
-	srcPublicClient: PublicClient,
-	sendState: (state: ExecutionState) => void,
-	routeData: RouteData,
-): Promise<number | undefined> {
-	const txStart = new Date().getTime()
-	const tx = await srcPublicClient.waitForTransactionReceipt({
-		hash: txHash as `0x${string}`,
-	})
+const trackSwapTransaction = async (logs, sendState) => {
+	for (const log of logs) {
+		try {
+			const decodedLog = decodeEventLog({
+				abi: conceroAbi,
+				data: log.data,
+				topics: log.topics,
+			})
 
-	if (tx.status === 'reverted') {
-		sendState({
-			stage: ExecuteRouteStage.failedTransaction,
-			payload: {
-				title: 'Tailed transaction',
-				body: 'Transaction was reverted',
-				status: 'failed',
-				txLink: null,
-			},
-		})
-		return
+			if (decodedLog.eventName === 'Orchestrator_SwapSuccess') {
+				sendState({
+					stage: ExecuteRouteStage.successTransaction,
+					payload: {
+						title: 'Swap execute successfully!',
+						body: 'Check your balance',
+						status: 'success',
+						txLink: null,
+					},
+				})
+			}
+
+			console.log('decodedLog', decodedLog)
+		} catch (err) {
+			console.log(err)
+		}
 	}
+}
 
+const trackBridgeTransaction = async (tx, routeData, srcPublicClient, sendState, conceroAddress) => {
 	const dstPublicClient = getPublicClient(config, { chainId: Number(routeData.to.chain.id) })
 
-	const latestDstChainBlock = (await dstPublicClient.getBlockNumber()) - 100n
 	const latestSrcChainBlock = (await srcPublicClient.getBlockNumber()) - 100n
+	const latestDstChainBlock = (await dstPublicClient.getBlockNumber()) - 100n
 
-	const txLog = await getLogByName(
-		txHash,
+	for (const log of tx.logs) {
+		try {
+			const decodedLog = decodeEventLog({
+				abi: conceroAbi,
+				data: log.data,
+				topics: log.topics,
+			})
+			console.log(decodedLog)
+
+			console.log('decodedLog', decodedLog)
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
+	const txLogCcipSent = await getLogByName(
+		tx.hash,
 		'CCIPSent',
-		conceroAddressesMap[routeData.from.chain.id],
+		conceroAddress,
 		srcPublicClient,
 		'0x' + latestSrcChainBlock.toString(16),
 	)
 
-	const ccipMessageId = txLog?.args?.ccipMessageId
+	console.log('CCIPSent', txLogCcipSent)
+
+	const ccipMessageId = txLogCcipSent?.args?.ccipMessageId
 
 	let dstLog = null
 	let srcFailLog = null
-
-	console.log('ccipMessageId', ccipMessageId)
 
 	if (ccipMessageId) {
 		while (dstLog === null && srcFailLog === null) {
@@ -104,14 +124,14 @@ export async function checkTransactionStatus(
 				getLogByName(
 					ccipMessageId,
 					'UnconfirmedTXAdded',
-					conceroAddressesMap[routeData.to.chain.id],
+					conceroAddress,
 					dstPublicClient,
 					'0x' + latestDstChainBlock.toString(16),
 				),
 				getLogByName(
 					ccipMessageId,
 					'FunctionsRequestError',
-					conceroAddressesMap[routeData.from.chain.id],
+					conceroAddress,
 					srcPublicClient,
 					'0x' + latestSrcChainBlock.toString(16),
 				),
@@ -143,37 +163,27 @@ export async function checkTransactionStatus(
 			txLink: null,
 		},
 	})
+}
 
-	let dstLog2 = null
-	let dstFailLog = null
+export async function checkTransactionStatus(
+	txHash: string,
+	srcPublicClient: PublicClient,
+	sendState: (state: ExecutionState) => void,
+	routeData: RouteData,
+	conceroAddress: Address,
+): Promise<number | undefined> {
+	const txStart = new Date().getTime()
+	const tx = await srcPublicClient.waitForTransactionReceipt({
+		hash: txHash as `0x${string}`,
+	})
+	console.log(tx)
 
-	while (dstLog2 === null && dstFailLog === null) {
-		;[dstFailLog, dstLog2] = await Promise.all([
-			getLogByName(
-				ccipMessageId,
-				'FunctionsRequestError',
-				conceroAddressesMap[routeData.to.chain.id],
-				dstPublicClient,
-				'0x' + latestDstChainBlock.toString(16),
-			),
-			getLogByName(
-				ccipMessageId,
-				'TXReleased',
-				conceroAddressesMap[routeData.to.chain.id],
-				dstPublicClient,
-				'0x' + latestDstChainBlock.toString(16),
-			),
-		])
-
-		await sleep(3000)
-	}
-
-	if (dstFailLog) {
+	if (tx.status === 'reverted') {
 		sendState({
 			stage: ExecuteRouteStage.failedTransaction,
 			payload: {
 				title: 'Tailed transaction',
-				body: 'Transaction failed in receiving stage',
+				body: 'Transaction was reverted',
 				status: 'failed',
 				txLink: null,
 			},
@@ -182,14 +192,47 @@ export async function checkTransactionStatus(
 	}
 
 	sendState({
-		stage: ExecuteRouteStage.successTransaction,
+		stage: ExecuteRouteStage.confirmingTransaction,
 		payload: {
-			title: 'Swap execute successfully!',
-			body: 'Check your balance',
-			status: 'success',
+			title: 'Transaction confirming',
+			body: 'Checking transaction confirmation',
+			status: 'await',
 			txLink: null,
 		},
 	})
+
+	const swapType = routeData.from.chain?.id === routeData.to.chain?.id ? 'swap' : 'bridge'
+
+	console.log(swapType)
+
+	if (swapType === 'swap') {
+		await trackSwapTransaction(tx.logs, sendState)
+		return
+	}
+
+	await trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress)
+
+	// sendState({
+	// 	stage: ExecuteRouteStage.failedTransaction,
+	// 	payload: {
+	// 		title: 'Tailed transaction',
+	// 		body: 'Transaction failed in send stage',
+	// 		status: 'failed',
+	// 		txLink: null,
+	// 	},
+	// })
+	//
+
+	//
+	// sendState({
+	// 	stage: ExecuteRouteStage.successTransaction,
+	// 	payload: {
+	// 		title: 'Swap execute successfully!',
+	// 		body: 'Check your balance',
+	// 		status: 'success',
+	// 		txLink: null,
+	// 	},
+	// })
 
 	return txStart
 }

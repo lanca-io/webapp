@@ -7,9 +7,9 @@ export async function fetchTokenBalances(
 	walletAddress: string,
 ): Promise<TokenBalance | null> {
 	try {
-		if (!dotSeparatedAddresses.length) {
-			return null
-		}
+		// if (!dotSeparatedAddresses.length) {
+		// 	return null
+		// }
 
 		const addresses = dotSeparatedAddresses.join(`&token_address=`)
 		const url = `${config.baseURL}/token_balances?wallet_address=${walletAddress}&token_address=${addresses}`

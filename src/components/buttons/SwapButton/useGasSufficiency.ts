@@ -23,6 +23,7 @@ async function getGasSufficiency(
 	getChains: (param: GetChainsParams) => Promise<Chain[]>,
 	walletBalances: TokenBalance | null,
 ): Promise<GasSufficiency> {
+	console.log('walletBalances', walletBalances)
 	if (!walletBalances) return { isInsufficient: false }
 	const { selectedRoute } = swapState
 
@@ -107,7 +108,7 @@ async function getBalances(selectedRoute: StandardRoute, walletAddress: string):
 
 	selectedRoute.steps?.forEach((steps: Step[]) => {
 		steps.forEach((step: Step) => {
-			step.tool.gas?.forEach(updateDotSeparatedAddresses)
+			step.tool.gas?.forEach(updateDotSeparatedAddresses) // TODO add gas and fees in steps in route
 			step.tool.fees?.forEach(updateDotSeparatedAddresses)
 		})
 	})
@@ -130,7 +131,7 @@ export function useGasSufficiency(swapState: SwapState) {
 
 	useEffect(() => {
 		void handleGetGasSufficiency()
-	}, [swapState.selectedRoute?.id])
+	}, [swapState.selectedRoute])
 
 	return { gasSufficiency, isLoading }
 }
