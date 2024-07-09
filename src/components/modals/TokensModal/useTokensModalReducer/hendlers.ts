@@ -29,7 +29,7 @@ export function setBalanceTokens(state: TokensModalState, action: SET_BALANCE_TO
 		)
 		return {
 			...state,
-			balanceTokens: action.balanceTokens,
+			balanceTokens: { ...action.balanceTokens, ...state.balanceTokens },
 			tokens: [...(balanceTokens ?? []), ...filteredTokens],
 		}
 	}
@@ -47,8 +47,15 @@ export function setBalanceTokens(state: TokensModalState, action: SET_BALANCE_TO
 }
 
 export function setTokens(state: TokensModalState, action: SET_TOKENS): TokensModalState {
+	const { balanceTokens, selectedChain } = state
+
 	if (!state.selectedChain) {
-		return { ...state, tokens: action.tokens }
+		const tokensWithBalance =
+			!!balanceTokens && balanceTokens[selectedChain.id] ? balanceTokens[selectedChain.id] : []
+
+		const totalTokens = [...tokensWithBalance, ...action.tokens]
+
+		return { ...state, tokens: totalTokens }
 	}
 
 	if (!state.balanceTokens?.[state.selectedChain.id]?.length) {

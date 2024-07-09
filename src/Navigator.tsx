@@ -6,7 +6,7 @@ import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
-import { useFeatureFlagVariantKey } from 'posthog-js/react'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 const SwapScreen = lazy(
 	async () =>
@@ -15,7 +15,7 @@ const SwapScreen = lazy(
 
 export const Navigator = () => {
 	const { address } = useAccount()
-	const isWhitelisted = useFeatureFlagVariantKey('mainnet-whitelist')
+	const isWhitelisted = useFeatureFlagEnabled('lanca-early-access')
 
 	useEffect(() => {
 		if (!address) return

@@ -8,7 +8,6 @@ import { CardModal } from '../../CardModal/CardModal'
 import { ChainListItem } from './ChainListItem/ChainListItem'
 import { TextInput } from '../../../input/TextInput'
 import { IconSearch } from '@tabler/icons-react'
-import { testnetChains } from './testnetChains'
 
 interface TokensModalHeaderProps {
 	selectedChain: Chain | null
@@ -17,9 +16,8 @@ interface TokensModalHeaderProps {
 }
 
 export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: TokensModalHeaderProps) {
-	const { getChains } = useContext(DataContext)
+	const { getChains, chains } = useContext(DataContext)
 	const [searchValue, setSearchValue] = useState<string>('')
-	const [chains, setChains] = useState<Chain[]>([])
 	const [isChainsModalOpen, setIsChainsModalOpen] = useState<boolean>(false)
 	const { t } = useTranslation()
 
@@ -36,14 +34,10 @@ export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: Tok
 	}
 
 	useEffect(() => {
-		if (isTestnet) {
-			setChains(testnetChains)
-		} else {
-			getChains({ offset: 0, limit: 18, search: searchValue }).then((chains: Chain[]) => {
-				setChains(chains)
-			})
-		}
-	}, [searchValue])
+		if (chains.length !== 0) return
+
+		getChains({ offset: 0, limit: 18 })
+	}, [])
 
 	return (
 		<div className={classNames.container}>
