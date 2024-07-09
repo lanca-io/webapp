@@ -54,7 +54,7 @@ const getLogByName = async (
 	})
 }
 
-export async function checkTransactionStatus(
+export async function checkTransactionStatusOld(
 	txHash: string,
 	srcPublicClient: PublicClient,
 	sendState: (state: ExecutionState) => void,

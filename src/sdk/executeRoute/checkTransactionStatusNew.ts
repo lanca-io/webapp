@@ -1,11 +1,11 @@
 import type { PublicClient } from 'viem/clients/createPublicClient'
-import { getPublicClient } from '@wagmi/core'
-import { config } from '../../web3/wagmi'
-import { type Address, decodeEventLog } from 'viem'
+import { type Address, createPublicClient, decodeEventLog, parseAbiItem, http } from 'viem'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import type { RouteData } from '../types/routeTypes'
 import { conceroAbi } from './conceroOrchestratorAbi'
-import { conceroAddressesMap } from '../../components/cards/SwapCard/swapExecution/executeConceroRoute'
+import { conceroAddressesMap } from '../configs/conceroAddressesMap'
+import { viemChains } from '../configs/chainsConfig'
+import functionsAbi from '../assets/contractsData/conctractFunctionsData.json'
 
 const sleep = async (ms: number) => await new Promise(resolve => setTimeout(resolve, ms))
 
@@ -82,87 +82,109 @@ const trackSwapTransaction = async (logs, sendState) => {
 	}
 }
 
-const trackBridgeTransaction = async (tx, routeData, srcPublicClient, sendState, conceroAddress) => {
-	const dstPublicClient = getPublicClient(config, { chainId: Number(routeData.to.chain.id) })
+const trackBridgeTransaction = async (
+	tx,
+	routeData: RouteData,
+	srcPublicClient: PublicClient,
+	sendState: (state: ExecutionState) => void,
+	conceroAddress: Address,
+	clientAddress: Address,
+) => {
+	const dstPublicClient = createPublicClient({
+		chain: viemChains[routeData.to.chain.id].chain,
+		transport: http(),
+	})
 
-	const latestSrcChainBlock = (await srcPublicClient.getBlockNumber()) - 100n
+	const dstConceroContract = conceroAddressesMap[routeData.to.chain.id]
 	const latestDstChainBlock = (await dstPublicClient.getBlockNumber()) - 100n
 
-	for (const log of tx.logs) {
-		try {
-			const decodedLog = decodeEventLog({
-				abi: conceroAbi,
-				data: log.data,
-				topics: log.topics,
-			})
-			console.log(decodedLog)
-
-			console.log('decodedLog', decodedLog)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
-	const txLogCcipSent = await getLogByName(
-		tx.hash,
-		'CCIPSent',
-		conceroAddress,
-		srcPublicClient,
-		'0x' + latestSrcChainBlock.toString(16),
-	)
-
-	console.log('CCIPSent', txLogCcipSent)
-
-	const ccipMessageId = txLogCcipSent?.args?.ccipMessageId
-
-	let dstLog = null
-	let srcFailLog = null
-
-	if (ccipMessageId) {
-		while (dstLog === null && srcFailLog === null) {
-			;[dstLog, srcFailLog] = await Promise.all([
-				getLogByName(
-					ccipMessageId,
-					'UnconfirmedTXAdded',
-					conceroAddress,
-					dstPublicClient,
-					'0x' + latestDstChainBlock.toString(16),
-				),
-				getLogByName(
-					ccipMessageId,
-					'FunctionsRequestError',
-					conceroAddress,
-					srcPublicClient,
-					'0x' + latestSrcChainBlock.toString(16),
-				),
-			])
-
-			await sleep(3000)
-		}
-	}
-
-	if (srcFailLog) {
-		sendState({
-			stage: ExecuteRouteStage.failedTransaction,
-			payload: {
-				title: 'Tailed transaction',
-				body: 'Transaction failed in send stage',
-				status: 'failed',
-				txLink: null,
-			},
-		})
-		return
-	}
-
-	sendState({
-		stage: ExecuteRouteStage.confirmingTransaction,
-		payload: {
-			title: 'Transaction confirming',
-			body: 'Checking transaction confirmation',
-			status: 'await',
-			txLink: null,
+	const [logCCIPSent] = await srcPublicClient.getLogs({
+		address: conceroAddress,
+		event: parseAbiItem(
+			'event CCIPSent(bytes32 indexed ccipMessageId, address sender, address recipient, uint8 token, uint256 amount, uint64 dstChainSelector)',
+		),
+		args: {
+			from: clientAddress,
+			to: clientAddress,
 		},
+		fromBlock: tx.blockNumber,
+		toBlock: 'latest',
 	})
+
+	console.log('CCIPSent', logCCIPSent)
+
+	let fromBlock = latestDstChainBlock - 1000n
+	let toBlock = latestDstChainBlock
+
+	while (Number(toBlock) > Number(latestDstChainBlock - 200_000n)) {
+		const logs = await dstPublicClient.getLogs({
+			// address: conceroAddress,
+			event: parseAbiItem(
+				'event TXReleased(bytes32 indexed ccipMessageId, address indexed sender, address indexed recipient, address token, uint256 amount)',
+			),
+			abi: functionsAbi,
+			args: {
+				from: clientAddress,
+				to: clientAddress,
+			},
+			fromBlock,
+			toBlock,
+		})
+
+		console.log(logs.length)
+
+		for (const log of logs) {
+			try {
+				const decodedLog = decodeEventLog({
+					abi: functionsAbi,
+					data: log.data,
+					topics: log.topics,
+				})
+				console.log('decodedLog', decodedLog)
+			} catch (err) {
+				console.log(err)
+			}
+		}
+
+		fromBlock -= 1000n
+		toBlock -= 1000n
+	}
+
+	// const getFailureLog = await dstPublicClient.getLogs({
+	// 	address: dstConceroContract,
+	// 	event: parseAbiItem(
+	// 		'event FunctionsRequestError(bytes32 indexed ccipMessageId, bytes32 requestId, uint8 requestType)',
+	// 	),
+	// 	args: {
+	// 		from: clientAddress,
+	// 		to: clientAddress,
+	// 	},
+	// 	fromBlock: latestDstChainBlock - 100n,
+	// 	toBlock: 'latest',
+	// })
+	//
+	// if (true) {
+	// 	sendState({
+	// 		stage: ExecuteRouteStage.failedTransaction,
+	// 		payload: {
+	// 			title: 'Tailed transaction',
+	// 			body: 'Transaction failed in send stage',
+	// 			status: 'failed',
+	// 			txLink: null,
+	// 		},
+	// 	})
+	// 	return
+	// }
+	//
+	// sendState({
+	// 	stage: ExecuteRouteStage.confirmingTransaction,
+	// 	payload: {
+	// 		title: 'Transaction confirming',
+	// 		body: 'Checking transaction confirmation',
+	// 		status: 'await',
+	// 		txLink: null,
+	// 	},
+	// })
 }
 
 export async function checkTransactionStatus(
@@ -171,10 +193,15 @@ export async function checkTransactionStatus(
 	sendState: (state: ExecutionState) => void,
 	routeData: RouteData,
 	conceroAddress: Address,
+	clientAddress: Address,
 ): Promise<number | undefined> {
 	const txStart = new Date().getTime()
+
+	console.log('START TRACKING')
+
 	const tx = await srcPublicClient.waitForTransactionReceipt({
 		hash: txHash as `0x${string}`,
+		// timeout: 120_000,
 	})
 	console.log(tx)
 
@@ -210,7 +237,7 @@ export async function checkTransactionStatus(
 		return
 	}
 
-	await trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress)
+	await trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
 
 	// sendState({
 	// 	stage: ExecuteRouteStage.failedTransaction,

@@ -224,6 +224,19 @@ body::-webkit-scrollbar {
 	--color-pacific-300: #d2f3fb;
 	--color-pacific-250: #edfbfe;
 
+	/* aquamarine colors */
+	--color-aquamarine-250: #00332e;
+	--color-aquamarine-300: #0d5449;
+	--color-aquamarine-350: #0a6558;
+	--color-aquamarine-400: #05806c;
+	--color-aquamarine-450: #00a186;
+	--color-aquamarine-500: #04c8a2;
+	--color-aquamarine-550: #1de4bb;
+	--color-aquamarine-600: #50f8cf;
+	--color-aquamarine-650: #80ffdc;
+	--color-aquamarine-700: #c7ffef;
+	--color-aquamarine-750: #effefa;
+
 	/* green */
 	--color-green-550: #20a273;
 	--color-green-600: #194536;
