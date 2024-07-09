@@ -2,7 +2,7 @@ import { type Dispatch } from 'react'
 import { type SwapAction } from '../components/cards/SwapCard/swapReducer/types'
 import { TokenAmount } from './TokenAmount'
 import { configChainsViem } from '../web3/wagmi'
-import { createPublicClient, erc20Abi, getContract, http } from 'viem'
+import { createPublicClient, getContract, http } from 'viem'
 import ERC20 from '../abi/ERC20.json'
 import { config } from '../constants/config'
 
@@ -51,7 +51,7 @@ export async function getBalance({ dispatch, from, address }: HandleBalanceProps
 
 		if (from.token.address === config.NULL_ADDRESS) {
 			userBalanceAmount = await publicClient.getBalance({
-				address: '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
+				address,
 			})
 		} else {
 			userBalanceAmount = await tokenFromContract.read.balanceOf([address])
