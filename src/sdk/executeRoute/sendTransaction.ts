@@ -44,6 +44,6 @@ export const sendTransaction = async (
 		functionName: txName,
 		address: conceroAddress,
 		args,
-		gas: 4_000_000n,
+		gas: 3_000_000n,
 	})
 }
