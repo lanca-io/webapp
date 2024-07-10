@@ -10,10 +10,14 @@ const uniswapV3RouterAddressesMap: Record<string, Address> = {
 }
 
 export function buildDexData(step: Step, recipient: Address) {
-	if (step.tool.type === 'uniswapV3Multi') {
+	if (step.tool.name === 'uniswapV3Multi') {
 		return encodeAbiParameters(
-			[{ type: 'address' }, { type: 'bytes' }, { type: 'address' }],
-			[uniswapV3RouterAddressesMap[step.from.chainId], step.tool.additional_info.tokenPath, recipient],
+			[{ type: 'address' }, { type: 'bytes' }, { type: 'uint256' }],
+			[
+				uniswapV3RouterAddressesMap[step.from.chainId],
+				step.tool.additional_info.tokenPath,
+				BigInt(step.tool.additional_info.deadline),
+			],
 		)
 	} else {
 		return encodeAbiParameters(

@@ -51,6 +51,7 @@ export interface Step {
 		fees: Fee[]
 		additional_info: {
 			fee: number
+			deadline: number
 		}
 	}
 }
