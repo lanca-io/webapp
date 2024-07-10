@@ -1,68 +1,155 @@
 import type { PublicClient } from 'viem/clients/createPublicClient'
-import { getPublicClient } from '@wagmi/core'
-import { config } from '../../web3/wagmi'
-import { conceroAddressesMap } from '../../components/cards/SwapCard/swapExecution/executeConceroRoute'
-import { decodeEventLog } from 'viem'
+import { type Address, createPublicClient, decodeEventLog, parseAbiItem, http, type Transaction, type Log } from 'viem'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import type { RouteData } from '../types/routeTypes'
 import { conceroAbi } from './conceroOrchestratorAbi'
+import { viemChains } from '../configs/chainsConfig'
+import functionsAbi from '../assets/contractsData/conctractFunctionsData.json'
 
-const sleep = async (ms: number) => await new Promise(resolve => setTimeout(resolve, ms))
-
-const getLogByName = async (
-	id: string,
-	eventName: string,
-	contractAddress: string,
-	viemPublicClient: any,
-	fromBlock: string,
-): Promise<any | null> => {
-	const logs = await viemPublicClient.getLogs({
-		address: contractAddress,
-		abi: conceroAbi,
-		fromBlock,
-		toBlock: 'latest',
-	})
-
-	const filteredLog = logs.find((log: any) => {
-		let decodedLog: any = null
-
+const trackSwapTransaction = async (logs: Log[], sendState: (state: ExecutionState) => void) => {
+	for (const log of logs) {
 		try {
-			decodedLog = decodeEventLog({
+			const decodedLog = decodeEventLog({
 				abi: conceroAbi,
 				data: log.data,
 				topics: log.topics,
 			})
+
+			if (decodedLog.eventName === 'Orchestrator_SwapSuccess') {
+				sendState({
+					stage: ExecuteRouteStage.successTransaction,
+					payload: {
+						title: 'Swap execute successfully!',
+						body: 'Check your balance',
+						status: 'success',
+						txLink: null,
+					},
+				})
+			}
 		} catch (err) {
-			return false
+			console.log(err)
 		}
-
-		if (decodedLog?.args) {
-			const logId = eventName === 'CCIPSent' ? log.transactionHash : decodedLog.args.ccipMessageId
-			return logId?.toLowerCase() === id.toLowerCase() && decodedLog.eventName === eventName
-		}
-		return false
-	})
-
-	if (!filteredLog) {
-		return null
 	}
-
-	return decodeEventLog({
-		abi: conceroAbi,
-		data: filteredLog.data,
-		topics: filteredLog.topics,
-	})
 }
 
-export async function checkTransactionStatusOld(
+const trackBridgeTransaction = async (
+	tx: Transaction,
+	routeData: RouteData,
+	srcPublicClient: PublicClient,
+	sendState: (state: ExecutionState) => void,
+	conceroAddress: Address,
+	clientAddress: Address,
+) => {
+	const dstPublicClient = createPublicClient({
+		chain: viemChains[routeData.to.chain.id].chain,
+		transport: http(),
+	})
+
+	const [logCCIPSent] = await srcPublicClient.getLogs({
+		address: conceroAddress,
+		event: parseAbiItem(
+			'event CCIPSent(bytes32 indexed ccipMessageId, address sender, address recipient, uint8 token, uint256 amount, uint64 dstChainSelector)',
+		),
+		args: {
+			from: clientAddress,
+			to: clientAddress,
+		},
+		fromBlock: tx.blockNumber!,
+		toBlock: 'latest',
+	})
+
+	const { ccipMessageId } = logCCIPSent.args
+
+	const timerId = setInterval(async () => {
+		const latestDstChainBlock = await dstPublicClient.getBlockNumber()
+
+		const logs = await dstPublicClient.getLogs({
+			address: conceroAddress,
+			abi: functionsAbi,
+			fromBlock: latestDstChainBlock - 500n,
+			toBlock: 'latest',
+		})
+
+		const maxRetries = 120
+		let retryCount = 0
+
+		logs.forEach(log => {
+			const decodedLog = decodeEventLog({
+				abi: functionsAbi,
+				data: log.data,
+				topics: log.topics,
+			})
+
+			const dstCcipMessageId = decodedLog.args?.ccipMessageId as string
+			const isCurrentCcipMessage = dstCcipMessageId === ccipMessageId
+
+			console.log({
+				event: decodedLog,
+				eventName: decodedLog.eventName,
+				isCurrentCcipMessage,
+				dstCcipMessageId,
+				srcCcipMessageId: ccipMessageId,
+				latestDstChainBlock: log.blockNumber,
+				txHash: log.transactionHash,
+			})
+
+			if (ccipMessageId && decodedLog.eventName === 'TXReleased' && isCurrentCcipMessage) {
+				sendState({
+					stage: ExecuteRouteStage.successTransaction,
+					payload: {
+						title: 'Swap execute successfully!',
+						body: 'Check your balance',
+						status: 'success',
+						txLink: null,
+					},
+				})
+				clearTimeout(timerId)
+			}
+			if (ccipMessageId && decodedLog.eventName === 'FunctionsRequestError' && isCurrentCcipMessage) {
+				sendState({
+					stage: ExecuteRouteStage.failedTransaction,
+					payload: {
+						title: 'Tailed transaction',
+						body: 'Transaction was reverted',
+						status: 'failed',
+						txLink: null,
+					},
+				})
+				clearTimeout(timerId)
+			}
+		})
+
+		if (retryCount === maxRetries) {
+			clearInterval(timerId)
+		}
+
+		retryCount++
+	}, 1000)
+}
+
+export async function checkTransactionStatus(
 	txHash: string,
 	srcPublicClient: PublicClient,
 	sendState: (state: ExecutionState) => void,
 	routeData: RouteData,
+	conceroAddress: Address,
+	clientAddress: Address,
 ): Promise<number | undefined> {
-	const txStart = new Date().getTime()
+	// const txStart = new Date().getTime()
+
+	sendState({
+		stage: ExecuteRouteStage.confirmingTransaction,
+		payload: {
+			title: 'Transaction confirming',
+			body: 'Checking transaction confirmation',
+			status: 'await',
+			txLink: null,
+		},
+	})
+
 	const tx = await srcPublicClient.waitForTransactionReceipt({
 		hash: txHash as `0x${string}`,
+		timeout: 60_000,
 	})
 
 	if (tx.status === 'reverted') {
@@ -78,118 +165,12 @@ export async function checkTransactionStatusOld(
 		return
 	}
 
-	const dstPublicClient = getPublicClient(config, { chainId: Number(routeData.to.chain.id) })
+	const swapType = routeData.from.chain?.id === routeData.to.chain?.id ? 'swap' : 'bridge'
 
-	const latestDstChainBlock = (await dstPublicClient.getBlockNumber()) - 100n
-	const latestSrcChainBlock = (await srcPublicClient.getBlockNumber()) - 100n
-
-	const txLog = await getLogByName(
-		txHash,
-		'CCIPSent',
-		conceroAddressesMap[routeData.from.chain.id],
-		srcPublicClient,
-		'0x' + latestSrcChainBlock.toString(16),
-	)
-
-	const ccipMessageId = txLog?.args?.ccipMessageId
-
-	let dstLog = null
-	let srcFailLog = null
-
-	console.log('ccipMessageId', ccipMessageId)
-
-	if (ccipMessageId) {
-		while (dstLog === null && srcFailLog === null) {
-			;[dstLog, srcFailLog] = await Promise.all([
-				getLogByName(
-					ccipMessageId,
-					'UnconfirmedTXAdded',
-					conceroAddressesMap[routeData.to.chain.id],
-					dstPublicClient,
-					'0x' + latestDstChainBlock.toString(16),
-				),
-				getLogByName(
-					ccipMessageId,
-					'FunctionsRequestError',
-					conceroAddressesMap[routeData.from.chain.id],
-					srcPublicClient,
-					'0x' + latestSrcChainBlock.toString(16),
-				),
-			])
-
-			await sleep(3000)
-		}
-	}
-
-	if (srcFailLog) {
-		sendState({
-			stage: ExecuteRouteStage.failedTransaction,
-			payload: {
-				title: 'Tailed transaction',
-				body: 'Transaction failed in send stage',
-				status: 'failed',
-				txLink: null,
-			},
-		})
+	if (swapType === 'swap') {
+		await trackSwapTransaction(tx.logs, sendState)
 		return
 	}
 
-	sendState({
-		stage: ExecuteRouteStage.confirmingTransaction,
-		payload: {
-			title: 'Transaction confirming',
-			body: 'Checking transaction confirmation',
-			status: 'await',
-			txLink: null,
-		},
-	})
-
-	let dstLog2 = null
-	let dstFailLog = null
-
-	while (dstLog2 === null && dstFailLog === null) {
-		;[dstFailLog, dstLog2] = await Promise.all([
-			getLogByName(
-				ccipMessageId,
-				'FunctionsRequestError',
-				conceroAddressesMap[routeData.to.chain.id],
-				dstPublicClient,
-				'0x' + latestDstChainBlock.toString(16),
-			),
-			getLogByName(
-				ccipMessageId,
-				'TXReleased',
-				conceroAddressesMap[routeData.to.chain.id],
-				dstPublicClient,
-				'0x' + latestDstChainBlock.toString(16),
-			),
-		])
-
-		await sleep(3000)
-	}
-
-	if (dstFailLog) {
-		sendState({
-			stage: ExecuteRouteStage.failedTransaction,
-			payload: {
-				title: 'Tailed transaction',
-				body: 'Transaction failed in receiving stage',
-				status: 'failed',
-				txLink: null,
-			},
-		})
-		return
-	}
-
-	sendState({
-		stage: ExecuteRouteStage.successTransaction,
-		payload: {
-			title: 'Swap execute successfully!',
-			body: 'Check your balance',
-			status: 'success',
-			txLink: null,
-		},
-	})
-
-	return txStart
+	await trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
 }

@@ -5,7 +5,7 @@ import { viemChains } from '../configs/chainsConfig'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
 import { ExecuteRouteStage, type ExecutionConfigs, type ExecutionState } from '../types/executeSettingsTypes'
 import { buildRouteData } from './buildRouteData'
-import { checkTransactionStatus } from './checkTransactionStatusNew'
+import { checkTransactionStatus } from './checkTransactionStatus'
 import { checkAllowanceAndApprove } from './checkAllowanceAndApprove'
 import { sendTransaction } from './sendTransaction'
 
@@ -73,7 +73,7 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 		stage: ExecuteRouteStage.checkAllowance,
 		payload: {
 			title: 'Check allowance',
-			body: 'Please input allowance and approve the transaction in your wallet',
+			body: 'Waiting for token allowance',
 			status: 'await',
 			txLink: null,
 		},
@@ -96,8 +96,8 @@ export const executeRoute = async (signer: WalletClient, route: Route, execution
 		sendState({
 			stage: ExecuteRouteStage.internalError,
 			payload: {
-				title: 'Internal error',
-				body: String(error),
+				title: 'Transaction failed',
+				body: 'Internal error',
 				status: 'failed',
 				txLink: null,
 			},
