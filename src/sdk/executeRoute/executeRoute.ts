@@ -82,11 +82,10 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 	await checkAllowanceAndApprove(walletClient, publicClient, data.from, clientAddress, sendState)
 	const hash = await sendTransaction(inputRouteData, publicClient, walletClient, conceroAddress, clientAddress)
 
-	// const hash = '0x26218596609ed52027fab5d88317d628305ddec6083321e33af5ae1f5c8822a1'
+	// const hash = '0x585a6f9a8e42f4c27831b1085999e90173fad1084ad7413fdc818e7ef4511dff'
 	await checkTransactionStatus(hash, publicClient, sendState, data, conceroAddress, clientAddress)
 }
 
-// test bridge and allowance (1 hour)
 export const executeRoute = async (signer: WalletClient, route: Route, executionConfigs: ExecutionConfigs) => {
 	const sendState = useSendStateHook(executionConfigs)
 

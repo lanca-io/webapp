@@ -1,12 +1,10 @@
 import { handleTransactionError } from '../handlers/handleTransactionError'
-import { handleLifiResponse, handleRangoResponse } from './handleResponses'
-import { updateLifiSteps } from './updateLifiSteps'
 import { type GetChainByProviderSymbolI } from '../../../../hooks/DataContext/types'
 import { type SwitchChainHookType } from '../SwapInput/types'
 import { type Dispatch } from 'react'
 import { type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
 import { type providers } from 'ethers'
-import { executeConceroRouteWithSdk } from './executeConceroRouteWithSdk'
+import { executeConceroRoute } from './executeConceroRoute'
 
 interface HandleSwapProps {
 	swapState: SwapState
@@ -18,19 +16,9 @@ interface HandleSwapProps {
 	isNewSwapCardMode: boolean
 }
 
-export const handleSwap = async ({
-	swapState,
-	swapDispatch,
-	address,
-	switchChainHook,
-	getChainByProviderSymbol,
-	getSigner,
-	isNewSwapCardMode,
-}: HandleSwapProps): Promise<void> => {
-	const { from, settings, selectedRoute } = swapState
+export const handleSwap = async ({ swapState, swapDispatch }: HandleSwapProps): Promise<void> => {
+	const { selectedRoute } = swapState
 	const { originalRoute } = selectedRoute
-
-	const provider = 'uniswap'
 
 	if (!originalRoute) {
 		console.error('No original route passed')
@@ -41,9 +29,8 @@ export const handleSwap = async ({
 	swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.progress })
 
 	try {
-		executeConceroRouteWithSdk(swapState, swapDispatch, originalRoute)
+		executeConceroRoute(swapState, swapDispatch, originalRoute)
 	} catch (error: Error) {
-		console.error('ERROR: ', error)
 		handleTransactionError(error, swapDispatch, selectedRoute)
 	} finally {
 		swapDispatch({ type: 'SET_LOADING', payload: false })

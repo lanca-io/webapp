@@ -16,6 +16,7 @@ import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
 import { SwapCardStage } from '../swapReducer/types'
 import { testnetToMainnetChainsMap } from '../../../../constants/testnetToMainnetChainsMap'
+import { formatNumber } from '../../../../utils/formatting'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,
@@ -69,6 +70,9 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	// 	}
 	// }, [state.currentTokenPriceUSD])
 
+	const formattedValue =
+		direction === 'to' && selection.amount ? formatNumber(Number(selection.amount)) : selection.amount
+
 	return (
 		<>
 			<animated.div
@@ -100,7 +104,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 								}}
 								variant="inline"
 								placeholder={'0'}
-								value={selection.amount}
+								value={formattedValue}
 								onChangeText={value => {
 									onChangeText(value)
 								}}

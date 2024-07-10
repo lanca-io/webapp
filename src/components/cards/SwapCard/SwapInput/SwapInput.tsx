@@ -12,7 +12,7 @@ import { DestinationAddressInput } from './DestinationAddressInput/DestinationAd
 import { SwapCardStage } from '../swapReducer/types'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action, category } from '../../../../constants/tracking'
-import { executeConceroRouteWithSdk } from '../swapExecution/executeConceroRouteWithSdk'
+import { executeConceroRoute } from '../swapExecution/executeConceroRoute'
 import { handleSwap } from '../swapExecution/handleSwap'
 import { useContext } from 'react'
 import { type DataContextValue } from '../../../../hooks/DataContext/types'
@@ -61,7 +61,7 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true, s
 				label: 'concero_begin_swap',
 				data: { isNewSwapCardMode, from: swapState.from, to: swapState.to },
 			})
-			await executeConceroRouteWithSdk(swapState, swapDispatch)
+			await executeConceroRoute(swapState, swapDispatch)
 			// setTxInfo(time)
 		}
 

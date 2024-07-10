@@ -154,13 +154,15 @@ interface FormatNumberOptions {
 
 export function formatNumber(num: number, options: FormatNumberOptions = {}): string {
 	// console.log('formatNumber', num, options)
-	let { decimals = 10, decimalPlaces = 4, separator, minDigits = 1, disableUnit = false } = options
+	let { decimals = 10, decimalPlaces = 6, separator, minDigits = 1, disableUnit = false } = options
 	if (num === undefined || num === null) return ''
 
 	const op = num < 0 ? '-' : ''
 	num = Math.abs(num)
 
 	if (num > 1 && !options.decimalPlaces) decimalPlaces = 2
+
+	if (num > 0.1) decimalPlaces = 4
 
 	if (num < 0.001 && num > 0) {
 		return '< 0.001'

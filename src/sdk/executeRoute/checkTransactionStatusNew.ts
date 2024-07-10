@@ -1,60 +1,12 @@
 import type { PublicClient } from 'viem/clients/createPublicClient'
-import { type Address, createPublicClient, decodeEventLog, parseAbiItem, http } from 'viem'
+import { type Address, createPublicClient, decodeEventLog, parseAbiItem, http, type Transaction, type Log } from 'viem'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import type { RouteData } from '../types/routeTypes'
 import { conceroAbi } from './conceroOrchestratorAbi'
-import { conceroAddressesMap } from '../configs/conceroAddressesMap'
 import { viemChains } from '../configs/chainsConfig'
 import functionsAbi from '../assets/contractsData/conctractFunctionsData.json'
 
-const sleep = async (ms: number) => await new Promise(resolve => setTimeout(resolve, ms))
-
-const getLogByName = async (
-	id: string,
-	eventName: string,
-	contractAddress: string,
-	viemPublicClient: any,
-	fromBlock: string,
-): Promise<any | null> => {
-	const logs = await viemPublicClient.getLogs({
-		address: contractAddress,
-		abi: conceroAbi,
-		fromBlock,
-		toBlock: 'latest',
-	})
-
-	const filteredLog = logs.find((log: any) => {
-		let decodedLog: any = null
-
-		try {
-			decodedLog = decodeEventLog({
-				abi: conceroAbi,
-				data: log.data,
-				topics: log.topics,
-			})
-		} catch (err) {
-			return false
-		}
-
-		if (decodedLog?.args) {
-			const logId = eventName === 'CCIPSent' ? log.transactionHash : decodedLog.args.ccipMessageId
-			return logId?.toLowerCase() === id.toLowerCase() && decodedLog.eventName === eventName
-		}
-		return false
-	})
-
-	if (!filteredLog) {
-		return null
-	}
-
-	return decodeEventLog({
-		abi: conceroAbi,
-		data: filteredLog.data,
-		topics: filteredLog.topics,
-	})
-}
-
-const trackSwapTransaction = async (logs, sendState) => {
+const trackSwapTransaction = async (logs: Log[], sendState: (state: ExecutionState) => void) => {
 	for (const log of logs) {
 		try {
 			const decodedLog = decodeEventLog({
@@ -74,8 +26,6 @@ const trackSwapTransaction = async (logs, sendState) => {
 					},
 				})
 			}
-
-			console.log('decodedLog', decodedLog)
 		} catch (err) {
 			console.log(err)
 		}
@@ -83,7 +33,7 @@ const trackSwapTransaction = async (logs, sendState) => {
 }
 
 const trackBridgeTransaction = async (
-	tx,
+	tx: Transaction,
 	routeData: RouteData,
 	srcPublicClient: PublicClient,
 	sendState: (state: ExecutionState) => void,
@@ -95,9 +45,6 @@ const trackBridgeTransaction = async (
 		transport: http(),
 	})
 
-	const dstConceroContract = conceroAddressesMap[routeData.to.chain.id]
-	const latestDstChainBlock = (await dstPublicClient.getBlockNumber()) - 100n
-
 	const [logCCIPSent] = await srcPublicClient.getLogs({
 		address: conceroAddress,
 		event: parseAbiItem(
@@ -107,80 +54,77 @@ const trackBridgeTransaction = async (
 			from: clientAddress,
 			to: clientAddress,
 		},
-		fromBlock: tx.blockNumber,
+		fromBlock: tx.blockNumber!,
 		toBlock: 'latest',
 	})
 
 	const { ccipMessageId } = logCCIPSent.args
-	console.log('CCIPSent', ccipMessageId)
 
-	let fromBlock = latestDstChainBlock - 1000n
-	let toBlock = latestDstChainBlock
+	const timerId = setInterval(async () => {
+		const latestDstChainBlock = await dstPublicClient.getBlockNumber()
 
-	while (Number(toBlock) > Number(latestDstChainBlock - 200_000n)) {
 		const logs = await dstPublicClient.getLogs({
 			address: conceroAddress,
 			abi: functionsAbi,
-			fromBlock,
-			toBlock,
+			fromBlock: latestDstChainBlock - 500n,
+			toBlock: 'latest',
 		})
 
-		console.log(logs.length)
+		const maxRetries = 120
+		let retryCount = 0
 
-		for (const log of logs) {
-			try {
-				const decodedLog = decodeEventLog({
-					abi: functionsAbi,
-					data: log.data,
-					topics: log.topics,
+		logs.forEach(log => {
+			const decodedLog = decodeEventLog({
+				abi: functionsAbi,
+				data: log.data,
+				topics: log.topics,
+			})
+
+			const dstCcipMessageId = decodedLog.args?.ccipMessageId as string
+			const isCurrentCcipMessage = dstCcipMessageId === ccipMessageId
+
+			console.log({
+				event: decodedLog,
+				eventName: decodedLog.eventName,
+				isCurrentCcipMessage,
+				dstCcipMessageId,
+				srcCcipMessageId: ccipMessageId,
+				latestDstChainBlock: log.blockNumber,
+				txHash: log.transactionHash,
+			})
+
+			if (ccipMessageId && decodedLog.eventName === 'TXReleased' && isCurrentCcipMessage) {
+				sendState({
+					stage: ExecuteRouteStage.successTransaction,
+					payload: {
+						title: 'Swap execute successfully!',
+						body: 'Check your balance',
+						status: 'success',
+						txLink: null,
+					},
 				})
-				console.log('decodedLog', decodedLog, decodedLog.args?.ccipMessageId)
-				if (decodedLog.eventName === 'UnconfirmedTXAdded' && decodedLog.args.ccipMessageId === logCCIPSent) {
-					sendState({
-						stage: ExecuteRouteStage.confirmingTransaction,
-						payload: {
-							title: 'Transaction confirming',
-							body: 'Checking transaction confirmation',
-							status: 'await',
-							txLink: null,
-						},
-					})
-				}
-			} catch (err) {
-				console.log(err.message)
+				clearTimeout(timerId)
 			}
+			if (ccipMessageId && decodedLog.eventName === 'TXReleased' && isCurrentCcipMessage) {
+				sendState({
+					stage: ExecuteRouteStage.successTransaction,
+					payload: {
+						title: 'Swap execute successfully!',
+						body: 'Check your balance',
+						status: 'success',
+						txLink: null,
+					},
+				})
+				clearTimeout(timerId)
+			}
+		})
+
+		if (retryCount === maxRetries) {
+			clearInterval(timerId)
 		}
 
-		fromBlock -= 1000n
-		toBlock -= 1000n
-	}
-
-	// const getFailureLog = await dstPublicClient.getLogs({
-	// 	address: dstConceroContract,
-	// 	event: parseAbiItem(
-	// 		'event FunctionsRequestError(bytes32 indexed ccipMessageId, bytes32 requestId, uint8 requestType)',
-	// 	),
-	// 	args: {
-	// 		from: clientAddress,
-	// 		to: clientAddress,
-	// 	},
-	// 	fromBlock: latestDstChainBlock - 100n,
-	// 	toBlock: 'latest',
-	// })
-	//
-	// if (true) {
-	// 	sendState({
-	// 		stage: ExecuteRouteStage.failedTransaction,
-	// 		payload: {
-	// 			title: 'Tailed transaction',
-	// 			body: 'Transaction failed in send stage',
-	// 			status: 'failed',
-	// 			txLink: null,
-	// 		},
-	// 	})
-	// 	return
-	// }
-	//
+		retryCount++
+	}, 1000)
 }
 
 export async function checkTransactionStatus(
@@ -193,13 +137,10 @@ export async function checkTransactionStatus(
 ): Promise<number | undefined> {
 	const txStart = new Date().getTime()
 
-	console.log('START TRACKING')
-
 	const tx = await srcPublicClient.waitForTransactionReceipt({
 		hash: txHash as `0x${string}`,
-		// timeout: 120_000,
+		timeout: 60_000,
 	})
-	console.log(tx)
 
 	if (tx.status === 'reverted') {
 		sendState({
@@ -226,36 +167,10 @@ export async function checkTransactionStatus(
 
 	const swapType = routeData.from.chain?.id === routeData.to.chain?.id ? 'swap' : 'bridge'
 
-	console.log(swapType)
-
 	if (swapType === 'swap') {
 		await trackSwapTransaction(tx.logs, sendState)
 		return
 	}
 
 	await trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
-
-	// sendState({
-	// 	stage: ExecuteRouteStage.failedTransaction,
-	// 	payload: {
-	// 		title: 'Tailed transaction',
-	// 		body: 'Transaction failed in send stage',
-	// 		status: 'failed',
-	// 		txLink: null,
-	// 	},
-	// })
-	//
-
-	//
-	// sendState({
-	// 	stage: ExecuteRouteStage.successTransaction,
-	// 	payload: {
-	// 		title: 'Swap execute successfully!',
-	// 		body: 'Check your balance',
-	// 		status: 'success',
-	// 		txLink: null,
-	// 	},
-	// })
-
-	return txStart
 }

@@ -44,7 +44,7 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 			],
 		})
 	},
-	PENGING_TRANSACTION: swapDispatch => {
+	PENDING_TRANSACTION: swapDispatch => {
 		swapDispatch({
 			type: 'SET_SWAP_STEPS',
 			payload: [{ status: 'pending', title: 'Sending transaction' }],
