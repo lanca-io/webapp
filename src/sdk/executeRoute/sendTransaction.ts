@@ -23,22 +23,12 @@ export const sendTransaction = async (
 		args = [bridgeData, dstSwapData]
 	}
 
-	const { request } = await publicClient.simulateContract({
+	return await walletClient.writeContract({
 		account: clientAddress,
 		abi: conceroAbi,
 		functionName: txName,
 		address: conceroAddress,
 		args,
+		gas: 3_000_000n,
 	})
-
-	return await walletClient.writeContract(request)
-
-	// return await walletClient.writeContract({
-	// 	account: clientAddress,
-	// 	abi: conceroAbi,
-	// 	functionName: txName,
-	// 	address: conceroAddress,
-	// 	args,
-	// 	gas: 3_000_000n,
-	// })
 }
