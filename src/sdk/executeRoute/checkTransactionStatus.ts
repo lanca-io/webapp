@@ -1,5 +1,5 @@
 import type { PublicClient } from 'viem/clients/createPublicClient'
-import { type Address, createPublicClient, decodeEventLog, parseAbiItem, http, type Transaction, type Log } from 'viem'
+import { type Address, createPublicClient, decodeEventLog, http, type Log, parseAbiItem, type Transaction } from 'viem'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import type { RouteData } from '../types/routeTypes'
 import { conceroAbi } from './conceroOrchestratorAbi'
@@ -83,16 +83,6 @@ const trackBridgeTransaction = async (
 			const dstCcipMessageId = decodedLog.args?.ccipMessageId as string
 			const isCurrentCcipMessage = dstCcipMessageId === ccipMessageId
 
-			console.log({
-				event: decodedLog,
-				eventName: decodedLog.eventName,
-				isCurrentCcipMessage,
-				dstCcipMessageId,
-				srcCcipMessageId: ccipMessageId,
-				latestDstChainBlock: log.blockNumber,
-				txHash: log.transactionHash,
-			})
-
 			if (ccipMessageId && decodedLog.eventName === 'TXReleased' && isCurrentCcipMessage) {
 				sendState({
 					stage: ExecuteRouteStage.successTransaction,
@@ -105,6 +95,7 @@ const trackBridgeTransaction = async (
 				})
 				clearTimeout(timerId)
 			}
+
 			if (ccipMessageId && decodedLog.eventName === 'FunctionsRequestError' && isCurrentCcipMessage) {
 				sendState({
 					stage: ExecuteRouteStage.failedTransaction,
@@ -135,17 +126,7 @@ export async function checkTransactionStatus(
 	conceroAddress: Address,
 	clientAddress: Address,
 ): Promise<number | undefined> {
-	// const txStart = new Date().getTime()
-
-	sendState({
-		stage: ExecuteRouteStage.confirmingTransaction,
-		payload: {
-			title: 'Transaction confirming',
-			body: 'Checking transaction confirmation',
-			status: 'await',
-			txLink: null,
-		},
-	})
+	sendState({ stage: ExecuteRouteStage.pendingTransaction })
 
 	const tx = await srcPublicClient.waitForTransactionReceipt({
 		hash: txHash as `0x${string}`,

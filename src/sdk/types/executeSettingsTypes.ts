@@ -17,7 +17,7 @@ type Status = 'idle' | 'await' | 'success' | 'failed'
 
 export interface ExecutionState {
 	stage: ExecuteRouteStage
-	payload: {
+	payload?: {
 		title: string
 		body: string
 		status: Status

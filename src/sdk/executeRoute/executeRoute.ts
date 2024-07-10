@@ -24,8 +24,6 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 
 	if (!route) throw new Error('Route is not passed!')
 
-	console.log('route: ', route)
-
 	const { data } = route
 	const { switchChainHook } = executionConfigs
 	const sendState = useSendStateHook(executionConfigs)
@@ -82,7 +80,6 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 	await checkAllowanceAndApprove(walletClient, publicClient, data.from, clientAddress, sendState)
 	const hash = await sendTransaction(inputRouteData, publicClient, walletClient, conceroAddress, clientAddress)
 
-	// const hash = '0x585a6f9a8e42f4c27831b1085999e90173fad1084ad7413fdc818e7ef4511dff'
 	await checkTransactionStatus(hash, publicClient, sendState, data, conceroAddress, clientAddress)
 }
 
