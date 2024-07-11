@@ -121,7 +121,7 @@ export function roundNumberByDecimals(number: number | string | undefined | null
 	if (!number || !isValidNumber(number)) return null
 	const bigNumber = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
 
-	if (bigNumber.toNumber() <= 0.0001) return '< 0.01'
+	if (bigNumber.toNumber() <= 0.0001 && bigNumber.toNumber() > 0) return '< 0.01'
 
 	return bigNumber.toString().replace(/\.?0*$/, '')
 }
