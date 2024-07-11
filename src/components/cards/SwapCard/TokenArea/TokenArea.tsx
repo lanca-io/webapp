@@ -16,7 +16,7 @@ import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
 import { SwapCardStage } from '../swapReducer/types'
 import { testnetToMainnetChainsMap } from '../../../../constants/testnetToMainnetChainsMap'
-import { formatNumber } from '../../../../utils/formatting'
+import { roundNumberByDecimals } from '../../../../utils/formatting'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,
@@ -50,8 +50,8 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	const handleMaxButtonClick = () => {
 		if (!balance) return
 		const { amount } = balance
-		if (!Number(amount.formatted)) return
-		handleAmountChange({ value: amount.roundedDown, state, dispatch: swapDispatch, direction: 'from' })
+		if (!Number(amount.rounded)) return
+		handleAmountChange({ value: amount.roundDown, state, dispatch: swapDispatch, direction: 'from' })
 	}
 
 	const handleSelectToken = (token: Token, chain: Chain) => {
@@ -71,7 +71,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	// }, [state.currentTokenPriceUSD])
 
 	const formattedValue =
-		direction === 'to' && selection.amount ? formatNumber(Number(selection.amount)) : selection.amount
+		direction === 'to' && selection.amount ? roundNumberByDecimals(Number(selection.amount)) : selection.amount
 
 	return (
 		<>
