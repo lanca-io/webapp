@@ -18,6 +18,12 @@ export class TokenAmount {
 		return new BigNumber(this.rawAmount).dividedBy(BigNumber(10).pow(this.decimals)).toString()
 	}
 
+	public get roundedDown(): string {
+		const decimals = this.decimals > 4 ? this.decimals - 2 : this.decimals
+
+		return Number(this.rounded).toFixed(decimals)
+	}
+
 	public plus(amount: string | TokenAmount): TokenAmount {
 		if (typeof amount === 'string') {
 			return new TokenAmount(new BigNumber(this.formatted).plus(amount).toString(), this.decimals)

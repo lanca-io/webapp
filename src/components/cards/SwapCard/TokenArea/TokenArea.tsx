@@ -51,7 +51,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 		if (!balance) return
 		const { amount } = balance
 		if (!Number(amount.formatted)) return
-		handleAmountChange({ value: amount.formatted, state, dispatch: swapDispatch, direction: 'from' })
+		handleAmountChange({ value: amount.roundedDown, state, dispatch: swapDispatch, direction: 'from' })
 	}
 
 	const handleSelectToken = (token: Token, chain: Chain) => {
