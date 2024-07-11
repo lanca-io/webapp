@@ -7,7 +7,7 @@ import { type Chain } from '../../api/concero/types'
 
 export const initialState = {
 	tokens: {
-		'1': [
+		'8453': [
 			{
 				name: 'Ethereum',
 				symbol: 'ETH',
@@ -35,12 +35,12 @@ export const initialState = {
 	},
 	chains: [
 		{
-			id: '1',
-			name: 'Ethereum',
+			id: '8453',
+			name: 'BASE',
 			symbol: 'ETH',
 			addressPatterns: ['^(0x)[0-9A-Fa-f]{40}$'],
-			logoURI: `${config.CONCERO_ASSETS_URI}/icons/chains/filled/1.svg`,
-			explorerURI: 'https://etherscan.io',
+			logoURI: 'https://api.concero.io/static/icons/chains/8453.svg',
+			explorerURI: 'https://basescan.org',
 			providers: [
 				{
 					name: 'lifi',
@@ -131,12 +131,12 @@ export function DataProvider({ children }: DataProviderProps) {
 
 	const initialFetch = async () => {
 		const [ethTokens, polygonTokens, fetchedChains] = await Promise.all([
-			fetchTokens({ chainId: '1', offset: 0, limit: 15 }),
+			fetchTokens({ chainId: '8453', offset: 0, limit: 15 }),
 			fetchTokens({ chainId: '137', offset: 0, limit: 15 }),
 			fetchChains({ offset: 0, limit: 20 }),
 		])
 
-		setTokens({ '1': ethTokens, '137': polygonTokens })
+		setTokens({ '8453': ethTokens, '137': polygonTokens })
 		setChains(fetchedChains)
 	}
 
