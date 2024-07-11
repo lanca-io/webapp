@@ -67,10 +67,10 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 			type: 'SET_SWAP_STEPS',
 			payload: [
 				{ status: 'success', title: 'Sending transaction' },
-				{
-					status: 'success',
-					title: 'Confirming transaction',
-				},
+				// {
+				// 	status: 'success',
+				// 	title: 'Confirming transaction',
+				// },
 				{
 					status: 'success',
 					title: 'Complete',

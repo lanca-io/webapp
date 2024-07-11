@@ -21,12 +21,9 @@ export const checkAllowanceAndApprove = async (
 		args: [clientAddress, conceroAddress],
 	})
 
-	console.log('allowance: ', allowance)
-
 	let approveTxHash = null
 
 	const amountInDecimals = parseUnits(amount, token.decimals)
-	console.log('amountInDecimals', amountInDecimals)
 
 	if (allowance < amountInDecimals) {
 		const { request } = await publicClient.simulateContract({
