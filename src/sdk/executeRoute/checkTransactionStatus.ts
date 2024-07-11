@@ -5,6 +5,7 @@ import type { RouteData } from '../types/routeTypes'
 import { conceroAbi } from './conceroOrchestratorAbi'
 import { viemChains } from '../configs/chainsConfig'
 import functionsAbi from '../assets/contractsData/conctractFunctionsData.json'
+import { conceroAddressesMap } from '../configs/conceroAddressesMap'
 
 const trackSwapTransaction = async (logs: Log[], sendState: (state: ExecutionState) => void) => {
 	for (const log of logs) {
@@ -59,12 +60,13 @@ const trackBridgeTransaction = async (
 	})
 
 	const { ccipMessageId } = logCCIPSent.args
+	const dstConceroAddress = conceroAddressesMap[routeData.to.chain.id]
 
 	const timerId = setInterval(async () => {
 		const latestDstChainBlock = await dstPublicClient.getBlockNumber()
 
 		const logs = await dstPublicClient.getLogs({
-			address: conceroAddress,
+			address: dstConceroAddress,
 			abi: functionsAbi,
 			fromBlock: latestDstChainBlock - 500n,
 			toBlock: 'latest',
@@ -115,7 +117,7 @@ const trackBridgeTransaction = async (
 		}
 
 		retryCount++
-	}, 1000)
+	}, 2000)
 }
 
 export async function checkTransactionStatus(
