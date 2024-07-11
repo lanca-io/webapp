@@ -141,7 +141,7 @@ export const configChainsViem = {
 	[mainnet.id]: mainnet,
 	[polygon.id]: polygon,
 	[arbitrum.id]: arbitrum,
-	[optimism.id]: optimism,
+	[avalanche.id]: avalanche,
 	[base.id]: base,
 }
 

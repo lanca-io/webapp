@@ -152,6 +152,11 @@ interface FormatNumberOptions {
 	disableUnit?: boolean
 }
 
+export function roundDown(value, decimals) {
+	const factor = Math.pow(10, decimals)
+	return Math.floor(value * factor) / factor
+}
+
 export function formatNumber(num: number, options: FormatNumberOptions = {}): string {
 	// console.log('formatNumber', num, options)
 	let { decimals = 10, decimalPlaces = 6, separator, minDigits = 1, disableUnit = false } = options

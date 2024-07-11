@@ -21,7 +21,9 @@ export class TokenAmount {
 	public get roundedDown(): string {
 		const decimals = this.decimals > 4 ? this.decimals - 2 : this.decimals
 
-		return Number(this.rounded).toFixed(decimals)
+		return Number(this.rounded)
+			.toFixed(decimals)
+			.replace(/\.?0*$/, '')
 	}
 
 	public plus(amount: string | TokenAmount): TokenAmount {
