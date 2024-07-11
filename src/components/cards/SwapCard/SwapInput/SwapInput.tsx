@@ -18,7 +18,7 @@ import { useContext } from 'react'
 import { type DataContextValue } from '../../../../hooks/DataContext/types'
 import { DataContext } from '../../../../hooks/DataContext/DataContext'
 
-export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true, setTxInfo }: SwapInputProps) => {
+export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }: SwapInputProps) => {
 	const { getChainByProviderSymbol } = useContext<DataContextValue>(DataContext)
 	const { isConnected, address } = useAccount()
 	const isInsuranceCardVisible =

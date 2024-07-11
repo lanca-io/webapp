@@ -7,8 +7,8 @@ export const conceroAddressesMap: Record<string, Address> = {
 	'84532': '0x5FcA77ba9Bb3CF34874ecbBB6AcDD24Bed554597', // base sepolia
 
 	// MAINNET
-	'137': config.CONCERO_PROXY_POLYGON, // pol
-	'42161': config.CONCERO_PROXY_ARBITRUM, // arb
-	'8453': config.CONCERO_PROXY_BASE, // base
+	'137': config.CONCERO_PROXY_POLYGON,
+	'42161': config.CONCERO_PROXY_ARBITRUM,
+	'8453': config.CONCERO_PROXY_BASE,
 	'43114': config.CONCERO_PROXY_AVALANCHE,
 }
