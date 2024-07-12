@@ -7,6 +7,7 @@ import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScree
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
+import NotAccess from './components/screens/NotAccess/NotAccess'
 
 const SwapScreen = lazy(
 	async () =>
@@ -22,7 +23,7 @@ export const Navigator = () => {
 		posthog.identify(address)
 	}, [address])
 
-	const content = isWhitelisted ? <SwapScreen /> : 'Not access'
+	const content = isWhitelisted ? <SwapScreen /> : <NotAccess />
 
 	return (
 		<BrowserRouter>
@@ -33,8 +34,8 @@ export const Navigator = () => {
 						path={routes.home}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
-								{/* {isWhitelisted === undefined ? <FullScreenLoader /> : content} */}
-								<SwapScreen />
+								{isWhitelisted === undefined ? <FullScreenLoader /> : content}
+								{/* <SwapScreen /> */}
 							</Suspense>
 						}
 					/>
