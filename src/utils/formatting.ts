@@ -144,7 +144,7 @@ export function roundDownNumberAndFormat(number: string | number, decimals = 4) 
 
 export function roundDownDecimals(value: number | string, decimals: number): string {
 	const number = new BigNumber(value).dividedBy(BigNumber(10).pow(decimals)).toString()
-	const roundedValue = new BigNumber(number).decimalPlaces(decimals - 1, BigNumber.ROUND_DOWN)
+	const roundedValue = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
 	return roundedValue.toString()
 }
 
