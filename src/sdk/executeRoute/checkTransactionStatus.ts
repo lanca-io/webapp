@@ -46,6 +46,8 @@ const trackBridgeTransaction = async (
 		transport: http(),
 	})
 
+	const latestDstChainBlock = await dstPublicClient.getBlockNumber()
+
 	const [logCCIPSent] = await srcPublicClient.getLogs({
 		address: conceroAddress,
 		event: parseAbiItem(
@@ -63,12 +65,10 @@ const trackBridgeTransaction = async (
 	const dstConceroAddress = conceroAddressesMap[routeData.to.chain.id]
 
 	const timerId = setInterval(async () => {
-		const latestDstChainBlock = await dstPublicClient.getBlockNumber()
-
 		const logs = await dstPublicClient.getLogs({
 			address: dstConceroAddress,
 			abi: functionsAbi,
-			fromBlock: latestDstChainBlock - 500n,
+			fromBlock: latestDstChainBlock,
 			toBlock: 'latest',
 		})
 
