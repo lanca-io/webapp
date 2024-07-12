@@ -118,6 +118,22 @@ export const numberToFormatString = (number: number, decimals = 4, isTransformNe
 }
 
 export function roundNumberByDecimals(number: number | string | undefined | null, decimals = 4): string | null {
+	if (!isValidNumber(number) || !isValidNumber(decimals)) return null
+	const bigNumber = new BigNumber(number)
+	const decimalPart = bigNumber.toString().split('.')[1]
+	let count = 0
+	if (decimalPart) {
+		while (decimalPart[count] === '0') count++
+		count++
+	}
+	const factor = Math.max(count, decimals)
+	return bigNumber
+		.toFixed(factor)
+		.toString()
+		.replace(/\.?0*$/, '')
+}
+
+export function roundDownNumberAndFormat(number: string | number, decimals = 4) {
 	if (!number || !isValidNumber(number)) return null
 	const bigNumber = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
 
@@ -128,7 +144,7 @@ export function roundNumberByDecimals(number: number | string | undefined | null
 
 export function roundDownDecimals(value: number | string, decimals: number): string {
 	const number = new BigNumber(value).dividedBy(BigNumber(10).pow(decimals)).toString()
-	const roundedValue = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
+	const roundedValue = new BigNumber(number).decimalPlaces(decimals - 1, BigNumber.ROUND_DOWN)
 	return roundedValue.toString()
 }
 

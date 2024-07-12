@@ -16,7 +16,7 @@ import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
 import { SwapCardStage } from '../swapReducer/types'
 import { testnetToMainnetChainsMap } from '../../../../constants/testnetToMainnetChainsMap'
-import { roundNumberByDecimals } from '../../../../utils/formatting'
+import { roundDownNumberAndFormat } from '../../../../utils/formatting'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,
@@ -71,7 +71,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	// }, [state.currentTokenPriceUSD])
 
 	const formattedValue =
-		direction === 'to' && selection.amount ? roundNumberByDecimals(Number(selection.amount)) : selection.amount
+		direction === 'to' && selection.amount ? roundDownNumberAndFormat(Number(selection.amount)) : selection.amount
 
 	return (
 		<>
