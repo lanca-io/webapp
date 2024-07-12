@@ -32,7 +32,8 @@ export function getButtonType(
 		return ButtonType.ENTER_AMOUNT
 	}
 
-	if (balance && new BigNumber(from.amount).gte(balance.amount.formatted)) {
+	if (balance && new BigNumber(from.amount).gt(balance.amount.formatted)) {
+		console.log('balance / amount', balance.amount.formatted, from.amount)
 		return ButtonType.LOW_BALANCE
 	}
 
