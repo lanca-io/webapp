@@ -3,15 +3,14 @@ import { type Address } from 'viem'
 export interface Token {
 	_id: string
 	address: Address
-	chainId: string
+	chain_id: string
 	decimals: number
+	is_popular: true
+	logoURI: string
 	name: string
 	symbol: string
-	price: string
-	totalValueLocked: string
-	totalValueLockedUsd: string
-	volume: string
-	volumeUsd: string
+	priceUsd: string
+	providers: Provider[]
 }
 
 export interface Provider {
@@ -21,26 +20,19 @@ export interface Provider {
 }
 
 export interface Chain {
-	_id: string
 	id: string
-	__v: number
-	addressPatterns: string[]
 	explorerURI: string
+	logoURI: string
 	name: string
-	providers: Provider[]
 	symbol: string
-	tokens: string
 }
 
 export interface SwapDirectionData {
 	token: Token
-	chain: Chain
-	amount: string
-	amount_usd: string
-}
-
-export interface SwapStepDirectionData extends Omit<SwapDirectionData, 'chain'> {
+	chain?: Chain
 	chainId: string
+	amount: string
+	amount_usd?: string
 }
 
 export interface Fee {
@@ -50,18 +42,17 @@ export interface Fee {
 	token: Token
 }
 
-type SwapType = 'bridge' | 'swap'
-
 export interface Step {
-	from: SwapStepDirectionData
-	to: SwapStepDirectionData
+	from: SwapDirectionData
+	to: SwapDirectionData
 	tool: {
-		type: SwapType
 		name: string
 		logo_url: string
-		execution_time_seconds: string
-		address: Address
 		fees: Fee[]
+		additional_info: {
+			fee: number
+			deadline: number
+		}
 	}
 }
 
@@ -73,11 +64,10 @@ export interface Gas {
 }
 
 export interface RouteData {
-	_id: string
 	from: SwapDirectionData
 	to: SwapDirectionData
-	gas: Gas
-	fees: Fee[]
+	gas?: Gas
+	fees?: Fee[]
 	steps: Step[]
 }
 

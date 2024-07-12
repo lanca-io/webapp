@@ -21,9 +21,11 @@ export const SwapDetails: FC<SwapDetailsProps> = ({ swapState, swapDispatch }) =
 	const { selectedRoute } = swapState
 	const { t } = useTranslation()
 
+	const isInputStage = swapState.stage === 'input'
+
 	const containerAnimation = useSpring({
-		height: selectedRoute ? animatedContainerHeight : 0,
-		opacity: selectedRoute ? 1 : 0,
+		height: selectedRoute && !isInputStage ? animatedContainerHeight : 0,
+		opacity: selectedRoute && !isInputStage ? 1 : 0,
 		config: { duration: 200, easing: easeQuadInOut },
 	})
 
@@ -39,31 +41,33 @@ export const SwapDetails: FC<SwapDetailsProps> = ({ swapState, swapDispatch }) =
 		}
 	}, [routeContainerRef.current?.scrollHeight, reviewRouteCardRef.current?.scrollHeight, swapState.stage])
 
+	const inputDetails = (
+		<div className={classNames.selectRouteButtonContainer} ref={routeContainerRef}>
+			<p className={'body1'}>{t('swapCard.route')}</p>
+			<RouteButton
+				selectedRoute={selectedRoute}
+				onClick={() => {
+					void trackEvent({
+						action: action.OpenRoutesModal,
+						category: category.SwapCard,
+						label: 'route_modal_opened',
+					})
+					setIsSelectRouteModalVisible(true)
+				}}
+			/>
+			<SelectRouteModal
+				swapState={swapState}
+				swapDispatch={swapDispatch}
+				isOpen={isSelectRouteModalVisible}
+				setIsOpen={setIsSelectRouteModalVisible}
+			/>
+		</div>
+	)
+
 	return (
 		<animated.div style={containerAnimation}>
 			<div className={classNames.swapDetailsContainer}>
-				{swapState.stage === 'input' ? (
-					<div className={classNames.selectRouteButtonContainer} ref={routeContainerRef}>
-						<p className={'body1'}>{t('swapCard.route')}</p>
-						<RouteButton
-							selectedRoute={selectedRoute}
-							onClick={() => {
-								void trackEvent({
-									action: action.OpenRoutesModal,
-									category: category.SwapCard,
-									label: 'route_modal_opened',
-								})
-								setIsSelectRouteModalVisible(true)
-							}}
-						/>
-						<SelectRouteModal
-							swapState={swapState}
-							swapDispatch={swapDispatch}
-							isOpen={isSelectRouteModalVisible}
-							setIsOpen={setIsSelectRouteModalVisible}
-						/>
-					</div>
-				) : (
+				{!isInputStage && (
 					<div
 						className={classNames.reviewContainer}
 						ref={reviewRouteCardRef}

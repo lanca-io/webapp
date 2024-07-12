@@ -2,7 +2,7 @@ import { IconChartPie, IconLayoutGrid, IconRipple, IconSeeding } from '@tabler/i
 
 export function getCategoryIconByTitle(title: string, isSelected) {
 	const size = 13
-	const color = isSelected ? 'var(--color-primary-400)' : 'var(--color-grey-500)'
+	const color = isSelected ? 'var(--color-pacific-400)' : 'var(--color-grey-500)'
 
 	switch (title) {
 		case 'Liquid Staking':

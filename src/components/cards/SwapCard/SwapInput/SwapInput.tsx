@@ -1,4 +1,3 @@
-import { type FC, useContext } from 'react'
 import { useAccount, useSwitchChain, useWalletClient } from 'wagmi'
 import { TokenArea } from '../TokenArea/TokenArea'
 import { SwapDetails } from '../SwapDetails/SwapDetails'
@@ -6,20 +5,22 @@ import classNames from './SwapInput.module.pcss'
 import { type SwapInputProps } from './types'
 import { SwapButton } from '../../../buttons/SwapButton/SwapButton'
 import { InsuranceCard } from '../InsuranceCard/InsuranceCard'
-import { DataContext } from '../../../../hooks/DataContext/DataContext'
-import { type DataContextValue } from '../../../../hooks/DataContext/types'
 import { getEthersSigner } from '../../../../web3/ethers'
 import { type providers } from 'ethers'
 import { IconArrowsUpDown } from '@tabler/icons-react'
 import { DestinationAddressInput } from './DestinationAddressInput/DestinationAddressInput'
 import { SwapCardStage } from '../swapReducer/types'
-import { executeConceroRoute } from '../swapExecution/executeConceroRoute'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action, category } from '../../../../constants/tracking'
+import { executeConceroRoute } from '../swapExecution/executeConceroRoute'
+import { handleSwap } from '../swapExecution/handleSwap'
+import { useContext } from 'react'
+import { type DataContextValue } from '../../../../hooks/DataContext/types'
+import { DataContext } from '../../../../hooks/DataContext/DataContext'
 
-export const SwapInput: FC<SwapInputProps> = ({ swapState, swapDispatch, isNewSwapCardMode, setTxInfo }) => {
+export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }: SwapInputProps) => {
 	const { getChainByProviderSymbol } = useContext<DataContextValue>(DataContext)
-	const { address, isConnected } = useAccount()
+	const { isConnected, address } = useAccount()
 	const isInsuranceCardVisible =
 		swapState.selectedRoute?.insurance?.state === 'INSURABLE' ||
 		swapState.selectedRoute?.insurance?.state === 'INSURED'
@@ -60,23 +61,23 @@ export const SwapInput: FC<SwapInputProps> = ({ swapState, swapDispatch, isNewSw
 				label: 'concero_begin_swap',
 				data: { isNewSwapCardMode, from: swapState.from, to: swapState.to },
 			})
-			const time = await executeConceroRoute(swapState, swapDispatch)
-			setTxInfo(time)
+			await executeConceroRoute(swapState, swapDispatch)
+			// setTxInfo(time)
 		}
 
-		// if (swapState.stage === 'input') {
-		// 	swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.review })
-		// } else {
-		// 	await handleSwap({
-		// 		swapState,
-		// 		swapDispatch,
-		// 		address,
-		// 		switchChainHook,
-		// 		getChainByProviderSymbol,
-		// 		getSigner,
-		// 		isNewSwapCardMode,
-		// 	})
-		// }
+		if (swapState.stage === 'input') {
+			swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.review })
+		} else {
+			await handleSwap({
+				swapState,
+				swapDispatch,
+				address,
+				switchChainHook,
+				getChainByProviderSymbol,
+				getSigner,
+				isNewSwapCardMode,
+			})
+		}
 	}
 
 	return (

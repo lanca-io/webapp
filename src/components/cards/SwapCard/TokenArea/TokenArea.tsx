@@ -1,4 +1,4 @@
-import { type FC, type ForwardedRef, useRef } from 'react'
+import { type FC, type ForwardedRef, useEffect, useRef } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import classNames from './TokenArea.module.pcss'
 import { Button } from '../../../buttons/Button/Button'
@@ -16,6 +16,7 @@ import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
 import { SwapCardStage } from '../swapReducer/types'
 import { testnetToMainnetChainsMap } from '../../../../constants/testnetToMainnetChainsMap'
+import { roundDownNumberAndFormat } from '../../../../utils/formatting'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,
@@ -49,8 +50,8 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	const handleMaxButtonClick = () => {
 		if (!balance) return
 		const { amount } = balance
-		if (!Number(amount.formatted)) return
-		handleAmountChange({ value: amount.formatted, state, dispatch: swapDispatch, direction: 'from' })
+		if (!Number(amount.rounded)) return
+		handleAmountChange({ value: amount.roundDown, state, dispatch: swapDispatch, direction: 'from' })
 	}
 
 	const handleSelectToken = (token: Token, chain: Chain) => {
@@ -62,12 +63,15 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	// useEffect(() => {
 	// 	if (direction === 'from') void getCurrentPriceToken(selection, tokenAreaDispatch)
 	// }, [selection.chain, selection.token])
-
+	//
 	// useEffect(() => {
 	// 	if (selection.amount) {
 	// 		handleAmountChange({ value: selection.amount, state, dispatch: swapDispatch, direction })
 	// 	}
 	// }, [state.currentTokenPriceUSD])
+
+	const formattedValue =
+		direction === 'to' && selection.amount ? roundDownNumberAndFormat(Number(selection.amount)) : selection.amount
 
 	return (
 		<>
@@ -100,7 +104,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 								}}
 								variant="inline"
 								placeholder={'0'}
-								value={selection.amount}
+								value={formattedValue}
 								onChangeText={value => {
 									onChangeText(value)
 								}}

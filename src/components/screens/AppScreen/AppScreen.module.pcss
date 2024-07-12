@@ -1,11 +1,11 @@
 .container {
-	background-color: var(--color-base-background);
+	background: linear-gradient(
+		90deg,
+		var(--color-background-gradient-from) 0%,
+		var(--color-background-gradient-to) 100%
+	);
 	flex: 1;
 	padding: var(--sp-screen-v) var(--sp-screen-h);
-}
-
-.abTestNewSwapCardLayoutContainer {
-	background-color: var(--color-base-background);
 }
 
 @media (max-width: 768px) {

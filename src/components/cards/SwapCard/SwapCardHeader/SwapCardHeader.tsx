@@ -6,7 +6,6 @@ import { type Dispatch, useLayoutEffect, useRef, useState } from 'react'
 import { getCardTitleByStatus } from '../handlers/getCardTitleByStatus'
 import { animated, useSpring } from '@react-spring/web'
 import { easeQuadInOut } from 'd3-ease'
-import { Toggle } from '../../../layout/Toggle/Toggle'
 
 interface SwapCardHeaderProps {
 	swapState: SwapState
@@ -14,7 +13,7 @@ interface SwapCardHeaderProps {
 }
 
 export function SwapCardHeader({ swapState, swapDispatch }: SwapCardHeaderProps) {
-	const { stage, isTestnet } = swapState
+	const { stage } = swapState
 	const containerRef = useRef<HTMLDivElement | null>(null)
 	const [titleAnimationWidth, setTitleAnimationWidth] = useState<number>(0)
 
@@ -32,10 +31,6 @@ export function SwapCardHeader({ swapState, swapDispatch }: SwapCardHeaderProps)
 			setTitleAnimationWidth(containerRef.current.scrollWidth / 2 - 74)
 		}
 	}, [containerRef.current?.scrollWidth])
-
-	// useEffect(() => {
-	// 	swapDispatch({ type: 'TOGGLE_TESTNET' })
-	// }, [])
 
 	return (
 		<div
@@ -55,22 +50,18 @@ export function SwapCardHeader({ swapState, swapDispatch }: SwapCardHeaderProps)
 			<animated.div style={titleTransition}>
 				<h5 className={'cardHeaderTitle'}>{getCardTitleByStatus(swapState.stage)}</h5>
 			</animated.div>
-			{isInputStage ? (
-				<div className={classNames.settingsContainer}>
-					<div className={classNames.toggleTestnetContainer}>
-						<h5>Testnet</h5>
-						<Toggle isChecked={isTestnet} className={classNames.disabledTestnetButton} />
-					</div>
-					<Button
-						variant="black"
-						size="sq-xs"
-						onClick={() => {
-							swapDispatch({ type: 'TOGGLE_SETTINGS_MODAL_OPEN' })
-						}}
-						leftIcon={<IconDots size={16} color={'var(--color-text-secondary)'} />}
-					/>
-				</div>
-			) : null}
+			{/* {isInputStage ? ( */}
+			{/* 	<div className={classNames.settingsContainer}> */}
+			{/* 		<Button */}
+			{/* 			variant="black" */}
+			{/* 			size="sq-xs" */}
+			{/* 			onClick={() => { */}
+			{/* 				swapDispatch({ type: 'TOGGLE_SETTINGS_MODAL_OPEN' }) */}
+			{/* 			}} */}
+			{/* 			leftIcon={<IconDots size={16} color={'var(--color-text-secondary)'} />} */}
+			{/* 		/> */}
+			{/* 	</div> */}
+			{/* ) : null} */}
 		</div>
 	)
 }

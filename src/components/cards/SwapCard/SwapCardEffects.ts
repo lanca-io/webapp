@@ -41,10 +41,6 @@ export function useSwapCardEffects({
 	}, [from.token.address, from.chain.id, address])
 
 	useEffect(() => {
-		// if (isTestnet) {
-		// 	swapDispatch({ type: 'SET_AMOUNT', direction: 'to', payload: { amount: from.amount, amount_usd: '' } })
-		// 	return
-		// }
 		clearRoutes(typingTimeoutRef, swapDispatch)
 		void handleFetchRoutes(swapState, swapDispatch, typingTimeoutRef)
 		return () => {
@@ -64,6 +60,7 @@ export function useSwapCardEffects({
 
 	useEffect(() => {
 		if (!selectedRoute) return
+
 		swapDispatch({
 			type: 'SET_AMOUNT',
 			direction: 'to',

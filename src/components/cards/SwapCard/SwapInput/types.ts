@@ -5,7 +5,7 @@ import { type Dispatch } from 'react'
 export interface SwapInputProps {
 	swapState: SwapState
 	swapDispatch: Dispatch<SwapAction>
-	isNewSwapCardMode: boolean
+	isNewSwapCardMode?: boolean // TODO remove prop
 	setTxInfo: (info: { duration: number; hash: string } | undefined) => void
 }
 

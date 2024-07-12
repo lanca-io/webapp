@@ -35,7 +35,7 @@ export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }:
 	const limit = 15
 	const { selection } = useContext(SelectionContext)
 	const [tokensModalState, tokensModalDispatch] = useTokensModalReducer(selection.swapCard[direction].chain)
-	const { selectedChain, tokens, isLoading, isBalanceLoading, offset, searchValue } = tokensModalState
+	const { selectedChain, tokens, isLoading, isBalanceLoading, offset, searchValue, balanceTokens } = tokensModalState
 
 	const addTokens = async () => {
 		if (isTestnet) {
@@ -74,9 +74,10 @@ export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }:
 				tokens: tokensOnTargetChain,
 			})
 		} else {
-			const resToken = await getTokens({ chainId: selectedChain.id, offset: 0, limit, search: searchValue })
-			if (resToken.length > 0) {
-				tokensModalDispatch({ type: TokenModalActionType.SET_TOKENS, tokens: resToken })
+			const resTokens = await getTokens({ chainId: selectedChain.id, offset: 0, limit, search: searchValue })
+
+			if (resTokens.length > 0) {
+				tokensModalDispatch({ type: TokenModalActionType.SET_TOKENS, tokens: resTokens })
 				tokensModalDispatch({ type: TokenModalActionType.SET_OFFSET, offset: 15 })
 			}
 		}

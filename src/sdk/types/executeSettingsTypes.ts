@@ -6,7 +6,8 @@ export enum ExecuteRouteStage {
 	setChain = 'SET_CHAIN',
 	setAddress = 'SET_ADDRESS',
 	checkAllowance = 'CHECK_ALLOWANCE',
-	pendingTransaction = 'PENGING_TRANSACTION',
+	pendingTransaction = 'PENDING_TRANSACTION',
+	confirmingTransaction = 'CONFIRMING_TRANSACTION',
 	failedTransaction = 'FAILED_TRANSACTION',
 	successTransaction = 'SUCCESS_TRANSACTION',
 	internalError = 'INTERNAL_ERROR',
@@ -16,7 +17,7 @@ type Status = 'idle' | 'await' | 'success' | 'failed'
 
 export interface ExecutionState {
 	stage: ExecuteRouteStage
-	payload: {
+	payload?: {
 		title: string
 		body: string
 		status: Status

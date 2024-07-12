@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { addingTokenDecimals } from './formatting'
+import { addingTokenDecimals, roundDownDecimals } from './formatting'
 
 export class TokenAmount {
 	private rawAmount: string
@@ -12,6 +12,10 @@ export class TokenAmount {
 
 	public get rounded(): string {
 		return addingTokenDecimals(this.rawAmount, this.decimals) ?? ''
+	}
+
+	public get roundDown(): string {
+		return roundDownDecimals(this.rawAmount, this.decimals) ?? ''
 	}
 
 	public get formatted(): string {

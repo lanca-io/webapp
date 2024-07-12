@@ -113,7 +113,7 @@ export function BurgerMenu() {
 								size={'sq-sm'}
 								className={classNames.listButton}
 								onClick={(e: MouseEvent) => {
-									window.open('https://twitter.com/concero_io', '_blank')
+									window.open('https://x.com/lanca_io', '_blank')
 									e.stopPropagation()
 								}}
 							>

@@ -133,6 +133,21 @@ export function roundNumberByDecimals(number: number | string | undefined | null
 		.replace(/\.?0*$/, '')
 }
 
+export function roundDownNumberAndFormat(number: string | number, decimals = 4) {
+	if (!number || !isValidNumber(number)) return null
+	const bigNumber = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
+
+	if (bigNumber.toNumber() <= 0.0001 && bigNumber.toNumber() > 0) return '< 0.01'
+
+	return bigNumber.toString().replace(/\.?0*$/, '')
+}
+
+export function roundDownDecimals(value: number | string, decimals: number): string {
+	const number = new BigNumber(value).dividedBy(BigNumber(10).pow(decimals)).toString()
+	const roundedValue = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
+	return roundedValue.toString()
+}
+
 export function addingTokenDecimals(amount: number | string, decimals: number): string | null {
 	if (!isValidNumber(amount) || !isValidNumber(decimals)) return null
 	const number = new BigNumber(amount).dividedBy(BigNumber(10).pow(decimals)).toString()
@@ -154,13 +169,15 @@ interface FormatNumberOptions {
 
 export function formatNumber(num: number, options: FormatNumberOptions = {}): string {
 	// console.log('formatNumber', num, options)
-	let { decimals = 10, decimalPlaces = 4, separator, minDigits = 1, disableUnit = false } = options
+	let { decimals = 10, decimalPlaces = 6, separator, minDigits = 1, disableUnit = false } = options
 	if (num === undefined || num === null) return ''
 
 	const op = num < 0 ? '-' : ''
 	num = Math.abs(num)
 
 	if (num > 1 && !options.decimalPlaces) decimalPlaces = 2
+
+	if (num > 0.1) decimalPlaces = 4
 
 	if (num < 0.001 && num > 0) {
 		return '< 0.001'

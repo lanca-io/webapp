@@ -137,6 +137,14 @@ createWeb3Modal({
 	enableAnalytics: true,
 })
 
+export const configChainsViem = {
+	[mainnet.id]: mainnet,
+	[polygon.id]: polygon,
+	[arbitrum.id]: arbitrum,
+	[avalanche.id]: avalanche,
+	[base.id]: base,
+}
+
 export const publicClient = createPublicClient({
 	chain: mainnet,
 	transport: http(),
