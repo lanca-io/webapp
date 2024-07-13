@@ -49,6 +49,7 @@ export interface Step {
 		name: string
 		logo_url: string
 		fees: Fee[]
+		type: 'bridge' | 'swap'
 		additional_info: {
 			fee: number
 			deadline: number
