@@ -18,7 +18,7 @@ export function InnerStepCard({ step }: InnerStepCardProps) {
 		[StepTypes.bridge]: t('swapCard.routeCard.bridge'),
 	}
 
-	const stepTypeTitle = stepTypeTitles[step.type] ?? t('swapCard.routeCard.swap')
+	const stepTypeTitle = stepTypeTitles[step.tool.type] ?? t('swapCard.routeCard.swap')
 
 	return (
 		<div className={classNames.container}>

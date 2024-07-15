@@ -83,6 +83,7 @@ export interface Step {
 		gas: Fees[] | []
 		gas_usd: number | string | null
 		logo_uri: string
+		type: StepTypes
 	}
 }
 

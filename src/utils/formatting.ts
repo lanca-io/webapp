@@ -133,13 +133,14 @@ export function roundNumberByDecimals(number: number | string | undefined | null
 		.replace(/\.?0*$/, '')
 }
 
-export function roundDownNumberAndFormat(number: string | number, decimals = 4) {
+export function roundDownNumberAndFormat(number: string | number, decimals = 4, isTransformNeeded = false) {
 	if (!number || !isValidNumber(number)) return null
 	const bigNumber = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
 
-	if (bigNumber.toNumber() <= 0.0001 && bigNumber.toNumber() > 0) return '< 0.01'
+	if (bigNumber.toNumber() <= 0.0001 && bigNumber.toNumber() > 0 && isTransformNeeded) return '< 0.01'
+	if (bigNumber.toNumber() <= 0.0001 && bigNumber.toNumber() > 0 && !isTransformNeeded) return number
 
-	return bigNumber.toString().replace(/\.?0*$/, '')
+	return bigNumber.toString()
 }
 
 export function roundDownDecimals(value: number | string, decimals: number): string {

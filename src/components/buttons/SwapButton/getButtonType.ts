@@ -33,7 +33,6 @@ export function getButtonType(
 	}
 
 	if (balance && new BigNumber(from.amount).gt(balance.amount.formatted)) {
-		console.log('balance / amount', balance.amount.formatted, from.amount)
 		return ButtonType.LOW_BALANCE
 	}
 

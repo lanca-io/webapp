@@ -26,14 +26,14 @@ export function AmountUsd({ state, balance, selection, direction, handleMaxButto
 				) : !state.isFocused && selection.amount === '' ? (
 					<h4>{t('tokenArea.enterAmount')}</h4>
 				) : (
-					<h4>{`$${numberToFormatString((selection.token.priceUsd ?? 0) * Number(selection.amount), 2)}`}</h4>
+					<h4>{`$${numberToFormatString((selection.token.priceUsd ?? 0) * Number(selection.amount), 2, true)}`}</h4>
 				)}
 			</div>
 		)
 	} else {
 		return (
 			<div className={classNames.amountUsdContainer}>
-				<h4>{`$${numberToFormatString(Number(selection.amount_usd), 2)}`}</h4>
+				<h4>{`$${numberToFormatString(Number(selection.amount_usd), 2, true)}`}</h4>
 			</div>
 		)
 	}

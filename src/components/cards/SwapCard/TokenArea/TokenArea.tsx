@@ -50,8 +50,9 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	const handleMaxButtonClick = () => {
 		if (!balance) return
 		const { amount } = balance
-		if (!Number(amount.rounded)) return
-		handleAmountChange({ value: amount.roundDown, state, dispatch: swapDispatch, direction: 'from' })
+		if (!Number(amount.formatted)) return
+
+		handleAmountChange({ value: amount.formatted, state, dispatch: swapDispatch, direction: 'from' })
 	}
 
 	const handleSelectToken = (token: Token, chain: Chain) => {
@@ -69,9 +70,6 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	// 		handleAmountChange({ value: selection.amount, state, dispatch: swapDispatch, direction })
 	// 	}
 	// }, [state.currentTokenPriceUSD])
-
-	const formattedValue =
-		direction === 'to' && selection.amount ? roundDownNumberAndFormat(Number(selection.amount)) : selection.amount
 
 	return (
 		<>
@@ -104,7 +102,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 								}}
 								variant="inline"
 								placeholder={'0'}
-								value={formattedValue}
+								value={selection.amount}
 								onChangeText={value => {
 									onChangeText(value)
 								}}
