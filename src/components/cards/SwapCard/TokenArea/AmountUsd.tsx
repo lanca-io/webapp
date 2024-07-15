@@ -21,7 +21,7 @@ export function AmountUsd({ state, balance, selection, direction, handleMaxButto
 			<div className={classNames.amountUsdContainer}>
 				{state.isFocused && !selection.amount && balance && !isTestnet ? (
 					<h4 className={classNames.maxButton} onMouseDown={handleMaxButtonClick}>
-						Max: {balance?.amount.rounded}
+						Max: {numberToFormatString(Number(balance?.amount.rounded), 4, true)}
 					</h4>
 				) : !state.isFocused && selection.amount === '' ? (
 					<h4>{t('tokenArea.enterAmount')}</h4>

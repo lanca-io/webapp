@@ -43,7 +43,7 @@ const trackBridgeTransaction = async (
 ) => {
 	const dstPublicClient = createPublicClient({
 		chain: viemChains[routeData.to.chain.id].chain,
-		transport: http(),
+		transport: viemChains[routeData.to.chain.id].transport ?? http(),
 	})
 
 	const latestDstChainBlock = await dstPublicClient.getBlockNumber()
@@ -133,7 +133,9 @@ export async function checkTransactionStatus(
 
 	const tx = await srcPublicClient.waitForTransactionReceipt({
 		hash: txHash as `0x${string}`,
-		timeout: 60_000,
+		timeout: 300_000,
+		pollingInterval: 3_000,
+		retryCount: 12,
 	})
 
 	if (tx.status === 'reverted') {

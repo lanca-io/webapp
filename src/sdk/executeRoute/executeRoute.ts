@@ -61,7 +61,7 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 
 	const publicClient = createPublicClient({
 		chain: viemChains[data.from.chain.id].chain,
-		transport: http(viemChains[data.from.chain.id].transport),
+		transport: viemChains[data.from.chain.id].transport ?? http(),
 	})
 
 	const inputRouteData: InputRouteData = buildRouteData(data, clientAddress)
