@@ -1,4 +1,4 @@
-import { type Chain } from 'viem'
+import { type Chain, fallback, type Transport } from 'viem'
 import {
 	arbitrum,
 	arbitrumSepolia,
@@ -25,22 +25,44 @@ import {
 	sepolia,
 	zkSync,
 } from 'viem/chains'
+import { http } from 'wagmi'
 
-export const viemChains: Record<string, { chain: Chain; transport?: string }> = {
+export const viemChains: Record<string, { chain: Chain; transport?: Transport }> = {
 	[mainnet.id]: {
 		chain: mainnet,
 	},
 	[polygon.id]: {
 		chain: polygon,
+		transport: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://polygon.meowrpc.com')], {
+			rank: true,
+		}),
+	},
+	[arbitrum.id]: {
+		chain: arbitrum,
+		transport: fallback([http('https://arbitrum.llamarpc.com'), http('https://arbitrum-one-rpc.publicnode.com')], {
+			rank: true,
+		}),
+	},
+	[avalanche.id]: {
+		chain: avalanche,
+		transport: fallback(
+			[http('https://avalanche.drpc.org'), http('https://avalanche-c-chain-rpc.publicnode.com')],
+			{
+				rank: true,
+			},
+		),
+	},
+	[base.id]: {
+		chain: base,
+		transport: fallback([http('https://base-rpc.publicnode.com'), http('https://base.meowrpc.com')], {
+			rank: true,
+		}),
 	},
 	[sepolia.id]: {
 		chain: sepolia,
 	},
 	[polygonZkEvm.id]: {
 		chain: polygonZkEvm,
-	},
-	[arbitrum.id]: {
-		chain: arbitrum,
 	},
 	[aurora.id]: {
 		chain: aurora,
@@ -66,14 +88,8 @@ export const viemChains: Record<string, { chain: Chain; transport?: string }> = 
 	[bsc.id]: {
 		chain: bsc,
 	},
-	[avalanche.id]: {
-		chain: avalanche,
-	},
 	[gnosis.id]: {
 		chain: gnosis,
-	},
-	[base.id]: {
-		chain: base,
 	},
 	[fantom.id]: {
 		chain: fantom,
@@ -92,11 +108,11 @@ export const viemChains: Record<string, { chain: Chain; transport?: string }> = 
 	},
 	[baseSepolia.id]: {
 		chain: baseSepolia,
-		transport: 'https://base-sepolia-rpc.publicnode.com',
+		transport: http('https://base-sepolia-rpc.publicnode.com'),
 	},
 	[arbitrumSepolia.id]: {
 		chain: arbitrumSepolia,
-		transport: 'https://arbitrum-sepolia-rpc.publicnode.com',
+		transport: http('https://arbitrum-sepolia-rpc.publicnode.com'),
 	},
 	[optimismSepolia.id]: {
 		chain: optimismSepolia,
