@@ -64,6 +64,9 @@ const trackBridgeTransaction = async (
 	const { ccipMessageId } = logCCIPSent.args
 	const dstConceroAddress = conceroAddressesMap[routeData.to.chain.id]
 
+	let retryCount = 0
+	const maxRetries = 120
+
 	const timerId = setInterval(async () => {
 		const logs = await dstPublicClient.getLogs({
 			address: dstConceroAddress,
@@ -71,9 +74,6 @@ const trackBridgeTransaction = async (
 			fromBlock: latestDstChainBlock,
 			toBlock: 'latest',
 		})
-
-		const maxRetries = 120
-		let retryCount = 0
 
 		logs.forEach(log => {
 			const decodedLog = decodeEventLog({
@@ -113,6 +113,7 @@ const trackBridgeTransaction = async (
 		})
 
 		if (retryCount === maxRetries) {
+			console.log('listening finish')
 			clearInterval(timerId)
 		}
 
