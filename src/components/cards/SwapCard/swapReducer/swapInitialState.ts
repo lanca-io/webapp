@@ -37,4 +37,5 @@ export const swapInitialState = (selection): SwapState => ({
 	isDestinationAddressVisible: false,
 	settingsModalOpen: false,
 	isTestnet: false,
+	isSufficientLiquidity: true,
 })

@@ -8,7 +8,7 @@ export function getButtonType(
 	isInsufficientGas: boolean,
 	isFetchBalancesLoading: boolean,
 ): ButtonType {
-	const { from, to, routes, isLoading, balance, isNoRoutes, selectedRoute, stage, isTestnet } = swapState
+	const { from, to, routes, isLoading, balance, isNoRoutes, selectedRoute, stage, isSufficientLiquidity } = swapState
 
 	if (isLoading) {
 		return ButtonType.LOADING
@@ -22,9 +22,14 @@ export function getButtonType(
 		return ButtonType.CONNECT_WALLET_BRIGHT
 	}
 
-	if (from.amount && isTestnet) {
-		if (BigNumber(from.amount).gt(20)) return ButtonType.TESTNET_AMOUNT_TOO_HIGH
-		if (BigNumber(to.amount).eq(0)) return ButtonType.TESTNET_AMOUNT_TOO_LOW
+	if (from.amount) {
+		const fromAmountUsd = Number(from.amount) * from.token.priceUsd
+
+		if (BigNumber(fromAmountUsd).gt(30)) return ButtonType.TESTNET_AMOUNT_TOO_HIGH
+		if (BigNumber(to.amount).lte(0)) return ButtonType.TESTNET_AMOUNT_TOO_LOW
+
+		if (!isSufficientLiquidity) return ButtonType.NOT_SUFFICIENT_LIQUIDITY
+
 		return ButtonType.SWAP
 	}
 
