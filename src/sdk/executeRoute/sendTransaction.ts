@@ -23,6 +23,8 @@ export const sendTransaction = async (
 		args = [bridgeData, dstSwapData]
 	}
 
+	const gasPrice = await publicClient.getGasPrice()
+
 	return await walletClient.writeContract({
 		account: clientAddress,
 		abi: conceroAbi,
@@ -30,5 +32,6 @@ export const sendTransaction = async (
 		address: conceroAddress,
 		args,
 		gas: 3_000_000n,
+		gasPrice,
 	})
 }
