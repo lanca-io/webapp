@@ -1,4 +1,4 @@
-import { type Chain, fallback, type Transport } from 'viem'
+import { type Chain, type Transport } from 'viem'
 import {
 	arbitrum,
 	arbitrumSepolia,
@@ -33,30 +33,34 @@ export const viemChains: Record<string, { chain: Chain; transport?: Transport }>
 	},
 	[polygon.id]: {
 		chain: polygon,
-		transport: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://polygon.meowrpc.com')], {
-			rank: true,
-		}),
+		transport: http(),
+		// fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://polygon.meowrpc.com')], {
+		// rank: true,
+		// }),
 	},
 	[arbitrum.id]: {
 		chain: arbitrum,
-		transport: fallback([http('https://arbitrum.llamarpc.com'), http('https://arbitrum-one-rpc.publicnode.com')], {
-			rank: true,
-		}),
+		transport: http(),
+		// fallback([http('https://arbitrum.llamarpc.com'), http('https://arbitrum-one-rpc.publicnode.com')], {
+		// rank: true,
+		// }),
 	},
 	[avalanche.id]: {
 		chain: avalanche,
-		transport: fallback(
-			[http('https://avalanche.drpc.org'), http('https://avalanche-c-chain-rpc.publicnode.com')],
-			{
-				rank: true,
-			},
-		),
+		transport: http(),
+		// fallback(
+		// [http('https://avalanche.drpc.org'), http('https://avalanche-c-chain-rpc.publicnode.com')],
+		// {
+		// 	rank: true,
+		// },
+		// ),
 	},
 	[base.id]: {
 		chain: base,
-		transport: fallback([http('https://base-rpc.publicnode.com'), http('https://base.meowrpc.com')], {
-			rank: true,
-		}),
+		transport: http(),
+		// fallback([http('https://base-rpc.publicnode.com'), http('https://base.meowrpc.com')], {
+		// rank: true,
+		// }),
 	},
 	[sepolia.id]: {
 		chain: sepolia,
