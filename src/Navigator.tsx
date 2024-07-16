@@ -35,7 +35,6 @@ export const Navigator = () => {
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
 								{isWhitelisted === undefined ? <FullScreenLoader /> : content}
-								{/* <SwapScreen /> */}
 							</Suspense>
 						}
 					/>

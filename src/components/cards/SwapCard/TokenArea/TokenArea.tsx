@@ -16,7 +16,6 @@ import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
 import { SwapCardStage } from '../swapReducer/types'
 import { testnetToMainnetChainsMap } from '../../../../constants/testnetToMainnetChainsMap'
-import { roundDownNumberAndFormat } from '../../../../utils/formatting'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,

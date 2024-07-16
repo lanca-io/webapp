@@ -1,37 +1,32 @@
 import classNames from './NotAccess.module.pcss'
 import { Button } from '../../buttons/Button/Button'
-import { IconBrandDiscord, IconBrandMedium, IconBrandTwitter } from '@tabler/icons-react'
+import { useAccount } from 'wagmi'
+import { add } from 'husky'
 
 const links = [
 	{
-		title: 'Twitter',
-		link: 'https://x.com/lanca_io',
-		icon: <IconBrandTwitter size={18} />,
-	},
-	{
-		title: 'Discord',
-		link: 'https://discord.com/channels/1155792755105214535',
-		icon: <IconBrandDiscord size={18} />,
-	},
-	{
-		title: 'Medium',
-		link: 'https://medium.com/@concero',
-		icon: <IconBrandMedium size={18} />,
+		title: 'Get access',
+		link: 'https://send.lanca.io/s/clynb69qi0387y0ufi9myw20x',
 	},
 ]
 
 export const NotAccess = () => {
+	const { address } = useAccount()
+
+	const text = address ? 'You’re on the waitlist. Stay tuned!' : 'Connect your wallet to get access'
+
 	return (
 		<div className={classNames.notAccessContainer}>
-			<h2>You’re on the waitlist. Stay tuned!</h2>
+			<h2>{text}</h2>
 			<div className={classNames.buttonsContainer}>
-				{links.map(link => {
-					return (
-						<a rel="noreferrer" target="_blank" href={link.link} key={link.link}>
-							<Button leftIcon={link.icon}>{link.title}</Button>
-						</a>
-					)
-				})}
+				{address &&
+					links.map(link => {
+						return (
+							<a rel="noreferrer" target="_blank" href={link.link} key={link.link}>
+								<Button>{link.title}</Button>
+							</a>
+						)
+					})}
 			</div>
 		</div>
 	)
