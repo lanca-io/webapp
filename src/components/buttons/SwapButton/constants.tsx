@@ -15,6 +15,7 @@ export enum ButtonType {
 	CONNECT_WALLET_BRIGHT = 11,
 	TESTNET_AMOUNT_TOO_HIGH = 12,
 	TESTNET_AMOUNT_TOO_LOW = 13,
+	NOT_SUFFICIENT_LIQUIDITY = 14,
 }
 
 export const buttonText: { [key in ButtonType]: string } = {
@@ -29,8 +30,9 @@ export const buttonText: { [key in ButtonType]: string } = {
 	[ButtonType.REVIEW]: 'button.reviewSwap',
 	[ButtonType.FETCH_BALANCES_LOADING]: '',
 	[ButtonType.CONNECT_WALLET_BRIGHT]: 'button.connectWalletToSwap',
-	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: 'Amount should not be greater than 10',
+	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: 'Amount should not be greater than 30',
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: 'From amount is too low',
+	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: 'Try lower amount',
 }
 
 export const isButtonDisabled: { [key in ButtonType]: boolean } = {
@@ -47,6 +49,7 @@ export const isButtonDisabled: { [key in ButtonType]: boolean } = {
 	[ButtonType.CONNECT_WALLET_BRIGHT]: false,
 	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: true,
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: true,
+	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: true,
 }
 
 export const buttonStyleClass: { [key in ButtonType]: string } = {
@@ -63,6 +66,7 @@ export const buttonStyleClass: { [key in ButtonType]: string } = {
 	[ButtonType.CONNECT_WALLET_BRIGHT]: 'swap',
 	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: 'wrong',
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: 'wrong',
+	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: 'wrong',
 }
 
 export const iconComponent: { [key in ButtonType]: ReactNode | null } = {
@@ -79,4 +83,5 @@ export const iconComponent: { [key in ButtonType]: ReactNode | null } = {
 	[ButtonType.CONNECT_WALLET_BRIGHT]: <IconWallet size={18} color="white" />,
 	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: <IconWallet size={18} color="white" />,
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: <IconWallet size={18} color="white" />,
+	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: <IconWallet size={18} color="white" />,
 }

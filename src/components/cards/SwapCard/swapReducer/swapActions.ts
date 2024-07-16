@@ -128,6 +128,10 @@ export const swapActions: SwapAction = {
 		const isTestnet = !state.isTestnet
 		return { ...state, isTestnet }
 	},
+	SET_IS_SUFFICIENT_LIQUIDITY: (state: SwapState, action: SwapAction) => {
+		const isSufficientLiquidity = action.payload
+		return { ...state, isSufficientLiquidity }
+	},
 }
 
 function updateLastSwapState(state: SwapState): SwapState {
