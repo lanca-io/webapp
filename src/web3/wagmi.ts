@@ -1,5 +1,5 @@
 import { createConfig, http } from 'wagmi'
-import { createPublicClient } from 'viem'
+import { createPublicClient, fallback } from 'viem'
 import {
 	arbitrum,
 	arbitrumSepolia,
@@ -96,9 +96,12 @@ export const config = createConfig({
 	transports: {
 		[mainnet.id]: http(),
 		[sepolia.id]: http(),
-		[polygon.id]: http(),
+		[polygon.id]: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://polygon.meowrpc.com')]),
 		[polygonZkEvm.id]: http(),
-		[arbitrum.id]: http(),
+		[arbitrum.id]: fallback([
+			http('https://arbitrum.llamarpc.com'),
+			http('https://arbitrum-one-rpc.publicnode.com'),
+		]),
 		[aurora.id]: http(),
 		[zkSync.id]: http(),
 		[moonriver.id]: http(),
@@ -107,9 +110,12 @@ export const config = createConfig({
 		[optimism.id]: http(),
 		[fuse.id]: http(),
 		[bsc.id]: http(),
-		[avalanche.id]: http(),
+		[avalanche.id]: fallback([
+			http('https://avalanche.drpc.org'),
+			http('https://avalanche-c-chain-rpc.publicnode.com'),
+		]),
 		[gnosis.id]: http(),
-		[base.id]: http(),
+		[base.id]: fallback([http('https://base-rpc.publicnode.com'), http('https://base.meowrpc.com')]),
 		[fantom.id]: http(),
 		[okc.id]: http(),
 		[cronos.id]: http(),
