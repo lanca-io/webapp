@@ -7,7 +7,16 @@ import { viemChains } from '../configs/chainsConfig'
 import functionsAbi from '../assets/contractsData/conctractFunctionsData.json'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
 
-const trackSwapTransaction = async (logs: Log[], sendState: (state: ExecutionState) => void) => {
+type SwapStatusType = 'success' | 'fail'
+
+const throwError = (txHash: string) => {
+	const error = new Error('Failed transaction')
+	error.data = { txHash }
+
+	throw error
+}
+
+const trackSwapTransaction = (logs: Log[], sendState: (state: ExecutionState) => void): SwapStatusType => {
 	for (const log of logs) {
 		try {
 			const decodedLog = decodeEventLog({
@@ -26,11 +35,13 @@ const trackSwapTransaction = async (logs: Log[], sendState: (state: ExecutionSta
 						txLink: null,
 					},
 				})
+
+				return 'success'
 			}
-		} catch (err) {
-			console.log(err)
-		}
+		} catch (err) {}
 	}
+
+	throw new Error()
 }
 
 const trackBridgeTransaction = async (
@@ -40,7 +51,7 @@ const trackBridgeTransaction = async (
 	sendState: (state: ExecutionState) => void,
 	conceroAddress: Address,
 	clientAddress: Address,
-) => {
+): Promise<SwapStatusType> => {
 	const dstPublicClient = createPublicClient({
 		chain: viemChains[routeData.to.chain.id].chain,
 		transport: viemChains[routeData.to.chain.id].transport ?? http(),
@@ -96,29 +107,34 @@ const trackBridgeTransaction = async (
 					},
 				})
 				clearTimeout(timerId)
+
+				return 'success'
 			}
 
 			if (ccipMessageId && decodedLog.eventName === 'FunctionsRequestError' && isCurrentCcipMessage) {
 				sendState({
 					stage: ExecuteRouteStage.failedTransaction,
 					payload: {
-						title: 'Tailed transaction',
+						title: 'Failed transaction',
 						body: 'Transaction was reverted',
 						status: 'failed',
 						txLink: null,
 					},
 				})
 				clearTimeout(timerId)
+
+				return 'fail'
 			}
 		})
 
 		if (retryCount === maxRetries) {
-			console.log('listening finish')
 			clearInterval(timerId)
 		}
 
 		retryCount++
 	}, 2000)
+
+	return 'fail'
 }
 
 export async function checkTransactionStatus(
@@ -128,7 +144,7 @@ export async function checkTransactionStatus(
 	routeData: RouteData,
 	conceroAddress: Address,
 	clientAddress: Address,
-): Promise<number | undefined> {
+): Promise<SwapStatusType> {
 	sendState({ stage: ExecuteRouteStage.pendingTransaction })
 
 	const tx = await srcPublicClient.waitForTransactionReceipt({
@@ -148,15 +164,30 @@ export async function checkTransactionStatus(
 				txLink: null,
 			},
 		})
-		return
+
+		throwError(txHash)
 	}
 
 	const swapType = routeData.from.chain?.id === routeData.to.chain?.id ? 'swap' : 'bridge'
 
+	let swapTxStatus: SwapStatusType = 'fail'
+
 	if (swapType === 'swap') {
-		await trackSwapTransaction(tx.logs, sendState)
-		return
+		swapTxStatus = trackSwapTransaction(tx.logs, sendState)
 	}
 
-	await trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
+	if (swapType === 'bridge') {
+		swapTxStatus = await trackBridgeTransaction(
+			tx,
+			routeData,
+			srcPublicClient,
+			sendState,
+			conceroAddress,
+			clientAddress,
+		)
+	}
+
+	if (swapTxStatus === 'fail') {
+		throwError(txHash)
+	}
 }

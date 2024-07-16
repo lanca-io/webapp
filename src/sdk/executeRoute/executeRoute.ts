@@ -8,6 +8,8 @@ import { buildRouteData } from './buildRouteData'
 import { checkTransactionStatus } from './checkTransactionStatus'
 import { checkAllowanceAndApprove } from './checkAllowanceAndApprove'
 import { sendTransaction } from './sendTransaction'
+import { trackEvent } from '../../hooks/useTracking'
+import { action, category } from '../../constants/tracking'
 
 const useSendStateHook = (executionConfigs: ExecutionConfigs) => {
 	const { executionStateUpdateHook, executeInBackground } = executionConfigs
@@ -79,17 +81,28 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 
 	await checkAllowanceAndApprove(walletClient, publicClient, data.from, clientAddress, sendState)
 	const hash = await sendTransaction(inputRouteData, publicClient, walletClient, conceroAddress, clientAddress)
-
 	await checkTransactionStatus(hash, publicClient, sendState, data, conceroAddress, clientAddress)
+
+	return hash
 }
 
 export const executeRoute = async (signer: WalletClient, route: Route, executionConfigs: ExecutionConfigs) => {
 	const sendState = useSendStateHook(executionConfigs)
 
 	try {
-		await executeRouteBase(signer, route, executionConfigs)
+		const txHash = await executeRouteBase(signer, route, executionConfigs)
+
+		trackEvent({
+			category: category.SwapCard,
+			action: action.SwapSuccess,
+			label: 'swap_success',
+			data: { provider: 'concero', route, txHash },
+		})
 	} catch (error) {
 		console.error(error)
+
+		const { txHash } = error.data
+
 		sendState({
 			stage: ExecuteRouteStage.internalError,
 			payload: {
@@ -100,6 +113,11 @@ export const executeRoute = async (signer: WalletClient, route: Route, execution
 			},
 		})
 
-		throw new Error(String(error))
+		trackEvent({
+			category: category.SwapCard,
+			action: action.SwapFailed,
+			label: 'swap_failed',
+			data: { provider: 'concero', route, txHash },
+		})
 	}
 }
