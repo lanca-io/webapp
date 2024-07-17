@@ -18,12 +18,14 @@ export const Navigator = () => {
 	const { address } = useAccount()
 	const isWhitelisted = useFeatureFlagEnabled('lanca-early-access')
 
+	const isDevelopment = process.env.DEVELOPMENT === 'true'
+
 	useEffect(() => {
 		if (!address) return
 		posthog.identify(address)
 	}, [address])
 
-	const content = isWhitelisted ? <SwapScreen /> : <NotAccess />
+	const content = isWhitelisted || isDevelopment ? <SwapScreen /> : <NotAccess />
 
 	return (
 		<BrowserRouter>
@@ -34,7 +36,7 @@ export const Navigator = () => {
 						path={routes.home}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
-								{isWhitelisted === undefined ? <FullScreenLoader /> : content}
+								{isWhitelisted === undefined && !isDevelopment ? <FullScreenLoader /> : content}
 							</Suspense>
 						}
 					/>
