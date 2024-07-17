@@ -3,6 +3,7 @@ import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { getRoutes } from '../getRoutes/getRoutes'
 import { getPoolAmount } from './getPoolAmount'
 import { ButtonType } from '../../../buttons/SwapButton/constants'
+import { config } from '../../../../constants/config'
 
 export const handleFetchRoutes = async (
 	swapState: SwapState,
@@ -19,9 +20,11 @@ export const handleFetchRoutes = async (
 				buttonState.type === ButtonType.TESTNET_AMOUNT_TOO_HIGH ||
 				buttonState.type === ButtonType.TESTNET_AMOUNT_TOO_LOW
 
+			const isNativeToken = from.token.address === config.NULL_ADDRESS || to.token.address === config.NULL_ADDRESS
+
 			swapDispatch({ type: 'SET_IS_SUFFICIENT_LIQUIDITY', payload: true })
 
-			if (isWrongRangeAmount) return
+			if (isWrongRangeAmount || isNativeToken) return
 
 			if (isBridge) {
 				const dstChainId = to.chain.id
