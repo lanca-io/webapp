@@ -11,17 +11,17 @@ export function MobileBreadcrumbs() {
 
 	return (
 		<ul className={classNames.container}>
-			<Link to={routes.swap} className={classNames.link}>
-				<Button variant={'black'} className={`${classNames.listButton} ${matchSwap ? classNames.active : ''}`}>
-					<h5>{t('header.swap')}</h5>
-				</Button>
-			</Link>
-			{/* <Link to={routes.earn} className={classNames.link}> */}
-			{/*	<Button variant={'black'} className={`${classNames.listButton} ${matchEarn ? classNames.active : ''}`}> */}
-			{/*		<h5>{t('header.earn')}</h5> */}
-			{/*	</Button> */}
+			{/* <Link to={routes.swap} className={classNames.link}> */}
+			{/* 	<Button variant={'black'} className={`${classNames.listButton} ${matchSwap ? classNames.active : ''}`}> */}
+			{/* 		<h5>{t('header.swap')}</h5> */}
+			{/* 	</Button> */}
 			{/* </Link> */}
-			<div className={classNames.separator} />
+			{/* <Link to={routes.earn} className={classNames.link}> */}
+			{/* 	<Button variant={'black'} className={`${classNames.listButton} ${matchEarn ? classNames.active : ''}`}> */}
+			{/* 		<h5>{t('header.earn')}</h5> */}
+			{/* 	</Button> */}
+			{/* </Link> */}
+			{/* <div className={classNames.separator} /> */}
 		</ul>
 	)
 }

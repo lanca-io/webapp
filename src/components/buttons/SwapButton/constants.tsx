@@ -16,6 +16,7 @@ export enum ButtonType {
 	TESTNET_AMOUNT_TOO_HIGH = 12,
 	TESTNET_AMOUNT_TOO_LOW = 13,
 	NOT_SUFFICIENT_LIQUIDITY = 14,
+	NOT_SUPPORTED_NATIVE_TOKENS = 15,
 }
 
 export const buttonText: { [key in ButtonType]: string } = {
@@ -33,6 +34,7 @@ export const buttonText: { [key in ButtonType]: string } = {
 	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: 'Amount should not be greater than 30',
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: 'From amount is too low',
 	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: 'Try lower amount',
+	[ButtonType.NOT_SUPPORTED_NATIVE_TOKENS]: "Native tokens aren't supported",
 }
 
 export const isButtonDisabled: { [key in ButtonType]: boolean } = {
@@ -50,6 +52,7 @@ export const isButtonDisabled: { [key in ButtonType]: boolean } = {
 	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: true,
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: true,
 	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: true,
+	[ButtonType.NOT_SUPPORTED_NATIVE_TOKENS]: true,
 }
 
 export const buttonStyleClass: { [key in ButtonType]: string } = {
@@ -67,6 +70,7 @@ export const buttonStyleClass: { [key in ButtonType]: string } = {
 	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: 'wrong',
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: 'wrong',
 	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: 'wrong',
+	[ButtonType.NOT_SUPPORTED_NATIVE_TOKENS]: 'wrong',
 }
 
 export const iconComponent: { [key in ButtonType]: ReactNode | null } = {
@@ -84,4 +88,5 @@ export const iconComponent: { [key in ButtonType]: ReactNode | null } = {
 	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: <IconWallet size={18} color="white" />,
 	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: <IconWallet size={18} color="white" />,
 	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: <IconWallet size={18} color="white" />,
+	[ButtonType.NOT_SUPPORTED_NATIVE_TOKENS]: null,
 }

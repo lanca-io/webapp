@@ -9,6 +9,33 @@
 	flex-direction: row;
 }
 
+ul {
+	color: var(--color-text-secondary);
+	font-size: 0.875rem;
+	font-weight: 500;
+	gap: var(--sp-sm);
+
+	a {
+		border: 1px solid transparent;
+		border-radius: 6px;
+		padding: var(--sp-sm) var(--sp-md);
+	}
+
+	.active {
+		background-color: var(--color-primary-700);
+		border: 1px solid var(--color-primary-650);
+		color: var(--color-text-primary);
+	}
+
+	.active:hover {
+		background-color: var(--color-primary-700);
+	}
+
+	.comingSoon {
+		color: var(--color-grey-450);
+	}
+}
+
 a {
 	transition:
 		color 0.2s ease-in-out,

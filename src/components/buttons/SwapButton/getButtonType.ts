@@ -1,6 +1,7 @@
 import { type SwapState } from '../../cards/SwapCard/swapReducer/types'
 import { ButtonType } from './constants'
 import BigNumber from 'bignumber.js'
+import { config } from '../../../constants/config'
 
 export function getButtonType(
 	swapState: SwapState,
@@ -24,6 +25,9 @@ export function getButtonType(
 
 	if (from.amount) {
 		const fromAmountUsd = Number(from.amount) * from.token.priceUsd
+
+		if (from.token.address === config.NULL_ADDRESS || to.token.address === config.NULL_ADDRESS)
+			return ButtonType.NOT_SUPPORTED_NATIVE_TOKENS
 
 		if (BigNumber(fromAmountUsd).gt(30)) return ButtonType.TESTNET_AMOUNT_TOO_HIGH
 		if (BigNumber(to.amount).lte(0)) return ButtonType.TESTNET_AMOUNT_TOO_LOW
