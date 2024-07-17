@@ -2,8 +2,6 @@ import { type Direction, type StandardRoute, type Step as ConceroStep } from '..
 import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
 import { type GetConceroRoutes, type PopulateRoutes } from './types'
-import { trackEvent } from '../../../../hooks/useTracking'
-import { action, category } from '../../../../constants/tracking'
 import { findRoute } from '../../../../sdk/findRoute'
 import type { Address } from 'viem'
 import { type Route, type SwapDirectionData } from '../../../../sdk/types/routeTypes'
@@ -121,21 +119,15 @@ const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): P
 			toAddress: swapState.to.address as Address,
 		}
 
-		const uniswapRoute: Route = await findRoute(routeRequest)
-		if (!uniswapRoute.success) return false
+		const conceroRoute: Route = await findRoute(routeRequest)
 
-		const conceroRoute = routeDataProvider(uniswapRoute)
+		if (!conceroRoute?.success) return false
 
-		populateRoutes({ routes: [conceroRoute], fromAmount: swapState.from.amount, swapDispatch })
-		return uniswapRoute.success
+		const conceroRouteData = routeDataProvider(conceroRoute)
+		populateRoutes({ routes: [conceroRouteData], fromAmount: swapState.from.amount, swapDispatch })
+
+		return conceroRoute.success
 	} catch (error) {
-		void trackEvent({
-			category: category.SwapCard,
-			action: action.FetchRangoRoutesError,
-			label: 'fetch_uniswap_route_error',
-			data: { error },
-		})
-		console.error('uniswap route', error)
 		return false
 	}
 }
