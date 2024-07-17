@@ -18,7 +18,13 @@ export function InnerStepCard({ step }: InnerStepCardProps) {
 		[StepTypes.bridge]: t('swapCard.routeCard.bridge'),
 	}
 
+	const stepToolTitles: Record<string, string> = {
+		[StepTypes.swap]: tool.name,
+		[StepTypes.bridge]: 'Concero',
+	}
+
 	const stepTypeTitle = stepTypeTitles[step.tool.type] ?? t('swapCard.routeCard.swap')
+	const stepToolTitle = stepToolTitles[step.tool.type]
 
 	return (
 		<div className={classNames.container}>
@@ -31,7 +37,7 @@ export function InnerStepCard({ step }: InnerStepCardProps) {
 					</p>
 				</div>
 				<p className={'body1'}>{t('swapCard.routeCard.via')}</p>
-				<p className={'body1'}>{tool.name}</p>
+				<p className={'body1'}>{stepToolTitle}</p>
 			</div>
 			<div className={classNames.tagContainer}>
 				<p className={'body1'}>
