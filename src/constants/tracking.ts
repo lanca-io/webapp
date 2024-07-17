@@ -34,12 +34,12 @@ export enum action {
 	OpenRoutesModal = 'action_open_routes_modal',
 	SelectRoute = 'action_select_route',
 	ToggleSettingsModal = 'action_toggle_settings_modal',
-	FetchLifiRoutesError = 'action_fetch_lifi_routes_error',
-	FetchRangoRoutesError = 'action_fetch_rango_routes_error',
 	BeginSwap = 'action_begin_swap',
 	SwapFailed = 'action_swap_failed',
 	SwapSuccess = 'action_swap_success',
 	SwapRejected = 'action_swap_rejected',
+	FetchConceroRoutesError = 'action_fetch_concero_routes_error',
+	FetchConceroRoutesNotFound = 'action_fetch_concero_routes_not_found',
 
 	// Chart
 	ToggleChartModalVisible = 'action_toggle_chart_modal_visible',
