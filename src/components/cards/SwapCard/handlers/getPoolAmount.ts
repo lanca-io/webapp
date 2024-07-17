@@ -13,7 +13,7 @@ const usdcDecimals = 6
 export const poolConfigs: Record<string, IPoolConfig> = {
 	'8453': {
 		chain: base,
-		conceroContract: '0x390661e47a0013889b2bA26d1B7d01fdCD8F0bcC',
+		conceroContract: '0x1bb4233765838Ee69076845D10fa231c8cd500a3',
 		usdcContract: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
 	},
 	'42161': {
