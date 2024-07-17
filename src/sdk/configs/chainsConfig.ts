@@ -37,7 +37,7 @@ export const viemChains: Record<string, { chain: Chain; transport?: Transport }>
 	},
 	[arbitrum.id]: {
 		chain: arbitrum,
-		transport: fallback([http('https://arbitrum.llamarpc.com'), http('https://arbitrum-one-rpc.publicnode.com')]),
+		transport: fallback([http('https://arb1.arbitrum.io/rpc'), http('https://arbitrum-one-rpc.publicnode.com')]),
 	},
 	[avalanche.id]: {
 		chain: avalanche,
