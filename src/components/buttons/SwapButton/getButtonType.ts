@@ -33,8 +33,6 @@ export function getButtonType(
 		if (BigNumber(to.amount).lte(0)) return ButtonType.TESTNET_AMOUNT_TOO_LOW
 
 		if (!isSufficientLiquidity) return ButtonType.NOT_SUFFICIENT_LIQUIDITY
-
-		return ButtonType.SWAP
 	}
 
 	if (!from.amount || (from.amount && routes.length === 0)) {
