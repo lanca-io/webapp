@@ -101,7 +101,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 								}}
 								variant="inline"
 								placeholder={'0'}
-								value={selection.amount}
+								value={Number(selection.amount) < 0 ? '0' : selection.amount}
 								onChangeText={value => {
 									onChangeText(value)
 								}}
