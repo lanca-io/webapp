@@ -9,6 +9,7 @@ import { setSwapCard } from './handlers/setSwapCard'
 import { SelectionContext } from '../../../hooks/SelectionContext'
 import { testnetTokens } from '../../modals/TokensModal/testnetTokens'
 import { testnetChains } from '../../modals/TokensModal/ChainsPicker/testnetChains'
+import { fr } from '../../../i18n/translations/fr'
 
 interface UseSwapCardEffectsProps {
 	swapState: SwapState
@@ -38,7 +39,7 @@ export function useSwapCardEffects({
 	useEffect(() => {
 		if (isTestnet) return
 		void getBalance({ dispatch: swapDispatch, from, address })
-	}, [from.token.address, from.chain.id, address])
+	}, [from.token.address, from.chain.id, address, from.amount])
 
 	useEffect(() => {
 		clearRoutes(typingTimeoutRef, swapDispatch)
