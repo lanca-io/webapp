@@ -23,7 +23,7 @@ export const useSwapReducer = (): [SwapState, Dispatch<SwapAction>] => {
 			state.from.chain.id === '8453' &&
 			state.to.chain.id === '137' &&
 			state.to.token.priceUsd === null &&
-			tokens['1'] &&
+			tokens['8453'] &&
 			tokens['137']
 		) {
 			dispatch({ type: 'SET_TOKEN', payload: { token: tokens['8453'][0] }, direction: 'from' })

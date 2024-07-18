@@ -9,27 +9,27 @@ export const initialState = {
 	tokens: {
 		'8453': [
 			{
-				name: 'Ethereum',
-				symbol: 'ETH',
-				address: config.NULL_ADDRESS,
-				logoURI: 'https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png',
-				decimals: 18,
-				coinGeckoId: 'ethereum',
+				name: 'USD Coin',
+				symbol: 'USDC',
+				address: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+				logoURI:
+					'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+				decimals: 6,
+				coinGeckoId: null,
 				is_popular: true,
-				priceUsd: null,
+				priceUsd: 1,
 			},
 		],
 		'137': [
 			{
-				name: 'Matic',
-				symbol: 'MATIC',
-				address: config.NULL_ADDRESS,
-				logoURI:
-					'https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png',
-				decimals: 18,
-				coinGeckoId: 'matic-network',
+				name: 'USD Coin',
+				symbol: 'USDC',
+				address: '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359',
+				logoURI: 'https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png',
+				decimals: 6,
+				coinGeckoId: null,
 				is_popular: true,
-				priceUsd: null,
+				priceUsd: 1,
 			},
 		],
 	},
