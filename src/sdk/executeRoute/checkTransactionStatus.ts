@@ -66,6 +66,10 @@ const trackBridgeTransaction = async (
 		toBlock: 'latest',
 	})
 
+	if (!logCCIPSent.args) {
+		trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
+	}
+
 	const { ccipMessageId } = logCCIPSent.args
 	const dstConceroAddress = conceroAddressesMap[routeData.to.chain.id]
 
@@ -142,7 +146,7 @@ export async function checkTransactionStatus(
 		hash: txHash as `0x${string}`,
 		timeout: 300_000,
 		pollingInterval: 3_000,
-		retryCount: 12,
+		retryCount: 30,
 	})
 
 	if (tx.status === 'reverted') {
