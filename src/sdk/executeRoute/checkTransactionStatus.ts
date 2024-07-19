@@ -67,7 +67,7 @@ const trackBridgeTransaction = async (
 	})
 
 	if (!logCCIPSent.args) {
-		trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
+		return trackBridgeTransaction(tx, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
 	}
 
 	const { ccipMessageId } = logCCIPSent.args
