@@ -54,17 +54,6 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 	}
 
 	const handleSwapButtonClick = async () => {
-		if (swapState.isTestnet) {
-			void trackEvent({
-				category: category.SwapCard,
-				action: action.BeginSwap,
-				label: 'concero_begin_swap',
-				data: { isNewSwapCardMode, from: swapState.from, to: swapState.to },
-			})
-			await executeConceroRoute(swapState, swapDispatch)
-			// setTxInfo(time)
-		}
-
 		if (swapState.stage === 'input') {
 			swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.review })
 		} else {
