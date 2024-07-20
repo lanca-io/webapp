@@ -6,6 +6,8 @@ import { statusSwapMap } from './statusSwapMap'
 import { type Route } from '../../../../sdk/types/routeTypes'
 import { getWalletClient } from '@wagmi/core'
 import { config } from '../../../../web3/wagmi'
+import { trackEvent } from '../../../../hooks/useTracking'
+import { action, category } from '../../../../constants/tracking'
 
 export async function executeConceroRoute(swapState: SwapState, swapDispatch: Dispatch<SwapAction>, route: Route) {
 	swapDispatch({ type: 'SET_LOADING', payload: true })
@@ -20,6 +22,13 @@ export async function executeConceroRoute(swapState: SwapState, swapDispatch: Di
 		const executionConfig: ExecutionConfigs = {
 			executionStateUpdateHook: addExecutionListener,
 		}
+
+		void trackEvent({
+			category: category.SwapCard,
+			action: action.BeginSwap,
+			label: 'begin_swap',
+			data: { from: swapState.from, to: swapState.to },
+		})
 
 		await executeRoute(walletClient, route, executionConfig)
 	} catch (err) {

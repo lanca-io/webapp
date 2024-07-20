@@ -101,8 +101,6 @@ export const executeRoute = async (signer: WalletClient, route: Route, execution
 	} catch (error) {
 		console.error(error)
 
-		const { txHash } = error.data
-
 		sendState({
 			stage: ExecuteRouteStage.internalError,
 			payload: {
@@ -112,6 +110,18 @@ export const executeRoute = async (signer: WalletClient, route: Route, execution
 				txLink: null,
 			},
 		})
+
+		if (error.toString().toLowerCase().includes('user rejected')) {
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapRejected,
+				label: 'User rejected swap',
+				data: { provider: 'concero', route },
+			})
+			return
+		}
+
+		const { txHash } = error.data
 
 		trackEvent({
 			category: category.SwapCard,
