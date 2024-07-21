@@ -2,6 +2,7 @@ import { type Address, erc20Abi, parseUnits, type PublicClient, type WalletClien
 import type { SwapDirectionData } from '../types/routeTypes'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
 import { ExecuteRouteStage } from '../types/executeSettingsTypes'
+import { config } from '../../constants/config'
 
 export const checkAllowanceAndApprove = async (
 	walletClient: WalletClient,
@@ -11,6 +12,10 @@ export const checkAllowanceAndApprove = async (
 	sendState,
 ) => {
 	const { token, amount, chain } = txData
+
+	if (token.address === config.NULL_ADDRESS) {
+		return
+	}
 
 	const conceroAddress = conceroAddressesMap[chain.id]
 

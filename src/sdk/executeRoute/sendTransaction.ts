@@ -1,6 +1,7 @@
 import type { InputRouteData, SwapArgs, TxName } from '../types/contractInputTypes'
 import { type Address, type PublicClient, type WalletClient } from 'viem'
 import { conceroAbi } from './conceroOrchestratorAbi'
+import { config } from '../../constants/config'
 
 export const sendTransaction = async (
 	txArgs: InputRouteData,
@@ -14,6 +15,8 @@ export const sendTransaction = async (
 	let txName: TxName = 'swap'
 	let args: SwapArgs = [srcSwapData, clientAddress]
 
+	console.log(args)
+
 	if (srcSwapData.length > 0 && bridgeData) {
 		txName = 'swapAndBridge'
 		args = [bridgeData, srcSwapData, dstSwapData]
@@ -25,6 +28,8 @@ export const sendTransaction = async (
 
 	const gasPrice = await publicClient.getGasPrice()
 
+	const isFromNativeToken = srcSwapData.length > 0 && srcSwapData[0].fromToken === config.NULL_ADDRESS
+
 	return await walletClient.writeContract({
 		account: clientAddress,
 		abi: conceroAbi,
@@ -33,5 +38,6 @@ export const sendTransaction = async (
 		args,
 		gas: 3_000_000n,
 		gasPrice,
+		...(isFromNativeToken && { value: srcSwapData[0].fromAmount }),
 	})
 }

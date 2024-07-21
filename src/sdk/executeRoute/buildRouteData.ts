@@ -19,7 +19,6 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 
 	for (let i = 0; i < steps.length; i++) {
 		const currentStep = steps[i]
-		console.log(currentStep)
 
 		const { from, to, tool } = currentStep
 		const { type } = currentStep.tool
