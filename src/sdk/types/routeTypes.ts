@@ -53,6 +53,7 @@ export interface Step {
 		additional_info: {
 			fee: number
 			deadline: number
+			containDstUnwrapWNative?: boolean
 		}
 	}
 }

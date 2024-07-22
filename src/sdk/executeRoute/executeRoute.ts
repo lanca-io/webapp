@@ -1,4 +1,4 @@
-import { createPublicClient, http, type WalletClient } from 'viem'
+import { createPublicClient, http, parseUnits, type WalletClient } from 'viem'
 import { type Route } from '../types/routeTypes'
 import { type InputRouteData } from '../types/contractInputTypes'
 import { viemChains } from '../configs/chainsConfig'
@@ -10,6 +10,7 @@ import { checkAllowanceAndApprove } from './checkAllowanceAndApprove'
 import { sendTransaction } from './sendTransaction'
 import { trackEvent } from '../../hooks/useTracking'
 import { action, category } from '../../constants/tracking'
+import { unwrapWNative } from './unwrapWNative'
 
 const useSendStateHook = (executionConfigs: ExecutionConfigs) => {
 	const { executionStateUpdateHook, executeInBackground } = executionConfigs
@@ -29,6 +30,8 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 	const { data } = route
 	const { switchChainHook } = executionConfigs
 	const sendState = useSendStateHook(executionConfigs)
+	const containDstUnwrapWNative =
+		data.steps[data.steps.length - 1].tool.additional_info?.containDstUnwrapWNative ?? false
 
 	if (data.to.amount === '0' || data.to.amount === '') throw new Error('Amount is empty!')
 	if (data.from.token.address === data.to.token.address) throw new Error('Tokens are the same!')
@@ -82,15 +85,23 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 	await checkAllowanceAndApprove(walletClient, publicClient, data.from, clientAddress, sendState)
 	const hash = await sendTransaction(inputRouteData, publicClient, walletClient, conceroAddress, clientAddress)
 	await checkTransactionStatus(hash, publicClient, sendState, data, conceroAddress, clientAddress)
+	if (containDstUnwrapWNative) {
+		await unwrapWNative(
+			data.to.token.chain_id,
+			data.to.token.address,
+			parseUnits(data.to.amount, data.to.token.decimals),
+			clientAddress,
+		)
+	}
 
 	return hash
 }
 
-export const executeRoute = async (signer: WalletClient, route: Route, executionConfigs: ExecutionConfigs) => {
+export const executeRoute = async (walletClient: WalletClient, route: Route, executionConfigs: ExecutionConfigs) => {
 	const sendState = useSendStateHook(executionConfigs)
 
 	try {
-		const txHash = await executeRouteBase(signer, route, executionConfigs)
+		const txHash = await executeRouteBase(walletClient, route, executionConfigs)
 
 		trackEvent({
 			category: category.SwapCard,
