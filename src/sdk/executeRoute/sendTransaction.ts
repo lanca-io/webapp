@@ -27,7 +27,6 @@ export const sendTransaction = async (
 	}
 
 	const gasPrice = await publicClient.getGasPrice()
-
 	const isFromNativeToken = srcSwapData.length > 0 && srcSwapData[0].fromToken === config.NULL_ADDRESS
 
 	return await walletClient.writeContract({
