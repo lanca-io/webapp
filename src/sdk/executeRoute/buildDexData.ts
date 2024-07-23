@@ -19,15 +19,19 @@ export function buildDexData(step: Step, recipient: Address) {
 				BigInt(step.tool.additional_info.deadline),
 			],
 		)
-	} else {
+	} else if (step.tool.name === 'uniswapV3Single') {
 		return encodeAbiParameters(
 			[{ type: 'address' }, { type: 'uint24' }, { type: 'uint160' }, { type: 'uint256' }],
 			[
 				uniswapV3RouterAddressesMap[step.from.chainId],
 				step.tool.additional_info.fee,
 				0n,
-				step.tool.additional_info.deadline,
+				BigInt(step.tool.additional_info.deadline),
 			],
 		)
+	} else if (step.tool.name === 'wrapNative') {
+		return '0x'
+	} else if (step.tool.name === 'unwrapWNative') {
+		return encodeAbiParameters([{ type: 'address' }], [uniswapV3RouterAddressesMap[step.from.chainId]])
 	}
 }

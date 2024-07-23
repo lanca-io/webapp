@@ -15,8 +15,6 @@ export const sendTransaction = async (
 	let txName: TxName = 'swap'
 	let args: SwapArgs = [srcSwapData, clientAddress]
 
-	console.log(args)
-
 	if (srcSwapData.length > 0 && bridgeData) {
 		txName = 'swapAndBridge'
 		args = [bridgeData, srcSwapData, dstSwapData]
