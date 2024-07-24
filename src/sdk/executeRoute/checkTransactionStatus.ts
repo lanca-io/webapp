@@ -6,12 +6,27 @@ import { conceroAbi } from './conceroOrchestratorAbi'
 import { viemChains } from '../configs/chainsConfig'
 import functionsAbi from '../assets/contractsData/conctractFunctionsData.json'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
+import { trackEvent } from '../../hooks/useTracking'
+import { action, category } from '../../constants/tracking'
 
 const throwError = (txHash: Address) => {
 	const error = new Error('Failed transaction')
 	error.data = { txHash }
 
 	throw error
+}
+
+const timer = (func: (num: number) => void) => {
+	let counterTime = 1
+
+	const timerId = setInterval(() => {
+		counterTime++
+		func(counterTime)
+	}, 1000)
+
+	return () => {
+		clearInterval(timerId)
+	}
 }
 
 const trackSwapTransaction = (logs: Log[], sendState: (state: ExecutionState) => void) => {
@@ -49,6 +64,19 @@ const trackBridgeTransaction = async (
 	const dstPublicClient = createPublicClient({
 		chain: viemChains[routeData.to.chain.id].chain,
 		transport: viemChains[routeData.to.chain.id].transport ?? http(),
+	})
+
+	const stopTimer = timer(time => {
+		if (time === 180) {
+			// sendState({ stage: ExecuteRouteStage.longDurationConfirming })
+
+			trackEvent({
+				category: category.SwapCard,
+				action: action.ClFunctionsFailed,
+				label: 'cl_functions_failed',
+				data: { provider: 'concero', route: routeData, txHash: tx.hash },
+			})
+		}
 	})
 
 	const latestDstChainBlock = await dstPublicClient.getBlockNumber()
@@ -105,6 +133,7 @@ const trackBridgeTransaction = async (
 					},
 				})
 				clearTimeout(timerId)
+				stopTimer()
 				return
 			}
 
@@ -119,12 +148,13 @@ const trackBridgeTransaction = async (
 					},
 				})
 				clearTimeout(timerId)
-
+				stopTimer()
 				throwError(tx)
 			}
 		})
 
 		if (retryCount === maxRetries) {
+			stopTimer()
 			clearInterval(timerId)
 		}
 
@@ -144,9 +174,8 @@ export async function checkTransactionStatus(
 
 	const tx = await srcPublicClient.waitForTransactionReceipt({
 		hash: txHash as `0x${string}`,
-		timeout: 300_000,
 		pollingInterval: 3_000,
-		retryCount: 30,
+		retryCount: 500,
 	})
 
 	if (tx.status === 'reverted') {

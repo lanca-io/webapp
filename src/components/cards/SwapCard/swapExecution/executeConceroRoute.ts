@@ -31,11 +31,18 @@ export async function executeConceroRoute(swapState: SwapState, swapDispatch: Di
 		})
 
 		await executeRoute(walletClient, route, executionConfig)
-	} catch (err) {
+	} catch (error) {
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.failed })
 		swapDispatch({
 			type: 'SET_SWAP_STEPS',
 			payload: [{ title: 'Transaction failed', body: 'Internal error', status: 'error' }],
+		})
+
+		void trackEvent({
+			category: category.SwapCard,
+			action: action.FrontendSwapFailed,
+			label: 'fe_swap_failed',
+			data: { route, error },
 		})
 	}
 }

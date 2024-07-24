@@ -80,6 +80,18 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.success })
 	},
+	LONG_DURATION_CONFIRMING: swapDispatch => {
+		swapDispatch({
+			type: 'SET_SWAP_STEPS',
+			payload: [
+				{
+					status: 'pending',
+					title: 'Your transaction was sent through CCIP',
+					body: 'This will take longer than usual.\n' + 'Your funds are safe, please wait',
+				},
+			],
+		})
+	},
 	FAILED_TRANSACTION: swapDispatch => {
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.failed })
 		swapDispatch({

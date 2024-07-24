@@ -11,6 +11,7 @@ export enum ExecuteRouteStage {
 	failedTransaction = 'FAILED_TRANSACTION',
 	successTransaction = 'SUCCESS_TRANSACTION',
 	internalError = 'INTERNAL_ERROR',
+	longDurationConfirming = 'LONG_DURATION_CONFIRMING',
 }
 
 type Status = 'idle' | 'await' | 'success' | 'failed'

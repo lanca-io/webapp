@@ -36,6 +36,8 @@ export enum action {
 	ToggleSettingsModal = 'action_toggle_settings_modal',
 	BeginSwap = 'action_begin_swap',
 	SwapFailed = 'action_swap_failed',
+	FrontendSwapFailed = 'action_fe_swap_failed',
+	ClFunctionsFailed = 'action_cl_functions_failed',
 	SwapSuccess = 'action_swap_success',
 	SwapRejected = 'action_swap_rejected',
 	FetchConceroRoutesError = 'action_fetch_concero_routes_error',
