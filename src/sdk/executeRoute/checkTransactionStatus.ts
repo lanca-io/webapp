@@ -68,7 +68,7 @@ const trackBridgeTransaction = async (
 
 	const stopTimer = timer(time => {
 		if (time === 180) {
-			// sendState({ stage: ExecuteRouteStage.longDurationConfirming })
+			sendState({ stage: ExecuteRouteStage.longDurationConfirming })
 
 			trackEvent({
 				category: category.SwapCard,

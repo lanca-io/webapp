@@ -23,7 +23,7 @@ export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, 
 	const [isHovered, setIsHovered] = useState(false)
 	const [addressContainerHeight, setAddressContainerHeight] = useState(0)
 	const addressContainerRef = useRef<HTMLDivElement | null>(null)
-	const tokenAmount = new TokenAmount(token.balance, token.decimals).rounded
+	const tokenAmount = new TokenAmount(token.balance, token.decimals).formatted
 	const tokenAddressAnimation = useSpring({
 		y: isHovered ? -(addressContainerHeight - 19) : 0,
 		config: { duration: 200, easing: easeQuadInOut },
@@ -82,7 +82,7 @@ export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, 
 						<h4>{numberToFormatString(Number(tokenAmount), token.decimals, true)}</h4>
 						{token.priceUsd && token.priceUsd > 0 ? (
 							<p className={'body1'}>
-								{'$' + numberToFormatString(token.priceUsd * Number(tokenAmount), 2, true)}{' '}
+								{'$' + numberToFormatString(token.priceUsd * Number(tokenAmount), 2)}{' '}
 							</p>
 						) : null}
 					</>

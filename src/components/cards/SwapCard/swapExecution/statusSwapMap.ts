@@ -85,9 +85,11 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 			type: 'SET_SWAP_STEPS',
 			payload: [
 				{
-					status: 'pending',
+					status: 'success',
 					title: 'Your transaction was sent through CCIP',
-					body: 'This will take longer than usual.\n' + 'Your funds are safe, please wait',
+					body:
+						'This will take longer than usual.\n' +
+						'Your funds are safe, please check your wallet in ~30 mins',
 				},
 			],
 		})
