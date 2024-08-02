@@ -2,5 +2,7 @@
     <url>
         <loc>https://lanca.io/</loc>
         <lastmod>2024-08-02T12:30:18+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>1.0</priority>
     </url>
 </urlset>
