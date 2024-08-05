@@ -31,6 +31,11 @@ export const conceroAbi = [
 				name: '_chainIndex',
 				type: 'uint8',
 			},
+			{
+				internalType: 'address[3]',
+				name: '_messengers',
+				type: 'address[3]',
+			},
 		],
 		stateMutability: 'nonpayable',
 		type: 'constructor',
@@ -116,12 +121,12 @@ export const conceroAbi = [
 	},
 	{
 		inputs: [],
-		name: 'Orchestrator_InvalidSwapData',
+		name: 'Orchestrator_InvalidBridgeToken',
 		type: 'error',
 	},
 	{
 		inputs: [],
-		name: 'Orchestrator_InvalidSwapEtherData',
+		name: 'Orchestrator_InvalidSwapData',
 		type: 'error',
 	},
 	{
@@ -138,6 +143,11 @@ export const conceroAbi = [
 			},
 		],
 		name: 'Orchestrator_UnableToCompleteDelegateCall',
+		type: 'error',
+	},
+	{
+		inputs: [],
+		name: 'ReentrancyGuardReentrantCall',
 		type: 'error',
 	},
 	{
@@ -313,6 +323,24 @@ export const conceroAbi = [
 	{
 		anonymous: false,
 		inputs: [],
+		name: 'Orchestrator_StartBridge',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [],
+		name: 'Orchestrator_StartSwap',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [],
+		name: 'Orchestrator_StartSwapAndBridge',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [],
 		name: 'Orchestrator_SwapSuccess',
 		type: 'event',
 	},
@@ -333,64 +361,6 @@ export const conceroAbi = [
 			},
 		],
 		name: 'SourceJsHashSumUpdated',
-		type: 'event',
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: 'uint64',
-				name: 'chainSelector',
-				type: 'uint64',
-			},
-			{
-				indexed: false,
-				internalType: 'uint256',
-				name: 'feeAmount',
-				type: 'uint256',
-			},
-		],
-		name: 'StorageSetters_LastGasPriceUpdated',
-		type: 'event',
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: 'uint256',
-				name: 'amount',
-				type: 'uint256',
-			},
-		],
-		name: 'StorageSetters_LinkNativeRateUpdated',
-		type: 'event',
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: 'uint256',
-				name: 'amount',
-				type: 'uint256',
-			},
-		],
-		name: 'StorageSetters_LinkUsdcRateUpdated',
-		type: 'event',
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: 'uint256',
-				name: 'amount',
-				type: 'uint256',
-			},
-		],
-		name: 'StorageSetters_NativeUsdcRateUpdated',
 		type: 'event',
 	},
 	{
@@ -559,12 +529,70 @@ export const conceroAbi = [
 	{
 		inputs: [
 			{
+				internalType: 'enum IStorage.CCIPToken',
+				name: 'tokenType',
+				type: 'uint8',
+			},
+			{
+				internalType: 'uint64',
+				name: 'dstChainSelector',
+				type: 'uint64',
+			},
+			{
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+		],
+		name: 'getSrcTotalFeeInUSDC',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'enum IStorage.CCIPToken',
+				name: 'tokenType',
+				type: 'uint8',
+			},
+			{
+				internalType: 'uint64',
+				name: 'dstChainSelector',
+				type: 'uint64',
+			},
+			{
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+		],
+		name: 'getSrcTotalFeeInUSDCViaDelegateCall',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
 				internalType: 'bytes32',
 				name: '_ccipMessageId',
 				type: 'bytes32',
 			},
 		],
-		name: 'getTransactionsInfo',
+		name: 'getTransaction',
 		outputs: [
 			{
 				components: [
@@ -723,7 +751,7 @@ export const conceroAbi = [
 		outputs: [
 			{
 				internalType: 'uint256',
-				name: 'lasGasPrice',
+				name: 'lastGasPrice',
 				type: 'uint256',
 			},
 		],
@@ -1211,7 +1239,7 @@ export const conceroAbi = [
 		],
 		name: 'swapAndBridge',
 		outputs: [],
-		stateMutability: 'nonpayable',
+		stateMutability: 'payable',
 		type: 'function',
 	},
 	{
@@ -1236,5 +1264,9 @@ export const conceroAbi = [
 		outputs: [],
 		stateMutability: 'payable',
 		type: 'function',
+	},
+	{
+		stateMutability: 'payable',
+		type: 'receive',
 	},
 ]
