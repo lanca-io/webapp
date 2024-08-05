@@ -31,7 +31,9 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 	const sendState = useSendStateHook(executionConfigs)
 
 	if (data.to.amount === '0' || data.to.amount === '') throw new Error('Amount is empty!')
-	if (data.from.token.address === data.to.token.address) throw new Error('Tokens are the same!')
+	if (data.from.token.address === data.to.token.address && data.from.chain?.id === data.to.chain?.id) {
+		throw new Error('Tokens are the same!')
+	}
 
 	sendState({
 		stage: ExecuteRouteStage.setChain,
