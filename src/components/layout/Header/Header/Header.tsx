@@ -24,7 +24,17 @@ export const Header = () => {
 				<div className={classNames.logoContainer}>
 					<Logo />
 				</div>
-				{!isMobile ? <ul>{ComingSoon}</ul> : null}
+				{!isMobile ? (
+					<ul>
+						{/* {ComingSoon} */}
+						<a target="_blank" href="https://app.concero.io/rewards" rel="noreferrer">
+							Earn
+						</a>
+						<a target="_blank" href="https://app.concero.io/pool" rel="noreferrer">
+							Rewards
+						</a>
+					</ul>
+				) : null}
 			</div>
 			<div className={classNames.headerButtonsContainer}>
 				<WalletButton />
