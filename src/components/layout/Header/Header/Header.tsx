@@ -27,10 +27,10 @@ export const Header = () => {
 				{!isMobile ? (
 					<ul>
 						{/* {ComingSoon} */}
-						<a target="_blank" href="https://app.concero.io/rewards" rel="noreferrer">
+						<a target="_blank" href="https://app.concero.io/pool" rel="noreferrer">
 							Earn
 						</a>
-						<a target="_blank" href="https://app.concero.io/pool" rel="noreferrer">
+						<a target="_blank" href="https://app.concero.io/rewards" rel="noreferrer">
 							Rewards
 						</a>
 					</ul>
