@@ -28,7 +28,7 @@ export function getButtonType(
 		// if (from.token.address === config.NULL_ADDRESS || to.token.address === config.NULL_ADDRESS)
 		// 	return ButtonType.NOT_SUPPORTED_NATIVE_TOKENS
 
-		if (BigNumber(fromAmountUsd).gt(30)) return ButtonType.TESTNET_AMOUNT_TOO_HIGH
+		// if (BigNumber(fromAmountUsd).gt(30)) return ButtonType.TESTNET_AMOUNT_TOO_HIGH
 		if (BigNumber(to.amount).lte(0)) return ButtonType.TESTNET_AMOUNT_TOO_LOW
 
 		if (!isSufficientLiquidity) return ButtonType.NOT_SUFFICIENT_LIQUIDITY
