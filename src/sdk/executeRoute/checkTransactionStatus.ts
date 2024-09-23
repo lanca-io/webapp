@@ -81,6 +81,7 @@ const trackBridgeTransaction = async (
 
 	const latestDstChainBlock = await dstPublicClient.getBlockNumber()
 
+	// TODO get log to receipt
 	const [logCCIPSent] = await srcPublicClient.getLogs({
 		address: conceroAddress,
 		event: parseAbiItem(
@@ -176,6 +177,7 @@ export async function checkTransactionStatus(
 		hash: txHash as `0x${string}`,
 		pollingInterval: 3_000,
 		retryCount: 500,
+		confirmations: 3,
 	})
 
 	if (tx.status === 'reverted') {

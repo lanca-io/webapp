@@ -31,21 +31,40 @@ export const viemChains: Record<string, { chain: Chain; transport?: Transport }>
 	[mainnet.id]: {
 		chain: mainnet,
 	},
-	[polygon.id]: {
-		chain: polygon,
-		transport: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://polygon.meowrpc.com')]),
+	[base.id]: {
+		chain: base,
+		transport: fallback([
+			http('https://base-rpc.publicnode.com'),
+			http('https://base.drpc.org'),
+			http('https://1rpc.io/base'),
+		]),
 	},
 	[arbitrum.id]: {
 		chain: arbitrum,
-		transport: fallback([http('https://arb1.arbitrum.io/rpc'), http('https://arbitrum-one-rpc.publicnode.com')]),
+		transport: fallback([
+			http(),
+			http('https://1rpc.io/arb'),
+			http('https://endpoints.omniatech.io/v1/arbitrum/one/public'),
+			http('https://arbitrum.meowrpc.com'),
+		]),
+	},
+	[polygon.id]: {
+		chain: polygon,
+		transport: fallback([
+			http(),
+			http('https://polygon.meowrpc.com'),
+			http('https://polygon-pokt.nodies.app'),
+			http('https://polygon-bor-rpc.publicnode.com'),
+		]),
 	},
 	[avalanche.id]: {
 		chain: avalanche,
-		transport: fallback([http('https://avalanche.drpc.org'), http('https://avalanche-c-chain-rpc.publicnode.com')]),
-	},
-	[base.id]: {
-		chain: base,
-		transport: fallback([http('https://base-rpc.publicnode.com'), http('https://base.meowrpc.com')]),
+		transport: fallback([
+			http(),
+			http('https://avalanche-c-chain-rpc.publicnode.com'),
+			http('https://avalanche.drpc.org'),
+			http('https://1rpc.io/avax/c'),
+		]),
 	},
 	[sepolia.id]: {
 		chain: sepolia,
