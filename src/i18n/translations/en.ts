@@ -84,7 +84,7 @@ export const en = {
 			withdraw: 'Withdraw',
 			enterAmountToSwap: 'Enter amount to swap',
 			noRoutesFound: 'No routes found',
-			connectWalletToSwap: 'Connect wallet to swap',
+			connectWalletToSwap: 'Connect Wallet',
 			insufficientGas: 'Insufficient gas',
 			insufficientFees: 'Insufficient fees',
 			insufficientBalance: 'Insufficient balance',

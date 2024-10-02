@@ -60,16 +60,6 @@ export const TokenArea: FC<TokenAreaProps> = ({
 		tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: false })
 	}
 
-	// useEffect(() => {
-	// 	if (direction === 'from') void getCurrentPriceToken(selection, tokenAreaDispatch)
-	// }, [selection.chain, selection.token])
-	//
-	// useEffect(() => {
-	// 	if (selection.amount) {
-	// 		handleAmountChange({ value: selection.amount, state, dispatch: swapDispatch, direction })
-	// 	}
-	// }, [state.currentTokenPriceUSD])
-
 	return (
 		<>
 			<animated.div

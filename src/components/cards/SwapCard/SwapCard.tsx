@@ -2,7 +2,6 @@ import { type ReactComponentElement, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
 import classNames from './SwapCard.module.pcss'
 import { useSwapReducer } from './swapReducer/swapReducer'
-import { InsuranceProvider } from './InsuranceContext'
 import { useSwapCardEffects } from './SwapCardEffects'
 import { SwapInput } from './SwapInput/SwapInput'
 import { SwapProgress } from './SwapProgress/SwapProgress'
@@ -10,7 +9,7 @@ import { SwapSettingsModal } from './SwapSettingsModal/SwapSettingsModal'
 import { SwapCardStage } from './swapReducer/types'
 import { ContactSupportCard } from '../ContactSupportCard/ContactSupportCard'
 import posthog from 'posthog-js'
-import { SwapCardHeader } from './SwapCardHeader/SwapCardHeader'
+import { Card } from '../Card/Card'
 
 export const SwapCard = () => {
 	const [swapState, swapDispatch] = useSwapReducer()
@@ -24,10 +23,6 @@ export const SwapCard = () => {
 		swapDispatch({ type: 'CLEAR_ROUTES' })
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.input })
 		swapDispatch({ type: 'SET_SWAP_STEPS', payload: [] })
-	}
-
-	const toggleInsurance = (routeId: string) => {
-		swapDispatch({ type: 'TOGGLE_INSURANCE', payload: routeId })
 	}
 
 	function handleContactSupportGoBackClick() {
@@ -75,12 +70,10 @@ export const SwapCard = () => {
 	useSwapCardEffects({ swapState, swapDispatch, address, typingTimeoutRef, connector })
 
 	return (
-		<InsuranceProvider toggleInsurance={toggleInsurance}>
-			<div className={`card ${classNames.container}`}>
-				<SwapCardHeader swapState={swapState} swapDispatch={swapDispatch} />
-				<div className={classNames.swapContainer}>{renderSwapStage[swapState.stage]}</div>
-			</div>
+		<>
+			<Card className={classNames.container}>{renderSwapStage[swapState.stage]}</Card>
+
 			<SwapSettingsModal swapDispatch={swapDispatch} swapState={swapState} />
-		</InsuranceProvider>
+		</>
 	)
 }

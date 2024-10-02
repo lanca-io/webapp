@@ -2,7 +2,7 @@ import { type Dispatch, type MutableRefObject } from 'react'
 import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { getRoutes } from '../getRoutes/getRoutes'
 import { getPoolAmount } from './getPoolAmount'
-import { ButtonType } from '../../../buttons/SwapButton/constants'
+import { ButtonType } from '../SwapButton/constants'
 
 export const handleFetchRoutes = async (
 	swapState: SwapState,
