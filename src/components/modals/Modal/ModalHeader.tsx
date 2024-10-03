@@ -1,7 +1,7 @@
 import { IconX } from '@tabler/icons-react'
 import classNames from './Modal.module.pcss'
 import { Button } from '../../buttons/Button/Button'
-import { LoadingAnimation } from '../../layout/LoadingAnimation/LoadingAnimation'
+import { Loader } from '../../layout/Loader/Loader'
 
 interface ModalHeaderProps {
 	title: string
@@ -14,7 +14,7 @@ export function ModalHeader({ title, isLoading = false, onClick }: ModalHeaderPr
 		<div className={classNames.header}>
 			<div className={classNames.titleContainer}>
 				<h5>{title}</h5>
-				{isLoading ? <LoadingAnimation size={16} color={'var(--color-grey-600'} /> : null}
+				{isLoading ? <Loader size={16} color={'var(--color-grey-600'} /> : null}
 			</div>
 			<Button
 				onClick={onClick}

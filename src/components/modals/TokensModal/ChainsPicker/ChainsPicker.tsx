@@ -12,10 +12,9 @@ import { IconSearch } from '@tabler/icons-react'
 interface TokensModalHeaderProps {
 	selectedChain: Chain | null
 	setSelectedChain: (param: Chain | null) => void
-	isTestnet: boolean
 }
 
-export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: TokensModalHeaderProps) {
+export function ChainsPicker({ selectedChain, setSelectedChain }: TokensModalHeaderProps) {
 	const { getChains, chains } = useContext(DataContext)
 	const [searchValue, setSearchValue] = useState<string>('')
 	const [isChainsModalOpen, setIsChainsModalOpen] = useState<boolean>(false)
@@ -51,7 +50,6 @@ export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: Tok
 							chain={chain}
 							isSelected={isSelected}
 							onSelect={setSelectedChain}
-							isTestnet={isTestnet}
 						/>
 					)
 				})}
@@ -87,7 +85,6 @@ export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: Tok
 								isSelected={isSelected}
 								onSelect={handleSelectChain}
 								isCropped={false}
-								isTestnet={isTestnet}
 							/>
 						)
 					})}

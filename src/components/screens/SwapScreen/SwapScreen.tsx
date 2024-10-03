@@ -6,11 +6,9 @@ import classNames from './SwapScreen.module.pcss'
 const Swap = memo(withErrorBoundary(SwapCard))
 
 export const SwapScreen = () => {
-	const newSwapScreenLayout = (
+	return (
 		<div className={classNames.container}>
 			<Swap />
 		</div>
 	)
-
-	return <div className={classNames.newSwapScreenContainer}>{newSwapScreenLayout}</div>
 }

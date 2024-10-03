@@ -1,6 +1,6 @@
 import { type FC, type ReactNode } from 'react'
 import classNames from './CardHeader.module.pcss'
-import { LoadingAnimation } from '../../layout/LoadingAnimation/LoadingAnimation'
+import { Loader } from '../../layout/Loader/Loader'
 
 interface CardHeaderProps {
 	title?: string
@@ -13,7 +13,7 @@ export const CardHeader: FC<CardHeaderProps> = ({ title = null, children, isLoad
 		{title ? (
 			<div className={classNames.titleContainer}>
 				<h5 className={'cardHeaderTitle'}>{title}</h5>
-				<div>{isLoading ? <LoadingAnimation size={13} color={'var(--color-text-secondary)'} /> : null}</div>
+				<div>{isLoading ? <Loader size={13} color={'var(--color-text-secondary)'} /> : null}</div>
 			</div>
 		) : null}
 		{children}

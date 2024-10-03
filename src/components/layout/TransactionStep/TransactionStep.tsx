@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import { Ping } from '@uiball/loaders'
 import { IconCheck, IconExternalLink, IconX } from '@tabler/icons-react'
-import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation'
+import { Loader } from '../Loader/Loader'
 import { Button } from '../../buttons/Button/Button'
 import classNames from './TransactionStep.module.pcss'
 
@@ -22,7 +22,7 @@ const renderTag = (status: string) => {
 	const content = () => {
 		switch (status) {
 			case 'pending':
-				return <LoadingAnimation size={iconSize} color="var(--color-text-secondary)" />
+				return <Loader size={iconSize} color="var(--color-text-secondary)" />
 			case 'await':
 				return <Ping size={iconSize} color="var(--color-pacific-500)" />
 			case 'success':

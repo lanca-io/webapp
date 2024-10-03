@@ -36,39 +36,3 @@ export const buttonText: { [key in ButtonType]: string } = {
 	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: 'Try lower amount',
 	[ButtonType.NOT_SUPPORTED_NATIVE_TOKENS]: "Native tokens aren't supported",
 }
-
-export const isButtonDisabled: { [key in ButtonType]: boolean } = {
-	[ButtonType.LOADING]: true,
-	[ButtonType.SWAP]: false,
-	[ButtonType.ENTER_AMOUNT]: true,
-	[ButtonType.LOW_BALANCE]: true,
-	[ButtonType.LOW_GAS]: true,
-	[ButtonType.LOW_FEES]: true,
-	[ButtonType.CONNECT_WALLET]: true,
-	[ButtonType.NO_ROUTES]: true,
-	[ButtonType.REVIEW]: false,
-	[ButtonType.FETCH_BALANCES_LOADING]: true,
-	[ButtonType.CONNECT_WALLET_BRIGHT]: false,
-	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: true,
-	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: true,
-	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: true,
-	[ButtonType.NOT_SUPPORTED_NATIVE_TOKENS]: true,
-}
-
-export const buttonStyleClass: { [key in ButtonType]: string } = {
-	[ButtonType.LOADING]: 'loading',
-	[ButtonType.SWAP]: 'swap',
-	[ButtonType.ENTER_AMOUNT]: 'disabled',
-	[ButtonType.LOW_BALANCE]: 'wrong',
-	[ButtonType.LOW_GAS]: 'wrong',
-	[ButtonType.LOW_FEES]: 'wrong',
-	[ButtonType.CONNECT_WALLET]: 'disabled',
-	[ButtonType.NO_ROUTES]: 'disabled',
-	[ButtonType.REVIEW]: 'swap',
-	[ButtonType.FETCH_BALANCES_LOADING]: 'loading',
-	[ButtonType.CONNECT_WALLET_BRIGHT]: 'swap',
-	[ButtonType.TESTNET_AMOUNT_TOO_HIGH]: 'wrong',
-	[ButtonType.TESTNET_AMOUNT_TOO_LOW]: 'wrong',
-	[ButtonType.NOT_SUFFICIENT_LIQUIDITY]: 'wrong',
-	[ButtonType.NOT_SUPPORTED_NATIVE_TOKENS]: 'wrong',
-}

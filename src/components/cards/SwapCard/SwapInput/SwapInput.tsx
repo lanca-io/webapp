@@ -4,23 +4,20 @@ import { SwapDetails } from '../SwapDetails/SwapDetails'
 import classNames from './SwapInput.module.pcss'
 import { type SwapInputProps } from './types'
 import { SwapButton } from '../SwapButton/SwapButton'
-import { InsuranceCard } from '../InsuranceCard/InsuranceCard'
 import { getEthersSigner } from '../../../../web3/ethers'
 import { type providers } from 'ethers'
-import { IconArrowsUpDown } from '@tabler/icons-react'
-import { DestinationAddressInput } from './DestinationAddressInput/DestinationAddressInput'
 import { SwapCardStage } from '../swapReducer/types'
 import { handleSwap } from '../swapExecution/handleSwap'
 import { useContext } from 'react'
 import { type DataContextValue } from '../../../../hooks/DataContext/types'
 import { DataContext } from '../../../../hooks/DataContext/DataContext'
+import { SwapIcon } from '../../../../assets/icons/SwapIcon'
+import { IconButton } from '../../../buttons/IconButton/IconButton'
 
 export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }: SwapInputProps) => {
 	const { getChainByProviderSymbol } = useContext<DataContextValue>(DataContext)
 	const { isConnected, address } = useAccount()
-	const isInsuranceCardVisible =
-		swapState.selectedRoute?.insurance?.state === 'INSURABLE' ||
-		swapState.selectedRoute?.insurance?.state === 'INSURED'
+
 	const walletClient = useWalletClient()
 	const { switchChainAsync } = useSwitchChain()
 
@@ -75,32 +72,34 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 					swapDispatch={swapDispatch}
 					balance={swapState.balance}
 					stage={swapState.stage}
-					isTestnet={swapState.isTestnet}
 				/>
+
+				<div className={classNames.separatorWrap}>
+					<div className={classNames.separator}></div>
+					<IconButton
+						size="sm"
+						variant="secondary"
+						className={classNames.arrowsIcon}
+						onClick={() => {
+							swapDispatch({ type: 'SWAP_DIRECTIONS' })
+						}}
+					>
+						<SwapIcon />
+					</IconButton>
+					<div className={classNames.separator}></div>
+				</div>
+
 				<TokenArea
 					direction="to"
 					selection={swapState.to}
 					swapDispatch={swapDispatch}
 					isLoading={swapState.isLoading}
 					stage={swapState.stage}
-					isTestnet={swapState.isTestnet}
 				/>
-				{swapState.stage === SwapCardStage.input ? (
-					<div
-						className={classNames.arrowsIcon}
-						onClick={() => {
-							swapDispatch({ type: 'SWAP_DIRECTIONS' })
-						}}
-					>
-						<IconArrowsUpDown size={18} />
-					</div>
-				) : null}
+
+				<div className={classNames.separator}></div>
 			</div>
-			{isInsuranceCardVisible ? <InsuranceCard swapState={swapState} swapDispatch={swapDispatch} /> : null}
 			<SwapDetails swapState={swapState} swapDispatch={swapDispatch} />
-			{swapState.isDestinationAddressVisible ? (
-				<DestinationAddressInput swapState={swapState} swapDispatch={swapDispatch} />
-			) : null}
 			<SwapButton
 				swapState={swapState}
 				isConnected={isConnected}

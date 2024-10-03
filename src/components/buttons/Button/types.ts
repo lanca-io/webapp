@@ -5,7 +5,7 @@ export interface ButtonProps {
 	variant?: 'primary' | 'secondary' | 'secondaryColor' | 'tetrary' | 'tetraryColor'
 	leftIcon?: ReactNode
 	rightIcon?: ReactNode
-	onClick?: MouseEventHandler<HTMLButtonElement> | undefined
+	onClick?: ((event: MouseEventHandler) => void) | undefined
 	isLoading?: boolean
 	isDisabled?: boolean
 	className?: string

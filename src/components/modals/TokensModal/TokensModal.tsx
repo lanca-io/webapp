@@ -24,10 +24,9 @@ interface TokensModalProps {
 	onClose: () => void
 	onSelect: (token: Token, chain: Chain) => void
 	direction: 'from' | 'to'
-	isTestnet: boolean
 }
 
-export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }: TokensModalProps) {
+export function TokensModal({ isOpen, onClose, onSelect, direction }: TokensModalProps) {
 	const { t } = useTranslation()
 	const { address } = useAccount()
 	const { getTokens, getChains } = useContext(DataContext)
@@ -38,10 +37,6 @@ export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }:
 	const { selectedChain, tokens, isLoading, isBalanceLoading, offset, searchValue, balanceTokens } = tokensModalState
 
 	const addTokens = async () => {
-		if (isTestnet) {
-			tokensModalDispatch({ type: TokenModalActionType.UPSERT_TOKENS, tokens: [] })
-			return
-		}
 		const newTokens = await getTokens({ chainId: selectedChain?.id, offset, limit, search: searchValue })
 		if (!newTokens.length) return
 		tokensModalDispatch({ type: TokenModalActionType.UPSERT_TOKENS, tokens: newTokens })
@@ -67,19 +62,11 @@ export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }:
 		tokensModalDispatch({ type: TokenModalActionType.SET_TOKENS, tokens: [] })
 		tokensModalDispatch({ type: TokenModalActionType.SET_IS_LOADING, isLoading: true })
 
-		if (isTestnet) {
-			const tokensOnTargetChain = testnetTokens[selectedChain.id] ?? []
-			tokensModalDispatch({
-				type: TokenModalActionType.SET_TOKENS,
-				tokens: tokensOnTargetChain,
-			})
-		} else {
-			const resTokens = await getTokens({ chainId: selectedChain.id, offset: 0, limit, search: searchValue })
+		const resTokens = await getTokens({ chainId: selectedChain.id, offset: 0, limit, search: searchValue })
 
-			if (resTokens.length > 0) {
-				tokensModalDispatch({ type: TokenModalActionType.SET_TOKENS, tokens: resTokens })
-				tokensModalDispatch({ type: TokenModalActionType.SET_OFFSET, offset: 15 })
-			}
+		if (resTokens.length > 0) {
+			tokensModalDispatch({ type: TokenModalActionType.SET_TOKENS, tokens: resTokens })
+			tokensModalDispatch({ type: TokenModalActionType.SET_OFFSET, offset: 15 })
 		}
 
 		tokensModalDispatch({ type: TokenModalActionType.SET_IS_LOADING, isLoading: false })
@@ -114,16 +101,7 @@ export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }:
 	useEffect(() => {
 		void initialPopulateTokens()
 		moveToTop()
-	}, [selectedChain?.id, address, searchValue, isTestnet])
-
-	useEffect(() => {
-		if (isTestnet) {
-			tokensModalDispatch({
-				type: TokenModalActionType.SET_SELECTED_CHAIN,
-				chain: testnetChains[direction === 'from' ? 2 : 1],
-			})
-		}
-	}, [isTestnet])
+	}, [selectedChain?.id, address, searchValue])
 
 	return (
 		<Modal
@@ -134,11 +112,7 @@ export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }:
 			isHeaderVisible={false}
 		>
 			<div className={classNames.container}>
-				<ChainsPicker
-					selectedChain={selectedChain}
-					setSelectedChain={handleSelectChain}
-					isTestnet={isTestnet}
-				/>
+				<ChainsPicker selectedChain={selectedChain} setSelectedChain={handleSelectChain} />
 				<div className={classNames.tokensContainer}>
 					<div className={classNames.header}>
 						<p className={'body4'}>{t('tokensModal.tokens')}</p>
@@ -168,7 +142,6 @@ export function TokensModal({ isOpen, onClose, onSelect, direction, isTestnet }:
 										isBalanceLoading={isBalanceLoading}
 										onSelect={handleSelect}
 										explorerURI={selectedChain.explorerURI}
-										isTestnet={isTestnet}
 									/>
 								)
 							})

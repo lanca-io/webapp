@@ -1,8 +1,7 @@
 import { type FC } from 'react'
-import classNames from './SwapButton.module.pcss'
 import { Button } from '../../../buttons/Button/Button'
 import { type SwapButtonProps } from './types'
-import { buttonStyleClass, buttonText, ButtonType, isButtonDisabled } from './constants'
+import { buttonText, ButtonType } from './constants'
 import { getButtonType } from './getButtonType'
 import { useTranslation } from 'react-i18next'
 import { useGasSufficiency } from './useGasSufficiency'
@@ -22,18 +21,14 @@ export const SwapButton: FC<SwapButtonProps> = ({ swapState, isConnected, onClic
 	)
 
 	return (
-		<div className={classNames.container}>
-			<Button
-				isFull
-				size="lg"
-				variant="primary"
-				isDisabled={isButtonDisabled[buttonType]}
-				isLoading={isLoading}
-				onClick={buttonType === ButtonType.CONNECT_WALLET_BRIGHT ? open : onClick}
-				className={classNames[buttonStyleClass[buttonType]]}
-			>
-				{t(buttonText[buttonType])}
-			</Button>
-		</div>
+		<Button
+			isFull
+			size="lg"
+			variant="primary"
+			isLoading={isLoading}
+			onClick={buttonType === ButtonType.CONNECT_WALLET_BRIGHT ? open : onClick}
+		>
+			{t(buttonText[buttonType])}
+		</Button>
 	)
 }
