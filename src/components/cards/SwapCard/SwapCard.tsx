@@ -5,7 +5,6 @@ import { useSwapReducer } from './swapReducer/swapReducer'
 import { useSwapCardEffects } from './SwapCardEffects'
 import { SwapInput } from './SwapInput/SwapInput'
 import { SwapProgress } from './SwapProgress/SwapProgress'
-import { SwapSettingsModal } from './SwapSettingsModal/SwapSettingsModal'
 import { SwapCardStage } from './swapReducer/types'
 import { ContactSupportCard } from '../ContactSupportCard/ContactSupportCard'
 import posthog from 'posthog-js'
@@ -69,11 +68,5 @@ export const SwapCard = () => {
 
 	useSwapCardEffects({ swapState, swapDispatch, address, typingTimeoutRef, connector })
 
-	return (
-		<>
-			<Card className={classNames.container}>{renderSwapStage[swapState.stage]}</Card>
-
-			<SwapSettingsModal swapDispatch={swapDispatch} swapState={swapState} />
-		</>
-	)
+	return <Card className={classNames.container}>{renderSwapStage[swapState.stage]}</Card>
 }

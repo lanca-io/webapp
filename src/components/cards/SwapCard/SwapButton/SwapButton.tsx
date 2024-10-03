@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import { Button } from '../../../buttons/Button/Button'
 import { type SwapButtonProps } from './types'
-import { buttonText, ButtonType } from './constants'
+import { ButtonType } from './constants'
 import { getButtonType } from './getButtonType'
 import { useTranslation } from 'react-i18next'
 import { useGasSufficiency } from './useGasSufficiency'
@@ -19,16 +19,12 @@ export const SwapButton: FC<SwapButtonProps> = ({ swapState, isConnected, onClic
 		gasSufficiency?.isInsufficient ?? false,
 		isFetchBalancesLoading,
 	)
+	const walletIsConnect = buttonType === ButtonType.CONNECT_WALLET_BRIGHT
 
 	return (
-		<Button
-			isFull
-			size="lg"
-			variant="primary"
-			isLoading={isLoading}
-			onClick={buttonType === ButtonType.CONNECT_WALLET_BRIGHT ? open : onClick}
-		>
-			{t(buttonText[buttonType])}
+		<Button isFull size="lg" variant="primary" isLoading={isLoading} onClick={walletIsConnect ? open : onClick}>
+			{/* {t(buttonText[buttonType])} */}
+			{walletIsConnect ? 'Connect Wallet' : 'Begin Swap'}
 		</Button>
 	)
 }
