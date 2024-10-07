@@ -10,8 +10,8 @@ export const en = {
 				review: 'Review swap',
 			},
 			routeCard: {
-				swap: 'Swap to',
-				bridge: 'Bridge to',
+				swap: 'Swap',
+				bridge: 'Bridge',
 				via: 'via',
 			},
 			insurance: 'Insurance',
@@ -112,7 +112,7 @@ export const en = {
 		},
 		tokenArea: {
 			from: 'You pay',
-			to: 'You get',
+			to: 'You receive',
 			enterAmount: 'Enter amount',
 		},
 		protocolModal: {

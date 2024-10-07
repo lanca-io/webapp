@@ -13,6 +13,7 @@ import { type DataContextValue } from '../../../../hooks/DataContext/types'
 import { DataContext } from '../../../../hooks/DataContext/DataContext'
 import { SwapIcon } from '../../../../assets/icons/SwapIcon'
 import { IconButton } from '../../../buttons/IconButton/IconButton'
+import { FeeDetailsDropdown } from '../SwapDetails/FeeDetailsDropdown/FeeDetailsDropdown'
 
 export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }: SwapInputProps) => {
 	const { getChainByProviderSymbol } = useContext<DataContextValue>(DataContext)
@@ -63,6 +64,23 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 		}
 	}
 
+	const switchDirectionButton = (
+		<div className={classNames.separatorWrap}>
+			<div className={classNames.separator}></div>
+			<IconButton
+				size="sm"
+				variant="secondary"
+				className={classNames.arrowsIcon}
+				onClick={() => {
+					swapDispatch({ type: 'SWAP_DIRECTIONS' })
+				}}
+			>
+				<SwapIcon />
+			</IconButton>
+			<div className={classNames.separator}></div>
+		</div>
+	)
+
 	return (
 		<div className={classNames.container}>
 			<div className={classNames.tokenAreasContainer}>
@@ -74,20 +92,7 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 					stage={swapState.stage}
 				/>
 
-				<div className={classNames.separatorWrap}>
-					<div className={classNames.separator}></div>
-					<IconButton
-						size="sm"
-						variant="secondary"
-						className={classNames.arrowsIcon}
-						onClick={() => {
-							swapDispatch({ type: 'SWAP_DIRECTIONS' })
-						}}
-					>
-						<SwapIcon />
-					</IconButton>
-					<div className={classNames.separator}></div>
-				</div>
+				{switchDirectionButton}
 
 				<TokenArea
 					direction="to"
@@ -99,13 +104,17 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 
 				<div className={classNames.separator}></div>
 			</div>
+
 			<SwapDetails swapState={swapState} swapDispatch={swapDispatch} />
+
 			<SwapButton
 				swapState={swapState}
 				isConnected={isConnected}
 				onClick={handleSwapButtonClick}
 				switchChainHook={switchChainHook}
 			/>
+
+			<FeeDetailsDropdown />
 		</div>
 	)
 }

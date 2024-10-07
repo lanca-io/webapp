@@ -1,9 +1,8 @@
 import classNames from './InnerStepCard.module.pcss'
 import { type Step, StepTypes } from '../../../../../../../types/StandardRoute'
 import { useTranslation } from 'react-i18next'
-import { CryptoSymbol } from '../../../../../../tags/CryptoSymbol/CryptoSymbol'
-import { IconArrowRight, IconClock, IconCoins, IconGasStation } from '@tabler/icons-react'
-import { roundNumberByDecimals, secondsConverter } from '../../../../../../../utils/formatting'
+import { roundNumberByDecimals } from '../../../../../../../utils/formatting'
+import { Badge } from '../../../../../../badges/Badge/Badge'
 
 interface InnerStepCardProps {
 	step: Step
@@ -28,45 +27,47 @@ export function InnerStepCard({ step }: InnerStepCardProps) {
 
 	return (
 		<div className={classNames.container}>
-			<div className={classNames.rowContainer}>
-				<p className={classNames.title}>{stepTypeTitle}</p>
+			<div className="row jsb">
+				<p className={`${classNames.type} body2`}>{stepTypeTitle}</p>
+				<p className={'body2'}>
+					{t('swapCard.routeCard.via')} {stepToolTitle}
+				</p>
+			</div>
+
+			<div className="gap-xs">
 				<div className={classNames.tagContainer}>
-					<CryptoSymbol src={to.token.logo_uri} />
-					<p className={classNames.title} style={{ paddingLeft: 2 }}>
-						{to.token.symbol}
-					</p>
+					<p className={'body2'}>From:</p>
+					<div className={classNames.amountContainer}>
+						{from.token.logo_uri && <Badge size="m" tokenLogoSrc={from.token.logo_uri} />}
+
+						<div className="row gap-xs ac">
+							<h4>{roundNumberByDecimals(from.token.amount)}</h4>
+							<p className="body4">{from.token.symbol}</p>
+						</div>
+
+						<p className="body2">on</p>
+						{from.token.logo_uri && <Badge size="m" borderSmall tokenLogoSrc={from.token.logo_uri} />}
+
+						<h4>Arbitrum</h4>
+					</div>
 				</div>
-				<p className={'body1'}>{t('swapCard.routeCard.via')}</p>
-				<p className={'body1'}>{stepToolTitle}</p>
-			</div>
-			<div className={classNames.tagContainer}>
-				<p className={'body1'}>
-					{roundNumberByDecimals(from.token.amount)} {from.token.symbol}
-				</p>
-				<IconArrowRight size={13} color={'var(--color-text-secondary)'} />
-				<p className={'body1'}>
-					{roundNumberByDecimals(to.token.amount)} {to.token.symbol}
-				</p>
-			</div>
-			<div className={classNames.rowContainer}>
-				{tool.gas_usd ? (
-					<div className={classNames.tagContainer}>
-						<IconGasStation size={13} color={'var(--color-text-secondary)'} />
-						<p className={'body1'}>${roundNumberByDecimals(tool.gas_usd, 2)}</p>
+
+				<div className={classNames.tagContainer}>
+					<p className={'body2'}>To:</p>
+					<div className={classNames.amountContainer}>
+						{to.token.logo_uri && <Badge size="m" tokenLogoSrc={to.token.logo_uri} />}
+
+						<div className="row gap-xs ac">
+							<h4>{roundNumberByDecimals(to.token.amount)}</h4>
+							<p className="body4">{to.token.symbol}</p>
+						</div>
+
+						<p className="body2">on</p>
+						{to.token.logo_uri && <Badge size="m" borderSmall tokenLogoSrc={to.token.logo_uri} />}
+
+						<h4>Arbitrum</h4>
 					</div>
-				) : null}
-				{tool.fees_usd && (
-					<div className={classNames.tagContainer}>
-						<IconCoins size={13} color={'var(--color-text-secondary)'} />
-						<p className={'body1'}>${roundNumberByDecimals(tool.fees_usd, 2)}</p>
-					</div>
-				)}
-				{tool.estimated_execution_time_seconds && (
-					<div className={classNames.tagContainer}>
-						<IconClock size={13} color={'var(--color-text-secondary)'} />
-						<p className={'body1'}>{secondsConverter(tool.estimated_execution_time_seconds)}</p>
-					</div>
-				)}
+				</div>
 			</div>
 		</div>
 	)

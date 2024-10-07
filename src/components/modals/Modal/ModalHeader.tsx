@@ -1,27 +1,21 @@
-import { IconX } from '@tabler/icons-react'
 import classNames from './Modal.module.pcss'
-import { Button } from '../../buttons/Button/Button'
-import { Loader } from '../../layout/Loader/Loader'
+import { IconButton } from '../../buttons/IconButton/IconButton'
+import { TrailArrowLeftIcon } from '../../../assets/icons/TrailArrowLeftIcon'
 
 interface ModalHeaderProps {
 	title: string
-	isLoading?: boolean
 	onClick: () => void
 }
 
-export function ModalHeader({ title, isLoading = false, onClick }: ModalHeaderProps) {
+export function ModalHeader({ title, onClick }: ModalHeaderProps) {
 	return (
 		<div className={classNames.header}>
+			<IconButton onClick={onClick} variant="secondary" size="md">
+				<TrailArrowLeftIcon />
+			</IconButton>
 			<div className={classNames.titleContainer}>
 				<h5>{title}</h5>
-				{isLoading ? <Loader size={16} color={'var(--color-grey-600'} /> : null}
 			</div>
-			<Button
-				onClick={onClick}
-				variant="black"
-				size="sq-xs"
-				leftIcon={<IconX size={18} color="var(--color-text-secondary)" />}
-			/>
 		</div>
 	)
 }

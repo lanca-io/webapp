@@ -11,9 +11,10 @@ import { type Chain } from '../../../../api/concero/types'
 import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
 import { SwapCardStage } from '../swapReducer/types'
-import { TokenBadge } from '../../../badges/TokenBadge/TokenBadge'
-import { TrailArrowIcon } from '../../../../assets/icons/TrailArrowIcon'
+import { Badge } from '../../../badges/Badge/Badge'
+import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIcon'
 import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
+import { InputError } from '../SwapInput/InputError/InputError'
 
 export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispatch, balance = null, stage }) => {
 	const [state, tokenAreaDispatch] = useTokenAreaReducer()
@@ -76,7 +77,7 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 						}}
 					>
 						<div className="row ac">
-							<TokenBadge
+							<Badge
 								size="l"
 								tokenLogoSrc={selection.token.logoURI}
 								chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${selection.chain.id}.svg`}
@@ -84,7 +85,7 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 							<SelectTokenShape symbol={selection.token.symbol} chainName={selection.chain.name} />
 						</div>
 
-						<TrailArrowIcon />
+						<TrailArrowRightIcon />
 					</button>
 				</div>
 
@@ -95,6 +96,10 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 					direction={direction}
 					handleMaxButtonClick={handleMaxButtonClick}
 				/>
+
+				{direction === 'from' && (
+					<InputError color="var(--color-danger-700)" errorText="Minimum amount is 20 USDC" />
+				)}
 			</div>
 
 			<TokensModal

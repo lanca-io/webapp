@@ -1,6 +1,8 @@
 import classNames from './MainRouteInfoTags.module.pcss'
-import { IconClock, IconCoins, IconHandClick } from '@tabler/icons-react'
 import { secondsConverter } from '../../../utils/formatting'
+import { GasIcon } from '../../../assets/icons/GasIcon'
+import { TimeIcon } from '../../../assets/icons/TimeIcon'
+import { LayersIcon } from '../../../assets/icons/LayersIcon'
 
 interface MainRouteInfoTagsProps {
 	totalGasUsd?: string | null
@@ -8,31 +10,36 @@ interface MainRouteInfoTagsProps {
 	transactionTimeSeconds?: number | null
 }
 
-export function MainRouteInfoTags({
-	totalGasUsd = null,
-	stepsLength = null,
-	transactionTimeSeconds = null,
-}: MainRouteInfoTagsProps) {
+export function MainRouteInfoTags({ totalGasUsd, stepsLength, transactionTimeSeconds }: MainRouteInfoTagsProps) {
 	return (
 		<div className={classNames.container}>
-			{totalGasUsd !== null ? (
+			{totalGasUsd && (
 				<div className={classNames.tagContainer}>
-					<IconCoins size={16} color={'var(--color-text-secondary)'} />
-					<p className={'body1'}>{`$${totalGasUsd}`}</p>
+					<div className="gap-sm row">
+						<GasIcon />
+						<p className="body2">Gas to pay:</p>
+					</div>
+					<p className={`body2 ${classNames.value}`}>{totalGasUsd ? `$${totalGasUsd}` : 'n/a'}</p>
 				</div>
-			) : null}
-			{transactionTimeSeconds !== null ? (
+			)}
+			{transactionTimeSeconds && (
 				<div className={classNames.tagContainer}>
-					<IconClock size={16} color={'var(--color-text-secondary)'} />
-					<p className={'body1'}>{`${secondsConverter(Number(transactionTimeSeconds))}`}</p>
+					<div className="gap-sm row">
+						<TimeIcon />
+						<p className="body2">ETA:</p>
+					</div>
+					<p
+						className={`body2 ${classNames.valueBlue}`}
+					>{`${secondsConverter(Number(transactionTimeSeconds))}`}</p>
 				</div>
-			) : null}
-			{stepsLength !== null ? (
-				<div className={classNames.tagContainer}>
-					<IconHandClick size={16} color={'var(--color-text-secondary)'} />
-					<p className={'body1'}>{stepsLength}</p>
+			)}
+			<div className={classNames.tagContainer}>
+				<div className="gap-sm row">
+					<LayersIcon />
+					<p className="body2">Steps:</p>
 				</div>
-			) : null}
+				<p className={`body2 ${classNames.value}`}>{stepsLength ?? 'n/a'}</p>
+			</div>
 		</div>
 	)
 }

@@ -1,48 +1,28 @@
 import classNames from './ReviewRouteCard.module.pcss'
-import { type SwapState } from '../../swapReducer/types'
-import { useTranslation } from 'react-i18next'
-import { type Step } from '../../../../../types/StandardRoute'
-import { IconChevronRight } from '@tabler/icons-react'
-import { ReviewRouteStepCard } from './ReviewRouteStepCard/ReviewRouteStepCard'
 import { MainRouteInfoTags } from '../../../../tags/MainRouteInfoTags/MainRouteInfoTags'
+import { Button } from '../../../../buttons/Button/Button'
+import { TrailArrowRightIcon } from '../../../../../assets/icons/TrailArrowRightIcon'
+import { type StandardRoute } from '../../../../../types/StandardRoute'
 
 interface ReviewRouteCardProps {
-	swapState: SwapState
+	selectedRoute: StandardRoute
 }
 
-export function ReviewRouteCard({ swapState }: ReviewRouteCardProps) {
-	const { t } = useTranslation()
-	const { selectedRoute } = swapState
-
+export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {
 	return (
 		<div className={classNames.container}>
-			<div className={classNames.header}>
-				<p className={'body2'}>{t('swapCard.yourRoute')}</p>
+			<div className="gap-md">
+				<MainRouteInfoTags
+					transactionTimeSeconds={60}
+					totalGasUsd={'5.05'}
+					stepsLength={selectedRoute?.steps?.length}
+				/>
+				<Button className="w-full jsb" variant="secondary" size="sm" rightIcon={<TrailArrowRightIcon />}>
+					Review
+				</Button>
 			</div>
-			<div className={classNames.routeStepsContainer}>
-				{swapState.selectedRoute ? <ReviewRouteStepCard direction={swapState.selectedRoute?.from} /> : null}
-				<IconChevronRight size={18} color={'var(--color-text-secondary)'} />
-				{swapState.selectedRoute?.steps?.map((steps: Step[], index: number) => {
-					return (
-						<div key={index.toString()} className={classNames.rowContainer}>
-							{index !== 0 ? <IconChevronRight size={18} color={'var(--color-text-secondary)'} /> : null}
-							<ReviewRouteStepCard direction={steps[steps.length - 1].to} />
-						</div>
-					)
-				})}
-			</div>
-			<div className={`${classNames.rowContainer}`}>
-				<div className={classNames.tags}>
-					<MainRouteInfoTags
-						transactionTimeSeconds={selectedRoute?.transaction_time_seconds}
-						totalGasUsd={selectedRoute?.cost.total_gas_usd}
-						stepsLength={selectedRoute?.steps?.length}
-					/>
-				</div>
-				<div className={classNames.footerTitleContainer}>
-					<p className={'body1'}>{t('swapCard.clickToOpenDetails')}</p>
-				</div>
-			</div>
+
+			<div className={classNames.separator}></div>
 		</div>
 	)
 }

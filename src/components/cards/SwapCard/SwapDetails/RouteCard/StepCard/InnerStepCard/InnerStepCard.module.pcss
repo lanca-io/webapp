@@ -1,5 +1,10 @@
 .container {
-	gap: 2px;
+	gap: var(--sp-sm);
+}
+
+.type {
+	color: var(--color-grey-700);
+	font-weight: 500;
 }
 
 .rowContainer {
@@ -10,11 +15,26 @@
 
 .tagContainer {
 	flex-direction: row;
+	justify-content: space-between;
 	align-items: center;
-	gap: 2px;
+	gap: var(--sp-md);
+
+	> p {
+		width: 37px;
+	}
 }
 
 .title {
 	font-size: 14px;
 	font-weight: 400;
+}
+
+.amountContainer {
+	width: 100%;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--sp-sm);
+	background: var(--color-grey-100);
+	padding: var(--sp-sm) var(--sp-lg);
+	border-radius: var(--sp-md);
 }
