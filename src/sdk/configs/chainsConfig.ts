@@ -33,37 +33,21 @@ export const viemChains: Record<string, { chain: Chain; transport?: Transport }>
 	},
 	[base.id]: {
 		chain: base,
-		transport: fallback([
-			http('https://base-rpc.publicnode.com'),
-			http('https://base.drpc.org'),
-			http('https://1rpc.io/base'),
-		]),
+		transport: fallback([http('https://base-rpc.publicnode.com'), http('https://rpc.ankr.com/base')]),
 	},
 	[arbitrum.id]: {
 		chain: arbitrum,
-		transport: fallback([
-			http(),
-			http('https://1rpc.io/arb'),
-			http('https://endpoints.omniatech.io/v1/arbitrum/one/public'),
-			http('https://arbitrum.meowrpc.com'),
-		]),
+		transport: fallback([http('https://arbitrum-one-rpc.publicnode.com'), http('https://rpc.ankr.com/arbitrum')]),
 	},
 	[polygon.id]: {
 		chain: polygon,
-		transport: fallback([
-			http(),
-			http('https://polygon.meowrpc.com'),
-			http('https://polygon-pokt.nodies.app'),
-			http('https://polygon-bor-rpc.publicnode.com'),
-		]),
+		transport: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://rpc.ankr.com/polygon')]),
 	},
 	[avalanche.id]: {
 		chain: avalanche,
 		transport: fallback([
-			http(),
 			http('https://avalanche-c-chain-rpc.publicnode.com'),
-			http('https://avalanche.drpc.org'),
-			http('https://1rpc.io/avax/c'),
+			http('https://rpc.ankr.com/polygon'),
 		]),
 	},
 	[sepolia.id]: {
