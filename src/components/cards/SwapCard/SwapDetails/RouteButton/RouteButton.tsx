@@ -3,7 +3,7 @@ import { IconChevronRight, IconClockHour3, IconCoins } from '@tabler/icons-react
 import { type RouteButtonProps } from '../../types'
 import { secondsConverter } from '../../../../../utils/formatting'
 import classNames from './RouteButton.module.pcss'
-import { Button } from '../../../../buttons/Button/Button'
+import { Button } from '../../../../layout/buttons/Button/Button'
 
 export const RouteButton: FC<RouteButtonProps> = ({ selectedRoute, onClick }) => {
 	return (

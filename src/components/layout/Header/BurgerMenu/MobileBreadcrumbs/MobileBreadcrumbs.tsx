@@ -1,5 +1,5 @@
 import classNames from './MobileBreadcrumbs.module.pcss'
-import { Button } from '../../../../buttons/Button/Button'
+import { Button } from '../../../buttons/Button/Button'
 
 export function MobileBreadcrumbs() {
 	return (

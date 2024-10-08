@@ -4,7 +4,7 @@ import { Logo } from '../../Logo/Logo'
 import { useMediaQuery } from '../../../../hooks/useMediaQuery'
 import { WalletButton } from '../WalletButton/WalletButton'
 import { BurgerMenu } from '../BurgerMenu/BurgerMenu'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../buttons/Button/Button'
 
 interface HeaderProps {
 	children?: ReactNode

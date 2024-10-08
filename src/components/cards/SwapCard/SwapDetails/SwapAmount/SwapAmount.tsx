@@ -1,4 +1,4 @@
-import { Badge } from '../../../../badges/Badge/Badge'
+import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
 import { type Direction } from '../../../../../types/StandardRoute'
 import { SelectTokenShape } from '../../TokenArea/SelectTokenShape/SelectTokenShape'

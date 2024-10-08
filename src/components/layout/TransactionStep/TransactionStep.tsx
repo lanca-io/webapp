@@ -1,8 +1,5 @@
 import { type FC } from 'react'
-import { Ping } from '@uiball/loaders'
-import { IconCheck, IconExternalLink, IconX } from '@tabler/icons-react'
 import { Loader } from '../Loader/Loader'
-import { Button } from '../../buttons/Button/Button'
 import classNames from './TransactionStep.module.pcss'
 
 interface StageProps {
@@ -22,13 +19,11 @@ const renderTag = (status: string) => {
 	const content = () => {
 		switch (status) {
 			case 'pending':
-				return <Loader size={iconSize} color="var(--color-text-secondary)" />
+				return <Loader variant="neutral" />
 			case 'await':
-				return <Ping size={iconSize} color="var(--color-pacific-500)" />
-			case 'success':
-				return <IconCheck size={iconSize} color={'var(--color-aquamarine-500)'} />
+				return <Loader variant="neutral" />
 			case 'error':
-				return <IconX size={iconSize} color={'var(--color-red-500'} />
+				return null
 			default:
 				return <div style={{ width: iconSize, height: iconSize }} />
 		}
@@ -38,24 +33,12 @@ const renderTag = (status: string) => {
 }
 
 export const TransactionStep: FC<StageProps> = ({ step }) => {
-	const { title, body, status, txLink } = step
+	const { title, status } = step
 
 	return (
 		<div className={classNames.step}>
 			{renderTag(status)}
-			<div className={classNames.stageText}>
-				<div className={classNames.titleContainer}>
-					<h5>{title}</h5>
-					{txLink && (
-						<a href={txLink} target="_blank" rel="noopener noreferrer">
-							<Button variant="black" size="xs">
-								<IconExternalLink size={16} color={'var(--color-text-secondary)'} />
-							</Button>
-						</a>
-					)}
-				</div>
-				{body && <p className="body1">{body}</p>}
-			</div>
+			<h4 className={classNames.titleContainer}>{title}</h4>
 		</div>
 	)
 }

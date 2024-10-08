@@ -1,8 +1,8 @@
 import { type FC } from 'react'
 import { IconCheck } from '@tabler/icons-react'
 import classNames from './ListEntityButton.module.pcss'
-import { CryptoIcon } from '../../tags/CryptoSymbol/CryptoIcon'
-import { colors } from '../../../constants/colors'
+import { CryptoIcon } from '../../../tags/CryptoSymbol/CryptoIcon'
+import { colors } from '../../../../constants/colors'
 import { Button } from '../Button/Button'
 
 interface ChainSelectionRowProps {

@@ -5,46 +5,51 @@ import { animated, useSpring } from '@react-spring/web'
 import { easeQuadInOut } from 'd3-ease'
 import { ReviewRouteCard } from './ReviewRouteCard/ReviewRouteCard'
 import { RouteDetailsModal } from './RouteDetailsModal/RouteDetailsModal'
+import { Alert } from '../../../layout/Alert/Alert'
+import { Separator } from '../../../layout/Separator/Separator'
 
 export const SwapDetails: FC<SwapDetailsProps> = ({ swapState }) => {
 	const [animatedContainerHeight, setAnimatedContainerHeight] = useState<number>(0)
 	const [isReviewRouteModalVisible, setIsReviewRouteModalVisible] = useState<boolean>(false)
 	const reviewRouteCardRef = useRef<HTMLDivElement>(null)
-	const { selectedRoute } = swapState
-
-	const isInputStage = swapState.stage === 'input'
+	const { selectedRoute, isNoRoutes } = swapState
 
 	const containerAnimation = useSpring({
-		height: selectedRoute && !isInputStage ? animatedContainerHeight : 0,
-		opacity: selectedRoute && !isInputStage ? 1 : 0,
+		height: selectedRoute || isNoRoutes ? animatedContainerHeight : 0,
+		opacity: selectedRoute || isNoRoutes ? 1 : 0,
 		config: { duration: 200, easing: easeQuadInOut },
 	})
 
 	useEffect(() => {
 		if (!reviewRouteCardRef.current) return
-		setAnimatedContainerHeight(reviewRouteCardRef.current.scrollHeight)
-	}, [reviewRouteCardRef.current?.scrollHeight, swapState.stage])
+
+		setAnimatedContainerHeight(isNoRoutes ? 80 : 147)
+	}, [reviewRouteCardRef.current, swapState.stage])
 
 	return (
 		<animated.div style={containerAnimation}>
-			<div className={classNames.swapDetailsContainer}>
+			<div ref={reviewRouteCardRef} className={classNames.swapDetailsContainer}>
 				<div
 					className={classNames.reviewContainer}
-					ref={reviewRouteCardRef}
 					onClick={() => {
 						setIsReviewRouteModalVisible(true)
 					}}
 				>
-					<ReviewRouteCard selectedRoute={selectedRoute} />
+					{isNoRoutes ? (
+						<Alert title={'Routs not found'} variant="error" />
+					) : (
+						<ReviewRouteCard selectedRoute={selectedRoute} />
+					)}
+					<Separator />
 				</div>
+				{selectedRoute && (
+					<RouteDetailsModal
+						selectedRoute={selectedRoute}
+						isOpen={isReviewRouteModalVisible}
+						setIsOpen={setIsReviewRouteModalVisible}
+					/>
+				)}
 			</div>
-			{selectedRoute && (
-				<RouteDetailsModal
-					selectedRoute={selectedRoute}
-					isOpen={isReviewRouteModalVisible}
-					setIsOpen={setIsReviewRouteModalVisible}
-				/>
-			)}
 		</animated.div>
 	)
 }

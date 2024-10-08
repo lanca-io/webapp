@@ -2,7 +2,7 @@ import classNames from './InnerStepCard.module.pcss'
 import { type Step, StepTypes } from '../../../../../../../types/StandardRoute'
 import { useTranslation } from 'react-i18next'
 import { roundNumberByDecimals } from '../../../../../../../utils/formatting'
-import { Badge } from '../../../../../../badges/Badge/Badge'
+import { Badge } from '../../../../../../layout/Badge/Badge'
 
 interface InnerStepCardProps {
 	step: Step

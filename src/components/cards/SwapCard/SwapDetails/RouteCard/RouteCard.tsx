@@ -2,7 +2,7 @@ import { type StandardRoute, type Step } from '../../../../../types/StandardRout
 import classNames from './RouteCard.module.pcss'
 import { IconChevronDown } from '@tabler/icons-react'
 import { roundNumberByDecimals } from '../../../../../utils/formatting'
-import { Button } from '../../../../buttons/Button/Button'
+import { Button } from '../../../../layout/buttons/Button/Button'
 import { useRef, useState } from 'react'
 import { StepCard } from './StepCard/StepCard'
 import { animated, useSpring } from '@react-spring/web'

@@ -1,9 +1,8 @@
 import { type FC } from 'react'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../../layout/buttons/Button/Button'
 import { type SwapButtonProps } from './types'
 import { ButtonType } from './constants'
 import { getButtonType } from './getButtonType'
-import { useTranslation } from 'react-i18next'
 import { useGasSufficiency } from './useGasSufficiency'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 
@@ -12,7 +11,6 @@ export const SwapButton: FC<SwapButtonProps> = ({ swapState, isConnected, onClic
 	const { isLoading: isFetchBalancesLoading, gasSufficiency } = useGasSufficiency(swapState)
 
 	const { open } = useWeb3Modal()
-	const { t } = useTranslation()
 	const buttonType = getButtonType(
 		swapState,
 		isConnected,

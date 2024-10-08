@@ -1,5 +1,5 @@
 import classNames from './TestnetCheckButtons.module.pcss'
-import { Button } from '../../../../buttons/Button/Button'
+import { Button } from '../../../../layout/buttons/Button/Button'
 import { type SwapState } from '../../swapReducer/types'
 import { IconCheck } from '@tabler/icons-react'
 import { type providers } from 'ethers'

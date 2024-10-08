@@ -3,7 +3,7 @@ import { animated, useTransition } from '@react-spring/web'
 import { IconX } from '@tabler/icons-react'
 import { NotificationsContext } from '../../../hooks/notificationsContext'
 import classNames from './Notifications.module.pcss'
-import { Button } from '../../buttons/Button/Button'
+import { Button } from '../../layout/buttons/Button/Button'
 import { Beacon } from '../../layout/Beacon/Beacon'
 
 export function Notifications() {

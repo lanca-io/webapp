@@ -12,8 +12,10 @@ import { useContext } from 'react'
 import { type DataContextValue } from '../../../../hooks/DataContext/types'
 import { DataContext } from '../../../../hooks/DataContext/DataContext'
 import { SwapIcon } from '../../../../assets/icons/SwapIcon'
-import { IconButton } from '../../../buttons/IconButton/IconButton'
+import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
 import { FeeDetailsDropdown } from '../SwapDetails/FeeDetailsDropdown/FeeDetailsDropdown'
+import { Separator } from '../../../layout/Separator/Separator'
+import { Alert } from '../../../layout/Alert/Alert'
 
 export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }: SwapInputProps) => {
 	const { getChainByProviderSymbol } = useContext<DataContextValue>(DataContext)
@@ -102,7 +104,7 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 					stage={swapState.stage}
 				/>
 
-				<div className={classNames.separator}></div>
+				<Separator />
 			</div>
 
 			<SwapDetails swapState={swapState} swapDispatch={swapDispatch} />
@@ -114,7 +116,9 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 				switchChainHook={switchChainHook}
 			/>
 
-			<FeeDetailsDropdown />
+			<div className={classNames.feeDetails}>
+				<FeeDetailsDropdown />
+			</div>
 		</div>
 	)
 }

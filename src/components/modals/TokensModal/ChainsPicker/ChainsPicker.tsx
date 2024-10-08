@@ -1,12 +1,12 @@
 import classNames from './ChainsPicker.module.pcss'
 import { useContext, useEffect, useState } from 'react'
 import { DataContext } from '../../../../hooks/DataContext/DataContext'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../../layout/buttons/Button/Button'
 import type { Chain } from '../../../../api/concero/types'
 import { useTranslation } from 'react-i18next'
 import { CardModal } from '../../CardModal/CardModal'
 import { ChainListItem } from './ChainListItem/ChainListItem'
-import { TextInput } from '../../../input/TextInput'
+import { TextInput } from '../../../layout/input/TextInput'
 import { IconSearch } from '@tabler/icons-react'
 
 interface TokensModalHeaderProps {

@@ -1,6 +1,6 @@
 import classNames from './ReviewRouteCard.module.pcss'
 import { MainRouteInfoTags } from '../../../../tags/MainRouteInfoTags/MainRouteInfoTags'
-import { Button } from '../../../../buttons/Button/Button'
+import { Button } from '../../../../layout/buttons/Button/Button'
 import { TrailArrowRightIcon } from '../../../../../assets/icons/TrailArrowRightIcon'
 import { type StandardRoute } from '../../../../../types/StandardRoute'
 
@@ -9,6 +9,8 @@ interface ReviewRouteCardProps {
 }
 
 export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {
+	if (!selectedRoute) return
+
 	return (
 		<div className={classNames.container}>
 			<div className="gap-md">
@@ -21,8 +23,6 @@ export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {
 					Review
 				</Button>
 			</div>
-
-			<div className={classNames.separator}></div>
 		</div>
 	)
 }

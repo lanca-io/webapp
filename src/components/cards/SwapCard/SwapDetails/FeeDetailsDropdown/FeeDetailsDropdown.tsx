@@ -16,7 +16,7 @@ const FeePrice = ({ title, price, percent }: Props) => {
 				<p className="body2">{title}</p>
 				<InfoIcon />
 			</div>
-			<div className="row gap-sm ac">
+			<div className="row gap-xs ac">
 				<p className={`${classNames.priceFee} body2`}>{price}</p>
 				<p className="body2">{percent} %</p>
 			</div>
@@ -28,7 +28,7 @@ export const FeeDetailsDropdown = () => {
 	const [isOpen, setIsOpen] = useState(false)
 
 	return (
-		<div className="gap-sm">
+		<div className={classNames.wrap}>
 			<div
 				className={classNames.container}
 				onClick={() => {

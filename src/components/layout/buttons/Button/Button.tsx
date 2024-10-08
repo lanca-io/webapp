@@ -1,6 +1,6 @@
 import { type FC } from 'react'
 import { type ButtonProps } from './types'
-import { Loader } from '../../layout/Loader/Loader'
+import { Loader } from '../../Loader/Loader'
 import { getButtonClasses } from './getButtonClasses'
 import classNames from './Button.module.pcss'
 

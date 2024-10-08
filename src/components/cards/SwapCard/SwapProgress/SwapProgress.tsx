@@ -4,9 +4,14 @@ import classNames from './SwapProgress.module.pcss'
 import { TokenInfo } from './TokenInfo'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
 import { type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../../layout/buttons/Button/Button'
 import { type IStep } from '../../EarnHeaderCard/ManageModal/useEarnReducer/types'
 import { useTranslation } from 'react-i18next'
+import { PendingStateSvg } from '../../../../assets/images/transactionStates/PendingStateSvg'
+import { Separator } from '../../../layout/Separator/Separator'
+import { Alert } from '../../../layout/Alert/Alert'
+import { Loader } from '../../../layout/Loader/Loader'
+import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIcon'
 
 interface SwapProgressProps {
 	swapState: SwapState
@@ -31,23 +36,13 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, s
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[SwapCardStage.failed]: (
-			<div className={classNames.buttonsContainer}>
-				<Button
-					leftIcon={<IconArrowLeft size={20} color={'var(--color-pacific-400)'} />}
-					onClick={handleGoBack}
-					variant="secondary"
-				>
-					{t('button.goBack')}
-				</Button>
-				<Button
-					variant={'primary'}
-					className={classNames.button}
-					onClick={handleContactSupportButtonClick}
-					leftIcon={<IconUser color={'var(--color-button-text-primary)'} size={18} />}
-				>
-					{t('contactSupportCard.contractSupport')}
-				</Button>
-			</div>
+			<Button
+				leftIcon={<IconArrowLeft size={20} color={'var(--color-pacific-400)'} />}
+				onClick={handleGoBack}
+				variant="secondary"
+			>
+				Try again
+			</Button>
 		),
 		[SwapCardStage.success]: (
 			<div className={classNames.successButtonsContainer}>
@@ -79,16 +74,34 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, s
 
 	return (
 		<div className={classNames.container}>
-			<div className={classNames.tokensInfoContainer}>
-				<TokenInfo direction={from} />
-				<TokenInfo direction={to} />
+			<div className={classNames.header}>
+				<h3>Transaction in progress...</h3>
 			</div>
+
+			<div className={classNames.stateImg}>
+				<PendingStateSvg />
+			</div>
+
 			<div className={classNames.progressContainer}>
 				{steps.map((step: IStep, index: number) => (
 					<TransactionStep key={index.toString()} step={step} />
 				))}
+				<TrailArrowRightIcon />
+				<h4>Bridge</h4>
+				<TrailArrowRightIcon />
+				<h4>Swap</h4>
 			</div>
+
+			<Separator />
+
+			<Alert title="Signature required" variant="neutral" icon={<Loader variant="neutral" />} />
+
 			{button}
 		</div>
 	)
 }
+
+// <div className={classNames.tokensInfoContainer}>
+// 	<TokenInfo direction={from} />
+// 	<TokenInfo direction={to} />
+// </div>

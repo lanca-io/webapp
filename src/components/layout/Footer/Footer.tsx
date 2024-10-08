@@ -1,5 +1,5 @@
 import { FooterLogo } from '../../../assets/icons/FooterLogo'
-import { Button } from '../../buttons/Button/Button'
+import { Button } from '../buttons/Button/Button'
 import classNames from './Footer.module.pcss'
 import { type ReactNode } from 'react'
 import { TwitterIcon } from '../../../assets/icons/Socials/TwitterIcon'
