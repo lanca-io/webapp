@@ -1,17 +1,21 @@
 import { type Dispatch, type FC } from 'react'
-import { IconArrowLeft, IconBrandTwitter, IconUser } from '@tabler/icons-react'
 import classNames from './SwapProgress.module.pcss'
-import { TokenInfo } from './TokenInfo'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
 import { type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
 import { Button } from '../../../layout/buttons/Button/Button'
-import { type IStep } from '../../EarnHeaderCard/ManageModal/useEarnReducer/types'
-import { useTranslation } from 'react-i18next'
 import { PendingStateSvg } from '../../../../assets/images/transactionStates/PendingStateSvg'
 import { Separator } from '../../../layout/Separator/Separator'
 import { Alert } from '../../../layout/Alert/Alert'
 import { Loader } from '../../../layout/Loader/Loader'
 import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIcon'
+import { FailStateSvg } from '../../../../assets/images/transactionStates/FailStateSvg'
+import { SuccessStateSvg } from '../../../../assets/images/transactionStates/SuccessStateSvg'
+import { InfoIcon } from '../../../../assets/icons/InfoIcon'
+import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
+import { TrailArrowLeftIcon } from '../../../../assets/icons/TrailArrowLeftIcon'
+import { PencilIcon } from '../../../../assets/icons/PencilIcon'
+import { CrossIcon } from '../../../../assets/icons/CrossIcon'
+import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 
 interface SwapProgressProps {
 	swapState: SwapState
@@ -26,29 +30,33 @@ const testnetChainsTwitterMap: Record<string, string> = {
 	'11155420': 'Optimism',
 }
 
-export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, swapDispatch, txInfo }) => {
-	const { from, to, steps, stage } = swapState
-	const { t } = useTranslation()
+export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, txInfo }) => {
+	const { to, steps, stage } = swapState
 
-	function handleContactSupportButtonClick() {
-		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.contactSupport })
-	}
+	const isFailed = stage === SwapCardStage.failed
+	const isSuccess = stage === SwapCardStage.success
+	const currentStep = steps[steps.length - 1]
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[SwapCardStage.failed]: (
-			<Button
-				leftIcon={<IconArrowLeft size={20} color={'var(--color-pacific-400)'} />}
-				onClick={handleGoBack}
-				variant="secondary"
-			>
-				Try again
-			</Button>
+			<div className="gap-lg w-full">
+				<Separator />
+				<Button isFull={true} onClick={handleGoBack} variant="secondaryColor" size="lg">
+					Try again
+				</Button>
+			</div>
 		),
 		[SwapCardStage.success]: (
-			<div className={classNames.successButtonsContainer}>
-				{swapState.isTestnet && txInfo !== undefined ? (
+			<>
+				<Separator />
+				<div className="w-full gap-sm">
+					<Button isFull onClick={handleGoBack} variant="secondaryColor" size="lg">
+						Swap again
+					</Button>
 					<Button
-						leftIcon={<IconBrandTwitter size={18} />}
+						isFull
+						variant="secondary"
+						size="lg"
 						onClick={() => {
 							window.open(
 								`https://twitter.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${testnetChainsTwitterMap[swapState.from.chain.id]}%20to%20%40${testnetChainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${txInfo?.duration}%20sec%20on%20%40concero_io%20testnet!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20app.concero.io%20👇`,
@@ -56,52 +64,92 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, s
 							)
 						}}
 					>
-						Share on Twitter
+						Share on X
 					</Button>
-				) : null}
-				<Button
-					leftIcon={<IconArrowLeft size={20} color={'var(--color-pacific-400)'} />}
-					onClick={handleGoBack}
-					variant="secondary"
-				>
-					{t('button.goBack')}
-				</Button>
+				</div>
+			</>
+		),
+	}
+
+	const stateImages: Record<string, JSX.Element> | Record<string, null> = {
+		[SwapCardStage.progress]: (
+			<div className={`${classNames.stateImg} ${classNames.stateImgPending}`}>
+				<PendingStateSvg />
+			</div>
+		),
+		[SwapCardStage.failed]: (
+			<div className={`${classNames.stateImg} ${classNames.stateImgFail}`}>
+				<FailStateSvg />
+			</div>
+		),
+		[SwapCardStage.success]: (
+			<div className={`${classNames.stateImg} ${classNames.stateImgSuccess}`}>
+				<SuccessStateSvg />
 			</div>
 		),
 	}
 
-	const button = renderButtons[stage] ?? null
+	const title: Record<string, string> | Record<string, null> = {
+		[SwapCardStage.progress]: 'Transaction in progress...',
+		[SwapCardStage.failed]: 'Transaction failed',
+		[SwapCardStage.success]: 'Swap Successful!',
+	}
 
-	return (
-		<div className={classNames.container}>
-			<div className={classNames.header}>
-				<h3>Transaction in progress...</h3>
-			</div>
-
-			<div className={classNames.stateImg}>
-				<PendingStateSvg />
-			</div>
+	const progressDetails = (
+		<>
+			{/* <SwapProgressDetails from={from} to={to} /> */}
 
 			<div className={classNames.progressContainer}>
-				{steps.map((step: IStep, index: number) => (
-					<TransactionStep key={index.toString()} step={step} />
-				))}
+				<TransactionStep status="pending" title="Approvals" />
 				<TrailArrowRightIcon />
-				<h4>Bridge</h4>
+				<TransactionStep status="error" title="Bridge" />
 				<TrailArrowRightIcon />
-				<h4>Swap</h4>
+				<TransactionStep status="success" title="Swap" />
 			</div>
 
 			<Separator />
 
-			<Alert title="Signature required" variant="neutral" icon={<Loader variant="neutral" />} />
+			{currentStep && currentStep.status !== 'await' && (
+				<Alert
+					title={currentStep.title}
+					variant={isFailed ? 'error' : 'neutral'}
+					icon={isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />}
+				/>
+			)}
+		</>
+	)
 
-			{button}
+	return (
+		<div className={classNames.container}>
+			<div className={classNames.header}>
+				{isFailed && (
+					<IconButton onClick={handleGoBack} className={classNames.backButton} variant="secondary" size="md">
+						<TrailArrowLeftIcon />
+					</IconButton>
+				)}
+				<h3>{title[stage] ?? 'Uh Oh...'}</h3>
+				{isSuccess && (
+					<IconButton onClick={handleGoBack} className={classNames.closeButton} variant="secondary" size="md">
+						<CrossIcon />
+					</IconButton>
+				)}
+			</div>
+
+			{stateImages[stage] ?? null}
+
+			{isSuccess ? <FinishTxInfo to={to} /> : progressDetails}
+
+			{currentStep?.status === 'await' && (
+				<div className={classNames.infoMessage}>
+					<div className={classNames.wrapIcon}>
+						<PencilIcon />
+					</div>
+					<h4 className={classNames.messageTitle}>Signature required</h4>
+					<p className={classNames.messageSubtitle}>Please open your wallet and sign the transaction</p>
+				</div>
+			)}
+
+			{renderButtons[stage] ?? null}
 		</div>
 	)
 }
-
-// <div className={classNames.tokensInfoContainer}>
-// 	<TokenInfo direction={from} />
-// 	<TokenInfo direction={to} />
-// </div>

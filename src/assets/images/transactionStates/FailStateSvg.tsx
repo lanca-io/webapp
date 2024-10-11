@@ -1,4 +1,4 @@
-export const warningStateSvg = () => (
+export const FailStateSvg = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" width="109" height="110" viewBox="0 0 109 110" fill="none">
 		<g filter="url(#filter0_f_557_9668)">
 			<path

@@ -1,44 +1,34 @@
 import { type FC } from 'react'
 import { Loader } from '../Loader/Loader'
 import classNames from './TransactionStep.module.pcss'
+import { InfoIcon } from '../../../assets/icons/InfoIcon'
+import { SuccessIcon } from '../../../assets/icons/SuccessIcon'
 
 interface StageProps {
-	step: StageStep
-}
-
-export interface StageStep {
 	title: string
-	body?: string
-	status: 'pending' | 'success' | 'error' | 'await'
-	txLink?: string
+	status: 'pending' | 'success' | 'error' | 'idle'
 }
 
-const renderTag = (status: string) => {
-	const iconSize = 18
-
-	const content = () => {
+export const TransactionStep: FC<StageProps> = ({ status, title }) => {
+	const renderIcon = () => {
 		switch (status) {
+			case 'idle':
+				return null
 			case 'pending':
 				return <Loader variant="neutral" />
-			case 'await':
-				return <Loader variant="neutral" />
 			case 'error':
-				return null
+				return <InfoIcon color="var(--color-danger-700)" />
+			case 'success':
+				return <SuccessIcon />
 			default:
-				return <div style={{ width: iconSize, height: iconSize }} />
+				return null
 		}
 	}
 
-	return <div className={`${classNames.tagContainer} ${classNames[status]}`}>{content()}</div>
-}
-
-export const TransactionStep: FC<StageProps> = ({ step }) => {
-	const { title, status } = step
-
 	return (
 		<div className={classNames.step}>
-			{renderTag(status)}
-			<h4 className={classNames.titleContainer}>{title}</h4>
+			{renderIcon()}
+			<h4 className={classNames[status]}>{title}</h4>
 		</div>
 	)
 }

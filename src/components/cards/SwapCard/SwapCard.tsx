@@ -1,17 +1,20 @@
-import { type ReactComponentElement, useRef, useState } from 'react'
+import { type Dispatch, type ReactComponentElement, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
 import classNames from './SwapCard.module.pcss'
-import { useSwapReducer } from './swapReducer/swapReducer'
 import { useSwapCardEffects } from './SwapCardEffects'
 import { SwapInput } from './SwapInput/SwapInput'
 import { SwapProgress } from './SwapProgress/SwapProgress'
-import { SwapCardStage } from './swapReducer/types'
+import { type SwapAction, SwapCardStage, type SwapState } from './swapReducer/types'
 import { ContactSupportCard } from '../ContactSupportCard/ContactSupportCard'
 import posthog from 'posthog-js'
 import { Card } from '../Card/Card'
 
-export const SwapCard = () => {
-	const [swapState, swapDispatch] = useSwapReducer()
+export interface Props {
+	swapState: SwapState
+	swapDispatch: Dispatch<SwapAction>
+}
+
+export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 	const [txInfo, setTxInfo] = useState<{ duration: number; hash: string } | undefined>(undefined)
 	const { address, connector } = useAccount()
 	const typingTimeoutRef = useRef<number>()

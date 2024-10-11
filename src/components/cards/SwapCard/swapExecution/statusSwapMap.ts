@@ -31,7 +31,7 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 			],
 		})
 	},
-	CHECK_ALLOWANCE: (swapDispatch, state) => {
+	CHECK_ALLOWANCE: swapDispatch => {
 		swapDispatch({
 			type: 'SET_SWAP_STEPS',
 			payload: [

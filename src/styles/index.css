@@ -259,7 +259,7 @@ a {
 
 .body1 {
 	color: var(--color-grey-500);
-	font-size: 0.85rem;
+	font-size: 0.875rem;
 	flex: none;
 }
 
@@ -286,7 +286,7 @@ a {
 
 .tagBody {
 	color: var(--color-grey-500);
-	font-size: 0.85rem;
+	font-size: 0.875rem;
 }
 
 button {

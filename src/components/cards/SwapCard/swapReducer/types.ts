@@ -48,13 +48,11 @@ export interface Balance {
 }
 
 export interface SwapState {
-	settingsModalOpen: boolean
 	from: SwapStateDirection
 	to: SwapStateDirection
 	routes: StandardRoute[]
-	isNoRoutes: boolean
-	isLoading: boolean
 	selectedRoute: StandardRoute | null
+
 	typingTimeout: number
 	stage: SwapCardStage
 	steps: StageStep[]
@@ -62,6 +60,10 @@ export interface SwapState {
 	buttonState: ButtonState
 	balance: Balance
 	walletBalances: ConceroBalanceResponse | null
+
+	settingsModalOpen: boolean
+	isNoRoutes: boolean
+	isLoading: boolean
 	isDestinationAddressVisible: boolean
 	isTestnet: boolean
 	isSufficientLiquidity: boolean

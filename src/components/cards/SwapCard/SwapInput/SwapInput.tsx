@@ -15,7 +15,6 @@ import { SwapIcon } from '../../../../assets/icons/SwapIcon'
 import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
 import { FeeDetailsDropdown } from '../SwapDetails/FeeDetailsDropdown/FeeDetailsDropdown'
 import { Separator } from '../../../layout/Separator/Separator'
-import { Alert } from '../../../layout/Alert/Alert'
 
 export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }: SwapInputProps) => {
 	const { getChainByProviderSymbol } = useContext<DataContextValue>(DataContext)
@@ -116,9 +115,11 @@ export const SwapInput = ({ swapState, swapDispatch, isNewSwapCardMode = true }:
 				switchChainHook={switchChainHook}
 			/>
 
-			<div className={classNames.feeDetails}>
-				<FeeDetailsDropdown />
-			</div>
+			{swapState.selectedRoute && (
+				<div className={classNames.feeDetails}>
+					<FeeDetailsDropdown />
+				</div>
+			)}
 		</div>
 	)
 }

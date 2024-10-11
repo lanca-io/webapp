@@ -3,6 +3,22 @@
 	height: 100vh;
 	align-items: center;
 	padding-top: var(--sp-xxl);
+	transition: 0.2s;
+}
+
+.input,
+.review,
+.progress {
 	background: radial-gradient(70.26% 70.26% at 48.67% 29.75%, #e0f2fe 0%, rgba(245, 251, 255, 0) 100%),
+		linear-gradient(180deg, #f9fafb 0%, #eaecf0 100%);
+}
+
+.failed {
+	background: radial-gradient(70.26% 70.26% at 48.67% 29.75%, #fee4e2 0%, rgba(255, 251, 250, 0) 100%),
+		linear-gradient(180deg, #f9fafb 0%, #eaecf0 100%) !important;
+}
+
+.success {
+	background: radial-gradient(75.61% 75.61% at 49.34% 24.39%, #d1fadf 0%, rgba(246, 254, 249, 0.1) 60%),
 		linear-gradient(180deg, #f9fafb 0%, #eaecf0 100%);
 }
