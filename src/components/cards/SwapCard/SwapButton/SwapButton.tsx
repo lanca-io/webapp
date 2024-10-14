@@ -20,7 +20,14 @@ export const SwapButton: FC<SwapButtonProps> = ({ swapState, isConnected, onClic
 	const walletIsConnect = buttonType === ButtonType.CONNECT_WALLET_BRIGHT
 
 	return (
-		<Button isFull size="lg" variant="primary" isLoading={isLoading} onClick={walletIsConnect ? open : onClick}>
+		<Button
+			isDisabled={false}
+			isFull
+			size="lg"
+			variant="primary"
+			isLoading={isLoading}
+			onClick={walletIsConnect ? open : onClick}
+		>
 			{/* {t(buttonText[buttonType])} */}
 			{walletIsConnect ? 'Connect Wallet' : 'Begin Swap'}
 		</Button>

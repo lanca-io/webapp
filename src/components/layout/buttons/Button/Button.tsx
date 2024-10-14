@@ -22,6 +22,7 @@ export const Button: FC<ButtonProps> = ({
 		<button
 			className={buttonClasses}
 			id={classNames[variant]}
+			disabled={isDisabled}
 			onClick={!isDisabled ? onClick : undefined}
 			aria-label={variant + size}
 		>

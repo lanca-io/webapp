@@ -14,10 +14,8 @@ import { TokenModalActionType } from './useTokensModalReducer/types'
 import { getBalanceTokens } from './handlers/getBalanceTokens'
 import { ChainsPicker } from './ChainsPicker/ChainsPicker'
 import { Modal } from '../Modal/Modal'
-import { Button } from '../../layout/buttons/Button/Button'
 import { SelectionContext } from '../../../hooks/SelectionContext'
-import { testnetTokens } from './testnetTokens'
-import { testnetChains } from './ChainsPicker/testnetChains'
+import { WriteIcon } from '../../../assets/icons/WriteIcon'
 
 interface TokensModalProps {
 	isOpen: boolean
@@ -103,40 +101,41 @@ export function TokensModal({ isOpen, onClose, onSelect, direction }: TokensModa
 		moveToTop()
 	}, [selectedChain?.id, address, searchValue])
 
+	const selectedToken = selection.swapCard[direction].token
+
 	return (
 		<Modal
+			position="top"
 			show={isOpen}
 			setShow={onClose}
 			title={t('tokensModal.selectChainToken')}
 			className={classNames.modal}
-			isHeaderVisible={false}
+			isHeaderVisible
 		>
 			<div className={classNames.container}>
+				<TextInput
+					placeholder={t('tokensModal.searchByTokenNameOrAddress')}
+					icon={<WriteIcon />}
+					value={searchValue}
+					onChange={handleSearch}
+					variant="inline"
+				/>
+
 				<ChainsPicker selectedChain={selectedChain} setSelectedChain={handleSelectChain} />
-				<div className={classNames.tokensContainer}>
-					<div className={classNames.header}>
-						<p className={'body4'}>{t('tokensModal.tokens')}</p>
-						<Button
-							variant={'black'}
-							size={'sq-xs'}
-							onClick={() => {
-								onClose()
-							}}
-						>
-							<IconX size={18} color={'var(--color-text-secondary)'} />
-						</Button>
-					</div>
-					<TextInput
-						placeholder={t('tokensModal.searchByTokenNameOrAddress')}
-						icon={<IconSearch size={18} color={colors.text.secondary} />}
-						value={searchValue}
-						onChange={handleSearch}
-					/>
+
+				<div className="gap-sm">
+					<h5 className={classNames.title}>Tokens</h5>
+
 					<div className={classNames.tokenContainer} onScroll={handleScroll} ref={tokenContainerRef}>
 						{!isLoading && tokens ? (
 							tokens.map((token: Token, index: number) => {
+								const isSelected =
+									selectedToken.address === token.address &&
+									String(selectedToken.chain_id) === String(selectedChain.id)
+
 								return (
 									<TokenListItem
+										isSelected={isSelected}
 										key={token.address.toLowerCase() + index.toString()}
 										token={token}
 										isBalanceLoading={isBalanceLoading}

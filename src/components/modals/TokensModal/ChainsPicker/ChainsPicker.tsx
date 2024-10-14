@@ -40,7 +40,8 @@ export function ChainsPicker({ selectedChain, setSelectedChain }: TokensModalHea
 
 	return (
 		<div className={classNames.container}>
-			<p className={`body4 ${classNames.title}`}>{t('tokensModal.chains')}</p>
+			<h5 className={classNames.title}>{t('tokensModal.chains')}</h5>
+
 			<div className={classNames.firsChainsLineContainer}>
 				{fistLineChains.map((chain: Chain, index) => {
 					const isSelected = selectedChain?.id === chain.id
@@ -66,6 +67,7 @@ export function ChainsPicker({ selectedChain, setSelectedChain }: TokensModalHea
 					</Button>
 				) : null}
 			</div>
+
 			<CardModal isOpen={isChainsModalOpen} setIsOpen={handleOpenChainsModal} title={t('tokensModal.chains')}>
 				<TextInput
 					value={searchValue}

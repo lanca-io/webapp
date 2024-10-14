@@ -1,16 +1,29 @@
+.inputWrapper {
+	flex-direction: row;
+	align-items: center;
+	color: var(--color-grey-400);
+	background-color: var(--color-grey-100);
+	padding: var(--sp-sm) var(--sp-md);
+	border-radius: var(--sp-md);
+
+	&:focus {
+		border: 1px solid var(--color-primary-600);
+	}
+}
+
 input {
-	background-color: transparent;
-	color: var(--color-grey-700);
+	background: transparent;
 	border: none;
-	font-size: 32px;
-	line-height: 32px;
+	font-size: 16px;
+	line-height: 20px;
 	height: 32px;
-	font-weight: 500;
+	font-weight: 400;
 	outline: none;
 	width: 100%;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	padding: 2px var(--sp-xs);
 }
 
 input::placeholder {

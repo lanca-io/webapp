@@ -52,6 +52,7 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 
 				<div className={classNames.tokenRow}>
 					<TextInput
+						wrapperClassName={classNames.input}
 						ref={inputRef}
 						onFocus={() => {
 							tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: true })

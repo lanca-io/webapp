@@ -163,9 +163,9 @@ export const en = {
 			title: 'Change language',
 		},
 		tokensModal: {
-			selectChainToken: 'Select chain & token',
+			selectChainToken: 'Select a token or chain',
 			allChains: 'All chains',
-			searchByTokenNameOrAddress: 'Search by token name or address...',
+			searchByTokenNameOrAddress: 'Search by token name or address',
 			tokens: 'Tokens',
 			chains: 'Chains',
 			search: 'Search',

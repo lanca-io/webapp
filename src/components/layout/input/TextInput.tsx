@@ -20,6 +20,7 @@ export interface TextInputProps {
 	isDisabled?: boolean
 	title?: string
 	type?: string
+	wrapperClassName?: string
 	onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -35,13 +36,14 @@ export const TextInput: FC<TextInputProps & { ref?: MutableRefObject<ForwardedRe
 				isDisabled = false,
 				title = null,
 				type = 'text',
+				wrapperClassName = '',
 				...rest
 			},
 			ref,
 		) => {
 			const inputRef = useRef<HTMLInputElement>(null)
 			const [isFocused, setIsFocused] = useState<boolean>(false)
-			const inputClass = variant === 'inline' && !title ? '' : classNames.inputWrapper
+			const inputClass = classNames.inputWrapper
 			const handleFocus = () => {
 				setIsFocused(true)
 			}
@@ -57,7 +59,7 @@ export const TextInput: FC<TextInputProps & { ref?: MutableRefObject<ForwardedRe
 				onChangeText && onChangeText(event.target.value)
 			}
 
-			const handleKeyDown = (event: KeyboardEvent) => {
+			const handleKeyDown = () => {
 				if (inputRef.current && !isFocused) {
 					inputRef.current.focus()
 				}
@@ -75,7 +77,7 @@ export const TextInput: FC<TextInputProps & { ref?: MutableRefObject<ForwardedRe
 
 			return (
 				<div
-					className={`${inputClass} ${isFocused && variant === 'default' ? classNames.focused : ''}`}
+					className={`${wrapperClassName} ${inputClass} ${isFocused && variant === 'default' ? classNames.focused : ''}`}
 					onClick={handleAreaClick}
 					style={{ width: '100%' }}
 				>
