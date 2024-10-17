@@ -1,110 +1,40 @@
-import { type Direction, type StandardRoute, type Step as ConceroStep } from '../../../../types/StandardRoute'
 import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
-import { type GetConceroRoutes, type PopulateRoutes } from './types'
+import { type GetConceroRoutes } from './types'
 import { findRoute } from '../../../../sdk/findRoute'
 import type { Address } from 'viem'
-import { type Route, type SwapDirectionData } from '../../../../sdk/types/routeTypes'
+import { type Route, type RouteData, type Step } from '../../../../sdk/types/routeTypes'
+import { ErrorType } from '../SwapButton/constants'
 
-const populateRoutes = ({ routes, fromAmount, swapDispatch }: PopulateRoutes) => {
-	swapDispatch({
-		type: 'POPULATE_ROUTES',
-		payload: routes,
-		fromAmount,
-	})
-}
+const routeDataProvider = (route: RouteData): RouteData => {
+	const { from, to } = route
 
-const providerDirection = (direction: SwapDirectionData): Direction => {
-	const { token, chain, amount, chainId } = direction
-	return {
-		token: {
-			name: token.name,
-			address: token.address,
-			symbol: token.symbol,
-			decimals: token.decimals,
-			price_usd: token.priceUsd,
-			logo_uri: token.logoURI,
-			amount,
-			amount_usd: String(Number(amount) * Number(token.priceUsd)),
-		},
-		chain: {
-			id: chain?.id ?? chainId,
-			logo_uri: chain?.logoURI ?? null,
-		},
-		amount,
-		amount_usd: String(Number(amount) * Number(token.priceUsd)),
-		address: null,
+	const chainDataMap = {
+		[from.chain.id]: from.chain,
+		[to.chain.id]: to.chain,
 	}
-}
 
-const routeDataProvider = (route: Route): StandardRoute => {
-	const { data } = route
-	const { from, to, steps } = data
+	const newSteps = route.steps.map((step): Step => {
+		const fromChainId = step.from.chain ? step.from.chain : step.from.chainId
+		const toChainId = step.to.chain ? step.to.chain : step.to.chainId
 
-	const newSteps = steps.map((step): ConceroStep => {
-		const { from, to, tool } = step
 		return {
+			...step,
 			from: {
-				token: {
-					name: from.token.name,
-					address: from.token.address,
-					symbol: from.token.symbol,
-					decimals: from.token.decimals,
-					price_usd: from.token.priceUsd,
-					logo_uri: from.token.logoURI,
-					amount: from.amount,
-					amount_usd: from.amount_usd,
-				},
-				chain: {
-					id: from?.chain?.id ?? from.chainId,
-					logo_uri: from.chain?.logoURI ?? null,
-				},
-				amount: from.amount,
-				amount_usd: from.amount_usd,
-				address: null,
+				...step.from,
+				chainData: fromChainId ? chainDataMap[fromChainId] : null,
 			},
 			to: {
-				token: {
-					name: to.token.name,
-					address: to.token.address,
-					symbol: to.token.symbol,
-					decimals: to.token.decimals,
-					price_usd: to.token.priceUsd,
-					logo_uri: to.token.logoURI,
-					amount: to.amount,
-					amount_usd: to.amount_usd,
-				},
-				chain: {
-					id: to?.chain?.id ?? to.chainId,
-					logo_uri: to.chain?.logoURI ?? null,
-				},
-				amount: to.amount,
-				amount_usd: to.amount_usd,
-				address: null,
-			},
-			tool: {
-				name: 'Uniswap v3',
-				logo_uri: tool.logo_url,
-				type: tool.type,
+				...step.to,
+				chainData: toChainId ? chainDataMap[toChainId] : null,
 			},
 		}
 	})
 
-	const standartRoute = {
-		id: null,
-		from: providerDirection(from),
-		to: providerDirection(to),
-		steps: [newSteps],
-		cost: {
-			total_usd: null,
-			total_gas_usd: null,
-		},
-		tags: 'FASTEST',
-		slippage_percent: 0.5,
-		originalRoute: route,
+	return {
+		...route,
+		steps: newSteps,
 	}
-
-	return standartRoute
 }
 
 const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): Promise<boolean> => {
@@ -123,8 +53,11 @@ const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): P
 
 		if (!conceroRoute?.success) return false
 
-		const conceroRouteData = routeDataProvider(conceroRoute)
-		populateRoutes({ routes: [conceroRouteData], fromAmount: swapState.from.amount, swapDispatch })
+		swapDispatch({
+			type: 'POPULATE_ROUTES',
+			payload: [routeDataProvider(conceroRoute.data)],
+			fromAmount: swapState.from.amount,
+		})
 
 		return conceroRoute.success
 	} catch (error) {
@@ -143,7 +76,7 @@ export const getRoutes = async (swapState: SwapState, swapDispatch: Dispatch<Swa
 		const isSuccess: boolean = await getConceroRoute({ swapState, swapDispatch })
 
 		if (!isSuccess) {
-			swapDispatch({ type: 'SET_IS_NO_ROUTES', status: true })
+			swapDispatch({ type: 'SET_INPUT_ERROR', payload: ErrorType.NO_ROUTES })
 		}
 	} catch (error) {
 		console.error(error)

@@ -1,7 +1,7 @@
 import { type Dispatch, type FC } from 'react'
 import classNames from './SwapProgress.module.pcss'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
-import { type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
+import { StageType, type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
 import { Button } from '../../../layout/buttons/Button/Button'
 import { PendingStateSvg } from '../../../../assets/images/transactionStates/PendingStateSvg'
 import { Separator } from '../../../layout/Separator/Separator'
@@ -16,12 +16,13 @@ import { TrailArrowLeftIcon } from '../../../../assets/icons/TrailArrowLeftIcon'
 import { PencilIcon } from '../../../../assets/icons/PencilIcon'
 import { CrossIcon } from '../../../../assets/icons/CrossIcon'
 import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
+import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 
 interface SwapProgressProps {
 	swapState: SwapState
 	swapDispatch: Dispatch<SwapAction>
 	handleGoBack: () => void
-	txInfo: { duration: number; hash: string } | undefined
+	txInfo?: { duration: number; hash: string } | undefined
 }
 
 const testnetChainsTwitterMap: Record<string, string> = {
@@ -31,11 +32,16 @@ const testnetChainsTwitterMap: Record<string, string> = {
 }
 
 export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, txInfo }) => {
-	const { to, steps, stage } = swapState
+	const { to, from, steps, stage } = swapState
 
+	const isBridge = to.chain.id !== from.chain.id
 	const isFailed = stage === SwapCardStage.failed
 	const isSuccess = stage === SwapCardStage.success
 	const currentStep = steps[steps.length - 1]
+	const isTransactionStage = currentStep?.type === StageType.transaction
+	const isAwait = currentStep && currentStep.status === 'await'
+
+	const txType = isBridge ? 'Bridge' : 'Swap'
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[SwapCardStage.failed]: (
@@ -97,21 +103,43 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 
 	const progressDetails = (
 		<>
-			{/* <SwapProgressDetails from={from} to={to} /> */}
+			{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
 
 			<div className={classNames.progressContainer}>
-				<TransactionStep status="pending" title="Approvals" />
-				<TrailArrowRightIcon />
-				<TransactionStep status="error" title="Bridge" />
-				<TrailArrowRightIcon />
-				<TransactionStep status="success" title="Swap" />
+				<TransactionStep status={steps[0]?.status} title="Approvals" />
+
+				{isBridge && (
+					<>
+						<TrailArrowRightIcon />
+						<TransactionStep status={steps[1]?.status} title="Bridge" />
+						<TrailArrowRightIcon />
+						<TransactionStep status={steps[1]?.status === 'success' ? 'success' : 'idle'} title="Swap" />
+					</>
+				)}
+
+				{!isBridge && (
+					<>
+						<TrailArrowRightIcon />
+						<TransactionStep status={steps[1]?.status} title="Swap" />
+					</>
+				)}
 			</div>
 
 			<Separator />
 
-			{currentStep && currentStep.status !== 'await' && (
+			{isAwait && (
+				<div className={classNames.infoMessage}>
+					<div className={classNames.wrapIcon}>
+						<PencilIcon />
+					</div>
+					<h4 className={classNames.messageTitle}>Signature required</h4>
+					<p className={classNames.messageSubtitle}>Please open your wallet and sign the transaction</p>
+				</div>
+			)}
+
+			{currentStep && !isAwait && (
 				<Alert
-					title={currentStep.title}
+					title={`${isTransactionStage ? `${txType} ` : ''} ${currentStep.title}`}
 					variant={isFailed ? 'error' : 'neutral'}
 					icon={isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />}
 				/>
@@ -135,19 +163,9 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 				)}
 			</div>
 
-			{stateImages[stage] ?? null}
+			{!isTransactionStage && stateImages[stage]}
 
 			{isSuccess ? <FinishTxInfo to={to} /> : progressDetails}
-
-			{currentStep?.status === 'await' && (
-				<div className={classNames.infoMessage}>
-					<div className={classNames.wrapIcon}>
-						<PencilIcon />
-					</div>
-					<h4 className={classNames.messageTitle}>Signature required</h4>
-					<p className={classNames.messageSubtitle}>Please open your wallet and sign the transaction</p>
-				</div>
-			)}
 
 			{renderButtons[stage] ?? null}
 		</div>

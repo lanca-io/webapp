@@ -1,9 +1,8 @@
-import { type SwapState } from '../swapReducer/types'
-import type { providers } from 'ethers'
+import { type MouseEventHandler } from 'react'
+import { type ErrorType } from './constants'
 
 export interface SwapButtonProps {
-	swapState: SwapState
-	isConnected: boolean
-	onClick: () => void
-	switchChainHook: (requiredChainId: number) => Promise<providers.JsonRpcSigner>
+	isLoading: boolean
+	error: ErrorType | null
+	onClick?: ((event: MouseEventHandler) => void) | undefined
 }

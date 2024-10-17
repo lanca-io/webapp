@@ -15,13 +15,19 @@ import { Badge } from '../../../layout/Badge/Badge'
 import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIcon'
 import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
 import { InputError } from '../SwapInput/InputError/InputError'
+import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
 
-export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispatch, balance = null, stage }) => {
+export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispatch, balance = null, stage, error }) => {
 	const [state, tokenAreaDispatch] = useTokenAreaReducer()
 	const inputRef = useRef<ForwardedRef<HTMLInputElement>>()
 	const { t } = useTranslation()
 
+	const isTransactionError = error ? errorTypeMap[error] === ErrorCategory.input : false
+	const isError = error && isTransactionError
+
 	const onChangeText = (value: string) => {
+		swapDispatch({ type: 'SET_INPUT_ERROR', payload: null })
+
 		if (value && !isFloatInput(value)) tokenAreaDispatch({ type: 'SET_SHAKE', payload: true })
 		if (direction === 'from') handleAmountChange({ value, state, dispatch: swapDispatch, direction })
 	}
@@ -98,8 +104,8 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 					handleMaxButtonClick={handleMaxButtonClick}
 				/>
 
-				{direction === 'from' && (
-					<InputError color="var(--color-danger-700)" errorText="Minimum amount is 20 USDC" />
+				{isError && direction === 'from' && (
+					<InputError color="var(--color-danger-700)" errorText={errorTextMap[error]} />
 				)}
 			</div>
 

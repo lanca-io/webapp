@@ -7,24 +7,35 @@ import { ReviewRouteCard } from './ReviewRouteCard/ReviewRouteCard'
 import { RouteDetailsModal } from './RouteDetailsModal/RouteDetailsModal'
 import { Alert } from '../../../layout/Alert/Alert'
 import { Separator } from '../../../layout/Separator/Separator'
+import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
 
 export const SwapDetails: FC<SwapDetailsProps> = ({ swapState }) => {
 	const [animatedContainerHeight, setAnimatedContainerHeight] = useState<number>(0)
 	const [isReviewRouteModalVisible, setIsReviewRouteModalVisible] = useState<boolean>(false)
 	const reviewRouteCardRef = useRef<HTMLDivElement>(null)
-	const { selectedRoute, isNoRoutes } = swapState
+	const { selectedRoute, inputError } = swapState
+
+	const amountUsdFrom = swapState.from.amount
+		? Number(swapState.from.amount) * Number(swapState.from.token.priceUsd)
+		: 0
+	const amountUsdTo = swapState.to.amount ? Number(swapState.to.amount) * Number(swapState.to.token.priceUsd) : 0
+
+	const totalFeeUsd = amountUsdFrom - amountUsdTo
+
+	const isTransactionError = inputError ? errorTypeMap[inputError] === ErrorCategory.transaction : false
+	const isError = inputError && isTransactionError
 
 	const containerAnimation = useSpring({
-		height: selectedRoute || isNoRoutes ? animatedContainerHeight : 0,
-		opacity: selectedRoute || isNoRoutes ? 1 : 0,
+		height: selectedRoute || isError ? animatedContainerHeight : 0,
+		opacity: selectedRoute || isError ? 1 : 0,
 		config: { duration: 200, easing: easeQuadInOut },
 	})
 
 	useEffect(() => {
 		if (!reviewRouteCardRef.current) return
 
-		setAnimatedContainerHeight(isNoRoutes ? 80 : 147)
-	}, [reviewRouteCardRef.current, swapState.stage])
+		setAnimatedContainerHeight(isError ? 80 : 120)
+	}, [reviewRouteCardRef.current, swapState.stage, inputError])
 
 	return (
 		<animated.div style={containerAnimation}>
@@ -35,8 +46,8 @@ export const SwapDetails: FC<SwapDetailsProps> = ({ swapState }) => {
 						setIsReviewRouteModalVisible(true)
 					}}
 				>
-					{isNoRoutes ? (
-						<Alert title={'Routs not found'} variant="error" />
+					{isError ? (
+						<Alert title={errorTextMap[inputError]} variant="error" />
 					) : (
 						<ReviewRouteCard selectedRoute={selectedRoute} />
 					)}
@@ -44,6 +55,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({ swapState }) => {
 				</div>
 				{selectedRoute && (
 					<RouteDetailsModal
+						amountUsd={totalFeeUsd}
 						selectedRoute={selectedRoute}
 						isOpen={isReviewRouteModalVisible}
 						setIsOpen={setIsReviewRouteModalVisible}

@@ -78,7 +78,7 @@ async function getGasSufficiency(
 		)
 
 		const insufficientAmount = isNativeToken
-			? amountToCheck.minus(tokenBalanceAmount.minus(steps[0].from.token.amount!))
+			? amountToCheck.minus(tokenBalanceAmount.minus(steps[0].from.token.amount))
 			: amountToCheck.minus(tokenBalanceAmount)
 
 		if (insufficientAmount.gt(0)) {

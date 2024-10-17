@@ -6,6 +6,8 @@ export enum ExecuteRouteStage {
 	setChain = 'SET_CHAIN',
 	setAddress = 'SET_ADDRESS',
 	checkAllowance = 'CHECK_ALLOWANCE',
+	awaitApprove = 'AWAIT_APPROVE',
+	pendingApprove = 'PENDING_APPROVE',
 	pendingTransaction = 'PENDING_TRANSACTION',
 	confirmingTransaction = 'CONFIRMING_TRANSACTION',
 	failedTransaction = 'FAILED_TRANSACTION',
@@ -14,7 +16,7 @@ export enum ExecuteRouteStage {
 	longDurationConfirming = 'LONG_DURATION_CONFIRMING',
 }
 
-type Status = 'idle' | 'await' | 'success' | 'failed'
+export type Status = 'idle' | 'pending' | 'await' | 'success' | 'failed'
 
 export interface ExecutionState {
 	stage: ExecuteRouteStage

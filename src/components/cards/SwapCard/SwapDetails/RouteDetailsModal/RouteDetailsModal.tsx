@@ -1,20 +1,20 @@
 import classNames from './RouteDetailsModal.module.pcss'
-import { type StandardRoute } from '../../../../../types/StandardRoute'
-import { StepCard } from '../RouteCard/StepCard/StepCard'
 import { Modal } from '../../../../modals/Modal/Modal'
 import { FeeDetailsDropdown } from '../FeeDetailsDropdown/FeeDetailsDropdown'
 import { MainRouteInfoTags } from '../../../../tags/MainRouteInfoTags/MainRouteInfoTags'
 import { SwapAmount } from '../SwapAmount/SwapAmount'
 import { Separator } from '../../../../layout/Separator/Separator'
+import { type RouteData } from '../../../../../sdk/types/routeTypes'
+import { StepCard } from '../RouteCard/Step/Step'
 
 interface RouteDetailsModalProps {
 	isOpen: boolean
 	setIsOpen: (param: boolean) => void
-	selectedRoute: StandardRoute
+	selectedRoute: RouteData
+	amountUsd: number
 }
 
-export function RouteDetailsModal({ isOpen, setIsOpen, selectedRoute }: RouteDetailsModalProps) {
-	console.log('selectedRoute', selectedRoute)
+export function RouteDetailsModal({ isOpen, setIsOpen, selectedRoute, amountUsd }: RouteDetailsModalProps) {
 	return (
 		<Modal position="top" show={isOpen} setShow={setIsOpen} title={'Review'} className={classNames.modal}>
 			<div className="gap-md">
@@ -24,19 +24,13 @@ export function RouteDetailsModal({ isOpen, setIsOpen, selectedRoute }: RouteDet
 
 			<Separator />
 
-			{selectedRoute.steps?.map((step, index) => (
-				<StepCard key={index.toString()} innerSteps={step} index={index} />
-			))}
+			{selectedRoute.steps?.map((step, index) => <StepCard key={index.toString()} step={step} index={index} />)}
 
-			<MainRouteInfoTags
-				transactionTimeSeconds={20}
-				totalGasUsd={'0.03'}
-				stepsLength={selectedRoute.steps?.length}
-			/>
+			<MainRouteInfoTags route={selectedRoute} />
 
 			<Separator />
 
-			<FeeDetailsDropdown />
+			<FeeDetailsDropdown amountUsd={amountUsd} />
 		</Modal>
 	)
 }

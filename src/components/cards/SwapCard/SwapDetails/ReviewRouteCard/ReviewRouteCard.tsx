@@ -5,7 +5,7 @@ import { TrailArrowRightIcon } from '../../../../../assets/icons/TrailArrowRight
 import { type StandardRoute } from '../../../../../types/StandardRoute'
 
 interface ReviewRouteCardProps {
-	selectedRoute: StandardRoute
+	selectedRoute: StandardRoute | null
 }
 
 export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {
@@ -14,11 +14,7 @@ export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {
 	return (
 		<div className={classNames.container}>
 			<div className="gap-md">
-				<MainRouteInfoTags
-					transactionTimeSeconds={60}
-					totalGasUsd={'5.05'}
-					stepsLength={selectedRoute?.steps?.length}
-				/>
+				<MainRouteInfoTags route={selectedRoute} />
 				<Button className="w-full jsb" variant="secondary" size="sm" rightIcon={<TrailArrowRightIcon />}>
 					Review
 				</Button>

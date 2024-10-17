@@ -1,35 +1,22 @@
-import { type FC } from 'react'
 import { Button } from '../../../layout/buttons/Button/Button'
 import { type SwapButtonProps } from './types'
-import { ButtonType } from './constants'
-import { getButtonType } from './getButtonType'
-import { useGasSufficiency } from './useGasSufficiency'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useAccount } from 'wagmi'
 
-export const SwapButton: FC<SwapButtonProps> = ({ swapState, isConnected, onClick }) => {
-	const { isLoading } = swapState
-	const { isLoading: isFetchBalancesLoading, gasSufficiency } = useGasSufficiency(swapState)
-
+export const SwapButton = ({ error, onClick, isLoading }: SwapButtonProps) => {
+	const { isConnected } = useAccount()
 	const { open } = useWeb3Modal()
-	const buttonType = getButtonType(
-		swapState,
-		isConnected,
-		gasSufficiency?.isInsufficient ?? false,
-		isFetchBalancesLoading,
-	)
-	const walletIsConnect = buttonType === ButtonType.CONNECT_WALLET_BRIGHT
 
 	return (
 		<Button
-			isDisabled={false}
+			isDisabled={!!error}
 			isFull
 			size="lg"
 			variant="primary"
 			isLoading={isLoading}
-			onClick={walletIsConnect ? open : onClick}
+			onClick={isConnected ? onClick : open}
 		>
-			{/* {t(buttonText[buttonType])} */}
-			{walletIsConnect ? 'Connect Wallet' : 'Begin Swap'}
+			{isConnected ? 'Begin Swap' : 'Connect Wallet'}
 		</Button>
 	)
 }

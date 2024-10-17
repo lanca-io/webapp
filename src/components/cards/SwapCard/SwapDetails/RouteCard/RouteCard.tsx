@@ -4,7 +4,7 @@ import { IconChevronDown } from '@tabler/icons-react'
 import { roundNumberByDecimals } from '../../../../../utils/formatting'
 import { Button } from '../../../../layout/buttons/Button/Button'
 import { useRef, useState } from 'react'
-import { StepCard } from './StepCard/StepCard'
+import { StepCard } from './Step/Step'
 import { animated, useSpring } from '@react-spring/web'
 import { easeQuadInOut } from 'd3-ease'
 import { Tag } from '../../../../tags/Tag/Tag'
@@ -86,11 +86,7 @@ export function RouteCard({ route, isSelected, onSelect }: RouteCardProps) {
 				</div>
 			</div>
 			<div className={classNames.spaceBetweenContainer}>
-				<MainRouteInfoTags
-					totalGasUsd={cost.total_gas_usd}
-					stepsLength={steps?.length}
-					transactionTimeSeconds={transaction_time_seconds}
-				/>
+				<MainRouteInfoTags route={route} />
 				{route.tags?.[0] ? (
 					<Tag color={getTag(route.tags?.[0]).color} size={'sm'}>
 						<p style={{ color: 'inherit' }}>{getTag(route.tags?.[0]).title}</p>
