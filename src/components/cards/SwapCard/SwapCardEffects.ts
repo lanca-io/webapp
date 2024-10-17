@@ -27,11 +27,6 @@ export function useSwapCardEffects({ swapState, swapDispatch, typingTimeoutRef }
 	}, [from.token.address, to.token.address])
 
 	useEffect(() => {
-		if (isTestnet) return
-		void getBalance({ dispatch: swapDispatch, from, address })
-	}, [from.token.address, from.chain.id, address, from.amount])
-
-	useEffect(() => {
 		clearRoutes(typingTimeoutRef, swapDispatch)
 
 		void handleFetchRoutes(swapState, swapDispatch, typingTimeoutRef)

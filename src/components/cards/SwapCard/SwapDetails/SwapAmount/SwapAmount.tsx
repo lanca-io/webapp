@@ -1,7 +1,6 @@
 import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
 import { SelectTokenShape } from '../../TokenArea/SelectTokenShape/SelectTokenShape'
-import { chainIdToNameMap } from '../../../../../constants/chainIdToNameMap'
 import classNames from './SwapAmount.module.pcss'
 import { type SwapDirectionData } from '../../../../../sdk/types/routeTypes'
 
@@ -22,10 +21,7 @@ export const SwapAmount = ({ direction, directionSide }: Props) => {
 						tokenLogoSrc={direction.token.logoURI}
 						chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${direction.chain?.id}.svg`}
 					/>
-					<SelectTokenShape
-						symbol={direction.token.symbol}
-						chainName={chainIdToNameMap[Number(direction.chainId)]}
-					/>
+					<SelectTokenShape symbol={direction.token.symbol} chainName={direction.chain.name} />
 				</div>
 			</div>
 		</div>

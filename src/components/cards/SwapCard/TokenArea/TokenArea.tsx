@@ -1,4 +1,4 @@
-import { type FC, type ForwardedRef, useRef } from 'react'
+import { type FC, type ForwardedRef, useEffect, useRef, useState } from 'react'
 import classNames from './TokenArea.module.pcss'
 import { TextInput } from '../../../layout/input/TextInput'
 import { type TokenAreaProps } from './types'
@@ -16,9 +16,14 @@ import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIco
 import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
 import { InputError } from '../SwapInput/InputError/InputError'
 import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
+import { getBalance } from '../../../../utils/getBalance'
+import { useAccount } from 'wagmi'
+import { set } from 'husky'
 
 export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispatch, balance = null, stage, error }) => {
+	const [loading, setLoading] = useState(false)
 	const [state, tokenAreaDispatch] = useTokenAreaReducer()
+	const { address } = useAccount()
 	const inputRef = useRef<ForwardedRef<HTMLInputElement>>()
 	const { t } = useTranslation()
 
@@ -45,6 +50,15 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 		swapDispatch({ type: 'SET_TOKEN', direction, payload: { token } })
 		tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: false })
 	}
+
+	useEffect(() => {
+		if (direction === 'to') return
+		setLoading(true)
+
+		getBalance({ dispatch: swapDispatch, from: selection, address }).finally(() => {
+			setLoading(false)
+		})
+	}, [selection.token.address, selection.chain.id, selection.amount, address])
 
 	return (
 		<>
@@ -97,6 +111,7 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 				</div>
 
 				<AmountUsd
+					loading={loading}
 					state={state}
 					balance={balance}
 					selection={selection}

@@ -5,6 +5,7 @@ import { findRoute } from '../../../../sdk/findRoute'
 import type { Address } from 'viem'
 import { type Route, type RouteData, type Step } from '../../../../sdk/types/routeTypes'
 import { ErrorType } from '../SwapButton/constants'
+import { getPoolAmount } from '../handlers/getPoolAmount'
 
 const routeDataProvider = (route: RouteData): RouteData => {
 	const { from, to } = route
@@ -66,11 +67,24 @@ const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): P
 }
 
 export const getRoutes = async (swapState: SwapState, swapDispatch: Dispatch<SwapAction>): Promise<void> => {
-	const { from } = swapState
+	const { from, to } = swapState
 
 	if (!from.amount || !parseFloat(from.amount)) return
 
 	swapDispatch({ type: 'SET_LOADING', payload: true })
+
+	const isBridge = from.chain.id !== to.chain.id
+
+	if (isBridge) {
+		const dstChainId = to.chain.id
+		const poolAmount = await getPoolAmount(dstChainId)
+		const fromAmountUsd = Number(from.amount) * from.token.priceUsd
+
+		if (fromAmountUsd > Number(poolAmount)) {
+			swapDispatch({ type: 'SET_IS_SUFFICIENT_LIQUIDITY', payload: false })
+			return
+		}
+	}
 
 	try {
 		const isSuccess: boolean = await getConceroRoute({ swapState, swapDispatch })

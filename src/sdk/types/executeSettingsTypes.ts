@@ -16,7 +16,7 @@ export enum ExecuteRouteStage {
 	longDurationConfirming = 'LONG_DURATION_CONFIRMING',
 }
 
-export type Status = 'idle' | 'pending' | 'await' | 'success' | 'failed'
+export type Status = 'idle' | 'pending' | 'await' | 'success' | 'error'
 
 export interface ExecutionState {
 	stage: ExecuteRouteStage

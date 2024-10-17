@@ -43,7 +43,7 @@ export const FeeDetailsDropdown = ({ amountUsd }: Props) => {
 			<div className={classNames.container}>
 				<div className="row w-full jsb ac">
 					<p className="body2">Included Fee</p>
-					<p className={`${classNames.priceFee} body2`}>${feePrice.toFixed(6)}</p>
+					<p className={`${classNames.priceFee} body2`}>${feePrice.toFixed(2)}</p>
 				</div>
 				{/* <div className={classNames.iconWrap}> */}
 				{/* 	<TrailArrowDownIcon /> */}

@@ -2,6 +2,7 @@ import classNames from './Step.module.pcss'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '../../../../../layout/Badge/Badge'
 import { type Step, type StepDirectionData } from '../../../../../../sdk/types/routeTypes'
+import { config } from '../../../../../../constants/config'
 
 interface InnerStepCardProps {
 	step: Step
@@ -14,6 +15,8 @@ interface DirectionProps {
 
 const Direction = ({ direction, title }: DirectionProps) => {
 	const { token, chainData } = direction
+
+	const chainImg = `${config.CONCERO_ASSETS_URI}/icons/chains/filled/${direction.chainData?.id}.svg`
 
 	return (
 		<div className={classNames.tagContainer}>
@@ -29,16 +32,15 @@ const Direction = ({ direction, title }: DirectionProps) => {
 				</div>
 
 				<p className="body2">on</p>
-				{chainData?.logoURI && <Badge size="m" borderSmall tokenLogoSrc={chainData.logoURI} />}
+				{chainData?.logoURI && <Badge size="m" borderSmall tokenLogoSrc={chainImg} />}
 
-				<h4>{chainData?.name}</h4>
+				<h4 className={classNames.chain}>{chainData?.name}</h4>
 			</div>
 		</div>
 	)
 }
 
 export function StepCard({ step }: InnerStepCardProps) {
-	console.log(step)
 	const { t } = useTranslation()
 	const { from, to, tool } = step
 

@@ -3,6 +3,7 @@ import type { TokenAreaState } from './useTokenAreaReducer/types'
 import { type Balance, type SwapStateDirection } from '../swapReducer/types'
 import { useTranslation } from 'react-i18next'
 import classNames from './TokenArea.module.pcss'
+import { SkeletonLoader } from '../../../layout/SkeletonLoader/SkeletonLoader'
 
 interface AmountUsdProps {
 	state: TokenAreaState
@@ -10,9 +11,10 @@ interface AmountUsdProps {
 	selection: SwapStateDirection
 	direction: 'from' | 'to'
 	handleMaxButtonClick: () => void
+	loading: boolean
 }
 
-export function AmountUsd({ state, balance, selection, direction, handleMaxButtonClick }: AmountUsdProps) {
+export function AmountUsd({ state, balance, selection, direction, handleMaxButtonClick, loading }: AmountUsdProps) {
 	const { t } = useTranslation()
 
 	const formatedBalance = numberToFormatString(Number(balance?.amount.rounded), 4, true)
@@ -23,7 +25,11 @@ export function AmountUsd({ state, balance, selection, direction, handleMaxButto
 				<div className={classNames.amountUsdContainer}>
 					{state.isFocused && !selection.amount && balance ? (
 						<h5 className={classNames.maxButton} onMouseDown={handleMaxButtonClick}>
-							Max: {formatedBalance}
+							{loading ? (
+								<SkeletonLoader className={classNames.maxBalanceSkeleton} />
+							) : (
+								`Max: ${formatedBalance}`
+							)}
 						</h5>
 					) : !state.isFocused && selection.amount === '' ? (
 						<h5>{t('tokenArea.enterAmount')}</h5>
@@ -33,7 +39,11 @@ export function AmountUsd({ state, balance, selection, direction, handleMaxButto
 				</div>
 				{!!balance && (
 					<h5 className={classNames.balance}>
-						Balance: {formatedBalance} {selection.token.symbol}
+						{loading ? (
+							<SkeletonLoader className={classNames.skeleton} />
+						) : (
+							`Balance: ${formatedBalance} ${selection.token.symbol}`
+						)}
 					</h5>
 				)}
 			</div>
@@ -41,7 +51,7 @@ export function AmountUsd({ state, balance, selection, direction, handleMaxButto
 	} else {
 		return (
 			<div className={classNames.amountUsdContainer}>
-				<h5>{`$${numberToFormatString(Number(selection.amount_usd), 2)}`}</h5>
+				<h5>{`$${numberToFormatString((selection.token.priceUsd ?? 0) * Number(selection.amount), 2)}`}</h5>
 			</div>
 		)
 	}

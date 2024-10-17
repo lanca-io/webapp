@@ -1,4 +1,4 @@
-import { type Dispatch, type FC } from 'react'
+import { type Dispatch, type FC, useEffect, useState } from 'react'
 import classNames from './SwapProgress.module.pcss'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
 import { StageType, type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
@@ -17,6 +17,7 @@ import { PencilIcon } from '../../../../assets/icons/PencilIcon'
 import { CrossIcon } from '../../../../assets/icons/CrossIcon'
 import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
+import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 
 interface SwapProgressProps {
 	swapState: SwapState
@@ -25,13 +26,15 @@ interface SwapProgressProps {
 	txInfo?: { duration: number; hash: string } | undefined
 }
 
-const testnetChainsTwitterMap: Record<string, string> = {
-	'421614': 'arbitrum',
-	'84532': 'base',
-	'11155420': 'Optimism',
+const chainsTwitterMap: Record<string, string> = {
+	[arbitrum.id]: 'arbitrum',
+	[base.id]: 'base',
+	[polygon.id]: '0xPolygon',
+	[avalanche.id]: 'avax',
 }
 
 export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, txInfo }) => {
+	const [time, setTime] = useState(0)
 	const { to, from, steps, stage } = swapState
 
 	const isBridge = to.chain.id !== from.chain.id
@@ -40,6 +43,22 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 	const currentStep = steps[steps.length - 1]
 	const isTransactionStage = currentStep?.type === StageType.transaction
 	const isAwait = currentStep && currentStep.status === 'await'
+
+	useEffect(() => {
+		const timerId = setInterval(() => {
+			if (isAwait || isSuccess || isFailed) return
+
+			setTime(prev => prev + 1)
+		}, 1000)
+
+		if (isSuccess || isAwait || isFailed) {
+			clearInterval(timerId)
+		}
+
+		return () => {
+			clearInterval(timerId)
+		}
+	}, [swapState])
 
 	const txType = isBridge ? 'Bridge' : 'Swap'
 
@@ -65,7 +84,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 						size="lg"
 						onClick={() => {
 							window.open(
-								`https://twitter.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${testnetChainsTwitterMap[swapState.from.chain.id]}%20to%20%40${testnetChainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${txInfo?.duration}%20sec%20on%20%40concero_io%20testnet!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20app.concero.io%20👇`,
+								`https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${chainsTwitterMap[swapState.from.chain.id]}%20to%20%40${chainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${time}%20sec%20on%20%40lanca_io%20testnet!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`,
 								'_blank',
 							)
 						}}
@@ -165,7 +184,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 
 			{!isTransactionStage && stateImages[stage]}
 
-			{isSuccess ? <FinishTxInfo to={to} /> : progressDetails}
+			{isSuccess ? <FinishTxInfo time={time} to={to} /> : progressDetails}
 
 			{renderButtons[stage] ?? null}
 		</div>

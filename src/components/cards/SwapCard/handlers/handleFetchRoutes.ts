@@ -21,23 +21,11 @@ export const handleFetchRoutes = async (
 
 			if (error) return
 
-			const isBridge = from.chain.id !== to.chain.id
 			const isWrongRangeAmount = buttonState.type === ErrorType.AMOUNT_TOO_LOW
 
 			swapDispatch({ type: 'SET_IS_SUFFICIENT_LIQUIDITY', payload: true })
 
 			if (isWrongRangeAmount) return
-
-			if (isBridge) {
-				const dstChainId = to.chain.id
-				const poolAmount = await getPoolAmount(dstChainId)
-				const fromAmountUsd = Number(from.amount) * from.token.priceUsd
-
-				if (fromAmountUsd > Number(poolAmount)) {
-					swapDispatch({ type: 'SET_IS_SUFFICIENT_LIQUIDITY', payload: false })
-					return
-				}
-			}
 
 			await getRoutes(swapState, swapDispatch)
 		}, 700)
