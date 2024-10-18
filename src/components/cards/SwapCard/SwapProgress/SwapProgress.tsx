@@ -104,7 +104,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 						size="lg"
 						onClick={() => {
 							window.open(
-								`https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${chainsTwitterMap[swapState.from.chain.id]}%20to%20%40${chainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${time}%20sec%20on%20%40lanca_io%20testnet!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`,
+								`https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${chainsTwitterMap[swapState.from.chain.id]}%20to%20%40${chainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${time}%20sec%20on%20%40lanca_io!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`,
 								'_blank',
 							)
 						}}
