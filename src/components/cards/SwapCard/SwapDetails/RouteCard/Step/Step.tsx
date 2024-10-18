@@ -50,7 +50,6 @@ export function StepCard({ step }: InnerStepCardProps) {
 	}
 
 	const stepToolTitles: Record<string, string> = {
-		swap: tool.name,
 		bridge: 'Concero',
 	}
 
@@ -61,9 +60,11 @@ export function StepCard({ step }: InnerStepCardProps) {
 		<div className={classNames.container}>
 			<div className="row jsb">
 				<p className={`${classNames.type} body2`}>{stepTypeTitle}</p>
-				<p className={'body2'}>
-					{t('swapCard.routeCard.via')} {stepToolTitle}
-				</p>
+				{step.tool.type === 'bridge' && (
+					<p className={'body2'}>
+						{t('swapCard.routeCard.via')} {stepToolTitle}
+					</p>
+				)}
 			</div>
 
 			<div className="gap-xs">

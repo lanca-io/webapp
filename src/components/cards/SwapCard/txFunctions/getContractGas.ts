@@ -1,12 +1,15 @@
 import { getPublicClient } from '../../../../sdk/configs/chainsConfig'
 import { type RouteData } from '../../../../sdk/types/routeTypes'
 import { type Address, formatUnits } from 'viem'
-import axios from 'axios'
+import { conceroAddressesMap } from '../../../../sdk/configs/conceroAddressesMap'
+import { fetchTokens } from '../../../../api/concero/fetchTokens'
+import { chainNativeTokensMap } from '../../../../constants/chainNativeTokens'
 
-const getEthUsdPrice = async () => {
+const getUsdPrice = async (chainId: string) => {
 	try {
-		const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
-		return response.data.ethereum.usd
+		const address = chainNativeTokensMap[Number(chainId)]
+		const response = await fetchTokens({ chainId, address, offset: 0, limit: 1 })
+		return response[0].priceUsd
 	} catch (error) {
 		console.error('Error usd eth cost:', error)
 	}
@@ -16,17 +19,17 @@ export const getContractGas = async (routeData: RouteData, address: Address) => 
 	if (!routeData || !address) return 'n/a'
 
 	const publicClient = getPublicClient(routeData.from.chain.id)
+	const conceroContract = conceroAddressesMap[routeData.from.chain.id]
 
-	const gasQuantity = await publicClient.estimateGas({
+	const estimatedGas = await publicClient.estimateGas({
 		account: address,
-		to: address,
+		to: conceroContract,
 	})
-
 	const gasPrice = await publicClient.getGasPrice()
-	const ethUsdPrice = await getEthUsdPrice()
-	const gasPriceInUsd = ethUsdPrice * Number(formatUnits(gasPrice, 18))
 
-	console.log({ gasQuantity, gasPrice, gasPriceInUsd })
+	const gasCost = Number(formatUnits(gasPrice, 18)) * Number(estimatedGas)
+	const gasTokenUsdPrice = await getUsdPrice(routeData.from.chain.id)
+	const gasCostInUSD = gasCost * gasTokenUsdPrice
 
-	return (gasPriceInUsd * Number(gasQuantity)).toFixed(6)
+	return gasCostInUSD.toFixed(6)
 }

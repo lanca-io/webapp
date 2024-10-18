@@ -70,7 +70,7 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 			],
 		})
 	},
-	LONG_DURATION_CONFIRMING: swapDispatch => {
+	LONG_DURATION_CONFIRMING: (swapDispatch, state) => {
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.warning })
 
 		swapDispatch({
@@ -80,7 +80,8 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 					status: 'pending',
 					title: 'Dont worry',
 					body: 'Your funds are safe but it will take a bit longer to complete the transaction.',
-					type: StageType.transaction,
+					type: StageType.warning,
+					txLink: state.payload?.ccipId,
 				},
 			],
 		})

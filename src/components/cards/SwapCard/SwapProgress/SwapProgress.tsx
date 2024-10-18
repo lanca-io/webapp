@@ -18,6 +18,7 @@ import { CrossIcon } from '../../../../assets/icons/CrossIcon'
 import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
+import { truncateWallet } from '../../../../utils/formatting'
 
 interface SwapProgressProps {
 	swapState: SwapState
@@ -33,7 +34,7 @@ const chainsTwitterMap: Record<string, string> = {
 	[avalanche.id]: 'avax',
 }
 
-export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, txInfo }) => {
+export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack }) => {
 	const [time, setTime] = useState(0)
 	const { to, from, steps, stage } = swapState
 
@@ -42,6 +43,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 	const isSuccess = stage === SwapCardStage.success
 	const currentStep = steps[steps.length - 1]
 	const isTransactionStage = currentStep?.type === StageType.transaction
+	const isWarning = currentStep?.type === StageType.warning
 	const isAwait = currentStep && currentStep.status === 'await'
 
 	useEffect(() => {
@@ -70,6 +72,24 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 					Try again
 				</Button>
 			</div>
+		),
+		[SwapCardStage.warning]: (
+			<>
+				{currentStep?.txLink && (
+					<div className="gap-lg w-full">
+						<Separator />
+						<a
+							target="_blank"
+							href={`https://ccip.chain.link/#/side-drawer/msg/${currentStep.txLink}`}
+							rel="noreferrer"
+						>
+							<Button isFull={true} variant="secondary" size="lg">
+								View in explorer
+							</Button>
+						</a>
+					</div>
+				)}
+			</>
 		),
 		[SwapCardStage.success]: (
 			<>
@@ -107,6 +127,11 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 				<FailStateSvg />
 			</div>
 		),
+		[SwapCardStage.warning]: (
+			<div className={`${classNames.stateImg} ${classNames.stateImgFail}`}>
+				<FailStateSvg />
+			</div>
+		),
 		[SwapCardStage.success]: (
 			<div className={`${classNames.stateImg} ${classNames.stateImgSuccess}`}>
 				<SuccessStateSvg />
@@ -118,33 +143,39 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 		[SwapCardStage.progress]: 'Transaction in progress...',
 		[SwapCardStage.failed]: 'Transaction failed',
 		[SwapCardStage.success]: 'Swap Successful!',
+		[SwapCardStage.warning]: 'Uh Oh...',
 	}
 
 	const progressDetails = (
 		<>
 			{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
 
-			<div className={classNames.progressContainer}>
-				<TransactionStep status={steps[0]?.status} title="Approvals" />
+			{!isWarning && (
+				<div className={classNames.progressContainer}>
+					<TransactionStep status={steps[0]?.status} title="Approvals" />
 
-				{isBridge && (
-					<>
-						<TrailArrowRightIcon />
-						<TransactionStep status={steps[1]?.status} title="Bridge" />
-						<TrailArrowRightIcon />
-						<TransactionStep status={steps[1]?.status === 'success' ? 'success' : 'idle'} title="Swap" />
-					</>
-				)}
+					{isBridge && (
+						<>
+							<TrailArrowRightIcon />
+							<TransactionStep status={steps[1]?.status} title="Bridge" />
+							<TrailArrowRightIcon />
+							<TransactionStep
+								status={steps[1]?.status === 'success' ? 'success' : 'idle'}
+								title="Swap"
+							/>
+						</>
+					)}
 
-				{!isBridge && (
-					<>
-						<TrailArrowRightIcon />
-						<TransactionStep status={steps[1]?.status} title="Swap" />
-					</>
-				)}
-			</div>
+					{!isBridge && (
+						<>
+							<TrailArrowRightIcon />
+							<TransactionStep status={steps[1]?.status} title="Swap" />
+						</>
+					)}
+				</div>
+			)}
 
-			<Separator />
+			{!isWarning && <Separator />}
 
 			{isAwait && (
 				<div className={classNames.infoMessage}>
@@ -156,7 +187,26 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 				</div>
 			)}
 
-			{currentStep && !isAwait && (
+			{isWarning && (
+				<div className="gap-lg">
+					<div className="gap-sm">
+						<h4 className={classNames.warningTitle}>Dont worry</h4>
+						<p>Your funds are safe but it will take a bit longer to complete the transaction. </p>
+						<p className={classNames.warningSubtitle}>
+							Funds are being migrated using Chainlink CCIP and will arrive in about 20 minutes.
+						</p>
+					</div>
+					<Separator />
+					{currentStep.txLink && (
+						<div className="row ac jsb">
+							<p>CCIP TXid:</p>
+							<p>{truncateWallet(currentStep.txLink)}</p>
+						</div>
+					)}
+				</div>
+			)}
+
+			{currentStep && !isAwait && !isWarning && (
 				<Alert
 					title={`${isTransactionStage ? `${txType} ` : ''} ${currentStep.title}`}
 					variant={isFailed ? 'error' : 'neutral'}
@@ -169,12 +219,12 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack, t
 	return (
 		<div className={classNames.container}>
 			<div className={classNames.header}>
-				{isFailed && (
+				{(isFailed || isWarning) && (
 					<IconButton onClick={handleGoBack} className={classNames.backButton} variant="secondary" size="md">
 						<TrailArrowLeftIcon />
 					</IconButton>
 				)}
-				<h3>{title[stage] ?? 'Uh Oh...'}</h3>
+				<h3>{title[stage] ?? ''}</h3>
 				{isSuccess && (
 					<IconButton onClick={handleGoBack} className={classNames.closeButton} variant="secondary" size="md">
 						<CrossIcon />

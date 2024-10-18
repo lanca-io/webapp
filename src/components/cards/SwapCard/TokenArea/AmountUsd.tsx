@@ -3,7 +3,7 @@ import type { TokenAreaState } from './useTokenAreaReducer/types'
 import { type Balance, type SwapStateDirection } from '../swapReducer/types'
 import { useTranslation } from 'react-i18next'
 import classNames from './TokenArea.module.pcss'
-import { SkeletonLoader } from '../../../layout/SkeletonLoader/SkeletonLoader'
+import { Loader } from '../../../layout/Loader/Loader'
 
 interface AmountUsdProps {
 	state: TokenAreaState
@@ -25,11 +25,7 @@ export function AmountUsd({ state, balance, selection, direction, handleMaxButto
 				<div className={classNames.amountUsdContainer}>
 					{state.isFocused && !selection.amount && balance ? (
 						<h5 className={classNames.maxButton} onMouseDown={handleMaxButtonClick}>
-							{loading ? (
-								<SkeletonLoader className={classNames.maxBalanceSkeleton} />
-							) : (
-								`Max: ${formatedBalance}`
-							)}
+							{loading ? <Loader variant="neutral" /> : `Max: ${formatedBalance}`}
 						</h5>
 					) : !state.isFocused && selection.amount === '' ? (
 						<h5>{t('tokenArea.enterAmount')}</h5>
@@ -40,7 +36,7 @@ export function AmountUsd({ state, balance, selection, direction, handleMaxButto
 				{!!balance && (
 					<h5 className={classNames.balance}>
 						{loading ? (
-							<SkeletonLoader className={classNames.skeleton} />
+							<Loader variant="neutral" />
 						) : (
 							`Balance: ${formatedBalance} ${selection.token.symbol}`
 						)}

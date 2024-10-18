@@ -1,7 +1,7 @@
 import classNames from './RouteDetailsModal.module.pcss'
 import { Modal } from '../../../../modals/Modal/Modal'
 import { FeeDetailsDropdown } from '../FeeDetailsDropdown/FeeDetailsDropdown'
-import { MainRouteInfoTags } from '../../../../tags/MainRouteInfoTags/MainRouteInfoTags'
+import { MainRouteInfoTags } from '../MainRouteInfoTags/MainRouteInfoTags'
 import { SwapAmount } from '../SwapAmount/SwapAmount'
 import { Separator } from '../../../../layout/Separator/Separator'
 import { type RouteData } from '../../../../../sdk/types/routeTypes'

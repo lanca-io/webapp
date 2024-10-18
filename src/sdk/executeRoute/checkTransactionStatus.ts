@@ -66,19 +66,6 @@ const trackBridgeTransaction = async (
 		transport: viemChains[routeData.to.chain.id].transport ?? http(),
 	})
 
-	const stopTimer = timer(time => {
-		if (time === 180) {
-			sendState({ stage: ExecuteRouteStage.longDurationConfirming })
-
-			trackEvent({
-				category: category.SwapCard,
-				action: action.ClFunctionsFailed,
-				label: 'cl_functions_failed',
-				data: { provider: 'concero', route: routeData, txHash: tx.hash },
-			})
-		}
-	})
-
 	const latestDstChainBlock = await dstPublicClient.getBlockNumber()
 
 	// TODO get log to receipt
@@ -100,6 +87,20 @@ const trackBridgeTransaction = async (
 	}
 
 	const { ccipMessageId } = logCCIPSent.args
+
+	const stopTimer = timer(time => {
+		if (time === 180) {
+			sendState({ stage: ExecuteRouteStage.longDurationConfirming, payload: { ccipId: ccipMessageId } })
+
+			trackEvent({
+				category: category.SwapCard,
+				action: action.ClFunctionsFailed,
+				label: 'cl_functions_failed',
+				data: { provider: 'concero', route: routeData, txHash: tx.hash },
+			})
+		}
+	})
+
 	const dstConceroAddress = conceroAddressesMap[routeData.to.chain.id]
 
 	let retryCount = 0

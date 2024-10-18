@@ -9,7 +9,7 @@ export enum StageType {
 	approve = 1,
 	transaction = 2,
 	success = 3,
-	ccip = 4,
+	warning = 4,
 }
 
 export interface StageStep {
@@ -17,7 +17,7 @@ export interface StageStep {
 	status: Status
 	type: StageType
 	body?: string
-	txLink?: null
+	txLink?: string | null | undefined
 }
 
 export interface SwapStateDirection {
@@ -136,7 +136,7 @@ export type SwapAction =
 	| { type: 'SET_SWAP_STAGE'; payload: SwapCardStage }
 	| { type: 'TOGGLE_SETTINGS_MODAL_OPEN' }
 	| { type: 'SET_SETTINGS'; payload: any }
-	| { type: 'SET_SWAP_STEPS'; payload: any[] }
+	| { type: 'SET_SWAP_STEPS'; payload: StageStep[] }
 	| { type: 'APPEND_SWAP_STEP'; payload: StageStep[] }
 	| { type: 'SET_TO_ADDRESS'; payload: string }
 	| { type: 'UPSERT_SWAP_STEP'; payload: any }

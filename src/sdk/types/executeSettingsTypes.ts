@@ -24,7 +24,7 @@ export interface ExecutionState {
 		title: string
 		body: string
 		status: Status
-		txLink: null
+		ccipId?: string | undefined
 	}
 }
 

@@ -8,7 +8,7 @@ import { StepCard } from './Step/Step'
 import { animated, useSpring } from '@react-spring/web'
 import { easeQuadInOut } from 'd3-ease'
 import { Tag } from '../../../../tags/Tag/Tag'
-import { MainRouteInfoTags } from '../../../../tags/MainRouteInfoTags/MainRouteInfoTags'
+import { MainRouteInfoTags } from '../MainRouteInfoTags/MainRouteInfoTags'
 
 interface RouteCardProps {
 	route: StandardRoute
