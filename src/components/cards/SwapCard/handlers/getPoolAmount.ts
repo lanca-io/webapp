@@ -1,7 +1,7 @@
-import { type Address, type Chain, createPublicClient, erc20Abi, formatUnits } from 'viem'
-import { http } from 'wagmi'
+import { type Address, type Chain, createPublicClient, erc20Abi, formatUnits, http } from 'viem'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 import { config } from '../../../../sdk/configs/config'
+import { viemChains } from '../../../../sdk/configs/chainsConfig'
 
 export interface IPoolConfig {
 	chain: Chain
@@ -35,11 +35,11 @@ export const poolConfigs: Record<string, IPoolConfig> = {
 }
 
 export const getPoolAmount = async (chainId: string): Promise<string> => {
-	const { chain, usdcContract, conceroContract } = poolConfigs[chainId]
+	const { usdcContract, conceroContract } = poolConfigs[chainId]
 
 	const publicClient = createPublicClient({
-		chain,
-		transport: http(),
+		chain: viemChains[chainId].chain,
+		transport: viemChains[chainId].transport ?? http(),
 	})
 
 	const data = await publicClient.readContract({

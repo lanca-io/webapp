@@ -1,61 +1,36 @@
 import { type FC } from 'react'
-import { Ping } from '@uiball/loaders'
-import { IconCheck, IconExternalLink, IconX } from '@tabler/icons-react'
-import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation'
-import { Button } from '../../buttons/Button/Button'
+import { Loader } from '../Loader/Loader'
 import classNames from './TransactionStep.module.pcss'
+import { InfoIcon } from '../../../assets/icons/InfoIcon'
+import { SuccessIcon } from '../../../assets/icons/SuccessIcon'
+import { type Status } from '../../../sdk/types/executeSettingsTypes'
 
 interface StageProps {
-	step: StageStep
-}
-
-export interface StageStep {
 	title: string
-	body?: string
-	status: 'pending' | 'success' | 'error' | 'await'
-	txLink?: string
+	status: Status | null | undefined
 }
 
-const renderTag = (status: string) => {
-	const iconSize = 18
-
-	const content = () => {
+export const TransactionStep: FC<StageProps> = ({ status, title }) => {
+	const renderIcon = () => {
 		switch (status) {
+			case 'idle':
+				return null
 			case 'pending':
-				return <LoadingAnimation size={iconSize} color="var(--color-text-secondary)" />
 			case 'await':
-				return <Ping size={iconSize} color="var(--color-pacific-500)" />
-			case 'success':
-				return <IconCheck size={iconSize} color={'var(--color-aquamarine-500)'} />
+				return <Loader variant="neutral" />
 			case 'error':
-				return <IconX size={iconSize} color={'var(--color-red-500'} />
+				return <InfoIcon color="var(--color-danger-700)" />
+			case 'success':
+				return <SuccessIcon />
 			default:
-				return <div style={{ width: iconSize, height: iconSize }} />
+				return null
 		}
 	}
 
-	return <div className={`${classNames.tagContainer} ${classNames[status]}`}>{content()}</div>
-}
-
-export const TransactionStep: FC<StageProps> = ({ step }) => {
-	const { title, body, status, txLink } = step
-
 	return (
 		<div className={classNames.step}>
-			{renderTag(status)}
-			<div className={classNames.stageText}>
-				<div className={classNames.titleContainer}>
-					<h5>{title}</h5>
-					{txLink && (
-						<a href={txLink} target="_blank" rel="noopener noreferrer">
-							<Button variant="black" size="xs">
-								<IconExternalLink size={16} color={'var(--color-text-secondary)'} />
-							</Button>
-						</a>
-					)}
-				</div>
-				{body && <p className="body1">{body}</p>}
-			</div>
+			{renderIcon()}
+			<h4 className={classNames[status ?? 'idle']}>{title}</h4>
 		</div>
 	)
 }

@@ -1,5 +1,5 @@
 import { type SwapState } from './types'
-import { ButtonType } from '../../../buttons/SwapButton/constants'
+import { ErrorType } from '../SwapButton/constants'
 
 export const swapInitialState = (selection): SwapState => ({
 	from: {
@@ -32,7 +32,7 @@ export const swapInitialState = (selection): SwapState => ({
 		allowSwitchChain: true,
 	},
 	chains: [],
-	buttonState: { type: ButtonType.ENTER_AMOUNT },
+	buttonState: { type: ErrorType.ENTER_AMOUNT },
 	walletBalances: null,
 	isDestinationAddressVisible: false,
 	settingsModalOpen: false,

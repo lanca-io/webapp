@@ -46,15 +46,10 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
 	}
 
 	useEffect(() => {
-		if (theme === 'light') {
-			document.body.classList.remove('dark')
-			document.body.classList.add('light')
-		} else {
-			document.body.classList.remove('light')
-			document.body.classList.add('dark')
-		}
+		document.body.classList.remove('dark')
+		document.body.classList.add('light')
 
-		const themeColors = theme === 'light' ? lightColors : darkColors
+		const themeColors = lightColors
 		setColors(themeColors.color as Colors)
 	}, [theme])
 

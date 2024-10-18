@@ -1,17 +1,23 @@
-.modal {
-	padding: 0;
+.container {
+	gap: var(--sp-lg);
 }
 
-.container {
-	width: 450px;
-	flex-direction: row;
+.modal {
+	max-width: 395px;
+	width: 100%;
+}
+
+.title {
+	color: var(--color-grey-700);
 }
 
 .tokenContainer {
+	padding-top: var(--sp-xs);
 	margin-top: var(--sp-md);
 	gap: var(--sp-md);
+	border-radius: var(--sp-md);
 	overflow-y: scroll;
-	height: 434px;
+	height: 318px;
 }
 
 .tokensContainer {
@@ -23,10 +29,4 @@
 	padding: var(--sp-md) 0;
 	flex-direction: row;
 	justify-content: space-between;
-}
-
-@media (max-width: 768px) {
-	.container {
-		width: 100%;
-	}
 }

@@ -1,32 +1,49 @@
 .container {
-	width: 100%;
+	width: calc(100% - 8px);
+	margin: 0 auto;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	border-radius: var(--st-br-sm);
+	border-radius: var(--sp-md);
 	padding: var(--sp-xs) var(--sp-sm);
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
+
+	&:hover {
+		background-color: var(--color-grey-200);
+	}
+
+	&:active {
+		background-color: var(--color-grey-300);
+	}
 }
 
-.container:hover {
-	background-color: var(--color-grey-600);
+.selected {
+	background-color: var(--color-grey-100);
+	box-shadow:
+		0 0 0 2px #f9fbfb,
+		0 0 0 4px var(--color-primary-500, #0ba5ec);
+}
+
+.tokenTitleContainer {
+	padding: var(--sp-xs);
 }
 
 .tokenInfoContainer {
 	flex-direction: row;
 	align-items: center;
-	gap: var(--sp-md);
+	gap: var(--sp-xs);
 }
 
-.tokenTitleContainer {
+.tokenName {
+	color: var(--color-grey-600);
 }
 
 .tokenPriceContainer {
 	align-items: flex-end;
 
-	p {
-		line-height: 118%;
+	h4 {
+		color: var(--color-grey-600);
 	}
 }
 
@@ -45,6 +62,10 @@
 	flex-direction: row;
 	align-items: center;
 	gap: var(--sp-xs);
+
+	p {
+		font-weight: 500 !important;
+	}
 }
 
 .linkButton:hover {

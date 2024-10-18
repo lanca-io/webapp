@@ -3,23 +3,22 @@ import { type Token } from '../../../../api/concero/types'
 import { useEffect, useRef, useState } from 'react'
 import { TokenAmount } from '../../../../utils/TokenAmount'
 import { SkeletonLoader } from '../../../layout/SkeletonLoader/SkeletonLoader'
-import { TokenIcon } from '../../../layout/TokenIcon/TokenIcon'
-import { animated, to, useSpring } from '@react-spring/web'
-import { formatNumber, numberToFormatString, truncate, truncateWallet } from '../../../../utils/formatting'
+import { animated, useSpring } from '@react-spring/web'
+import { numberToFormatString, truncate, truncateWallet } from '../../../../utils/formatting'
 import { IconExternalLink } from '@tabler/icons-react'
 import { easeQuadInOut } from 'd3-ease'
 import { config } from '../../../../constants/config'
-import { testnetToMainnetChainsMap } from '../../../../constants/testnetToMainnetChainsMap'
+import { Badge } from '../../../layout/Badge/Badge'
 
 interface TokenListItemProps {
 	token: Token
 	isBalanceLoading: boolean
 	onSelect: (token: Token) => void
 	explorerURI: string
-	isTestnet: boolean
+	isSelected: boolean
 }
 
-export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, isTestnet }: TokenListItemProps) {
+export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, isSelected }: TokenListItemProps) {
 	const [isHovered, setIsHovered] = useState(false)
 	const [addressContainerHeight, setAddressContainerHeight] = useState(0)
 	const addressContainerRef = useRef<HTMLDivElement | null>(null)
@@ -36,7 +35,7 @@ export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, 
 
 	return (
 		<div
-			className={classNames.container}
+			className={`${classNames.container} ${isSelected ? classNames.selected : ''}`}
 			onClick={() => {
 				onSelect(token)
 			}}
@@ -48,12 +47,15 @@ export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, 
 			}}
 		>
 			<div className={classNames.tokenInfoContainer}>
-				<TokenIcon
+				<Badge
+					size="l"
 					tokenLogoSrc={token.logoURI}
-					chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${isTestnet ? testnetToMainnetChainsMap[token.chain_id] : token.chain_id}.svg`}
+					chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${token.chain_id}.svg`}
 				/>
+
 				<div className={classNames.tokenTitleContainer}>
-					<h4>{truncate(token.name, 20)}</h4>
+					<h4 className={classNames.tokenName}>{truncate(token.name, 20)}</h4>
+
 					<div className={classNames.tokenAddressContainer} ref={addressContainerRef}>
 						<animated.div style={tokenAddressAnimation}>
 							<p className={'body1'}>{truncate(token.symbol, 20)}</p>
@@ -79,10 +81,10 @@ export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, 
 					<SkeletonLoader className={classNames.balanceSkeleton} />
 				) : token.balance ? (
 					<>
-						<h4>{numberToFormatString(Number(tokenAmount), token.decimals, true)}</h4>
+						<h4>{numberToFormatString(Number(tokenAmount), 3, true)}</h4>
 						{token.priceUsd && token.priceUsd > 0 ? (
 							<p className={'body1'}>
-								{'$' + numberToFormatString(token.priceUsd * Number(tokenAmount), 2)}{' '}
+								{'$' + numberToFormatString(token.priceUsd * Number(tokenAmount), 3)}
 							</p>
 						) : null}
 					</>

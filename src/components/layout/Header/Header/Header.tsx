@@ -1,46 +1,50 @@
-import { useState } from 'react'
+import { type FC, type ReactNode } from 'react'
 import classNames from './Header.module.pcss'
 import { Logo } from '../../Logo/Logo'
+import { useMediaQuery } from '../../../../hooks/useMediaQuery'
 import { WalletButton } from '../WalletButton/WalletButton'
 import { BurgerMenu } from '../BurgerMenu/BurgerMenu'
-import { FeedbackModal } from '../../../modals/FeedbackModal/FeedbackModal'
-import { useMediaQuery } from '../../../../hooks/useMediaQuery'
-import { WithTooltip } from '../../../wrappers/WithTooltip'
-import { ComingSoonLinks } from './ComingSoonLinks'
-import { TooltipContent } from './TooltipContent'
+import { Button } from '../../buttons/Button/Button'
 
-export const Header = () => {
-	const [isFeedbackModalOpened, setIsFeedbackModalOpened] = useState(false)
+interface HeaderProps {
+	children?: ReactNode
+}
+
+export const Header: FC<HeaderProps> = ({ children }) => {
 	const isMobile = useMediaQuery('mobile')
-
-	const ComingSoon = WithTooltip({
-		WrappedComponent: ComingSoonLinks,
-		Tooltip: TooltipContent,
-	})
 
 	return (
 		<header className={classNames.header}>
+			{children}
 			<div className={classNames.navigatorContainer}>
 				<div className={classNames.logoContainer}>
 					<Logo />
 				</div>
-				{!isMobile ? (
-					<ul>
-						{/* {ComingSoon} */}
-						<a target="_blank" href="https://app.concero.io/pool" rel="noreferrer">
-							Earn
+				{!isMobile && (
+					<ul className="gap-xs">
+						<a
+							className={classNames.link}
+							target="_blank"
+							href="https://app.concero.io/pool"
+							rel="noreferrer"
+						>
+							<Button variant="tetrary">Provide Liquidity</Button>
 						</a>
-						<a target="_blank" href="https://app.concero.io/rewards" rel="noreferrer">
-							Rewards
+						<a
+							className={classNames.link}
+							target="_blank"
+							href="https://app.concero.io/rewards"
+							rel="noreferrer"
+						>
+							<Button variant="tetrary">Rewards</Button>
 						</a>
 					</ul>
-				) : null}
+				)}
 			</div>
 			<div className={classNames.headerButtonsContainer}>
 				<WalletButton />
 				<BurgerMenu />
 			</div>
-			<FeedbackModal show={isFeedbackModalOpened} setShow={setIsFeedbackModalOpened} />
 		</header>
 	)
 }

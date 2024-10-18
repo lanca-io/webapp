@@ -36,7 +36,7 @@ export const initialState = {
 	chains: [
 		{
 			id: '8453',
-			name: 'BASE',
+			name: 'Base',
 			symbol: 'ETH',
 			addressPatterns: ['^(0x)[0-9A-Fa-f]{40}$'],
 			logoURI: 'https://api.concero.io/static/icons/chains/8453.svg',

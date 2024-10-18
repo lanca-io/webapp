@@ -1,7 +1,7 @@
 import { type Address, erc20Abi, parseUnits, type PublicClient, type WalletClient } from 'viem'
 import type { SwapDirectionData } from '../types/routeTypes'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
-import { ExecuteRouteStage } from '../types/executeSettingsTypes'
+import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import { config } from '../../constants/config'
 
 export const checkAllowanceAndApprove = async (
@@ -9,7 +9,7 @@ export const checkAllowanceAndApprove = async (
 	publicClient: PublicClient,
 	txData: SwapDirectionData,
 	clientAddress: Address,
-	sendState,
+	sendState: (state: ExecutionState) => void,
 ) => {
 	const { token, amount, chain } = txData
 
@@ -31,6 +31,16 @@ export const checkAllowanceAndApprove = async (
 	const amountInDecimals = parseUnits(amount, token.decimals)
 
 	if (allowance < amountInDecimals) {
+		sendState({
+			stage: ExecuteRouteStage.awaitApprove,
+			payload: {
+				title: 'Signature required',
+				body: 'Please check info and approve the transaction in your wallet',
+				status: 'await',
+				txLink: null,
+			},
+		})
+
 		const { request } = await publicClient.simulateContract({
 			account: clientAddress,
 			address: token.address,
@@ -40,19 +50,19 @@ export const checkAllowanceAndApprove = async (
 		})
 
 		approveTxHash = await walletClient.writeContract(request)
-	}
 
-	if (approveTxHash) {
 		sendState({
-			stage: ExecuteRouteStage.pendingTransaction,
+			stage: ExecuteRouteStage.pendingApprove,
 			payload: {
-				title: 'Swap in progress',
-				body: 'Please check info and approve the transaction in your wallet',
+				title: 'Pennding',
+				body: '',
 				status: 'await',
 				txLink: null,
 			},
 		})
+	}
 
+	if (approveTxHash) {
 		await publicClient.waitForTransactionReceipt({ hash: approveTxHash })
 	}
 }

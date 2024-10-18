@@ -81,7 +81,7 @@ export const pt = {
 			title: 'Gerenciar posição',
 		},
 		tokenArea: {
-			from: 'De',
+			from: 'FeeDetailsDropdown.tsx',
 			to: 'Para',
 		},
 		protocolModal: {

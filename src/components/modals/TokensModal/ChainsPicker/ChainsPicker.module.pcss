@@ -1,20 +1,20 @@
 .container {
-	padding: var(--sp-md) var(--sp-sm) var(--sp-sm) var(--sp-sm);
-	background-color: var(--color-grey-650);
+	gap: var(--sp-sm);
 }
 
 .chainsContainer {
-	flex: 1;
-	overflow-y: scroll;
+	flex-direction: row;
 	margin-top: var(--sp-sm);
 	gap: var(--sp-sm);
 }
 
 .firsChainsLineContainer {
-	padding-top: var(--sp-sm);
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 	gap: var(--sp-sm);
 	flex-wrap: nowrap;
 	align-items: center;
+	flex-direction: row;
 }
 
 .animeContainer {
@@ -27,4 +27,5 @@
 }
 
 .title {
+	color: var(--color-grey-700);
 }

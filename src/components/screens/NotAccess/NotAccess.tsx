@@ -1,7 +1,6 @@
 import classNames from './NotAccess.module.pcss'
-import { Button } from '../../buttons/Button/Button'
+import { Button } from '../../layout/buttons/Button/Button'
 import { useAccount } from 'wagmi'
-import { add } from 'husky'
 
 const links = [
 	{

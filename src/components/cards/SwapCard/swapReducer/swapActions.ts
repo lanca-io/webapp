@@ -1,9 +1,9 @@
 import { toggleRouteInsurance } from './toggleRouteInsurance'
 import { handleBeforeUnload } from '../../../../utils/leavingPageEvents'
 import { type SwapAction, type SwapState } from './types'
-// import { StageStep } from '../../EarnHeaderCard/ManageModal/SwapProgress/TransactionStep'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action as trackingAction, category as trackingCategory } from '../../../../constants/tracking'
+import { type ErrorType } from '../SwapButton/constants'
 
 export const swapActions: SwapAction = {
 	/* ROUTE-RELATED ACTIONS */
@@ -131,6 +131,10 @@ export const swapActions: SwapAction = {
 	SET_IS_SUFFICIENT_LIQUIDITY: (state: SwapState, action: SwapAction) => {
 		const isSufficientLiquidity = action.payload
 		return { ...state, isSufficientLiquidity }
+	},
+	SET_INPUT_ERROR: (state: SwapState, action: { payload: ErrorType | null }) => {
+		const inputError = action.payload
+		return { ...state, inputError }
 	},
 }
 

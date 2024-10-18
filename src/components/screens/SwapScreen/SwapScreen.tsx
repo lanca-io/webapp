@@ -2,19 +2,23 @@ import { memo } from 'react'
 import { withErrorBoundary } from '../../wrappers/WithErrorBoundary'
 import { SwapCard } from '../../cards/SwapCard/SwapCard'
 import classNames from './SwapScreen.module.pcss'
-import { ConceroWatermark } from './ConceroWatermark/ConceroWatermark'
+import { useSwapReducer } from '../../cards/SwapCard/swapReducer/swapReducer'
+import { ErrorCategory, errorTypeMap } from '../../cards/SwapCard/SwapButton/constants'
 
 const Swap = memo(withErrorBoundary(SwapCard))
 
 export const SwapScreen = () => {
-	const newSwapScreenLayout = (
-		<div className={classNames.newSwapCardContainer}>
-			<div className={classNames.newSwapCardInnerContainer}>
-				<Swap />
-			</div>
-			<ConceroWatermark />
+	const [swapState, swapDispatch] = useSwapReducer()
+
+	const isInputStageError = swapState.inputError
+		? errorTypeMap[swapState.inputError] === ErrorCategory.transaction
+		: false
+
+	return (
+		<div
+			className={`${classNames.container} ${isInputStageError ? classNames.failed : classNames[swapState.stage]}`}
+		>
+			<Swap swapDispatch={swapDispatch} swapState={swapState} />
 		</div>
 	)
-
-	return <div className={classNames.newSwapScreenContainer}>{newSwapScreenLayout}</div>
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react'
 import classNames from './InsuranceCard.module.pcss'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../../layout/buttons/Button/Button'
 import { Toggle } from '../../../layout/Toggle/Toggle'
 import { useTranslation } from 'react-i18next'
 

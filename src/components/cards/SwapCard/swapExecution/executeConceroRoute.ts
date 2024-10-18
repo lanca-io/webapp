@@ -3,13 +3,13 @@ import { type Dispatch } from 'react'
 import { type ExecutionConfigs, type ExecutionState } from '../../../../sdk/types/executeSettingsTypes'
 import { executeRoute } from '../../../../sdk/executeRoute/executeRoute'
 import { statusSwapMap } from './statusSwapMap'
-import { type Route } from '../../../../sdk/types/routeTypes'
+import { type RouteData } from '../../../../sdk/types/routeTypes'
 import { getWalletClient } from '@wagmi/core'
 import { config } from '../../../../web3/wagmi'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action, category } from '../../../../constants/tracking'
 
-export async function executeConceroRoute(swapState: SwapState, swapDispatch: Dispatch<SwapAction>, route: Route) {
+export async function executeConceroRoute(swapState: SwapState, swapDispatch: Dispatch<SwapAction>, route: RouteData) {
 	swapDispatch({ type: 'SET_LOADING', payload: true })
 
 	try {
