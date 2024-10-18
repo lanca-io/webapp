@@ -17,13 +17,6 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 		})
 	}
 
-	const amountUsdFrom = swapState.from.amount
-		? Number(swapState.from.amount) * Number(swapState.from.token.priceUsd)
-		: 0
-	const amountUsdTo = swapState.to.amount ? Number(swapState.to.amount) * Number(swapState.to.token.priceUsd) : 0
-
-	const totalFeeUsd = amountUsdFrom - amountUsdTo
-
 	const switchDirectionButton = (
 		<div className={classNames.separatorWrap}>
 			<div className={classNames.separator}></div>
@@ -76,7 +69,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 
 			{swapState.selectedRoute && (
 				<div className={classNames.feeDetails}>
-					<FeeDetailsDropdown amountUsd={totalFeeUsd} />
+					<FeeDetailsDropdown route={swapState.selectedRoute} />
 				</div>
 			)}
 		</div>

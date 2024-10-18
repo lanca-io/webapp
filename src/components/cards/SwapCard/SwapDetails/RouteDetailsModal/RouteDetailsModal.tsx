@@ -14,7 +14,7 @@ interface RouteDetailsModalProps {
 	amountUsd: number
 }
 
-export function RouteDetailsModal({ isOpen, setIsOpen, selectedRoute, amountUsd }: RouteDetailsModalProps) {
+export function RouteDetailsModal({ isOpen, setIsOpen, selectedRoute }: RouteDetailsModalProps) {
 	return (
 		<Modal position="top" show={isOpen} setShow={setIsOpen} title={'Review'} className={classNames.modal}>
 			<div className="gap-md">
@@ -24,13 +24,13 @@ export function RouteDetailsModal({ isOpen, setIsOpen, selectedRoute, amountUsd 
 
 			<Separator />
 
-			{selectedRoute.steps?.map((step, index) => <StepCard key={index.toString()} step={step} index={index} />)}
+			{selectedRoute.steps?.map((step, index) => <StepCard key={index.toString()} step={step} />)}
 
 			<MainRouteInfoTags route={selectedRoute} />
 
 			<Separator />
 
-			<FeeDetailsDropdown amountUsd={amountUsd} />
+			<FeeDetailsDropdown route={selectedRoute} />
 		</Modal>
 	)
 }
