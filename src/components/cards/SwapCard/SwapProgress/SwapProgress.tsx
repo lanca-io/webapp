@@ -22,9 +22,7 @@ import { truncateWallet } from '../../../../utils/formatting'
 
 interface SwapProgressProps {
 	swapState: SwapState
-	swapDispatch: Dispatch<SwapAction>
 	handleGoBack: () => void
-	txInfo?: { duration: number; hash: string } | undefined
 }
 
 const chainsTwitterMap: Record<string, string> = {
@@ -98,19 +96,21 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 					<Button isFull onClick={handleGoBack} variant="secondaryColor" size="lg">
 						Swap again
 					</Button>
-					<Button
-						isFull
-						variant="secondary"
-						size="lg"
-						onClick={() => {
-							window.open(
-								`https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${chainsTwitterMap[swapState.from.chain.id]}%20to%20%40${chainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${time}%20sec%20on%20%40lanca_io!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`,
-								'_blank',
-							)
-						}}
-					>
-						Share on X
-					</Button>
+					{isBridge && (
+						<Button
+							isFull
+							variant="secondary"
+							size="lg"
+							onClick={() => {
+								window.open(
+									`https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${chainsTwitterMap[swapState.from.chain.id]}%20to%20%40${chainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${time}%20sec%20on%20%40lanca_io!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`,
+									'_blank',
+								)
+							}}
+						>
+							Share on X
+						</Button>
+					)}
 				</div>
 			</>
 		),

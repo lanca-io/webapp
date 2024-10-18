@@ -1,11 +1,17 @@
 .container {
 	width: 100%;
 	max-width: 395px;
+	gap: var(--sp-lg);
+}
+
+.card {
+	width: 100%;
+	max-width: 100%;
 	background-color: var(--color-grey-25);
 }
 
 @media (max-width: 768px) {
-	.container {
+	.card {
 		width: 100%;
 	}
 }
@@ -30,4 +36,25 @@
 
 p {
 	font-size: 0.875rem;
+}
+
+.iconWrap {
+	background: #ebe9fe;
+	border-radius: var(--sp-sm);
+	width: 32px;
+	height: 32px;
+	justify-content: center;
+	align-items: center;
+}
+
+.pointsTitle {
+	color: var(--color-grey-700);
+
+	b {
+		color: #5925dc;
+	}
+}
+
+.rewardsButton {
+	color: #6938ef;
 }
