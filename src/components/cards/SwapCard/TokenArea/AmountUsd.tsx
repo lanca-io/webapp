@@ -3,6 +3,7 @@ import type { TokenAreaState } from './useTokenAreaReducer/types'
 import { type Balance, type SwapStateDirection } from '../swapReducer/types'
 import { useTranslation } from 'react-i18next'
 import classNames from './TokenArea.module.pcss'
+import { Loader } from '../../../layout/Loader/Loader'
 
 interface AmountUsdProps {
 	state: TokenAreaState
@@ -10,30 +11,43 @@ interface AmountUsdProps {
 	selection: SwapStateDirection
 	direction: 'from' | 'to'
 	handleMaxButtonClick: () => void
-	isTestnet: boolean
+	loading: boolean
 }
 
-export function AmountUsd({ state, balance, selection, direction, handleMaxButtonClick, isTestnet }: AmountUsdProps) {
+export function AmountUsd({ state, balance, selection, direction, handleMaxButtonClick, loading }: AmountUsdProps) {
 	const { t } = useTranslation()
+
+	const formatedBalance = numberToFormatString(Number(balance?.amount.rounded), 4, true)
 
 	if (direction === 'from') {
 		return (
-			<div className={classNames.amountUsdContainer}>
-				{state.isFocused && !selection.amount && balance && !isTestnet ? (
-					<h4 className={classNames.maxButton} onMouseDown={handleMaxButtonClick}>
-						Max: {numberToFormatString(Number(balance?.amount.rounded), 4, true)}
-					</h4>
-				) : !state.isFocused && selection.amount === '' ? (
-					<h4>{t('tokenArea.enterAmount')}</h4>
-				) : (
-					<h4>{`$${numberToFormatString((selection.token.priceUsd ?? 0) * Number(selection.amount), 2)}`}</h4>
+			<div className="row jsb">
+				<div className={classNames.amountUsdContainer}>
+					{state.isFocused && !selection.amount && balance ? (
+						<h5 className={classNames.maxButton} onMouseDown={handleMaxButtonClick}>
+							{loading ? <Loader variant="neutral" /> : `Max: ${formatedBalance}`}
+						</h5>
+					) : !state.isFocused && selection.amount === '' ? (
+						<h5>{t('tokenArea.enterAmount')}</h5>
+					) : (
+						<h5>{`$${numberToFormatString((selection.token.priceUsd ?? 0) * Number(selection.amount), 2)}`}</h5>
+					)}
+				</div>
+				{!!balance && (
+					<h5 className={classNames.balance}>
+						{loading ? (
+							<Loader variant="neutral" />
+						) : (
+							`Balance: ${formatedBalance} ${selection.token.symbol}`
+						)}
+					</h5>
 				)}
 			</div>
 		)
 	} else {
 		return (
 			<div className={classNames.amountUsdContainer}>
-				<h4>{`$${numberToFormatString(Number(selection.amount_usd), 2)}`}</h4>
+				<h5>{`$${numberToFormatString((selection.token.priceUsd ?? 0) * Number(selection.amount), 2)}`}</h5>
 			</div>
 		)
 	}

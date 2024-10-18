@@ -1,7 +1,7 @@
 import classNames from './DestinationAddressInput.module.pcss'
 import { type ChangeEvent, type Dispatch, useRef } from 'react'
 import { type SwapAction, type SwapState } from '../../swapReducer/types'
-import { TextInput } from '../../../../input/TextInput'
+import { TextInput } from '../../../../layout/input/TextInput'
 import { useTranslation } from 'react-i18next'
 import { IconCheck, IconX } from '@tabler/icons-react'
 

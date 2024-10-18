@@ -1,10 +1,24 @@
-import { type StandardRoute } from '../../../../types/StandardRoute'
 import { type Chain, type Provider } from '../../../../api/concero/types'
-import { type StageStep } from '../../EarnHeaderCard/ManageModal/SwapProgress/TransactionStep'
 import { type TransactionStatus } from 'rango-sdk'
-import { type ButtonType } from '../../../buttons/SwapButton/constants'
-import { type ConceroBalanceResponse } from '../../../../api/concero/fetchBalancesByChainIds'
+import { type ErrorType } from '../SwapButton/constants'
 import { type TokenAmount } from '../../../../utils/TokenAmount'
+import { type Status } from '../../../../sdk/types/executeSettingsTypes'
+import { type RouteData } from '../../../../sdk/types/routeTypes'
+
+export enum StageType {
+	approve = 1,
+	transaction = 2,
+	success = 3,
+	warning = 4,
+}
+
+export interface StageStep {
+	title: string
+	status: Status
+	type: StageType
+	body?: string
+	txLink?: string | null | undefined
+}
 
 export interface SwapStateDirection {
 	chain: {
@@ -29,7 +43,7 @@ export interface SwapStateDirection {
 }
 
 export interface ButtonState {
-	type: ButtonType
+	type: ErrorType
 	message?: string
 }
 
@@ -39,7 +53,7 @@ export enum SwapCardStage {
 	review = 'review',
 	failed = 'failed',
 	success = 'success',
-	contactSupport = 'contactSupport',
+	warning = 'warning',
 }
 
 export interface Balance {
@@ -48,23 +62,26 @@ export interface Balance {
 }
 
 export interface SwapState {
-	settingsModalOpen: boolean
 	from: SwapStateDirection
 	to: SwapStateDirection
-	routes: StandardRoute[]
-	isNoRoutes: boolean
-	isLoading: boolean
-	selectedRoute: StandardRoute | null
+	routes: RouteData[]
+	selectedRoute: RouteData | null
+
 	typingTimeout: number
 	stage: SwapCardStage
 	steps: StageStep[]
 	settings: Settings
 	buttonState: ButtonState
 	balance: Balance
-	walletBalances: ConceroBalanceResponse | null
+	walletBalances: null
+
+	settingsModalOpen: boolean
+	isNoRoutes: boolean
+	isLoading: boolean
 	isDestinationAddressVisible: boolean
 	isTestnet: boolean
 	isSufficientLiquidity: boolean
+	inputError: null
 }
 
 export interface Settings {
@@ -97,6 +114,7 @@ export enum SwapActionType {
 	UPDATE_LAST_SWAP_STEP = 'UPDATE_LAST_SWAP_STEP',
 	UPDATE_PREV_RANGO_STEPS = 'UPDATE_PREV_RANGO_STEPS',
 	SET_WALLET_BALANCES = 'SET_WALLET_BALANCES',
+	SET_INPUT_ERROR = 'SET_INPUT_ERROR',
 }
 
 export type SwapAction =
@@ -118,15 +136,16 @@ export type SwapAction =
 	| { type: 'SET_SWAP_STAGE'; payload: SwapCardStage }
 	| { type: 'TOGGLE_SETTINGS_MODAL_OPEN' }
 	| { type: 'SET_SETTINGS'; payload: any }
-	| { type: 'SET_SWAP_STEPS'; payload: any[] }
-	| { type: 'APPEND_SWAP_STEP'; payload: any }
+	| { type: 'SET_SWAP_STEPS'; payload: StageStep[] }
+	| { type: 'APPEND_SWAP_STEP'; payload: StageStep[] }
 	| { type: 'SET_TO_ADDRESS'; payload: string }
 	| { type: 'UPSERT_SWAP_STEP'; payload: any }
 	| { type: 'UPDATE_LAST_SWAP_STEP' }
 	| { type: 'UPDATE_PREV_RANGO_STEPS'; currentTransactionStatus: TransactionStatus }
-	| { type: SwapActionType.SET_WALLET_BALANCES; balances: ConceroBalanceResponse | null }
+	| { type: SwapActionType.SET_WALLET_BALANCES; balances: any }
 	| { type: 'SET_IS_NO_ROUTES'; status: boolean }
 	| { type: 'SWAP_DIRECTIONS' }
 	| { type: 'SET_IS_DESTINATION_ADDRESS_VISIBLE'; status: boolean }
 	| { type: 'TOGGLE_TESTNET' }
 	| { type: 'SET_IS_SUFFICIENT_LIQUIDITY'; payload: boolean }
+	| { type: 'SET_INPUT_ERROR'; payload: ErrorType | null }

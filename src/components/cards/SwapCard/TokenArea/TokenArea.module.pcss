@@ -1,152 +1,105 @@
 .tokenContainer {
-	background-color: var(--color-grey-650);
-	border-radius: var(--st-br-md);
-	border: 1px solid var(--color-grey-600);
-	padding: var(--sp-md) var(--sp-md);
-	box-shadow: none;
+	width: 100%;
 	transition: 0.2s ease-in-out;
 }
 
-.from {
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-	transition: 0.2s ease-in-out;
-}
+.input {
+	background: transparent;
+	margin: 0;
+	padding: 0;
 
-.from:hover {
-	border: 1px solid var(--color-grey-550);
-	box-shadow: 0 0 15px 0 rgba(172, 172, 172, 0.15) inset;
-}
-
-.from:focus-within {
-	transition: border 0.2s ease-in-out;
-	border: 1px solid var(--color-pacific-650);
-	box-shadow: 0 0 15px 0 rgba(115, 53, 247, 0.1) inset;
-}
-
-.to {
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-	border-top: unset;
-}
-
-.to:hover {
-	border-top: unset;
-}
-
-.from:focus-within {
-	transition: border 0.2s ease-in-out;
-	border: 1px solid var(--color-pacific-650);
-	box-shadow: 0 0 15px 0 var(--color-pacific-650) inset;
-}
-
-.transparentTokenArea {
-	background-color: transparent;
-	border: 1px solid transparent;
-	box-shadow: none;
-}
-
-.transparentTokenArea.to {
-	border-top: unset;
-}
-
-.from.transparentTokenArea {
-	border-bottom: 1px solid var(--color-grey-600);
-	.input {
-		pointer-events: none;
+	input {
+		font-size: 32px;
+		font-weight: 500;
+		color: var(--color-grey-700);
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }
 
-.from.transparentTokenArea:hover {
-	box-shadow: none;
-	border: 1px solid transparent;
-	border-bottom: 1px solid var(--color-grey-600);
+.tokenRowHeader {
+	color: var(--color-grey-600);
 }
 
 .tokenRow {
 	align-items: center;
 	flex-direction: row;
 	justify-content: space-between;
-
-	.tokenRowHeader {
-		align-items: center;
-		flex-direction: row;
-		gap: var(--sp-sm);
-	}
-
-	p {
-		color: var(--color-text-secondary);
-	}
-
-	h3,
-	h4,
-	h5 {
-		color: var(--color-grey-500);
-	}
-}
-
-.input {
-	font-size: 24px;
-	font-weight: 500;
-	width: 100%;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
+	gap: var(--sp-sm);
+	margin-top: var(--sp-sm);
+	margin-bottom: var(--sp-xs);
 }
 
 .selectTokenButton {
-	padding: var(--sp-sm) var(--sp-md);
+	max-width: 156px;
+	width: 100%;
+	border-radius: var(--sp-md);
+	background: var(--color-grey-100);
+	padding: var(--sp-xs) var(--sp-md) var(--sp-xs) var(--sp-sm);
+	gap: var(--sp-xs);
+	display: flex;
 	flex-direction: row;
 	align-items: center;
-	border-radius: var(--st-br-md);
+	justify-content: space-between;
+	cursor: pointer;
+	transition: 0.2s ease-in-out;
+}
 
-	p {
-		line-height: 1rem;
-	}
+.selectTokenButton:disabled {
+	cursor: default;
+	background: var(--color-grey-100);
 
-	h4 {
-		line-height: 1rem;
+	&:hover {
+		background: var(--color-grey-100);
 	}
 }
 
 .selectTokenButton:hover {
-	border-radius: var(--st-br-md);
-	border: 1px solid var(--color-grey-650);
+	background: var(--color-grey-200);
 }
 
 .transparentTokenArea .selectTokenButton {
 	border: 1px solid transparent;
 }
 
-.selectTokenButtonTitle {
-	align-items: flex-start;
-	gap: var(--sp-xs);
-
-	h4 {
-		color: var(--color-text-primary);
-	}
-
-	p {
-		font-weight: 400;
-		color: var(--color-text-secondary);
-	}
-}
-
 .amountUsdContainer {
 	justify-content: flex-start;
 	align-items: flex-start;
 
-	h4 {
+	h5 {
 		font-weight: 400;
-		color: var(--color-text-secondary);
+		color: var(--color-grey-500);
 	}
+}
+
+.balance {
+	font-weight: 400;
+	color: var(--color-grey-500);
+}
+
+.maxButton {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .maxButton:hover {
 	cursor: pointer;
-	color: var(--color-green-350);
+	color: var(--color-grey-500);
 }
 
 .hidden {
 	opacity: 0;
+}
+
+.maxBalanceSkeleton {
+	width: 20px;
+	height: 16px;
+	border-radius: var(--st-br-md);
+}
+
+.skeleton {
+	width: 120px;
+	height: 16px;
+	border-radius: var(--st-br-md);
 }

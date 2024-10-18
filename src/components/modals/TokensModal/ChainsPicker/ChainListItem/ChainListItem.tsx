@@ -1,14 +1,12 @@
 import type { Chain } from '../../../../../api/concero/types'
 import classNames from './ChainListItem.module.pcss'
 import { config } from '../../../../../constants/config'
-import { useTranslation } from 'react-i18next'
 import { testnetToMainnetChainsMap } from '../../../../../constants/testnetToMainnetChainsMap'
 
 interface ChainItemProps {
 	chain: Chain
 	isSelected: boolean
 	onSelect: (param: Chain) => void
-	isCropped?: boolean
 	isTestnet: boolean
 }
 
@@ -20,31 +18,20 @@ function ChainIcon({ src }: { src: string }) {
 	)
 }
 
-export function ChainListItem({ chain, isSelected, onSelect, isCropped = true, isTestnet }: ChainItemProps) {
-	const { t } = useTranslation()
-
+export function ChainListItem({ chain, isSelected, onSelect, isTestnet }: ChainItemProps) {
 	return (
 		<div
-			className={`${classNames.container} ${isCropped ? classNames.cropped : ''}`}
+			className={`${classNames.container} ${isSelected ? classNames.selected : null}`}
 			onClick={() => {
 				onSelect(chain)
 			}}
 		>
-			<div className={`${classNames.chainButton} ${isSelected ? classNames.selected : null}`}>
-				{isSelected ? (
-					<ChainIcon
-						src={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${isTestnet ? testnetToMainnetChainsMap[chain.id] : chain.id}.svg`}
-					/>
-				) : (
-					<ChainIcon src={chain.logoURI} />
-				)}
+			<div className={`${classNames.chainButton}`}>
+				<ChainIcon
+					src={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${isTestnet ? testnetToMainnetChainsMap[chain.id] : chain.id}.svg`}
+				/>
 			</div>
-			{!isCropped ? (
-				<div>
-					<h4>{chain.name}</h4>
-					{isSelected ? <p className={'body1'}>{t('tokensModal.selected')}</p> : null}
-				</div>
-			) : null}
+			<p className="body2">{chain.name}</p>
 		</div>
 	)
 }

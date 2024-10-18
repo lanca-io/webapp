@@ -1,21 +1,20 @@
 import classNames from './ChainsPicker.module.pcss'
 import { useContext, useEffect, useState } from 'react'
 import { DataContext } from '../../../../hooks/DataContext/DataContext'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../../layout/buttons/Button/Button'
 import type { Chain } from '../../../../api/concero/types'
 import { useTranslation } from 'react-i18next'
 import { CardModal } from '../../CardModal/CardModal'
 import { ChainListItem } from './ChainListItem/ChainListItem'
-import { TextInput } from '../../../input/TextInput'
+import { TextInput } from '../../../layout/input/TextInput'
 import { IconSearch } from '@tabler/icons-react'
 
 interface TokensModalHeaderProps {
 	selectedChain: Chain | null
 	setSelectedChain: (param: Chain | null) => void
-	isTestnet: boolean
 }
 
-export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: TokensModalHeaderProps) {
+export function ChainsPicker({ selectedChain, setSelectedChain }: TokensModalHeaderProps) {
 	const { getChains, chains } = useContext(DataContext)
 	const [searchValue, setSearchValue] = useState<string>('')
 	const [isChainsModalOpen, setIsChainsModalOpen] = useState<boolean>(false)
@@ -41,7 +40,8 @@ export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: Tok
 
 	return (
 		<div className={classNames.container}>
-			<p className={`body4 ${classNames.title}`}>{t('tokensModal.chains')}</p>
+			<h5 className={classNames.title}>{t('tokensModal.chains')}</h5>
+
 			<div className={classNames.firsChainsLineContainer}>
 				{fistLineChains.map((chain: Chain, index) => {
 					const isSelected = selectedChain?.id === chain.id
@@ -51,7 +51,6 @@ export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: Tok
 							chain={chain}
 							isSelected={isSelected}
 							onSelect={setSelectedChain}
-							isTestnet={isTestnet}
 						/>
 					)
 				})}
@@ -68,6 +67,7 @@ export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: Tok
 					</Button>
 				) : null}
 			</div>
+
 			<CardModal isOpen={isChainsModalOpen} setIsOpen={handleOpenChainsModal} title={t('tokensModal.chains')}>
 				<TextInput
 					value={searchValue}
@@ -87,7 +87,6 @@ export function ChainsPicker({ selectedChain, setSelectedChain, isTestnet }: Tok
 								isSelected={isSelected}
 								onSelect={handleSelectChain}
 								isCropped={false}
-								isTestnet={isTestnet}
 							/>
 						)
 					})}

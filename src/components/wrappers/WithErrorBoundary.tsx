@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from '../buttons/Button/Button'
+import { Button } from '../layout/buttons/Button/Button'
 
 export function FallbackComponent({ error }) {
 	return (

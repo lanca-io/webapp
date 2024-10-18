@@ -13,9 +13,9 @@ import {
 import classNames from './FeedbackModal.module.pcss'
 import { Modal } from '../Modal/Modal'
 import { TextArea } from '../../layout/TextArea/TextArea'
-import { Button } from '../../buttons/Button/Button'
+import { Button } from '../../layout/buttons/Button/Button'
 import { submitFeedback } from '../../../api/concero/submitFeedback'
-import { TextInput } from '../../input/TextInput'
+import { TextInput } from '../../layout/input/TextInput'
 import { NotificationsContext } from '../../../hooks/notificationsContext'
 import { useTranslation } from 'react-i18next'
 

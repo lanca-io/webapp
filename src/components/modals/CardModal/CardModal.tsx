@@ -3,7 +3,7 @@ import classNames from './CardModal.module.pcss'
 import { animated, useSpring } from '@react-spring/web'
 import { easeCubicInOut, easeQuadInOut } from 'd3-ease'
 import { IconX } from '@tabler/icons-react'
-import { Button } from '../../buttons/Button/Button'
+import { Button } from '../../layout/buttons/Button/Button'
 
 interface CardModalProps {
 	isOpen: boolean

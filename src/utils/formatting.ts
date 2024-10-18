@@ -106,8 +106,8 @@ export function addingAmountDecimals(number: number | string, decimals: number):
 
 export const secondsConverter = (seconds: number): string => {
 	if (seconds > 60)
-		return `${Math.round(seconds / 60)}m ${seconds % 60 ? `${Math.round(seconds % 60).toString()}s` : ''}`
-	return `${seconds}s`
+		return `${Math.round(seconds / 60)} min ${seconds % 60 ? `${Math.round(seconds % 60).toString()} sec.` : ''}`
+	return `${seconds} sec.`
 }
 
 export const numberToFormatString = (number: number, decimals = 4, isTransformNeeded = false): string | null => {

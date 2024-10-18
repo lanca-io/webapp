@@ -2,7 +2,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { action, category } from '../../../../constants/tracking'
 import { useAccount } from 'wagmi'
 import { IconWallet } from '@tabler/icons-react'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../buttons/Button/Button'
 import { truncateWallet } from '../../../../utils/formatting'
 import { useTranslation } from 'react-i18next'
 import classNames from './WalletButton.module.pcss'
@@ -31,16 +31,12 @@ export const WalletButton = () => {
 
 	return (
 		<Button
-			variant={isConnected ? 'subtle' : 'primary'}
-			leftIcon={
-				<IconWallet size={16} color={isConnected ? 'var(--color-grey-500)' : 'var(--color-base-white)'} />
-			}
-			size="sm"
+			leftIcon={isConnected ? <IconWallet size={16} color="var(--color-grey-600)" /> : null}
+			className={classNames.buttonWallet}
+			variant={isConnected ? 'secondary' : 'secondaryColor'}
 			onClick={handleClick}
 		>
-			<p className={`${classNames.buttonFont} ${!isConnected ? classNames.buttonText : 'body1'}`}>
-				{getStatus()}
-			</p>
+			{getStatus()}
 		</Button>
 	)
 }

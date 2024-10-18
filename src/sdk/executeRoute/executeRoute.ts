@@ -1,5 +1,5 @@
 import { createPublicClient, http, type WalletClient } from 'viem'
-import { type Route } from '../types/routeTypes'
+import { type RouteData } from '../types/routeTypes'
 import { type InputRouteData } from '../types/contractInputTypes'
 import { viemChains } from '../configs/chainsConfig'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
@@ -21,12 +21,12 @@ const useSendStateHook = (executionConfigs: ExecutionConfigs) => {
 	}
 }
 
-const executeRouteBase = async (walletClient: WalletClient, route: Route, executionConfigs: ExecutionConfigs) => {
+const executeRouteBase = async (walletClient: WalletClient, route: RouteData, executionConfigs: ExecutionConfigs) => {
 	if (!walletClient) throw new Error('walletClient is not passed!')
 
 	if (!route) throw new Error('Route is not passed!')
 
-	const { data } = route
+	const data = route
 	const { switchChainHook } = executionConfigs
 	const sendState = useSendStateHook(executionConfigs)
 
@@ -82,13 +82,24 @@ const executeRouteBase = async (walletClient: WalletClient, route: Route, execut
 	})
 
 	await checkAllowanceAndApprove(walletClient, publicClient, data.from, clientAddress, sendState)
-	const hash = await sendTransaction(inputRouteData, publicClient, walletClient, conceroAddress, clientAddress)
+	const hash = await sendTransaction(
+		inputRouteData,
+		publicClient,
+		walletClient,
+		conceroAddress,
+		clientAddress,
+		sendState,
+	)
 	await checkTransactionStatus(hash, publicClient, sendState, data, conceroAddress, clientAddress)
 
 	return hash
 }
 
-export const executeRoute = async (walletClient: WalletClient, route: Route, executionConfigs: ExecutionConfigs) => {
+export const executeRoute = async (
+	walletClient: WalletClient,
+	route: RouteData,
+	executionConfigs: ExecutionConfigs,
+) => {
 	const sendState = useSendStateHook(executionConfigs)
 
 	try {

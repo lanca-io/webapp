@@ -1,47 +1,38 @@
-import { type FC, type ForwardedRef, useEffect, useRef } from 'react'
-import { animated, useSpring } from '@react-spring/web'
+import { type FC, type ForwardedRef, useEffect, useRef, useState } from 'react'
 import classNames from './TokenArea.module.pcss'
-import { Button } from '../../../buttons/Button/Button'
-import { TextInput } from '../../../input/TextInput'
+import { TextInput } from '../../../layout/input/TextInput'
 import { type TokenAreaProps } from './types'
 import { handleAmountChange, handleAreaClick } from './handlers'
 import { useTokenAreaReducer } from './useTokenAreaReducer/tokenAreaReducer'
 import { isFloatInput } from '../../../../utils/validation'
 import { useTranslation } from 'react-i18next'
 import { TokensModal } from '../../../modals/TokensModal/TokensModal'
-import { TokenIcon } from '../../../layout/TokenIcon/TokenIcon'
-import { AmountInputSkeleton } from './AmountInputSkleton/AmountInputSkeleton'
 import { type Chain } from '../../../../api/concero/types'
 import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
 import { SwapCardStage } from '../swapReducer/types'
-import { testnetToMainnetChainsMap } from '../../../../constants/testnetToMainnetChainsMap'
+import { Badge } from '../../../layout/Badge/Badge'
+import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIcon'
+import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
+import { InputError } from '../SwapInput/InputError/InputError'
+import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
+import { getBalance } from '../../../../utils/getBalance'
+import { useAccount } from 'wagmi'
+import { set } from 'husky'
 
-export const TokenArea: FC<TokenAreaProps> = ({
-	direction,
-	selection,
-	swapDispatch,
-	balance = null,
-	isLoading = false,
-	stage,
-	isTestnet,
-}) => {
+export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispatch, balance = null, stage, error }) => {
+	const [loading, setLoading] = useState(false)
 	const [state, tokenAreaDispatch] = useTokenAreaReducer()
+	const { address } = useAccount()
 	const inputRef = useRef<ForwardedRef<HTMLInputElement>>()
 	const { t } = useTranslation()
-	const styleClass = direction === 'from' ? classNames.from : classNames.to
 
-	const shakeProps = useSpring({
-		from: { transform: 'translateX(0)' },
-		to: [{ transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0px)' }],
-		config: { duration: 50, mass: 1, tension: 500, friction: 10 },
-		reset: false,
-		onRest: () => {
-			state.shake && tokenAreaDispatch({ type: 'SET_SHAKE', payload: false })
-		},
-	})
+	const isTransactionError = error ? errorTypeMap[error] === ErrorCategory.input : false
+	const isError = error && isTransactionError
 
 	const onChangeText = (value: string) => {
+		swapDispatch({ type: 'SET_INPUT_ERROR', payload: null })
+
 		if (value && !isFloatInput(value)) tokenAreaDispatch({ type: 'SET_SHAKE', payload: true })
 		if (direction === 'from') handleAmountChange({ value, state, dispatch: swapDispatch, direction })
 	}
@@ -60,84 +51,79 @@ export const TokenArea: FC<TokenAreaProps> = ({
 		tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: false })
 	}
 
-	// useEffect(() => {
-	// 	if (direction === 'from') void getCurrentPriceToken(selection, tokenAreaDispatch)
-	// }, [selection.chain, selection.token])
-	//
-	// useEffect(() => {
-	// 	if (selection.amount) {
-	// 		handleAmountChange({ value: selection.amount, state, dispatch: swapDispatch, direction })
-	// 	}
-	// }, [state.currentTokenPriceUSD])
+	useEffect(() => {
+		if (direction === 'to') return
+		setLoading(true)
+
+		getBalance({ dispatch: swapDispatch, from: selection, address }).finally(() => {
+			setLoading(false)
+		})
+	}, [selection.token.address, selection.chain.id, selection.amount, address])
 
 	return (
 		<>
-			<animated.div
-				className={`${classNames.tokenContainer} ${styleClass} ${
-					stage === SwapCardStage.review ? classNames.transparentTokenArea : ''
-				}`}
+			<div
+				className={classNames.tokenContainer}
 				onClick={() => {
 					handleAreaClick(inputRef, stage)
 				}}
-				style={state.shake ? shakeProps : {}}
 			>
+				<p className={`body2 ${classNames.tokenRowHeader}`}>{t(`tokenArea.${direction}`)}</p>
+
 				<div className={classNames.tokenRow}>
-					<div className={classNames.tokenRowHeader}>
-						<p className={`body2`}>{t(`tokenArea.${direction}`)}</p>
-					</div>
-				</div>
-				<div className={classNames.tokenRow}>
-					{isLoading ? (
-						<AmountInputSkeleton />
-					) : (
-						<div>
-							<TextInput
-								ref={inputRef}
-								onFocus={() => {
-									tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: true })
-								}}
-								onBlur={() => {
-									tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: false })
-								}}
-								variant="inline"
-								placeholder={'0'}
-								value={Number(selection.amount) < 0 ? '0' : selection.amount}
-								onChangeText={value => {
-									onChangeText(value)
-								}}
-								isDisabled={direction === 'to'}
-								className={classNames.input}
-							/>
-							<AmountUsd
-								state={state}
-								balance={balance}
-								selection={selection}
-								direction={direction}
-								handleMaxButtonClick={handleMaxButtonClick}
-								isTestnet={isTestnet}
-							/>
-						</div>
-					)}
-					<Button
-						variant={'convex'}
+					<TextInput
+						wrapperClassName={classNames.input}
+						ref={inputRef}
+						onFocus={() => {
+							tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: true })
+						}}
+						onBlur={() => {
+							tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: false })
+						}}
+						variant="inline"
+						placeholder={'0'}
+						value={Number(selection.amount) < 0 ? '0' : selection.amount}
+						onChangeText={value => {
+							onChangeText(value)
+						}}
+						isDisabled={direction === 'to'}
+					/>
+
+					<button
 						className={classNames.selectTokenButton}
-						isDisabled={stage === SwapCardStage.review}
+						disabled={stage === SwapCardStage.review}
 						onClick={e => {
 							e.stopPropagation()
 							tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: true })
 						}}
 					>
-						<TokenIcon
-							tokenLogoSrc={selection.token.logoURI}
-							chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${isTestnet ? testnetToMainnetChainsMap[selection.chain.id] : selection.chain.id}.svg`}
-						/>
-						<div className={classNames.selectTokenButtonTitle}>
-							<h4>{selection.token.symbol}</h4>
-							<p className={'body2'}>{selection.chain.name}</p>
+						<div className="row ac">
+							<Badge
+								size="l"
+								tokenLogoSrc={selection.token.logoURI}
+								chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${selection.chain.id}.svg`}
+							/>
+							<SelectTokenShape symbol={selection.token.symbol} chainName={selection.chain.name} />
 						</div>
-					</Button>
+
+						<TrailArrowRightIcon />
+					</button>
 				</div>
-			</animated.div>
+
+				<AmountUsd
+					loading={loading}
+					state={state}
+					balance={balance}
+					selection={selection}
+					direction={direction}
+					handleMaxButtonClick={handleMaxButtonClick}
+				/>
+
+				{isError && direction === 'from' && (
+					<InputError color="var(--color-danger-700)" errorText={errorTextMap[error]} />
+				)}
+			</div>
+
 			<TokensModal
 				isOpen={state.showTokensModal}
 				direction={direction}
@@ -145,7 +131,6 @@ export const TokenArea: FC<TokenAreaProps> = ({
 					tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: false })
 				}}
 				onSelect={handleSelectToken}
-				isTestnet={isTestnet}
 			/>
 		</>
 	)

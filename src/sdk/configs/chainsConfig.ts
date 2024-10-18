@@ -1,4 +1,4 @@
-import { type Chain, fallback, type Transport } from 'viem'
+import { type Chain, createPublicClient, fallback, type Transport } from 'viem'
 import {
 	arbitrum,
 	arbitrumSepolia,
@@ -109,4 +109,11 @@ export const viemChains: Record<string, { chain: Chain; transport?: Transport }>
 	[optimismSepolia.id]: {
 		chain: optimismSepolia,
 	},
+}
+
+export const getPublicClient = (chainId: string) => {
+	return createPublicClient({
+		chain: viemChains[chainId].chain,
+		transport: viemChains[chainId].transport ?? http(),
+	})
 }

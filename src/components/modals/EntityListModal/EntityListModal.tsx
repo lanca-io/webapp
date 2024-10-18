@@ -1,7 +1,7 @@
 // todo: remove when api connected
 import { type FC, useEffect, useState } from 'react'
 import { IconSearch } from '@tabler/icons-react'
-import { TextInput } from '../../input/TextInput'
+import { TextInput } from '../../layout/input/TextInput'
 import { Table } from '../../layout/Table/Table'
 import { Modal } from '../Modal/Modal'
 import classNames from './EntityListModal.module.pcss'

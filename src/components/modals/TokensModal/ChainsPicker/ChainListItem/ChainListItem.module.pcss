@@ -1,16 +1,27 @@
 .container {
 	border-radius: var(--st-br-md);
+	max-width: 87px;
 	width: 100%;
-	flex-direction: row;
 	align-items: center;
-	gap: var(--sp-sm);
+	gap: var(--sp-xs);
 	cursor: pointer;
 	padding: var(--sp-sm);
 	transition: 0.2s ease-in-out;
-}
 
-.container:hover:not(.cropped) {
-	background-color: var(--color-grey-600);
+	&:focus {
+		box-shadow:
+			0 0 0 2px #f9fbfb,
+			0 0 0 4px var(--color-primary-500, #0ba5ec);
+		background-color: var(--color-grey-100);
+	}
+
+	&:hover {
+		background-color: var(--color-grey-200);
+	}
+
+	&:active {
+		background-color: var(--color-grey-300);
+	}
 }
 
 .chainButton {
@@ -19,11 +30,10 @@
 }
 
 .selected {
-	box-shadow: 0 4px 12px 0 rgba(45, 55, 75, 0.5);
-}
-
-.chainButton:hover {
-	background-color: var(--color-grey-600);
+	box-shadow:
+		0 0 0 2px #f9fbfb,
+		0 0 0 4px var(--color-primary-500, #0ba5ec);
+	background-color: var(--color-grey-100);
 }
 
 .cropped {

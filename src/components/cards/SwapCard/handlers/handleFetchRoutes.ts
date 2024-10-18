@@ -2,7 +2,8 @@ import { type Dispatch, type MutableRefObject } from 'react'
 import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { getRoutes } from '../getRoutes/getRoutes'
 import { getPoolAmount } from './getPoolAmount'
-import { ButtonType } from '../../../buttons/SwapButton/constants'
+import { ErrorType } from '../SwapButton/constants'
+import { getInputError } from '../SwapButton/getInputError'
 
 export const handleFetchRoutes = async (
 	swapState: SwapState,
@@ -11,31 +12,24 @@ export const handleFetchRoutes = async (
 ) => {
 	try {
 		if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+
 		const typingTimeoutId = setTimeout(async () => {
 			const { from, to, buttonState } = swapState
 
-			const isBridge = from.chain.id !== to.chain.id
-			const isWrongRangeAmount =
-				buttonState.type === ButtonType.TESTNET_AMOUNT_TOO_HIGH ||
-				buttonState.type === ButtonType.TESTNET_AMOUNT_TOO_LOW
+			const error = getInputError(swapState)
+			swapDispatch({ type: 'SET_INPUT_ERROR', payload: error })
+
+			if (error) return
+
+			const isWrongRangeAmount = buttonState.type === ErrorType.AMOUNT_TOO_LOW
 
 			swapDispatch({ type: 'SET_IS_SUFFICIENT_LIQUIDITY', payload: true })
 
 			if (isWrongRangeAmount) return
 
-			if (isBridge) {
-				const dstChainId = to.chain.id
-				const poolAmount = await getPoolAmount(dstChainId)
-				const fromAmountUsd = Number(from.amount) * from.token.priceUsd
-
-				if (fromAmountUsd > Number(poolAmount)) {
-					swapDispatch({ type: 'SET_IS_SUFFICIENT_LIQUIDITY', payload: false })
-					return
-				}
-			}
-
 			await getRoutes(swapState, swapDispatch)
 		}, 700)
+
 		typingTimeoutRef.current = typingTimeoutId
 	} catch (e) {
 		console.error(e)

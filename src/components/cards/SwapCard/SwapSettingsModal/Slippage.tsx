@@ -1,6 +1,6 @@
 import classNames from './SwapSettingsModal.module.pcss'
-import { TextInput } from '../../../input/TextInput'
-import { Button } from '../../../buttons/Button/Button'
+import { TextInput } from '../../../layout/input/TextInput'
+import { Button } from '../../../layout/buttons/Button/Button'
 import { isFloatInput } from '../../../../utils/validation'
 import { type Settings, type SwapAction } from '../swapReducer/types'
 import { type Dispatch } from 'react'

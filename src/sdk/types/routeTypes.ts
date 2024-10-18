@@ -29,10 +29,16 @@ export interface Chain {
 
 export interface SwapDirectionData {
 	token: Token
-	chain?: Chain
-	chainId: string
+	chain: Chain
 	amount: string
-	amount_usd?: string
+}
+
+export interface StepDirectionData {
+	token: Token
+	chain?: string
+	chainId?: string
+	chainData?: Chain
+	amount: string
 }
 
 export interface Fee {
@@ -43,8 +49,8 @@ export interface Fee {
 }
 
 export interface Step {
-	from: SwapDirectionData
-	to: SwapDirectionData
+	from: StepDirectionData
+	to: StepDirectionData
 	tool: {
 		name: string
 		logo_url: string

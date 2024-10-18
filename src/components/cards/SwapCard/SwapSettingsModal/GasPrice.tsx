@@ -2,7 +2,7 @@ import classNames from './SwapSettingsModal.module.pcss'
 import { type Dispatch } from 'react'
 import { type Settings, type SwapAction } from '../swapReducer/types'
 import { useTranslation } from 'react-i18next'
-import { Button } from '../../../buttons/Button/Button'
+import { Button } from '../../../layout/buttons/Button/Button'
 
 interface GapPriceProps {
 	settings: Settings

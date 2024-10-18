@@ -10,8 +10,8 @@ export const en = {
 				review: 'Review swap',
 			},
 			routeCard: {
-				swap: 'Swap to',
-				bridge: 'Bridge to',
+				swap: 'Swap',
+				bridge: 'Bridge',
 				via: 'via',
 			},
 			insurance: 'Insurance',
@@ -84,7 +84,7 @@ export const en = {
 			withdraw: 'Withdraw',
 			enterAmountToSwap: 'Enter amount to swap',
 			noRoutesFound: 'No routes found',
-			connectWalletToSwap: 'Connect wallet to swap',
+			connectWalletToSwap: 'Connect Wallet',
 			insufficientGas: 'Insufficient gas',
 			insufficientFees: 'Insufficient fees',
 			insufficientBalance: 'Insufficient balance',
@@ -112,7 +112,7 @@ export const en = {
 		},
 		tokenArea: {
 			from: 'You pay',
-			to: 'You get',
+			to: 'You receive',
 			enterAmount: 'Enter amount',
 		},
 		protocolModal: {
@@ -163,9 +163,9 @@ export const en = {
 			title: 'Change language',
 		},
 		tokensModal: {
-			selectChainToken: 'Select chain & token',
+			selectChainToken: 'Select a token or chain',
 			allChains: 'All chains',
-			searchByTokenNameOrAddress: 'Search by token name or address...',
+			searchByTokenNameOrAddress: 'Search by token name or address',
 			tokens: 'Tokens',
 			chains: 'Chains',
 			search: 'Search',
