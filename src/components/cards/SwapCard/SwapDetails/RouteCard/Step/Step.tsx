@@ -14,7 +14,7 @@ interface DirectionProps {
 }
 
 const Direction = ({ direction, title }: DirectionProps) => {
-	const { token, chainData } = direction
+	const { token, chainData, amount } = direction
 
 	const chainImg = `${config.CONCERO_ASSETS_URI}/icons/chains/filled/${direction.chainData?.id}.svg`
 
@@ -25,9 +25,7 @@ const Direction = ({ direction, title }: DirectionProps) => {
 				{token.logoURI && <Badge size="m" tokenLogoSrc={token.logoURI} />}
 
 				<div className="row gap-xs ac">
-					<h4 className={classNames.price}>
-						{(Number(token.priceUsd) * Number(direction.amount)).toFixed(3)}
-					</h4>
+					<h4 className={classNames.price}>{Number(amount).toFixed(3)}</h4>
 					<p className={`${classNames.symbol} body4`}>{token.symbol}</p>
 				</div>
 
@@ -53,14 +51,14 @@ export function StepCard({ step }: InnerStepCardProps) {
 		bridge: 'Concero',
 	}
 
-	const stepTypeTitle = stepTypeTitles[step.tool.type] ?? t('swapCard.routeCard.swap')
-	const stepToolTitle = stepToolTitles[step.tool.type]
+	const stepTypeTitle = stepTypeTitles[tool.type] ?? t('swapCard.routeCard.swap')
+	const stepToolTitle = stepToolTitles[tool.type]
 
 	return (
 		<div className={classNames.container}>
 			<div className="row jsb">
 				<p className={`${classNames.type} body2`}>{stepTypeTitle}</p>
-				{step.tool.type === 'bridge' && (
+				{tool.type === 'bridge' && (
 					<p className={'body2'}>
 						{t('swapCard.routeCard.via')} {stepToolTitle}
 					</p>

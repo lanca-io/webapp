@@ -3,16 +3,17 @@ import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIc
 import { InfoIcon } from '../../../../../assets/icons/InfoIcon'
 import { useState } from 'react'
 import { TooltipWrapper } from '../../../../wrappers/WithTooltip/TooltipWrapper'
+import { type RouteData } from '../../../../../sdk/types/routeTypes'
 
 interface FeePriceProps {
 	title: string
 	price: number
-	percent: number
+	percent?: number
 	infoTitle: string
 }
 
 interface Props {
-	amountUsd: number
+	route: RouteData
 }
 
 const FeePrice = ({ title, price, percent, infoTitle }: FeePriceProps) => {
@@ -26,28 +27,41 @@ const FeePrice = ({ title, price, percent, infoTitle }: FeePriceProps) => {
 				</TooltipWrapper>
 			</div>
 			<div className="row gap-xs ac">
-				<p className={`${classNames.priceFee} body2`}>{price.toFixed(6)}</p>
-				<p className="body2">{percent.toFixed(1)} %</p>
+				<p className={`${classNames.priceFee} body2`}>{price.toFixed(2)}</p>
+				{percent && <p className="body2">{percent.toFixed(1)} %</p>}
 			</div>
 		</div>
 	)
 }
 
-export const FeeDetailsDropdown = ({ amountUsd }: Props) => {
-	const [isOpen, _] = useState(false)
+export const FeeDetailsDropdown = ({ route }: Props) => {
+	const [isOpen, setIsOpen] = useState(false)
 
-	const feePrice = amountUsd
+	const amountUsdFrom = route.from.amount ? Number(route.from.amount) * Number(route.from.token.priceUsd) : 0
+	const amountUsdTo = route.to.amount ? Number(route.to.amount) * Number(route.to.token.priceUsd) : 0
+
+	const isBridge = route.to.chain.id !== route.from.chain.id
+
+	const totalFees = Math.abs(amountUsdFrom - amountUsdTo)
+
+	const conceroFee = amountUsdFrom * 0.001
+	const protocolFee = totalFees - conceroFee
 
 	return (
 		<div className={classNames.wrap}>
-			<div className={classNames.container}>
+			<div
+				className={classNames.container}
+				onClick={() => {
+					setIsOpen(!isOpen)
+				}}
+			>
 				<div className="row w-full jsb ac">
 					<p className="body2">Included Fee</p>
-					<p className={`${classNames.priceFee} body2`}>${feePrice.toFixed(2)}</p>
+					<p className={`${classNames.priceFee} body2`}>${totalFees.toFixed(2)}</p>
 				</div>
-				{/* <div className={classNames.iconWrap}> */}
-				{/* 	<TrailArrowDownIcon /> */}
-				{/* </div> */}
+				<div className={classNames.iconWrap}>
+					<TrailArrowDownIcon />
+				</div>
 			</div>
 			{isOpen && (
 				<div className="gap-sm">
@@ -55,27 +69,28 @@ export const FeeDetailsDropdown = ({ amountUsd }: Props) => {
 						infoTitle="For our cross-chain swaps, we leverage the Concero infrastructure, paying a fee of 0.1%
 								of the transaction volume for its use."
 						title="Concero fee"
-						price={feePrice}
+						price={conceroFee}
 						percent={0.1}
 					/>
 
-					<FeePrice
-						infoTitle="We utilize user-provided liquidity to facilitate cross-chain swaps, for which users are
-								rewarded with fees"
-						title="Concero LP fee"
-						price={feePrice}
-						percent={0.1}
-					/>
+					{/* <FeePrice */}
+					{/* 	infoTitle="We utilize user-provided liquidity to facilitate cross-chain swaps, for which users are */}
+					{/* 			rewarded with fees" */}
+					{/* 	title="Concero LP fee" */}
+					{/* 	price={feePrice} */}
+					{/* 	percent={0.1} */}
+					{/* /> */}
 
-					<FeePrice infoTitle="" title="Integrator fee" price={0} percent={0} />
+					{/* <FeePrice infoTitle="" title="Integrator fee" price={0} percent={0} /> */}
 
-					<FeePrice
-						infoTitle="We leverage additional protocols to ensure fast and secure transactions, incurring fees
+					{isBridge && (
+						<FeePrice
+							infoTitle="We leverage additional protocols to ensure fast and secure transactions, incurring fees
 								for their use."
-						title="Protocol services"
-						price={feePrice}
-						percent={0.1}
-					/>
+							title="Chainlink services"
+							price={protocolFee}
+						/>
+					)}
 				</div>
 			)}
 		</div>

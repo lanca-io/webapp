@@ -3,12 +3,11 @@ import { type RouteData } from '../../../../sdk/types/routeTypes'
 import { type Address, formatUnits } from 'viem'
 import { conceroAddressesMap } from '../../../../sdk/configs/conceroAddressesMap'
 import { fetchTokens } from '../../../../api/concero/fetchTokens'
-import { chainNativeTokensMap } from '../../../../constants/chainNativeTokens'
+import { config } from '../../../../constants/config'
 
 const getUsdPrice = async (chainId: string) => {
 	try {
-		const address = chainNativeTokensMap[Number(chainId)]
-		const response = await fetchTokens({ chainId, address, offset: 0, limit: 1 })
+		const response = await fetchTokens({ chainId, address: config.NULL_ADDRESS, offset: 0, limit: 1 })
 		return response[0].priceUsd
 	} catch (error) {
 		console.error('Error usd eth cost:', error)
