@@ -26,9 +26,9 @@ export const Button: FC<ButtonProps> = ({
 			onClick={!isDisabled ? onClick : undefined}
 			aria-label={variant + size}
 		>
-			{leftIcon}
+			{!isLoading && leftIcon}
 			<span className={classNames.innerButton}>{isLoading ? <Loader /> : children}</span>
-			{rightIcon}
+			{!isLoading && rightIcon}
 		</button>
 	)
 }
