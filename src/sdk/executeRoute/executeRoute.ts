@@ -23,7 +23,6 @@ const useSendStateHook = (executionConfigs: ExecutionConfigs) => {
 
 const executeRouteBase = async (walletClient: WalletClient, route: RouteData, executionConfigs: ExecutionConfigs) => {
 	if (!walletClient) throw new Error('walletClient is not passed!')
-
 	if (!route) throw new Error('Route is not passed!')
 
 	const data = route
@@ -31,6 +30,7 @@ const executeRouteBase = async (walletClient: WalletClient, route: RouteData, ex
 	const sendState = useSendStateHook(executionConfigs)
 
 	if (data.to.amount === '0' || data.to.amount === '') throw new Error('Amount is empty!')
+
 	if (data.from.token.address === data.to.token.address && data.from.chain?.id === data.to.chain?.id) {
 		throw new Error('Tokens are the same!')
 	}
@@ -104,6 +104,16 @@ export const executeRoute = async (
 
 	try {
 		const txHash = await executeRouteBase(walletClient, route, executionConfigs)
+
+		sendState({
+			stage: ExecuteRouteStage.successTransaction,
+			payload: {
+				title: 'Swap execute successfully!',
+				body: 'Check your balance',
+				status: 'success',
+				txLink: null,
+			},
+		})
 
 		trackEvent({
 			category: category.SwapCard,

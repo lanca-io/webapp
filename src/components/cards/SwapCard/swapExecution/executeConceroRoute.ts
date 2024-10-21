@@ -23,7 +23,7 @@ export async function executeConceroRoute(swapState: SwapState, swapDispatch: Di
 			executionStateUpdateHook: addExecutionListener,
 		}
 
-		void trackEvent({
+		trackEvent({
 			category: category.SwapCard,
 			action: action.BeginSwap,
 			label: 'begin_swap',
@@ -38,7 +38,7 @@ export async function executeConceroRoute(swapState: SwapState, swapDispatch: Di
 			payload: [{ title: 'Transaction failed', body: 'Internal error', status: 'error' }],
 		})
 
-		void trackEvent({
+		trackEvent({
 			category: category.SwapCard,
 			action: action.FrontendSwapFailed,
 			label: 'fe_swap_failed',

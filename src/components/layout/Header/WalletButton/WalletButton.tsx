@@ -15,7 +15,7 @@ export const WalletButton = () => {
 
 	function handleClick() {
 		void open()
-		void trackEvent({
+		trackEvent({
 			category: category.Wallet,
 			action: action.ClickConnectWallet,
 			label: 'Clicked Connect Wallet',

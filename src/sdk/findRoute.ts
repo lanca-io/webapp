@@ -20,7 +20,7 @@ export const findRoute = async (routeRequest: RouteRequest) => {
 		return routeRes.data
 	} catch (error) {
 		if (error.status === 404) {
-			void trackEvent({
+			trackEvent({
 				category: category.SwapCard,
 				action: action.FetchConceroRoutesNotFound,
 				label: 'action_fetch_concero_routes_not_found',
@@ -29,7 +29,7 @@ export const findRoute = async (routeRequest: RouteRequest) => {
 			throw error
 		}
 
-		void trackEvent({
+		trackEvent({
 			category: category.SwapCard,
 			action: action.FetchConceroRoutesError,
 			label: 'fetch_concero_route_error',

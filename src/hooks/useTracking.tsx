@@ -7,7 +7,7 @@ export const trackTransaction = () => {
 }
 
 // Standalone function for trackEvent
-export const trackEvent = async ({ category, action, label, data }: TrackEventProps) => {
+export const trackEvent = ({ category, action, label, data }: TrackEventProps) => {
 	try {
 		// console.log('trackEvent', action, label, category, data)
 		posthog.capture(action, {
