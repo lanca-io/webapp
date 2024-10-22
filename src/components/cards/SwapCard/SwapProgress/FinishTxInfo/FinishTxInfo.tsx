@@ -15,7 +15,7 @@ export const FinishTxInfo = ({ to, time }: Props) => {
 			<p className={classNames.title}>You received</p>
 
 			<div className="row gap-sm ac">
-				<h1 className={classNames.title}>{(Number(to.amount) * Number(to.token.priceUsd)).toFixed(3)}</h1>
+				<h1 className={classNames.title}>{Number(to.amount).toFixed(3)}</h1>
 				<div className="row gap-xs ac">
 					<Badge size="l" tokenLogoSrc={to.token.logoURI} chainLogoSrc={to.chain.logoURI} />
 					<SelectTokenShape symbol={to.token.symbol} chainName={to.chain.name} />

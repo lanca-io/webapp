@@ -37,7 +37,7 @@ export const statusSwapMap: Record<ExecuteRouteStage, swapStateFunction> = {
 	PENDING_APPROVE: swapDispatch => {
 		swapDispatch({
 			type: 'SET_SWAP_STEPS',
-			payload: [{ title: 'Pending approve', status: 'pending', type: StageType.approve }],
+			payload: [{ title: 'Pending approval', status: 'pending', type: StageType.approve }],
 		})
 	},
 	CONFIRMING_TRANSACTION: swapDispatch => {

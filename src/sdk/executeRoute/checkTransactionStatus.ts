@@ -13,7 +13,7 @@ import {
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import type { RouteData } from '../types/routeTypes'
 import { conceroAbi } from './conceroOrchestratorAbi'
-import { viemChains } from '../configs/chainsConfig'
+import { getPublicClient } from '../configs/chainsConfig'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
 import { trackEvent } from '../../hooks/useTracking'
 import { action, category } from '../../constants/tracking'
@@ -63,10 +63,7 @@ const trackBridgeTransaction = async (
 	conceroAddress: Address,
 	clientAddress: Address,
 ): Promise<void> => {
-	const dstPublicClient = createPublicClient({
-		chain: viemChains[routeData.to.chain.id].chain,
-		transport: viemChains[routeData.to.chain.id].transport ?? http(),
-	})
+	const dstPublicClient = getPublicClient(routeData.to.chain.id)
 	const latestDstChainBlock = await dstPublicClient.getBlockNumber()
 
 	// TODO get log to receipt
@@ -128,11 +125,14 @@ const trackBridgeTransaction = async (
 			const isCurrentCcipMessage =
 				dstCcipMessageId && dstCcipMessageId?.toLowerCase() === ccipMessageId.toLowerCase()
 
+			if (decodedLog.eventName === 'TXReleased' && !isCurrentCcipMessage) {
+				console.log('TxReleased with wrong ccip msg', { dstCcipMessageId, ccipMessageId, decodedLog })
+			}
+
 			if (!isCurrentCcipMessage) continue
 
 			if (decodedLog.eventName === 'TXReleased') {
 				stopClFunctionsCheckTimer()
-				console.log('txReleased', decodedLog)
 				return
 			}
 
@@ -155,9 +155,6 @@ const trackBridgeTransaction = async (
 		retryCount++
 		await sleep(2000)
 	}
-
-	stopClFunctionsCheckTimer()
-	throwError({ txHash: txReceipt.transactionHash })
 }
 
 export async function checkTransactionStatus(

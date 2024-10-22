@@ -41,13 +41,13 @@ export const viemChains: Record<string, { chain: Chain; transport?: Transport }>
 	},
 	[polygon.id]: {
 		chain: polygon,
-		transport: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://rpc.ankr.com/polygon')]),
+		transport: fallback([http('https://rpc.ankr.com/polygon'), http('https://polygon-bor-rpc.publicnode.com')]),
 	},
 	[avalanche.id]: {
 		chain: avalanche,
 		transport: fallback([
 			http('https://avalanche-c-chain-rpc.publicnode.com'),
-			http('https://rpc.ankr.com/polygon'),
+			http('https://rpc.ankr.com/avalanche'),
 		]),
 	},
 	[sepolia.id]: {
