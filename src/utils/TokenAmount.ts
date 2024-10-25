@@ -20,7 +20,7 @@ export class TokenAmount {
 	}
 
 	public get formatted(): string {
-		return formatUnits(BigInt(this.rawAmount), this.decimals)
+		return new BigNumber(this.rawAmount).dividedBy(BigNumber(10).pow(this.decimals)).toString()
 	}
 
 	public plus(amount: string | TokenAmount): TokenAmount {
