@@ -3,9 +3,10 @@ import { MainRouteInfoTags } from '../MainRouteInfoTags/MainRouteInfoTags'
 import { Button } from '../../../../layout/buttons/Button/Button'
 import { TrailArrowRightIcon } from '../../../../../assets/icons/TrailArrowRightIcon'
 import { type StandardRoute } from '../../../../../types/StandardRoute'
+import { type RouteData } from '../../../../../sdk/types/routeTypes'
 
 interface ReviewRouteCardProps {
-	selectedRoute: StandardRoute | null
+	selectedRoute: RouteData | null
 }
 
 export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {

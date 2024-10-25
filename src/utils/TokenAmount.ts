@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { addingTokenDecimals, roundDownDecimals } from './formatting'
+import { formatUnits } from 'viem'
 
 export class TokenAmount {
 	private rawAmount: string
@@ -19,7 +20,7 @@ export class TokenAmount {
 	}
 
 	public get formatted(): string {
-		return new BigNumber(this.rawAmount).dividedBy(BigNumber(10).pow(this.decimals)).toString()
+		return formatUnits(BigInt(this.rawAmount), this.decimals)
 	}
 
 	public plus(amount: string | TokenAmount): TokenAmount {

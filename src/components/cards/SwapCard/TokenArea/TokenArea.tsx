@@ -18,7 +18,6 @@ import { InputError } from '../SwapInput/InputError/InputError'
 import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
 import { getBalance } from '../../../../utils/getBalance'
 import { useAccount } from 'wagmi'
-import { set } from 'husky'
 
 export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispatch, balance = null, stage, error }) => {
 	const [loading, setLoading] = useState(false)

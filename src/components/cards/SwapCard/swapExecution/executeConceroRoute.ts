@@ -30,6 +30,7 @@ export async function executeConceroRoute(swapState: SwapState, swapDispatch: Di
 			data: { from: swapState.from, to: swapState.to },
 		})
 
+		console.log('USER BALANCE:', swapState.balance.amount.formatted)
 		await executeRoute(walletClient, route, executionConfig)
 	} catch (error) {
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.failed })

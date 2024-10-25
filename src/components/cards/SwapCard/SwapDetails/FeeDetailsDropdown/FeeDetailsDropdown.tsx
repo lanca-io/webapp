@@ -27,7 +27,7 @@ const FeePrice = ({ title, price, percent, infoTitle }: FeePriceProps) => {
 				</TooltipWrapper>
 			</div>
 			<div className="row gap-xs ac">
-				<p className={`${classNames.priceFee} body2`}>{price.toFixed(2)}</p>
+				<p className={`${classNames.priceFee} body2`}>{price.toFixed(4)}</p>
 				{percent && <p className="body2">{percent.toFixed(1)} %</p>}
 			</div>
 		</div>
@@ -42,10 +42,10 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 
 	const isBridge = route.to.chain.id !== route.from.chain.id
 
-	const totalFees = Math.abs(amountUsdFrom - amountUsdTo)
+	const totalFees = amountUsdFrom - amountUsdTo < 0 ? 0 : amountUsdFrom - amountUsdTo
 
 	const conceroFee = amountUsdFrom * 0.001
-	const protocolFee = totalFees - conceroFee
+	const protocolFee = totalFees === 0 ? 0 : totalFees - conceroFee
 
 	return (
 		<div className={classNames.wrap}>
