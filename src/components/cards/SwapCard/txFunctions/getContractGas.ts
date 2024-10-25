@@ -39,28 +39,28 @@ export const getContractGas = async (routeData: RouteData, address: Address) => 
 		args = [bridgeData, dstSwapData]
 	}
 
-	const allowance = await publicClient.readContract({
-		abi: erc20Abi,
-		functionName: 'allowance',
-		address: routeData.from.token.address,
-		args: [address, conceroContract],
-	})
+	// const allowance = await publicClient.readContract({
+	// 	abi: erc20Abi,
+	// 	functionName: 'allowance',
+	// 	address: routeData.from.token.address,
+	// 	args: [address, conceroContract],
+	// })
+	//
+	// const { request } = await publicClient.simulateContract({
+	// 	account: address,
+	// 	address: routeData.from.token.address,
+	// 	abi: erc20Abi,
+	// 	functionName: 'approve',
+	// 	args: [conceroContract, parseUnits(routeData.from.amount, routeData.from.token.decimals)],
+	// })
+	//
+	// const walletClient = createWalletClient({
+	// 	chain: viemChains[routeData.from.chain.id].chain,
+	// 	transport: custom(window.ethereum),
+	// })
 
-	const { request } = await publicClient.simulateContract({
-		account: address,
-		address: routeData.from.token.address,
-		abi: erc20Abi,
-		functionName: 'approve',
-		args: [conceroContract, parseUnits(routeData.from.amount, routeData.from.token.decimals)],
-	})
-
-	const walletClient = createWalletClient({
-		chain: viemChains[routeData.from.chain.id].chain,
-		transport: custom(window.ethereum),
-	})
-
-	await walletClient.switchChain({ id: Number(routeData.from.chain.id) })
-	const approveTxHash = await walletClient.writeContract(request)
+	// await walletClient.switchChain({ id: Number(routeData.from.chain.id) })
+	// const approveTxHash = await walletClient.writeContract(request)
 
 	const estimatedGas = await publicClient.estimateGas({
 		account: address,
