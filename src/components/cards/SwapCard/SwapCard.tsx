@@ -70,6 +70,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 					<SwapProgress swapState={swapState} handleGoBack={handleGoBack} />
 				)}
 			</Card>
+
 			{isSuccess && (
 				<Card className="row ac jsb">
 					<div className="row gap-sm ac">

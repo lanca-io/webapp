@@ -19,7 +19,7 @@ export function useSwapCardEffects({ swapState, swapDispatch, typingTimeoutRef }
 	const { address, connector } = useAccount()
 	const { selectionDispatch } = useContext(SelectionContext)
 
-	const { from, to, settings, selectedRoute, isTestnet } = swapState
+	const { from, to, settings, selectedRoute, balance } = swapState
 
 	useEffect(() => {
 		setHistoryCard(selectionDispatch, from, to)
@@ -34,17 +34,7 @@ export function useSwapCardEffects({ swapState, swapDispatch, typingTimeoutRef }
 		return () => {
 			clearRoutes(typingTimeoutRef, swapDispatch)
 		}
-	}, [
-		from.token,
-		from.amount,
-		from.chain,
-		to.token,
-		to.chain,
-		settings.slippage_percent,
-		settings.allowSwitchChain,
-		to.address,
-		isTestnet,
-	])
+	}, [from.token, from.amount, from.chain, to.token, to.chain, settings.allowSwitchChain, to.address, balance])
 
 	useEffect(() => {
 		if (!selectedRoute) return
