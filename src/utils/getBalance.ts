@@ -2,7 +2,7 @@ import { type Dispatch } from 'react'
 import { type SwapAction } from '../components/cards/SwapCard/swapReducer/types'
 import { TokenAmount } from './TokenAmount'
 import { configChainsViem } from '../web3/wagmi'
-import { createPublicClient, formatUnits, getContract, http } from 'viem'
+import { createPublicClient, getContract, http } from 'viem'
 import ERC20 from '../abi/ERC20.json'
 import { config } from '../constants/config'
 

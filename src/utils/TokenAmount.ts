@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
 import { addingTokenDecimals, roundDownDecimals } from './formatting'
-import { formatUnits } from 'viem'
 
 export class TokenAmount {
 	private rawAmount: string

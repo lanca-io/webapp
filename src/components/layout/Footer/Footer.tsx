@@ -79,7 +79,7 @@ export const Footer = () => {
 						<div className={classNames.linkGroup}>
 							<p className="body2">Socials:</p>
 							<div className="row gap-sm">
-								<SocialIconWrap href="https://x.com/concero_io" variant="iconDark">
+								<SocialIconWrap href="https://x.com/lanca_io" variant="iconDark">
 									<TwitterIcon />
 								</SocialIconWrap>
 								<SocialIconWrap
@@ -87,9 +87,6 @@ export const Footer = () => {
 									variant="iconBlue"
 								>
 									<DiscordIcon />
-								</SocialIconWrap>
-								<SocialIconWrap href="https://medium.com/@concero" variant="iconDark">
-									<MediumIcon />
 								</SocialIconWrap>
 							</div>
 						</div>
