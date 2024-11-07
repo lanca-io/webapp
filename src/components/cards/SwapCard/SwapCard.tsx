@@ -33,6 +33,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 		}
 	}
 
+	// @review wrong name. it doesn't return user points
 	const getUserPoints = async () => {
 		if (!isSuccess || !selectedRoute) return
 
@@ -48,6 +49,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 	}
 
 	useEffect(() => {
+		// @review: unhandled promise rejection. use .catch()
 		void getUserPoints()
 	}, [swapState.stage])
 

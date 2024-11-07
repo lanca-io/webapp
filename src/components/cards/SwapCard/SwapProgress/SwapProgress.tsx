@@ -1,7 +1,7 @@
-import { type Dispatch, type FC, useEffect, useState } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import classNames from './SwapProgress.module.pcss'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
-import { StageType, type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
+import { StageType, SwapCardStage, type SwapState } from '../swapReducer/types'
 import { Button } from '../../../layout/buttons/Button/Button'
 import { PendingStateSvg } from '../../../../assets/images/transactionStates/PendingStateSvg'
 import { Separator } from '../../../layout/Separator/Separator'
@@ -32,6 +32,7 @@ const chainsTwitterMap: Record<string, string> = {
 	[avalanche.id]: 'avax',
 }
 
+// @review: this component should be refactored into smaller components
 export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack }) => {
 	const [time, setTime] = useState(0)
 	const { to, from, steps, stage } = swapState
@@ -58,6 +59,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 		return () => {
 			clearInterval(timerId)
 		}
+		// @review: dont use object as dependency for useEffect
 	}, [swapState])
 
 	const txType = isBridge ? 'Bridge' : 'Swap'
@@ -146,10 +148,10 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 		[SwapCardStage.warning]: 'Uh Oh...',
 	}
 
+	// @review: it is in general impossible to read and understand this batch of conditions. we need to do something with it
 	const progressDetails = (
 		<>
 			{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
-
 			{!isWarning && (
 				<div className={classNames.progressContainer}>
 					<TransactionStep status={steps[0]?.status} title="Approvals" />
@@ -174,9 +176,8 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 					)}
 				</div>
 			)}
-
+			{/* @review: do we really need this condition? it is the same as above */}
 			{!isWarning && <Separator />}
-
 			{isAwait && (
 				<div className={classNames.infoMessage}>
 					<div className={classNames.wrapIcon}>
@@ -186,7 +187,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 					<p className={classNames.messageSubtitle}>Please open your wallet and sign the transaction</p>
 				</div>
 			)}
-
 			{isWarning && (
 				<div className="gap-lg">
 					<div className="gap-sm">
@@ -205,7 +205,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 					)}
 				</div>
 			)}
-
+			{/* @ review: use else if instead of multiple if conditions */}
 			{currentStep && !isAwait && !isWarning && (
 				<Alert
 					title={`${isTransactionStage ? `${txType} ` : ''} ${currentStep.title}`}
