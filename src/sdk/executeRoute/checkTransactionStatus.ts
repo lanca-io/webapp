@@ -78,7 +78,7 @@ const trackBridgeTransaction = async (
 	const { ccipMessageId } = logCCIPSent.args
 
 	const stopClFunctionsCheckTimer = timer(time => {
-		if (time === 180) {
+		if (time === 120) {
 			sendState({ stage: ExecuteRouteStage.longDurationConfirming, payload: { ccipId: ccipMessageId } })
 
 			trackEvent({
