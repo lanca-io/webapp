@@ -69,7 +69,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 
 			{swapState.selectedRoute && (
 				<div className={classNames.feeDetails}>
-					<FeeDetailsDropdown route={swapState.selectedRoute} />
+					<FeeDetailsDropdown swapDispatch={swapDispatch} route={swapState.selectedRoute} />
 				</div>
 			)}
 		</div>

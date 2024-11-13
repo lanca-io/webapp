@@ -1,23 +1,48 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { withErrorBoundary } from '../../wrappers/WithErrorBoundary'
 import { SwapCard } from '../../cards/SwapCard/SwapCard'
 import classNames from './SwapScreen.module.pcss'
 import { useSwapReducer } from '../../cards/SwapCard/swapReducer/swapReducer'
 import { ErrorCategory, errorTypeMap } from '../../cards/SwapCard/SwapButton/constants'
+import { getPriceImpact } from '../../cards/SwapCard/txFunctions/getPriceImpact'
+import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
 
 const Swap = memo(withErrorBoundary(SwapCard))
 
 export const SwapScreen = () => {
 	const [swapState, swapDispatch] = useSwapReducer()
+	const [backgroundTheme, setBackgroundTheme] = useState<SwapCardStage | string>(swapState.stage)
 
-	const isInputStageError = swapState.inputError
-		? errorTypeMap[swapState.inputError] === ErrorCategory.transaction
-		: false
+	useEffect(() => {
+		if (!swapState.selectedRoute) {
+			setBackgroundTheme(swapState.stage)
+			return
+		}
+
+		const { priceImpact, totalFees } = getPriceImpact({
+			from: swapState.selectedRoute.from,
+			to: swapState.selectedRoute.to,
+		})
+		const warningPriceImpact = priceImpact > 10 && totalFees > 5
+		const dangerPriceImpact = priceImpact > 20 && totalFees > 5
+
+		if (warningPriceImpact) {
+			setBackgroundTheme(dangerPriceImpact ? 'failed' : 'warning')
+		} else {
+			setBackgroundTheme(swapState.stage)
+		}
+	}, [swapState.selectedRoute])
+
+	useEffect(() => {
+		if (swapState.inputError && errorTypeMap[swapState.inputError] === ErrorCategory.transaction) {
+			setBackgroundTheme('failed')
+		} else {
+			setBackgroundTheme(swapState.stage)
+		}
+	}, [swapState.inputError])
 
 	return (
-		<div
-			className={`${classNames.container} ${isInputStageError ? classNames.failed : classNames[swapState.stage]}`}
-		>
+		<div className={`${classNames.container} ${classNames[backgroundTheme]}`}>
 			<Swap swapDispatch={swapDispatch} swapState={swapState} />
 		</div>
 	)

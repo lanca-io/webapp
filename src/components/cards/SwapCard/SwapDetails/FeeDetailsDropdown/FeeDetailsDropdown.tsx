@@ -1,11 +1,12 @@
 import classNames from './FeeDetailsDropdown.module.pcss'
 import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIcon'
 import { InfoIcon } from '../../../../../assets/icons/InfoIcon'
-import { useState } from 'react'
+import { type Dispatch, useState } from 'react'
 import { TooltipWrapper } from '../../../../wrappers/WithTooltip/TooltipWrapper'
 import { type RouteData } from '../../../../../sdk/types/routeTypes'
 import { Alert } from '../../../../layout/Alert/Alert'
-import { numberToFormatString } from '../../../../../utils/formatting'
+import { type SwapAction } from '../../swapReducer/types'
+import { getPriceImpact } from '../../txFunctions/getPriceImpact'
 
 interface FeePriceProps {
 	title: string
@@ -16,6 +17,7 @@ interface FeePriceProps {
 
 interface Props {
 	route: RouteData
+	swapDispatch: Dispatch<SwapAction>
 }
 
 const FeePrice = ({ title, price, percent, infoTitle }: FeePriceProps) => {
@@ -39,11 +41,7 @@ const FeePrice = ({ title, price, percent, infoTitle }: FeePriceProps) => {
 export const FeeDetailsDropdown = ({ route }: Props) => {
 	const [isOpen, setIsOpen] = useState(false)
 
-	const amountUsdFrom = route.from.amount ? Number(route.from.amount) * Number(route.from.token.priceUsd) : 0
-	const amountUsdTo = route.to.amount ? Number(route.to.amount) * Number(route.to.token.priceUsd) : 0
-
-	const totalFees = amountUsdFrom - amountUsdTo < 0 ? 0 : amountUsdFrom - amountUsdTo
-	const priceImpact = (totalFees / amountUsdFrom) * 100
+	const { priceImpact, totalFees } = getPriceImpact({ from: route.from, to: route.to })
 	const warningPriceImpact = priceImpact > 10 && totalFees > 5
 	const dangerPriceImpact = priceImpact > 20
 
