@@ -24,8 +24,8 @@ export const Alert = ({ icon, title, subtitle, variant = 'info' }: Props) => {
 		<div className={`${classNames.container} ${classNames[variant]}`}>
 			<div className={classNames.wrapIcon}>{icon || <InfoIcon color={svgColorMap[variant]} />}</div>
 			<div>
-				<h4>{title}</h4>
-				{subtitle && <p className="body2">{subtitle}</p>}
+				<h3>{title}</h3>
+				{subtitle && <p className="body4">{subtitle}</p>}
 			</div>
 		</div>
 	)

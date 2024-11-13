@@ -4,7 +4,6 @@ import classNames from './Footer.module.pcss'
 import { type ReactNode } from 'react'
 import { TwitterIcon } from '../../../assets/icons/Socials/TwitterIcon'
 import { DiscordIcon } from '../../../assets/icons/Socials/DiscordIcon'
-import { MediumIcon } from '../../../assets/icons/Socials/MediumIcon'
 import { ArrowRight } from '../../../assets/icons/ArrowRight'
 
 interface SocialIconWrapProps {

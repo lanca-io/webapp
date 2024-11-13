@@ -4,6 +4,8 @@ import { InfoIcon } from '../../../../../assets/icons/InfoIcon'
 import { useState } from 'react'
 import { TooltipWrapper } from '../../../../wrappers/WithTooltip/TooltipWrapper'
 import { type RouteData } from '../../../../../sdk/types/routeTypes'
+import { Alert } from '../../../../layout/Alert/Alert'
+import { numberToFormatString } from '../../../../../utils/formatting'
 
 interface FeePriceProps {
 	title: string
@@ -40,15 +42,24 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 	const amountUsdFrom = route.from.amount ? Number(route.from.amount) * Number(route.from.token.priceUsd) : 0
 	const amountUsdTo = route.to.amount ? Number(route.to.amount) * Number(route.to.token.priceUsd) : 0
 
-	const isBridge = route.to.chain.id !== route.from.chain.id
-
 	const totalFees = amountUsdFrom - amountUsdTo < 0 ? 0 : amountUsdFrom - amountUsdTo
+	const priceImpact = (totalFees / amountUsdFrom) * 100
+	const warningPriceImpact = priceImpact > 10 && totalFees > 5
+	const dangerPriceImpact = priceImpact > 20
 
-	const conceroFee = amountUsdFrom * 0.001
-	const protocolFee = totalFees === 0 ? 0 : totalFees - conceroFee
+	// const isBridge = route.to.chain.id !== route.from.chain.id
+	// const conceroFee = amountUsdFrom * 0.001
+	// const protocolFee = totalFees === 0 ? 0 : totalFees - conceroFee
 
 	return (
 		<div className={classNames.wrap}>
+			{warningPriceImpact && (
+				<Alert
+					subtitle={dangerPriceImpact ? 'Transaction not advised.' : ''}
+					title={`High price impact (${priceImpact.toFixed(2)}%)`}
+					variant={dangerPriceImpact ? 'error' : 'warning'}
+				/>
+			)}
 			<div
 				className={classNames.container}
 				onClick={() => {
@@ -56,7 +67,7 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 				}}
 			>
 				<div className="row w-full jsb ac">
-					<p className="body2">Included Fee</p>
+					<p className="body2">Price impact</p>
 					<p className={`${classNames.priceFee} body2`}>${totalFees.toFixed(2)}</p>
 				</div>
 				<div className={classNames.iconWrap}>
@@ -64,33 +75,10 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 				</div>
 			</div>
 			{isOpen && (
-				<div className="gap-sm">
-					<FeePrice
-						infoTitle="For our cross-chain swaps, we leverage the Concero infrastructure, paying a fee of 0.1%
-								of the transaction volume for its use."
-						title="Concero fee"
-						price={conceroFee}
-						percent={0.1}
-					/>
-
-					{/* <FeePrice */}
-					{/* 	infoTitle="We utilize user-provided liquidity to facilitate cross-chain swaps, for which users are */}
-					{/* 			rewarded with fees" */}
-					{/* 	title="Concero LP fee" */}
-					{/* 	price={feePrice} */}
-					{/* 	percent={0.1} */}
-					{/* /> */}
-
-					{/* <FeePrice infoTitle="" title="Integrator fee" price={0} percent={0} /> */}
-
-					{isBridge && (
-						<FeePrice
-							infoTitle="We leverage additional protocols to ensure fast and secure transactions, incurring fees
-								for their use."
-							title="Chainlink services"
-							price={protocolFee}
-						/>
-					)}
+				<div className={classNames.description}>
+					<p>
+						<span>Its include</span> Slippage, Concero services, <br /> Chainlink fee.
+					</p>
 				</div>
 			)}
 		</div>
