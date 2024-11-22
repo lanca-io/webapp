@@ -75,7 +75,7 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 			{isOpen && (
 				<div className={classNames.description}>
 					<p>
-						<span>Its include</span> Slippage, Concero services, <br /> Chainlink fee.
+						<span>It includes</span> Slippage, Concero fee, <br /> Chainlink services.
 					</p>
 				</div>
 			)}
