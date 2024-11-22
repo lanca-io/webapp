@@ -78,7 +78,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 							<TrophyIcon />
 						</div>
 						<p className={classNames.pointsTitle}>
-							You get <b>{userPoints.toFixed(2)} CERs</b>
+							You got <b>{userPoints.toFixed(2)} CERs</b>
 						</p>
 					</div>
 					<a href="https://app.concero.io/rewards" target="_blank" rel="noreferrer">

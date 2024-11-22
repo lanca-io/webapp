@@ -33,7 +33,7 @@ export function MainRouteInfoTags({ route }: MainRouteInfoTagsProps) {
 			<div className={classNames.tagContainer}>
 				<div className="gap-sm row">
 					<GasIcon />
-					<p className="body2">Gas to pay:</p>
+					<p className="body2">Gas to pay</p>
 				</div>
 				{loading ? (
 					<Loader variant="neutral" />
@@ -45,9 +45,9 @@ export function MainRouteInfoTags({ route }: MainRouteInfoTagsProps) {
 			<div className={classNames.tagContainer}>
 				<div className="gap-sm row">
 					<TimeIcon />
-					<p className="body2">ETA:</p>
+					<p className="body2">ETA</p>
 				</div>
-				<p className={`body2 ${classNames.valueBlue}`}>30 sec</p>
+				<p className={`body2 ${classNames.valueBlue}`}>30 sec.</p>
 			</div>
 		</div>
 	)
