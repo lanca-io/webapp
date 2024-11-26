@@ -70,7 +70,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 				)}
 			</Card>
 
-			{true && (
+			{isSuccess && (
 				<Card className={`row ac jsb ${classNames.cardPadding}`}>
 					<div className="row gap-sm ac">
 						<div className={classNames.iconWrap}>
