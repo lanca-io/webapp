@@ -9,7 +9,6 @@ import { TrophyIcon } from '../../../assets/icons/TrophyIcon'
 import { Button } from '../../layout/buttons/Button/Button'
 import { fetchUserByAddress } from '../../../api/concero/user/fetchUserByAddress'
 import type { Address } from 'viem'
-import { ArrowRight } from '../../../assets/icons/ArrowRight'
 
 export interface Props {
 	swapState: SwapState
@@ -71,8 +70,8 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 				)}
 			</Card>
 
-			{isSuccess && (
-				<Card className="row ac jsb">
+			{true && (
+				<Card className={`row ac jsb ${classNames.cardPadding}`}>
 					<div className="row gap-sm ac">
 						<div className={classNames.iconWrap}>
 							<TrophyIcon />
@@ -82,12 +81,8 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 						</p>
 					</div>
 					<a href="https://app.concero.io/rewards" target="_blank" rel="noreferrer">
-						<Button
-							className={classNames.rewardsButton}
-							variant="tetraryColor"
-							rightIcon={<ArrowRight color="#6938EF" />}
-						>
-							Go to rewards
+						<Button className={classNames.rewardsButton} variant="tetraryColor">
+							Claim
 						</Button>
 					</a>
 				</Card>
