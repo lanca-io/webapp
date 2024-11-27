@@ -10,7 +10,7 @@ interface ModalHeaderProps {
 export function ModalHeader({ title, onClick }: ModalHeaderProps) {
 	return (
 		<div className={classNames.header}>
-			<IconButton onClick={onClick} variant="secondary" size="sm">
+			<IconButton onClick={onClick} variant="secondary" size="md">
 				<TrailArrowLeftIcon />
 			</IconButton>
 			<h4 className={classNames.titleContainer}>{title}</h4>

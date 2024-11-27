@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { InfoIcon } from '../../../assets/icons/InfoIcon'
+import { AlertIcon } from '../../../assets/icons/AlertIcon'
 import classNames from './Alert.module.pcss'
 
 type Variant = 'neutral' | 'info' | 'success' | 'error' | 'warning'
@@ -22,8 +22,8 @@ const svgColorMap: Record<Variant, string> = {
 export const Alert = ({ icon, title, subtitle, variant = 'info' }: Props) => {
 	return (
 		<div className={`${classNames.container} ${classNames[variant]}`}>
-			<div className={classNames.wrapIcon}>{icon || <InfoIcon color={svgColorMap[variant]} />}</div>
-			<div>
+			<div className={classNames.wrapIcon}>{icon || <AlertIcon color={svgColorMap[variant]} />}</div>
+			<div className={`${classNames.content}`}>
 				<h3>{title}</h3>
 				{subtitle && <p className="body4">{subtitle}</p>}
 			</div>
