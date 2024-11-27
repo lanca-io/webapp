@@ -16,7 +16,7 @@ export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {
 		<div className={classNames.container}>
 			<div className="gap-md">
 				<MainRouteInfoTags route={selectedRoute} />
-				<Button className="w-full jsb" variant="secondary" size="sm" rightIcon={<TrailArrowRightIcon />}>
+				<Button className="w-full jsb" variant="secondary" size="md" rightIcon={<TrailArrowRightIcon />}>
 					Review
 				</Button>
 			</div>
