@@ -6,6 +6,8 @@ import { useSwapReducer } from '../../cards/SwapCard/swapReducer/swapReducer'
 import { ErrorCategory, errorTypeMap } from '../../cards/SwapCard/SwapButton/constants'
 import { getPriceImpact } from '../../cards/SwapCard/txFunctions/getPriceImpact'
 import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
+import { config } from '../../../constants/config'
+import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
 
 const Swap = memo(withErrorBoundary(SwapCard))
 
@@ -40,6 +42,10 @@ export const SwapScreen = () => {
 			setBackgroundTheme(swapState.stage)
 		}
 	}, [swapState.inputError])
+
+	if (config.APP_IS_NOT_AVAILABLE) {
+		return <TechWorksScreen />
+	}
 
 	return (
 		<div className={`${classNames.container} ${classNames[backgroundTheme]}`}>
