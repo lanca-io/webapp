@@ -53,7 +53,6 @@ const trackBridgeTransaction = async (
 		fromBlock: txReceipt.blockNumber,
 		toBlock: 'latest',
 	})
-	console.log(logCCIPSent)
 
 	if (!logCCIPSent?.args?.conceroMessageId) {
 		await trackBridgeTransaction(txReceipt, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
