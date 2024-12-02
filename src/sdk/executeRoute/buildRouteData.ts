@@ -55,8 +55,6 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 
 			const isDstSwapData = !!bridgeData
 
-			// if bridgeData does not exist, then it is src step
-			// or it exist, then it is dst step
 			if (isDstSwapData) {
 				dstSwapData.push(swapStep)
 			} else {
@@ -73,8 +71,6 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 	if (dstSwapData) {
 		const encodedSwapStep = encodeAbiParameters(swapDataAbiParams, [dstSwapData])
 		const compresedSwapStep = solady.LibZip.cdCompress(encodedSwapStep)
-
-		console.log(compresedSwapStep)
 
 		return { srcSwapData, bridgeData, dstSwapData: compresedSwapStep, integratorData }
 	}

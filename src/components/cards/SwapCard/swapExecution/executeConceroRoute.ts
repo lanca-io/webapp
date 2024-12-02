@@ -42,9 +42,7 @@ export async function executeConceroRoute({ swapState, swapDispatch, route, wall
 		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.failed })
 		swapDispatch({
 			type: 'SET_SWAP_STEPS',
-			payload: [
-				{ title: 'Transaction failed', body: 'Internal error', status: 'error', type: StageType.warning },
-			],
+			payload: [{ title: 'Transaction failed', body: 'Internal error', status: 'error', type: StageType.error }],
 		})
 
 		trackEvent({
