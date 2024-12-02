@@ -1,6 +1,6 @@
 import type { RouteData } from '../types/routeTypes'
 import { type Address, encodeAbiParameters, parseUnits, zeroAddress } from 'viem'
-import type { BridgeData, InputSwapData } from '../types/contractInputTypes'
+import { type BridgeData, type InputRouteData, type InputSwapData, type Integration } from '../types/contractInputTypes'
 import { createBigIntAmount } from '../utils/formatting'
 import { chainSelectorsMap } from '../configs/chainSelectorsMap'
 import { buildDexData } from './buildDexData'
@@ -14,7 +14,7 @@ const dexTypesMap: Record<string, number> = {
 	unwrapWNative: 10,
 }
 
-export const buildRouteData = (routeData: RouteData, clientAddress: Address) => {
+export const buildRouteData = (routeData: RouteData, clientAddress: Address): InputRouteData => {
 	const { steps } = routeData
 
 	let bridgeData: BridgeData | null = null
@@ -63,7 +63,7 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 		}
 	}
 
-	const integratorData = {
+	const integration: Integration = {
 		integrator: zeroAddress,
 		feeBps: 0,
 	}
@@ -72,8 +72,8 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 		const encodedSwapStep = encodeAbiParameters(swapDataAbiParams, [dstSwapData])
 		const compresedSwapStep = solady.LibZip.cdCompress(encodedSwapStep)
 
-		return { srcSwapData, bridgeData, dstSwapData: compresedSwapStep, integratorData }
+		return { srcSwapData, bridgeData, dstSwapData: compresedSwapStep, integration }
 	}
 
-	return { srcSwapData, bridgeData, dstSwapData, integratorData }
+	return { srcSwapData, bridgeData, dstSwapData, integration }
 }
