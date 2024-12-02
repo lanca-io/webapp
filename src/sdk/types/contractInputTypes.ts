@@ -26,7 +26,7 @@ export interface InputRouteData {
 	bridgeData: BridgeData | null
 	srcSwapData: InputSwapData[]
 	dstSwapData: InputSwapData[]
-	integraton: Integration
+	integration: Integration
 }
 
 export type SwapArgs = Array<InputSwapData[] | BridgeData | bigint | Address>

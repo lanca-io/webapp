@@ -12,7 +12,7 @@ export const sendTransaction = async (
 	clientAddress: Address,
 	sendState: (state: ExecutionState) => void,
 ) => {
-	const { srcSwapData, bridgeData, dstSwapData, integraton } = txArgs
+	const { srcSwapData, bridgeData, dstSwapData, integration } = txArgs
 
 	let txName: TxName = 'swap'
 	let args: SwapArgs = [srcSwapData, clientAddress]
@@ -26,7 +26,9 @@ export const sendTransaction = async (
 		args = [bridgeData, dstSwapData]
 	}
 
-	args.push(integraton)
+	args.push(integration)
+	console.log({ integration })
+	console.log({ args })
 
 	const gasPrice = await publicClient.getGasPrice()
 	const isFromNativeToken = srcSwapData.length > 0 && srcSwapData[0].fromToken === config.NULL_ADDRESS
