@@ -9,10 +9,9 @@ import { action, category } from '../../constants/tracking'
 import { decodeEventLogWrapper } from '../utils/decodeEventLogWrapper'
 import { throwError } from '../utils/throwError'
 import { sleep } from '../utils/sleep'
-import { ConceroAbiV1_5 } from '../../abi/ConceroAbiV1.5'
 
 const ConceroBridgeEventsAbi = parseAbi([
-	'event TXReleased(bytes32 indexed conceroMessageId, address indexed recipient, address indexed recipient, address token, uint256 amount)',
+	'event TXReleased(bytes32 indexed conceroMessageId, address indexed recipient, address token, uint256 amount)',
 	'event FunctionsRequestError(bytes32 indexed ccipMessageId, bytes32 requestId, uint8 requestType)',
 ])
 
