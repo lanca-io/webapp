@@ -25,7 +25,7 @@ export type TxName = 'swap' | 'bridge' | 'swapAndBridge'
 export interface InputRouteData {
 	bridgeData: BridgeData | null
 	srcSwapData: InputSwapData[]
-	dstSwapData: InputSwapData[]
+	dstSwapData: string
 	integration: Integration
 }
 
