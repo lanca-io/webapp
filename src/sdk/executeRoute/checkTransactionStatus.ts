@@ -1,8 +1,7 @@
 import type { PublicClient } from 'viem/clients/createPublicClient'
-import { type Address, decodeEventLog, type Log, parseAbi, parseAbiItem, type TransactionReceipt } from 'viem'
+import { type Address, parseAbi, parseAbiItem, type TransactionReceipt } from 'viem'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
 import type { RouteData } from '../types/routeTypes'
-import { conceroAbi } from './conceroOrchestratorAbi'
 import { getPublicClient } from '../configs/chainsConfig'
 import { conceroAddressesMap } from '../configs/conceroAddressesMap'
 import { trackEvent } from '../../hooks/useTracking'
@@ -12,7 +11,7 @@ import { throwError } from '../utils/throwError'
 import { sleep } from '../utils/sleep'
 
 const ConceroBridgeEventsAbi = parseAbi([
-	'event TXReleased(bytes32 indexed ccipMessageId, address indexed sender, address indexed recipient, address token, uint256 amount)',
+	'event TXReleased(bytes32 indexed conceroMessageId, address indexed recipient, address token, uint256 amount)',
 	'event FunctionsRequestError(bytes32 indexed ccipMessageId, bytes32 requestId, uint8 requestType)',
 ])
 
@@ -26,22 +25,6 @@ const timer = (func: (num: number) => void) => {
 
 	return () => {
 		clearInterval(timerId)
-	}
-}
-
-const trackSwapTransaction = (logs: Log[]) => {
-	for (const log of logs) {
-		try {
-			const decodedLog = decodeEventLog({
-				abi: conceroAbi,
-				data: log.data,
-				topics: log.topics,
-			})
-
-			if (decodedLog.eventName === 'Orchestrator_SwapSuccess') {
-				return
-			}
-		} catch (err) {}
 	}
 }
 
@@ -60,7 +43,7 @@ const trackBridgeTransaction = async (
 	const [logCCIPSent] = await srcPublicClient.getLogs({
 		address: conceroAddress,
 		event: parseAbiItem(
-			'event CCIPSent(bytes32 indexed ccipMessageId, address sender, address recipient, uint8 token, uint256 amount, uint64 dstChainSelector)',
+			'event ConceroBridgeSent(bytes32 indexed conceroMessageId, uint256 amount, uint64 dstChainSelector, address receiver, bytes compressedDstSwapData)',
 		),
 		args: {
 			from: clientAddress,
@@ -70,16 +53,16 @@ const trackBridgeTransaction = async (
 		toBlock: 'latest',
 	})
 
-	if (!logCCIPSent?.args?.ccipMessageId) {
+	if (!logCCIPSent?.args?.conceroMessageId) {
 		await trackBridgeTransaction(txReceipt, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
 		return
 	}
 
-	const { ccipMessageId } = logCCIPSent.args
+	const { conceroMessageId } = logCCIPSent.args
 
 	const stopClFunctionsCheckTimer = timer(time => {
 		if (time === 120) {
-			sendState({ stage: ExecuteRouteStage.longDurationConfirming, payload: { ccipId: ccipMessageId } })
+			sendState({ stage: ExecuteRouteStage.longDurationConfirming, payload: { ccipId: conceroMessageId } })
 
 			trackEvent({
 				category: category.SwapCard,
@@ -111,13 +94,9 @@ const trackBridgeTransaction = async (
 
 			if (!decodedLog) continue
 
-			const dstCcipMessageId = decodedLog.args?.ccipMessageId as string
+			const dstCcipMessageId = decodedLog.args?.conceroMessageId
 			const isCurrentCcipMessage =
-				dstCcipMessageId && dstCcipMessageId?.toLowerCase() === ccipMessageId.toLowerCase()
-
-			if (decodedLog.eventName === 'TXReleased' && !isCurrentCcipMessage) {
-				console.log('TxReleased with wrong ccip msg', { dstCcipMessageId, ccipMessageId, decodedLog })
-			}
+				dstCcipMessageId && dstCcipMessageId?.toLowerCase() === conceroMessageId.toLowerCase()
 
 			if (!isCurrentCcipMessage) continue
 
@@ -164,6 +143,8 @@ export async function checkTransactionStatus(
 		confirmations: 3,
 	})
 
+	const swapType = routeData.from.chain?.id === routeData.to.chain?.id ? 'swap' : 'bridge'
+
 	if (txReceipt.status === 'reverted') {
 		sendState({
 			stage: ExecuteRouteStage.failedTransaction,
@@ -176,13 +157,11 @@ export async function checkTransactionStatus(
 		})
 
 		throwError(txHash)
+	} else if (swapType === 'swap' && txReceipt.status === 'success') {
+		return
 	}
 
-	const swapType = routeData.from.chain?.id === routeData.to.chain?.id ? 'swap' : 'bridge'
-
-	if (swapType === 'swap') {
-		trackSwapTransaction(txReceipt.logs)
-	} else {
+	if (swapType === 'bridge') {
 		await trackBridgeTransaction(txReceipt, routeData, srcPublicClient, sendState, conceroAddress, clientAddress)
 	}
 }

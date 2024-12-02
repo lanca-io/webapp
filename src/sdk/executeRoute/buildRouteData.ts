@@ -1,6 +1,6 @@
 import type { RouteData } from '../types/routeTypes'
 import { type Address, encodeAbiParameters, parseUnits, zeroAddress } from 'viem'
-import type { BridgeData, InputSwapData } from '../types/contractInputTypes'
+import { type BridgeData, type InputRouteData, type InputSwapData, type Integration } from '../types/contractInputTypes'
 import { createBigIntAmount } from '../utils/formatting'
 import { chainSelectorsMap } from '../configs/chainSelectorsMap'
 import { buildDexData } from './buildDexData'
@@ -14,12 +14,12 @@ const dexTypesMap: Record<string, number> = {
 	unwrapWNative: 10,
 }
 
-export const buildRouteData = (routeData: RouteData, clientAddress: Address) => {
+export const buildRouteData = (routeData: RouteData, clientAddress: Address): InputRouteData => {
 	const { steps } = routeData
 
 	let bridgeData: BridgeData | null = null
 	const srcSwapData: InputSwapData[] = []
-	const dstSwapData: string[] = []
+	const dstSwapData: InputSwapData[] = []
 
 	for (let i = 0; i < steps.length; i++) {
 		const currentStep = steps[i]
@@ -58,19 +58,24 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 			// if bridgeData does not exist, then it is src step
 			// or it exist, then it is dst step
 			if (isDstSwapData) {
-				const encodedSwapStep = encodeAbiParameters(swapDataAbiParams, Object.values(swapStep))
-				const commpresedSwapStep = solady.LibZip.cdCompress(encodedSwapStep)
-				dstSwapData.push(commpresedSwapStep)
+				dstSwapData.push(swapStep)
 			} else {
 				srcSwapData.push(swapStep)
 			}
 		}
 	}
 
-	const integratorData = {
+	const integration: Integration = {
 		integrator: zeroAddress,
 		feeBps: 0,
 	}
 
-	return { srcSwapData, bridgeData, dstSwapData, integratorData }
+	if (dstSwapData.length > 0) {
+		const encodedSwapStep = encodeAbiParameters(swapDataAbiParams, [dstSwapData])
+		const compresedSwapStep = solady.LibZip.cdCompress(encodedSwapStep)
+
+		return { srcSwapData, bridgeData, dstSwapData: compresedSwapStep, integration }
+	}
+
+	return { srcSwapData, bridgeData, dstSwapData: '', integration }
 }

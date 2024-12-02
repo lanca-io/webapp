@@ -1,8 +1,8 @@
 import type { InputRouteData, SwapArgs, TxName } from '../types/contractInputTypes'
 import { type Address, type PublicClient, type WalletClient } from 'viem'
-import { conceroAbi } from './conceroOrchestratorAbi'
 import { config } from '../../constants/config'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
+import { ConceroAbiV1_5 } from '../../abi/ConceroAbiV1.5'
 
 export const sendTransaction = async (
 	txArgs: InputRouteData,
@@ -12,7 +12,7 @@ export const sendTransaction = async (
 	clientAddress: Address,
 	sendState: (state: ExecutionState) => void,
 ) => {
-	const { srcSwapData, bridgeData, dstSwapData } = txArgs
+	const { srcSwapData, bridgeData, dstSwapData, integration } = txArgs
 
 	let txName: TxName = 'swap'
 	let args: SwapArgs = [srcSwapData, clientAddress]
@@ -25,6 +25,8 @@ export const sendTransaction = async (
 		txName = 'bridge'
 		args = [bridgeData, dstSwapData]
 	}
+
+	args.push(integration)
 
 	const gasPrice = await publicClient.getGasPrice()
 	const isFromNativeToken = srcSwapData.length > 0 && srcSwapData[0].fromToken === config.NULL_ADDRESS
@@ -41,7 +43,7 @@ export const sendTransaction = async (
 
 	return await walletClient.writeContract({
 		account: clientAddress,
-		abi: conceroAbi,
+		abi: ConceroAbiV1_5,
 		functionName: txName,
 		address: conceroAddress,
 		args,

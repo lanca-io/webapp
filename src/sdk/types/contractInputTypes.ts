@@ -15,12 +15,18 @@ export interface InputSwapData {
 	toAmountMin: bigint
 }
 
+export interface Integration {
+	integrator: Address
+	feeBps: number
+}
+
 export type TxName = 'swap' | 'bridge' | 'swapAndBridge'
 
 export interface InputRouteData {
 	bridgeData: BridgeData | null
 	srcSwapData: InputSwapData[]
-	dstSwapData: InputSwapData[]
+	dstSwapData: string
+	integration: Integration
 }
 
 export type SwapArgs = Array<InputSwapData[] | BridgeData | bigint | Address>
