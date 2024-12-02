@@ -48,6 +48,7 @@
     "react-tooltip": "^5.28.0",
     "react-ts-tradingview-widgets": "^1.2.0",
     "recharts": "^2.8.0",
+    "solady": "^0.0.277",
     "viem": "^2.11.1",
     "wagmi": "^2.9.3"
   },

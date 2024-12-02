@@ -1,9 +1,11 @@
 import type { RouteData } from '../types/routeTypes'
-import { type Address, parseUnits } from 'viem'
+import { type Address, encodeAbiParameters, parseUnits, zeroAddress } from 'viem'
 import type { BridgeData, InputSwapData } from '../types/contractInputTypes'
 import { createBigIntAmount } from '../utils/formatting'
 import { chainSelectorsMap } from '../configs/chainSelectorsMap'
 import { buildDexData } from './buildDexData'
+import { swapDataAbiParams } from '../assets/swapDataAbiParameters'
+import * as solady from 'solady'
 
 const dexTypesMap: Record<string, number> = {
 	uniswapV3Single: 3,
@@ -17,7 +19,7 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 
 	let bridgeData: BridgeData | null = null
 	const srcSwapData: InputSwapData[] = []
-	const dstSwapData: InputSwapData[] = []
+	const dstSwapData: string[] = []
 
 	for (let i = 0; i < steps.length; i++) {
 		const currentStep = steps[i]
@@ -30,7 +32,6 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 
 		if (type === 'bridge') {
 			bridgeData = {
-				tokenType: 1,
 				amount: fromAmount,
 				dstChainSelector: BigInt(chainSelectorsMap[to.chainId]),
 				receiver: clientAddress,
@@ -42,7 +43,7 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 		if (type === 'swap') {
 			const dexData = buildDexData(currentStep, clientAddress)
 
-			const swapData = {
+			const swapStep = {
 				dexType: dexTypesMap[tool.name],
 				fromToken: from.token.address,
 				fromAmount,
@@ -52,11 +53,24 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 				dexData,
 			}
 
+			const isDstSwapData = !!bridgeData
+
 			// if bridgeData does not exist, then it is src step
 			// or it exist, then it is dst step
-			bridgeData ? dstSwapData.push(swapData) : srcSwapData.push(swapData)
+			if (isDstSwapData) {
+				const encodedSwapStep = encodeAbiParameters(swapDataAbiParams, Object.values(swapStep))
+				const commpresedSwapStep = solady.LibZip.cdCompress(encodedSwapStep)
+				dstSwapData.push(commpresedSwapStep)
+			} else {
+				srcSwapData.push(swapStep)
+			}
 		}
 	}
 
-	return { srcSwapData, bridgeData, dstSwapData }
+	const integratorData = {
+		integrator: zeroAddress,
+		feeBps: 0,
+	}
+
+	return { srcSwapData, bridgeData, dstSwapData, integratorData }
 }
