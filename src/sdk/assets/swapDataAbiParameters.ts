@@ -1,5 +1,3 @@
-import { parseAbiParameters } from 'viem'
-
 export const swapDataAbiParams = [
 	{
 		components: [
