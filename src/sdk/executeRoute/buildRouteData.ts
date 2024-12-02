@@ -74,8 +74,6 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address) => 
 		const encodedSwapStep = encodeAbiParameters(swapDataAbiParams, [dstSwapData])
 		const compresedSwapStep = solady.LibZip.cdCompress(encodedSwapStep)
 
-		console.log(compresedSwapStep)
-
 		return { srcSwapData, bridgeData, dstSwapData: compresedSwapStep, integratorData }
 	}
 
