@@ -19,7 +19,7 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address): In
 
 	let bridgeData: BridgeData | null = null
 	const srcSwapData: InputSwapData[] = []
-	const dstSwapData: string = ''
+	const dstSwapData: InputSwapData[] = []
 
 	for (let i = 0; i < steps.length; i++) {
 		const currentStep = steps[i]
@@ -77,5 +77,5 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address): In
 		return { srcSwapData, bridgeData, dstSwapData: compresedSwapStep, integration }
 	}
 
-	return { srcSwapData, bridgeData, dstSwapData, integration }
+	return { srcSwapData, bridgeData, dstSwapData: '', integration }
 }
