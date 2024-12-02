@@ -7,6 +7,8 @@ import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScree
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
 import { Footer } from './components/layout/Footer/Footer'
+import { config } from './constants/config'
+import NotAccess from './components/screens/NotAccess/NotAccess'
 
 const SwapScreen = lazy(
 	async () =>
@@ -20,6 +22,10 @@ export const Navigator = () => {
 		if (!address) return
 		posthog.identify(address)
 	}, [address])
+
+	if (config.APP_IS_NOT_AVAILABLE) {
+		return <NotAccess />
+	}
 
 	return (
 		<BrowserRouter>
