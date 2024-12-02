@@ -35,7 +35,6 @@ const chainsTwitterMap: Record<string, string> = {
 export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack }) => {
 	const [time, setTime] = useState(0)
 	const { to, from, steps, stage } = swapState
-
 	const isBridge = to.chain.id !== from.chain.id
 	const isFailed = stage === SwapCardStage.failed
 	const isSuccess = stage === SwapCardStage.success

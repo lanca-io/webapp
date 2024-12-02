@@ -8,13 +8,21 @@ import { SwapIcon } from '../../../../assets/icons/SwapIcon'
 import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
 import { FeeDetailsDropdown } from '../SwapDetails/FeeDetailsDropdown/FeeDetailsDropdown'
 import { Separator } from '../../../layout/Separator/Separator'
+import { getWalletClient } from '@wagmi/core'
+import { config } from '../../../../web3/wagmi'
 
 export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 	const handleSwapButtonClick = async () => {
-		await handleSwap({
-			swapState,
-			swapDispatch,
-		})
+		try {
+			const walletClient = await getWalletClient(config, { chainId: Number(swapState.from.chain.id) })
+			await handleSwap({
+				swapState,
+				swapDispatch,
+				walletClient,
+			})
+		} catch (error) {
+			console.error('Error initializing swap:', error)
+		}
 	}
 
 	const switchDirectionButton = (

@@ -14,7 +14,7 @@ export const SwapButton = ({ error, onClick, isLoading }: SwapButtonProps) => {
 			size="lg"
 			variant="primary"
 			isLoading={isLoading}
-			onClick={isConnected ? onClick : open}
+			onClick={isConnected ? onClick : async () => { await open(); }}
 		>
 			{isConnected ? 'Begin Swap' : 'Connect Wallet'}
 		</Button>
