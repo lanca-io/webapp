@@ -19,7 +19,7 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address): In
 
 	let bridgeData: BridgeData | null = null
 	const srcSwapData: InputSwapData[] = []
-	const dstSwapData: string[] = []
+	const dstSwapData: string = ''
 
 	for (let i = 0; i < steps.length; i++) {
 		const currentStep = steps[i]
