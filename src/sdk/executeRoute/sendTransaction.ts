@@ -1,8 +1,8 @@
 import type { InputRouteData, SwapArgs, TxName } from '../types/contractInputTypes'
 import { type Address, type PublicClient, type WalletClient } from 'viem'
-import { conceroAbi } from './conceroOrchestratorAbi'
 import { config } from '../../constants/config'
 import { ExecuteRouteStage, type ExecutionState } from '../types/executeSettingsTypes'
+import { ConceroAbiV1_5 } from '../../abi/ConceroAbiV1.5'
 
 export const sendTransaction = async (
 	txArgs: InputRouteData,
@@ -43,7 +43,7 @@ export const sendTransaction = async (
 
 	return await walletClient.writeContract({
 		account: clientAddress,
-		abi: conceroAbi,
+		abi: ConceroAbiV1_5,
 		functionName: txName,
 		address: conceroAddress,
 		args,
