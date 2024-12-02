@@ -27,8 +27,6 @@ export const sendTransaction = async (
 	}
 
 	args.push(integration)
-	console.log({ integration })
-	console.log({ args })
 
 	const gasPrice = await publicClient.getGasPrice()
 	const isFromNativeToken = srcSwapData.length > 0 && srcSwapData[0].fromToken === config.NULL_ADDRESS
