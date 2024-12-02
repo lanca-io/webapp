@@ -70,7 +70,7 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address): In
 		feeBps: 0,
 	}
 
-	if (dstSwapData) {
+	if (dstSwapData.length > 0) {
 		const encodedSwapStep = encodeAbiParameters(swapDataAbiParams, [dstSwapData])
 		const compresedSwapStep = solady.LibZip.cdCompress(encodedSwapStep)
 
