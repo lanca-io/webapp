@@ -1,7 +1,6 @@
 import { type Address } from 'viem'
 
 export interface BridgeData {
-	tokenType: number
 	amount: bigint
 	dstChainSelector: bigint
 	receiver: Address
