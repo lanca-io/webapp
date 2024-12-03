@@ -55,8 +55,6 @@ export const buildRouteData = (routeData: RouteData, clientAddress: Address): In
 
 			const isDstSwapData = !!bridgeData
 
-			// if bridgeData does not exist, then it is src step
-			// or it exist, then it is dst step
 			if (isDstSwapData) {
 				dstSwapData.push(swapStep)
 			} else {
