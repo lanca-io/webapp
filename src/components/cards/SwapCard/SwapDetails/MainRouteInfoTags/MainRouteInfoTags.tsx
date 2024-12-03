@@ -2,7 +2,7 @@ import classNames from './MainRouteInfoTags.module.pcss'
 import { GasIcon } from '../../../../../assets/icons/GasIcon'
 import { TimeIcon } from '../../../../../assets/icons/TimeIcon'
 import { useEffect, useState } from 'react'
-import { getContractGas } from '../../txFunctions/getContractGas'
+import { useContractGas } from '../../../../../hooks/useContractGas/useContractGas'
 import { type RouteData } from '../../../../../sdk/types/routeTypes'
 import { useAccount } from 'wagmi'
 import { Loader } from '../../../../layout/Loader/Loader'
@@ -18,7 +18,7 @@ export function MainRouteInfoTags({ route }: MainRouteInfoTagsProps) {
 
 	const handleSetGas = async () => {
 		setLoading(true)
-		const gasPrice = await getContractGas(route, address!)
+		const gasPrice = await useContractGas(route, address!)
 		setLoading(false)
 
 		setGas(gasPrice)
