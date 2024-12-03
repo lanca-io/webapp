@@ -3,13 +3,15 @@ import { type Dispatch } from 'react'
 import { type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
 import { executeConceroRoute } from './executeConceroRoute'
 import { ErrorType } from '../SwapButton/constants'
+import { type WalletClient } from 'viem'
 
 interface HandleSwapProps {
 	swapState: SwapState
 	swapDispatch: Dispatch<SwapAction>
+	walletClient: WalletClient
 }
 
-export const handleSwap = async ({ swapState, swapDispatch }: HandleSwapProps): Promise<void> => {
+export const handleSwap = async ({ swapState, swapDispatch, walletClient }: HandleSwapProps): Promise<void> => {
 	const { selectedRoute } = swapState
 
 	if (swapState.from.amount.length === 0) {
@@ -26,8 +28,8 @@ export const handleSwap = async ({ swapState, swapDispatch }: HandleSwapProps): 
 	swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.progress })
 
 	try {
-		await executeConceroRoute(swapState, swapDispatch, selectedRoute)
-	} catch (error: Error) {
+		await executeConceroRoute({ swapState, swapDispatch, route: selectedRoute, walletClient })
+	} catch (error: any) {
 		handleTransactionError(error, swapDispatch, selectedRoute)
 	} finally {
 		swapDispatch({ type: 'SET_LOADING', payload: false })

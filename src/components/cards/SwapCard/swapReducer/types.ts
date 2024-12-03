@@ -10,6 +10,7 @@ export enum StageType {
 	transaction = 2,
 	success = 3,
 	warning = 4,
+	error = 5,
 }
 
 export interface StageStep {
