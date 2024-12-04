@@ -2,8 +2,6 @@ import { type ChangeEvent, type UIEvent, useContext, useEffect, useRef } from 'r
 import { useTranslation } from 'react-i18next'
 import classNames from './TokensModal.module.pcss'
 import { TextInput } from '../../layout/input/TextInput'
-import { IconSearch, IconX } from '@tabler/icons-react'
-import { colors } from '../../../constants/colors'
 import type { Chain, Token } from '../../../api/concero/types'
 import { DataContext } from '../../../hooks/DataContext/DataContext'
 import { useAccount } from 'wagmi'
@@ -32,7 +30,7 @@ export function TokensModal({ isOpen, onClose, onSelect, direction }: TokensModa
 	const limit = 15
 	const { selection } = useContext(SelectionContext)
 	const [tokensModalState, tokensModalDispatch] = useTokensModalReducer(selection.swapCard[direction].chain)
-	const { selectedChain, tokens, isLoading, isBalanceLoading, offset, searchValue, balanceTokens } = tokensModalState
+	const { selectedChain, tokens, isLoading, isBalanceLoading, offset, searchValue } = tokensModalState
 
 	const addTokens = async () => {
 		const newTokens = await getTokens({ chainId: selectedChain?.id, offset, limit, search: searchValue })

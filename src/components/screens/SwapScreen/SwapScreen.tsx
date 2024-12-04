@@ -8,6 +8,7 @@ import { getPriceImpact } from '../../cards/SwapCard/txFunctions/getPriceImpact'
 import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
 import { config } from '../../../constants/config'
 import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
+import SwapWidget from '../../cards/SwapWidget/SwapWidget'
 
 const Swap = memo(withErrorBoundary(SwapCard))
 
@@ -50,6 +51,7 @@ export const SwapScreen = () => {
 	return (
 		<div className={`${classNames.container} ${classNames[backgroundTheme]}`}>
 			<Swap swapDispatch={swapDispatch} swapState={swapState} />
+			<SwapWidget />
 		</div>
 	)
 }
