@@ -37,7 +37,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 
 		const user = await getUser()
 		const totalUserMultiplier = user
-			? user.multiplier + (user?.dailySwappingMultiplier ?? 0) + (user?.liquidityHoldingMultiplier ?? 0)
+			? user.multiplier.default + (user?.multiplier.dailySwap ?? 0) + (user?.multiplier.liquidityHold ?? 0)
 			: 1
 
 		const usdAmount = Number(selectedRoute.from.amount) * Number(selectedRoute.from.token.priceUsd)
