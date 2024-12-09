@@ -51,6 +51,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 				balance={swapState.balance}
 				stage={swapState.stage}
 				error={swapState.inputError}
+				route={swapState.selectedRoute}
 			/>
 
 			{switchDirectionButton}
@@ -61,6 +62,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 				swapDispatch={swapDispatch}
 				isLoading={swapState.isLoading}
 				stage={swapState.stage}
+				route={swapState.selectedRoute}
 			/>
 
 			<Separator />
