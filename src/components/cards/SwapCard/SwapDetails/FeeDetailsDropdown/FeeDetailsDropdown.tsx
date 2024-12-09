@@ -14,16 +14,13 @@ interface Props {
 
 export const formatValue = (value: number): string => {
 	if (value === 0) {
-		return '0'
+		return `${0}`
 	} else if (value < 0.01) {
-		return value.toFixed(4)
-	} else if (value < 1) {
-		return value.toFixed(3)
+		return `${'< $0.01'}`
 	} else {
-		return value.toFixed(2)
+		return `$${value.toFixed(2)}`
 	}
 }
-
 export const FeeDetailsDropdown = ({ route }: Props) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [priceImpact, setPriceImpact] = useState(0)
@@ -55,7 +52,7 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 			>
 				<div className="row w-full jsb ac">
 					<p className="body2">Price impact</p>
-					<p className={`${classNames.priceFee} body2`}>${formatValue(totalFees)}</p>
+					<p className={`${classNames.priceFee} body2`}>{formatValue(totalFees)}</p>
 				</div>
 				<div className={classNames.iconWrap}>
 					<TrailArrowDownIcon />
