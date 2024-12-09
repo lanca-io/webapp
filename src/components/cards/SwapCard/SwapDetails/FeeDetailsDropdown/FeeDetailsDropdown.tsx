@@ -14,9 +14,9 @@ interface Props {
 
 export const formatValue = (value: number): string => {
 	if (value === 0) {
-		return `${0}`
+		return '$0.00'
 	} else if (value < 0.01) {
-		return `${'< $0.01'}`
+		return '< $0.01'
 	} else {
 		return `$${value.toFixed(2)}`
 	}
