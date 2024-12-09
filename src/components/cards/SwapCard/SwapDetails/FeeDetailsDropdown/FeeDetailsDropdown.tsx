@@ -1,53 +1,42 @@
+import { useState, useEffect } from 'react'
 import classNames from './FeeDetailsDropdown.module.pcss'
 import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIcon'
-import { InfoIcon } from '../../../../../assets/icons/InfoIcon'
-import { type Dispatch, useState } from 'react'
-import { TooltipWrapper } from '../../../../wrappers/WithTooltip/TooltipWrapper'
+import { type Dispatch } from 'react'
 import { type RouteData } from '../../../../../sdk/types/routeTypes'
 import { Alert } from '../../../../layout/Alert/Alert'
 import { type SwapAction } from '../../swapReducer/types'
 import { getPriceImpact } from '../../txFunctions/getPriceImpact'
-
-interface FeePriceProps {
-	title: string
-	price: number
-	percent?: number
-	infoTitle: string
-}
 
 interface Props {
 	route: RouteData
 	swapDispatch: Dispatch<SwapAction>
 }
 
-const FeePrice = ({ title, price, percent, infoTitle }: FeePriceProps) => {
-	return (
-		<div className="row w-full jsb ac">
-			<div className="row gap-sm ac">
-				<p className="body2">{title}</p>
-
-				<TooltipWrapper tooltipId={title} tooltipContent={<p>{infoTitle}</p>}>
-					<InfoIcon />
-				</TooltipWrapper>
-			</div>
-			<div className="row gap-xs ac">
-				<p className={`${classNames.priceFee} body2`}>{price.toFixed(4)}</p>
-				{percent && <p className="body2">{percent.toFixed(1)} %</p>}
-			</div>
-		</div>
-	)
+export const formatValue = (value: number): string => {
+	if (value === 0) {
+		return '0'
+	} else if (value < 0.01) {
+		return value.toFixed(4)
+	} else if (value < 1) {
+		return value.toFixed(3)
+	} else {
+		return value.toFixed(2)
+	}
 }
 
 export const FeeDetailsDropdown = ({ route }: Props) => {
 	const [isOpen, setIsOpen] = useState(false)
+	const [priceImpact, setPriceImpact] = useState(0)
+	const [totalFees, setTotalFees] = useState(0)
 
-	const { priceImpact, totalFees } = getPriceImpact({ from: route.from, to: route.to })
+	useEffect(() => {
+		const { priceImpact, totalFees } = getPriceImpact({ from: route.from, to: route.to })
+		setPriceImpact(priceImpact)
+		setTotalFees(totalFees)
+	}, [route.from, route.to.amount])
+
 	const warningPriceImpact = priceImpact > 10 && totalFees > 5
 	const dangerPriceImpact = priceImpact > 20
-
-	// const isBridge = route.to.chain.id !== route.from.chain.id
-	// const conceroFee = amountUsdFrom * 0.001
-	// const protocolFee = totalFees === 0 ? 0 : totalFees - conceroFee
 
 	return (
 		<div className={classNames.wrap}>
@@ -66,7 +55,7 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 			>
 				<div className="row w-full jsb ac">
 					<p className="body2">Price impact</p>
-					<p className={`${classNames.priceFee} body2`}>${totalFees.toFixed(2)}</p>
+					<p className={`${classNames.priceFee} body2`}>${formatValue(totalFees)}</p>
 				</div>
 				<div className={classNames.iconWrap}>
 					<TrailArrowDownIcon />

@@ -19,12 +19,21 @@ import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constan
 import { getBalance } from '../../../../utils/getBalance'
 import { useAccount } from 'wagmi'
 
-export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispatch, balance = null, stage, error }) => {
-	const [loading, setLoading] = useState(false)
-	const [state, tokenAreaDispatch] = useTokenAreaReducer()
+export const TokenArea: FC<TokenAreaProps> = ({
+	direction,
+	selection,
+	swapDispatch,
+	balance = null,
+	stage,
+	error,
+	route,
+}) => {
 	const { address } = useAccount()
-	const inputRef = useRef<ForwardedRef<HTMLInputElement>>()
 	const { t } = useTranslation()
+
+	const [loading, setLoading] = useState<boolean>(false)
+	const [state, tokenAreaDispatch] = useTokenAreaReducer()
+	const inputRef = useRef<ForwardedRef<HTMLInputElement>>()
 
 	const isTransactionError = error ? errorTypeMap[error] === ErrorCategory.input : false
 	const isError = error && isTransactionError
@@ -110,12 +119,13 @@ export const TokenArea: FC<TokenAreaProps> = ({ direction, selection, swapDispat
 				</div>
 
 				<AmountUsd
-					loading={loading}
-					state={state}
-					balance={balance}
-					selection={selection}
+					isFocused={state.isFocused}
+					userBalance={balance}
+					handleMax={handleMaxButtonClick}
+					selectedTokenInfo={selection}
 					direction={direction}
-					handleMaxButtonClick={handleMaxButtonClick}
+					selectedRoute={route}
+					loading={loading}
 				/>
 
 				{isError && direction === 'from' && (
