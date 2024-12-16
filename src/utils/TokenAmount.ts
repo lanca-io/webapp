@@ -19,7 +19,10 @@ export class TokenAmount {
 	}
 
 	public get formatted(): string {
-		return new BigNumber(this.rawAmount).dividedBy(BigNumber(10).pow(this.decimals)).toString()
+		return new BigNumber(this.rawAmount)
+			.dividedBy(new BigNumber(10).pow(this.decimals))
+			.decimalPlaces(this.decimals, BigNumber.ROUND_DOWN)
+			.toString()
 	}
 
 	public plus(amount: string | TokenAmount): TokenAmount {
