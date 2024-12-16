@@ -11,4 +11,5 @@ export const conceroAddressesMap: Record<string, Address> = {
 	'42161': config.CONCERO_PROXY_ARBITRUM,
 	'8453': config.CONCERO_PROXY_BASE,
 	'43114': config.CONCERO_PROXY_AVALANCHE,
+	'10': config.CONCERO_PROXY_OPTIMISM,
 }
