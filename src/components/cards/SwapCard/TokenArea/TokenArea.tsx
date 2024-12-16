@@ -38,8 +38,6 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	const isTransactionError = error ? errorTypeMap[error] === ErrorCategory.input : false
 	const isError = error && isTransactionError
 
-	console.log('Balance', balance)
-
 	const onChangeText = (value: string) => {
 		swapDispatch({ type: 'SET_INPUT_ERROR', payload: null })
 
