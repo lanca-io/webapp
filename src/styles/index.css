@@ -128,17 +128,17 @@ body::-webkit-scrollbar {
 	--color-warning-900: #291c00;
 
 	/* danger */
-	--color-danger-25: #fffbfa;
-	--color-danger-50: #fef3f2;
-	--color-danger-100: #fee4e2;
-	--color-danger-200: #fecdca;
-	--color-danger-300: #fda29b;
-	--color-danger-400: #f97066;
-	--color-danger-500: #f04438;
-	--color-danger-600: #d92d20;
-	--color-danger-700: #b42318;
-	--color-danger-800: #912018;
-	--color-danger-900: #7a271a;
+	--color-danger-25: #fef7f7;
+	--color-danger-50: #feefef;
+	--color-danger-100: #fde8e8;
+	--color-danger-200: #fccccc;
+	--color-danger-300: #fbb1b1;
+	--color-danger-400: #f98d8d;
+	--color-danger-500: #f75e5e;
+	--color-danger-600: #e80c0c;
+	--color-danger-700: #b10909;
+	--color-danger-800: #780606;
+	--color-danger-900: #6f0d06;
 	/* text */
 	--color-text-primary: #131313;
 	--color-button-text-primary: #fbfbfb;
