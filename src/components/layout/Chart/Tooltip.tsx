@@ -46,21 +46,21 @@ export function updateTooltip(param, mainSeries, secondarySeries, toolTip, chart
 		const secondaryPrice = secondaryData?.value ?? secondaryData?.close
 		if (secondaryPrice !== undefined && secondaryPrice !== null) {
 			content += `
-        <div style='font-size: 0.875rem; font-weight: 400; color: var(--color-text-primary);'>
-          <span style='font-weight: 500; color: var(--color-grey-400);'>${formatNumber(secondaryPrice)}%</span>
+        <div style='font-size: 0.875rem; font-weight: 400; color: var(--color-grey-100);'>
+          <span style='font-weight: 500; color: var(--color-grey-300);'>${formatNumber(secondaryPrice)}%</span>
     </div>
       `
 		}
 	}
 
 	content += `
-    <div style='font-size: 0.875rem; font-weight: 400; color: var(--color-text-primary);'>
-      <span style='font-weight: 500; color: var(--color-grey-400);'>$${formatNumber(mainPrice)}</span>
+    <div style='font-size: 0.875rem; font-weight: 400; color: var(--color-grey-100);'>
+      <span style='font-weight: 500; color: var(--color-grey-300);'>$${formatNumber(mainPrice)}</span>
     </div>
   `
 
 	content += `
-  <span style='font-size: 0.875rem; font-weight: 400; color: var(--color-grey-500);'>${unixTimeFormat(
+  <span style='font-size: 0.875rem; font-weight: 400; color: var(--color-grey-300);'>${unixTimeFormat(
 		param.time,
 		'MMM DD, hh:mm',
   )}</span>
