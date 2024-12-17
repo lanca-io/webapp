@@ -147,6 +147,17 @@ body::-webkit-scrollbar {
 }
 
 .dark {
+	--color-grey-25: #0b0d0e;
+	--color-grey-50: #16191b;
+	--color-grey-100: #1f2426;
+	--color-grey-200: #23292b;
+	--color-grey-300: #333b3f;
+	--color-grey-400: #475358;
+	--color-grey-500: #64737b;
+	--color-grey-600: #7d8d96;
+	--color-grey-700: #a7b2b8;
+	--color-grey-800: #cfd5d8;
+	--color-grey-900: #f3f5f6;
 }
 
 div#root {
