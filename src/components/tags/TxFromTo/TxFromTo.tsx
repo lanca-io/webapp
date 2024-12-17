@@ -39,10 +39,10 @@ export const TxFromTo: FC<TxFromToProps> = ({ from, to, type }) => {
 const getColor = (type: string) => {
 	switch (type) {
 		case 'sell':
-			return 'var(--color-green-500)'
+			return 'var(--color-success-600)'
 		case 'buy':
-			return 'var(--color-red-500)'
+			return 'var(--color-danger-600)'
 		default:
-			return 'var(--color-text-primary)'
+			return 'var(--color-grey-600)'
 	}
 }

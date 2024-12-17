@@ -11,7 +11,7 @@
 	height: 100%;
 	padding: var(--sp-md);
 	background-color: var(--color-grey-650);
-	color: var(--color-text-primary);
+	color: var(--color-grey-500);
 	font-family: inherit;
 	font-size: 0.875rem;
 	box-sizing: border-box;
@@ -20,6 +20,18 @@
 
 	&::placeholder {
 		color: var(--color-grey-500);
+	}
+
+	&:hover {
+		border-color: var(--color-grey-700);
+	}
+
+	&:focus {
+		border-color: var(--color-grey-700);
+	}
+
+	&:active {
+		border-color: var(--color-grey-700);
 	}
 }
 
