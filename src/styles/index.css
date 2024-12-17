@@ -147,6 +147,18 @@ body::-webkit-scrollbar {
 }
 
 .dark {
+	--color-primary-25: #010e15;
+	--color-primary-50: #021b28;
+	--color-primary-100: #032537;
+	--color-primary-200: #042b40;
+	--color-primary-300: #063e5c;
+	--color-primary-400: #085680;
+	--color-primary-500: #0b77b1;
+	--color-primary-600: #0e93da;
+	--color-primary-700: #46bbf6;
+	--color-primary-800: #92d7fa;
+	--color-primary-900: #e8f7fe;
+
 	--color-grey-25: #0b0d0e;
 	--color-grey-50: #16191b;
 	--color-grey-100: #1f2426;
@@ -158,6 +170,18 @@ body::-webkit-scrollbar {
 	--color-grey-700: #a7b2b8;
 	--color-grey-800: #cfd5d8;
 	--color-grey-900: #f3f5f6;
+
+	--color-success-25: #031009;
+	--color-success-50: #062112;
+	--color-success-100: #072818;
+	--color-success-200: #082f1c;
+	--color-success-300: #0b4328;
+	--color-success-400: #0f5e38;
+	--color-success-500: #15824d;
+	--color-success-600: #1a9f5e;
+	--color-success-700: #0ce087;
+	--color-success-800: #76e9b0;
+	--color-success-900: #e9fcf2;
 }
 
 div#root {
