@@ -33,7 +33,7 @@ export function LanguageModal({ setShow, show }: LanguageModalProps) {
 				onClick={() => {
 					onSelect(item)
 				}}
-				variant={isSelected ? 'filled' : 'black'}
+				variant={isSelected ? 'secondary' : 'secondary'}
 			>
 				<div className={classNames.renderItemContainer}>
 					{item.title}
