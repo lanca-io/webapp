@@ -38,6 +38,7 @@
     "dayjs": "^1.11.10",
     "ethers": "^5.7.2",
     "i18next": "^23.6.0",
+    "lanca-sdk-demo": "^0.0.10",
     "lightweight-charts": "^4.0.1",
     "posthog-js": "^1.148.0",
     "rango-sdk": "^0.1.40",
@@ -49,7 +50,7 @@
     "react-ts-tradingview-widgets": "^1.2.0",
     "recharts": "^2.8.0",
     "solady": "^0.0.277",
-    "viem": "^2.11.1",
+    "viem": "^2.21.55",
     "wagmi": "^2.9.3"
   },
   "devDependencies": {
@@ -75,8 +76,8 @@
     "husky": "^8.0.3",
     "jest-mock": "^29.7.0",
     "jsdom": "^21.1.2",
-    "postcss-preset-env": "^9.5.2",
     "postcss": "^8.4.37",
+    "postcss-preset-env": "^9.5.2",
     "precss": "^4.0.0",
     "prettier": "^3.2.5",
     "source-map-explorer": "^2.5.3",

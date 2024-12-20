@@ -1,4 +1,4 @@
-import { type SwapDirectionData } from '../../../../sdk/types/routeTypes'
+import { type SwapDirectionData } from 'lanca-sdk-demo'
 
 interface Options {
 	from: SwapDirectionData
