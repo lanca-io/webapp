@@ -2,8 +2,7 @@ import { type Chain, type Provider } from '../../../../api/concero/types'
 import { type TransactionStatus } from 'rango-sdk'
 import { type ErrorType } from '../SwapButton/constants'
 import { type TokenAmount } from '../../../../utils/TokenAmount'
-import { type Status } from '../../../../sdk/types/executeSettingsTypes'
-import { type RouteData } from '../../../../sdk/types/routeTypes'
+import { type RouteType, type Status } from 'lanca-sdk-demo'
 
 export enum StageType {
 	approve = 1,
@@ -65,8 +64,8 @@ export interface Balance {
 export interface SwapState {
 	from: SwapStateDirection
 	to: SwapStateDirection
-	routes: RouteData[]
-	selectedRoute: RouteData | null
+	routes: RouteType[]
+	selectedRoute: RouteType | null
 
 	typingTimeout: number
 	stage: SwapCardStage

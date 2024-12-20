@@ -1,15 +1,33 @@
 import classNames from './Step.module.pcss'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '../../../../../layout/Badge/Badge'
-import { type Step, type StepDirectionData } from '../../../../../../sdk/types/routeTypes'
 import { config } from '../../../../../../constants/config'
+import type { ConceroToken, ConceroChain, SwapDirectionData, Fee } from 'lanca-sdk-demo'
 
 interface InnerStepCardProps {
-	step: Step
+	step: {
+		from: SwapDirectionData
+		to: SwapDirectionData
+		tool: {
+			name: string
+			logoURL: string
+			fees: Fee[]
+			type: 'bridge' | 'swap'
+			additionalInfo: {
+				fee: number
+				deadline: number
+				containDstUnwrapWNative?: boolean
+			}
+		}
+	}
 }
 
 interface DirectionProps {
-	direction: StepDirectionData
+	direction: {
+		token: ConceroToken
+		chainData?: ConceroChain
+		amount: string
+	}
 	title: string
 }
 
@@ -22,7 +40,7 @@ const Direction = ({ direction, title }: DirectionProps) => {
 		<div className={classNames.tagContainer}>
 			<p className={'body2'}>{title}:</p>
 			<div className={classNames.amountContainer}>
-				{token.logoURI && <Badge size="m" tokenLogoSrc={token.logoURI} />}
+				{token.logoURL && <Badge size="m" tokenLogoSrc={token.logoURL} />}
 
 				<div className="row gap-xs ac">
 					<h4 className={classNames.price}>{Number(amount).toFixed(3)}</h4>
@@ -30,7 +48,7 @@ const Direction = ({ direction, title }: DirectionProps) => {
 				</div>
 
 				<p className="body2">on</p>
-				{chainData?.logoURI && <Badge size="m" borderSmall tokenLogoSrc={chainImg} />}
+				{chainData?.logoURL && <Badge size="m" borderSmall tokenLogoSrc={chainImg} />}
 
 				<h4 className={classNames.chain}>{chainData?.name}</h4>
 			</div>

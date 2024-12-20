@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react'
-import classNames from './FeeDetailsDropdown.module.pcss'
 import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIcon'
-import { type Dispatch } from 'react'
-import { type RouteData } from '../../../../../sdk/types/routeTypes'
 import { Alert } from '../../../../layout/Alert/Alert'
-import { type SwapAction } from '../../swapReducer/types'
 import { getPriceImpact } from '../../txFunctions/getPriceImpact'
+import { type RouteType } from 'lanca-sdk-demo'
+
+import classNames from './FeeDetailsDropdown.module.pcss'
 
 interface Props {
-	route: RouteData
-	swapDispatch: Dispatch<SwapAction>
+	route: RouteType
 }
 
 export const formatValue = (value: number): string => {

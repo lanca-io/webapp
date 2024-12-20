@@ -2,11 +2,10 @@ import classNames from './ReviewRouteCard.module.pcss'
 import { MainRouteInfoTags } from '../MainRouteInfoTags/MainRouteInfoTags'
 import { Button } from '../../../../layout/buttons/Button/Button'
 import { TrailArrowRightIcon } from '../../../../../assets/icons/TrailArrowRightIcon'
-import { type StandardRoute } from '../../../../../types/StandardRoute'
-import { type RouteData } from '../../../../../sdk/types/routeTypes'
+import { type RouteType } from 'lanca-sdk-demo'
 
 interface ReviewRouteCardProps {
-	selectedRoute: RouteData | null
+	selectedRoute: RouteType | null
 }
 
 export function ReviewRouteCard({ selectedRoute }: ReviewRouteCardProps) {

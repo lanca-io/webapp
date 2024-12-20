@@ -4,13 +4,13 @@ import { FeeDetailsDropdown } from '../FeeDetailsDropdown/FeeDetailsDropdown'
 import { MainRouteInfoTags } from '../MainRouteInfoTags/MainRouteInfoTags'
 import { SwapAmount } from '../SwapAmount/SwapAmount'
 import { Separator } from '../../../../layout/Separator/Separator'
-import { type RouteData } from '../../../../../sdk/types/routeTypes'
 import { StepCard } from '../RouteCard/Step/Step'
+import { type RouteType } from 'lanca-sdk-demo'
 
 interface RouteDetailsModalProps {
 	isOpen: boolean
 	setIsOpen: (param: boolean) => void
-	selectedRoute: RouteData
+	selectedRoute: RouteType
 	amountUsd: number
 }
 

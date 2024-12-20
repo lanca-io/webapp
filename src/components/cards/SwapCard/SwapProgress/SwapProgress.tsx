@@ -19,6 +19,7 @@ import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 import { truncateWallet } from '../../../../utils/formatting'
+import { Status } from 'lanca-sdk-demo'
 
 interface SwapProgressProps {
 	swapState: SwapState
@@ -42,7 +43,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 	const currentStep = steps[steps.length - 1]
 	const isTransactionStage = currentStep?.type === StageType.transaction
 	const isWarning = currentStep?.type === StageType.warning
-	const isAwait = currentStep && currentStep.status === 'await'
+	const isAwait = currentStep && currentStep.status === Status.PENDING
 
 	useEffect(() => {
 		const timerId = setInterval(() => {
@@ -152,15 +153,15 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 
 			{!isWarning && (
 				<div className={classNames.progressContainer}>
-					<TransactionStep status={steps[0]?.status} title="Approvals" />
+					<TransactionStep status={steps[0]?.status as Status} title="Approvals" />
 
 					{isBridge && (
 						<>
 							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status} title="Bridge" />
+							<TransactionStep status={steps[1]?.status as Status} title="Bridge" />
 							<TrailArrowRightIcon />
 							<TransactionStep
-								status={steps[1]?.status === 'success' ? 'success' : 'idle'}
+								status={steps[1]?.status === Status.SUCCESS ? Status.SUCCESS : Status.NOT_STARTED}
 								title="Swap"
 							/>
 						</>
@@ -169,7 +170,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 					{!isBridge && (
 						<>
 							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status} title="Swap" />
+							<TransactionStep status={steps[1]?.status as Status} title="Swap" />
 						</>
 					)}
 				</div>

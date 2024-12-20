@@ -4,14 +4,14 @@ import { type Balance, type SwapStateDirection } from '../swapReducer/types'
 import { useTranslation } from 'react-i18next'
 import classNames from './TokenArea.module.pcss'
 import { Loader } from '../../../layout/Loader/Loader'
-import { type RouteData } from '../../../../sdk/types/routeTypes'
+import { type RouteType } from 'lanca-sdk-demo'
 
 interface AmountUsdProps {
 	direction: 'from' | 'to'
 	isFocused: boolean
 	userBalance: Balance | null
 	selectedTokenInfo: SwapStateDirection
-	selectedRoute: RouteData | null
+	selectedRoute: RouteType | null
 	handleMax: () => void
 	loading: boolean
 }

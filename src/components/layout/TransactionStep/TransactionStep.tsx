@@ -3,7 +3,7 @@ import { Loader } from '../Loader/Loader'
 import classNames from './TransactionStep.module.pcss'
 import { InfoIcon } from '../../../assets/icons/InfoIcon'
 import { SuccessIcon } from '../../../assets/icons/SuccessIcon'
-import { type Status } from '../../../sdk/types/executeSettingsTypes'
+import { Status } from 'lanca-sdk-demo'
 
 interface StageProps {
 	title: string
@@ -13,14 +13,14 @@ interface StageProps {
 export const TransactionStep: FC<StageProps> = ({ status, title }) => {
 	const renderIcon = () => {
 		switch (status) {
-			case 'idle':
+			case Status.NOT_STARTED:
 				return null
-			case 'pending':
-			case 'await':
+			case Status.PENDING:
 				return <Loader variant="neutral" />
-			case 'error':
+			case Status.REJECTED:
+			case Status.FAILED:
 				return <InfoIcon color="var(--color-danger-700)" />
-			case 'success':
+			case Status.SUCCESS:
 				return <SuccessIcon />
 			default:
 				return null
@@ -30,7 +30,7 @@ export const TransactionStep: FC<StageProps> = ({ status, title }) => {
 	return (
 		<div className={classNames.step}>
 			{renderIcon()}
-			<h4 className={classNames[status ?? 'idle']}>{title}</h4>
+			<h4 className={classNames[status ?? Status.NOT_STARTED]}>{title}</h4>
 		</div>
 	)
 }

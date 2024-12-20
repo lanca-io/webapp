@@ -1,14 +1,10 @@
-import { getPublicClient } from '../../sdk/configs/chainsConfig'
-import { type RouteData } from '../../sdk/types/routeTypes'
 import { type Address, formatEther } from 'viem'
-import { conceroAddressesMap } from '../../sdk/configs/conceroAddressesMap'
 import { fetchTokens } from '../../api/concero/fetchTokens'
 import { config } from '../../constants/config'
 import { type Token } from '../../api/concero/types'
-import { buildRouteData } from '../../sdk/executeRoute/buildRouteData'
-import type { SwapArgs, TxName } from '../../sdk/types/contractInputTypes'
-import { add } from 'husky'
 import { gasUsedMap } from './gasPriceMap'
+import { publicClient } from '../../web3/wagmi'
+import { type RouteType } from 'lanca-sdk-demo'
 
 const getUsdPrice = async (chainId: string): Promise<Token | null> => {
 	try {
@@ -20,24 +16,23 @@ const getUsdPrice = async (chainId: string): Promise<Token | null> => {
 	}
 }
 
-export const useContractGas = async (routeData: RouteData, address: Address) => {
+export const useContractGas = async (routeData: RouteType, address: Address) => {
 	if (!routeData || !address) return 'n/a'
 
-	const publicClient = getPublicClient(routeData.from.chain.id)
-	// const conceroContract = conceroAddressesMap[routeData.from.chain.id]
+	const toolTypes = routeData.steps.map((step: any) => ({
+		toolType: step.tool.type,
+	}))
 
-	const args = buildRouteData(routeData, address)
-	const { srcSwapData, bridgeData } = args
+	const hasSwap = toolTypes.some(tool => tool.toolType === 'swap')
+	const hasBridge = toolTypes.some(tool => tool.toolType === 'bridge')
 
-	let txName: TxName = 'swap'
+	let txName: 'swap' | 'bridge' | 'swapAndBridge' = 'swap'
 
-	if (srcSwapData.length > 0 && bridgeData) {
+	if (hasSwap && hasBridge) {
 		txName = 'swapAndBridge'
-	}
-	if (srcSwapData.length === 0 && bridgeData) {
+	} else if (!hasSwap && hasBridge) {
 		txName = 'bridge'
 	}
-
 	const estimatedGas = gasUsedMap[Number(routeData.from.chain.id)]
 
 	const gasPrice = await publicClient.getGasPrice()

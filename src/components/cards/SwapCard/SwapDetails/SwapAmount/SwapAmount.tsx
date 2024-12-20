@@ -2,7 +2,7 @@ import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
 import { SelectTokenShape } from '../../TokenArea/SelectTokenShape/SelectTokenShape'
 import classNames from './SwapAmount.module.pcss'
-import { type SwapDirectionData } from '../../../../../sdk/types/routeTypes'
+import { type SwapDirectionData } from 'lanca-sdk-demo'
 
 interface Props {
 	direction: SwapDirectionData
@@ -18,7 +18,7 @@ export const SwapAmount = ({ direction, directionSide }: Props) => {
 				<div className={classNames.token}>
 					<Badge
 						size="l"
-						tokenLogoSrc={direction.token.logoURI}
+						tokenLogoSrc={direction.token.logoURL}
 						chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${direction.chain?.id}.svg`}
 					/>
 					<SelectTokenShape symbol={direction.token.symbol} chainName={direction.chain.name} />
