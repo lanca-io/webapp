@@ -10,7 +10,7 @@ import { Separator } from '../../../layout/Separator/Separator'
 import { getWalletClient } from '@wagmi/core'
 import { config } from '../../../../web3/wagmi'
 import { SwapActionType } from '../swapReducer/types'
-import { handleSwap } from '../../SwapCard/SwapExecution/handleSwap'
+import { handleSwap } from '../swapExecution/handleSwap'
 
 export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 	const handleSwapButtonClick = async () => {
