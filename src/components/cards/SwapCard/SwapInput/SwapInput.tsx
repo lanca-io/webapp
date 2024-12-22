@@ -3,7 +3,6 @@ import { SwapDetails } from '../SwapDetails/SwapDetails'
 import classNames from './SwapInput.module.pcss'
 import { type SwapInputProps } from './types'
 import { SwapButton } from '../SwapButton/SwapButton'
-import { handleSwap } from '../SwapExecution/handleSwap'
 import { SwapIcon } from '../../../../assets/icons/SwapIcon'
 import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
 import { FeeDropdown } from '../SwapDetails/FeeDropdown/FeeDropdown'
@@ -11,6 +10,7 @@ import { Separator } from '../../../layout/Separator/Separator'
 import { getWalletClient } from '@wagmi/core'
 import { config } from '../../../../web3/wagmi'
 import { SwapActionType } from '../swapReducer/types'
+import { handleSwap } from '../../SwapCard/SwapExecution/handleSwap'
 
 export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 	const handleSwapButtonClick = async () => {
