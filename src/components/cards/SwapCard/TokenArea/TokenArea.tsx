@@ -10,7 +10,7 @@ import { TokensModal } from '../../../modals/TokensModal/TokensModal'
 import { type Chain } from '../../../../api/concero/types'
 import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
-import { SwapCardStage } from '../swapReducer/types'
+import { SwapActionType, SwapCardStage } from '../swapReducer/types'
 import { Badge } from '../../../layout/Badge/Badge'
 import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIcon'
 import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
@@ -39,7 +39,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	const isError = error && isTransactionError
 
 	const onChangeText = (value: string) => {
-		swapDispatch({ type: 'SET_INPUT_ERROR', payload: null })
+		swapDispatch({ type: SwapActionType.SET_INPUT_ERROR, payload: null })
 
 		if (value && !isFloatInput(value)) tokenAreaDispatch({ type: 'SET_SHAKE', payload: true })
 		if (direction === 'from') handleAmountChange({ value, state, dispatch: swapDispatch, direction })
@@ -54,8 +54,8 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	}
 
 	const handleSelectToken = (token: Token, chain: Chain) => {
-		swapDispatch({ type: 'SET_CHAIN', direction, payload: { chain } })
-		swapDispatch({ type: 'SET_TOKEN', direction, payload: { token } })
+		swapDispatch({ type: SwapActionType.SET_CHAIN, direction, payload: { chain } })
+		swapDispatch({ type: SwapActionType.SET_TOKEN, direction, payload: { token } })
 		tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: false })
 	}
 

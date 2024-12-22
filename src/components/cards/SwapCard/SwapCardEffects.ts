@@ -1,13 +1,12 @@
 import { type Dispatch, type MutableRefObject, useContext, useEffect } from 'react'
-import { getBalance } from '../../../utils/getBalance'
-import { clearRoutes } from './handlers/handleRoutes'
+import { clearRoutes } from './handlers/handleClearRoutes'
 import { handleFetchRoutes } from './handlers/handleFetchRoutes'
 import { type SwapAction, type SwapState } from './swapReducer/types'
-import { setHistoryCard } from './handlers/setHistoryCard'
-import { setSwapCard } from './handlers/setSwapCard'
+import { setHistoryCard, setSwapCard } from './handlers/handleCardStates'
 import { SelectionContext } from '../../../hooks/SelectionContext'
 import { useAccount } from 'wagmi'
 import { ErrorType } from './SwapButton/constants'
+import { SwapActionType } from './swapReducer/types'
 
 interface UseSwapCardEffectsProps {
 	swapState: SwapState
@@ -40,11 +39,11 @@ export function useSwapCardEffects({ swapState, swapDispatch, typingTimeoutRef }
 		if (!selectedRoute) return
 
 		if (Number(selectedRoute.to.amount) <= 0) {
-			swapDispatch({ type: 'SET_INPUT_ERROR', payload: ErrorType.AMOUNT_TOO_LOW })
+			swapDispatch({ type: SwapActionType.SET_INPUT_ERROR, payload: ErrorType.AMOUNT_TOO_LOW })
 		}
 
 		swapDispatch({
-			type: 'SET_AMOUNT',
+			type: SwapActionType.SET_AMOUNT,
 			direction: 'to',
 			payload: {
 				amount: selectedRoute.to.amount,
@@ -56,11 +55,11 @@ export function useSwapCardEffects({ swapState, swapDispatch, typingTimeoutRef }
 	useEffect(() => {
 		if (!connector) return
 		const allowSwitchChain = connector.name !== 'WalletConnect'
-		swapDispatch({ type: 'SET_SETTINGS', payload: { allowSwitchChain } })
+		swapDispatch({ type: SwapActionType.SET_SETTINGS, payload: { allowSwitchChain } })
 	}, [connector?.id])
 
 	useEffect(() => {
-		swapDispatch({ type: 'SET_ADDRESS', direction: 'from', payload: address })
-		swapDispatch({ type: 'SET_ADDRESS', direction: 'to', payload: address })
+		swapDispatch({ type: SwapActionType.SET_ADDRESS, direction: 'from', payload: address as string })
+		swapDispatch({ type: SwapActionType.SET_ADDRESS, direction: 'to', payload: address as string })
 	}, [address])
 }

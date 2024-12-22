@@ -1,11 +1,11 @@
 import { type SwapDirectionData } from 'lanca-sdk-demo'
 
-interface Options {
+interface PriceImpactProps {
 	from: SwapDirectionData
 	to: SwapDirectionData
 }
 
-export const getPriceImpact = ({ from, to }: Options) => {
+export const getPriceImpact = ({ from, to }: PriceImpactProps) => {
 	const amountUsdFrom = from.amount ? Number(from.amount) * Number(from.token.priceUsd) : 0
 	const amountUsdTo = to.amount ? Number(to.amount) * Number(to.token.priceUsd) : 0
 

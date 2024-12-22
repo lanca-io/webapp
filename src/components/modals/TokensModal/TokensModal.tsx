@@ -2,8 +2,6 @@ import { type ChangeEvent, type UIEvent, useContext, useEffect, useRef } from 'r
 import { useTranslation } from 'react-i18next'
 import classNames from './TokensModal.module.pcss'
 import { TextInput } from '../../layout/input/TextInput'
-import { IconSearch, IconX } from '@tabler/icons-react'
-import { colors } from '../../../constants/colors'
 import type { Chain, Token } from '../../../api/concero/types'
 import { DataContext } from '../../../hooks/DataContext/DataContext'
 import { useAccount } from 'wagmi'

@@ -3,13 +3,14 @@ import { SwapDetails } from '../SwapDetails/SwapDetails'
 import classNames from './SwapInput.module.pcss'
 import { type SwapInputProps } from './types'
 import { SwapButton } from '../SwapButton/SwapButton'
-import { handleSwap } from '../swapExecution/handleSwap'
+import { handleSwap } from '../SwapExecution/handleSwap'
 import { SwapIcon } from '../../../../assets/icons/SwapIcon'
 import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
-import { FeeDetailsDropdown } from '../SwapDetails/FeeDetailsDropdown/FeeDetailsDropdown'
+import { FeeDropdown } from '../SwapDetails/FeeDropdown/FeeDropdown'
 import { Separator } from '../../../layout/Separator/Separator'
 import { getWalletClient } from '@wagmi/core'
 import { config } from '../../../../web3/wagmi'
+import { SwapActionType } from '../swapReducer/types'
 
 export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 	const handleSwapButtonClick = async () => {
@@ -33,7 +34,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 				variant="secondary"
 				className={classNames.arrowsIcon}
 				onClick={() => {
-					swapDispatch({ type: 'SWAP_DIRECTIONS' })
+					swapDispatch({ type: SwapActionType.SWAP_DIRECTIONS })
 				}}
 			>
 				<SwapIcon />
@@ -79,7 +80,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 
 			{swapState.selectedRoute && (
 				<div className={classNames.feeDetails}>
-					<FeeDetailsDropdown swapDispatch={swapDispatch} route={swapState.selectedRoute} />
+					<FeeDropdown route={swapState.selectedRoute} />
 				</div>
 			)}
 		</div>

@@ -1,16 +1,12 @@
-import { type Address, type Chain, createPublicClient, erc20Abi, formatUnits, http } from 'viem'
+import { type PoolConfig } from './types'
+
+import { createPublicClient, erc20Abi, formatUnits, http } from 'viem'
 import { arbitrum, avalanche, base, polygon } from 'viem/chains'
 import { conceroProxyMap, defaultRpcsConfig } from 'lanca-sdk-demo'
 
-export interface IPoolConfig {
-	chain: Chain
-	conceroContract: Address
-	usdcContract: Address
-}
-
 const usdcDecimals = 6
 
-export const poolConfigs: Record<string, IPoolConfig> = {
+export const poolConfigs: Record<string, PoolConfig> = {
 	'8453': {
 		chain: base,
 		conceroContract: conceroProxyMap.CONCERO_POOL_BASE,
@@ -33,7 +29,7 @@ export const poolConfigs: Record<string, IPoolConfig> = {
 	},
 }
 
-export const getPoolAmount = async (chainId: keyof typeof poolConfigs): Promise<string> => {
+export const getPoolLiquidity = async (chainId: keyof typeof poolConfigs): Promise<string> => {
 	const { usdcContract, conceroContract, chain } = poolConfigs[chainId]
 
 	if (!chain) {

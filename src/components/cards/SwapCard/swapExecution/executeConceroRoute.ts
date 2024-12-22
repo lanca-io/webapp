@@ -1,11 +1,11 @@
-import { StageType, type SwapAction, SwapCardStage, type SwapState } from '../swapReducer/types'
+import { type SwapAction, SwapActionType, SwapCardStage, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
-import { statusSwapMap } from './statusSwapMap'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action, category } from '../../../../constants/tracking'
 import { type WalletClient } from 'viem'
-import { type RouteType, Status, type ExecutionConfig } from 'lanca-sdk-demo'
 import { lanca } from '../../../../utils/initLancaSDK'
+import { statusSwapMap } from './statusSwapMap'
+import { Status, type ExecutionConfig, type RouteType } from 'lanca-sdk-demo'
 
 interface ExecuteConceroRoute {
 	swapState: SwapState
@@ -15,23 +15,14 @@ interface ExecuteConceroRoute {
 }
 
 export async function executeConceroRoute({ swapState, swapDispatch, route, walletClient }: ExecuteConceroRoute) {
-	swapDispatch({ type: 'SET_LOADING', payload: true })
+	swapDispatch({ type: SwapActionType.SET_LOADING, payload: true })
 
 	try {
 		const addExecutionListener = (state: RouteType) => {
 			state.steps.forEach(step => {
-				if (step.execution) {
-					const statusFunction =
-						step.execution.type && step.execution.status
-							? statusSwapMap[step.execution.type][step.execution.status]
-							: undefined
-					if (statusFunction) {
-						statusFunction(swapDispatch, state)
-					} else {
-						console.error(
-							`No status function found for stage: ${step.execution.type} and status: ${step.execution.status}`,
-						)
-					}
+				if (step.type in statusSwapMap) {
+					console.log('step', step)
+					statusSwapMap[step.type](swapDispatch, state)
 				}
 			})
 		}
@@ -39,6 +30,7 @@ export async function executeConceroRoute({ swapState, swapDispatch, route, wall
 		const executionConfig: ExecutionConfig = {
 			updateRouteStatusHook: addExecutionListener,
 		}
+
 		trackEvent({
 			category: category.SwapCard,
 			action: action.BeginSwap,
@@ -46,17 +38,15 @@ export async function executeConceroRoute({ swapState, swapDispatch, route, wall
 			data: { from: swapState.from, to: swapState.to },
 		})
 
-		await lanca.executeRoute(route, walletClient as any, executionConfig)
+		await lanca.executeRoute(route, walletClient, executionConfig)
 	} catch (error: any) {
 		const errorMessage = error.message || 'Internal error'
 		const errorData = error.data || {}
 
-		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.failed })
+		swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
 		swapDispatch({
-			type: 'SET_SWAP_STEPS',
-			payload: [
-				{ title: 'Transaction failed', body: 'Internal error', status: Status.FAILED, type: StageType.error },
-			],
+			type: SwapActionType.SET_SWAP_STEPS,
+			payload: [{ title: 'Transaction failed', status: Status.FAILED }],
 		})
 
 		trackEvent({

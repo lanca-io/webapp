@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIcon'
 import { Alert } from '../../../../layout/Alert/Alert'
-import { getPriceImpact } from '../../txFunctions/getPriceImpact'
+import { getPriceImpact } from './getPriceImpact'
 import { type RouteType } from 'lanca-sdk-demo'
+import classNames from './FeeDropdown.module.pcss'
 
-import classNames from './FeeDetailsDropdown.module.pcss'
-
-interface Props {
+interface FeeDropdownProps {
 	route: RouteType
 }
 
@@ -19,19 +18,18 @@ export const formatValue = (value: number): string => {
 		return `$${value.toFixed(2)}`
 	}
 }
-export const FeeDetailsDropdown = ({ route }: Props) => {
-	const [isOpen, setIsOpen] = useState(false)
-	const [priceImpact, setPriceImpact] = useState(0)
-	const [totalFees, setTotalFees] = useState(0)
 
-	useEffect(() => {
-		const { priceImpact, totalFees } = getPriceImpact({ from: route.from, to: route.to })
-		setPriceImpact(priceImpact)
-		setTotalFees(totalFees)
-	}, [route.from, route.to.amount])
+export const FeeDropdown = ({ route: { from, to } }: FeeDropdownProps) => {
+	const [isOpen, setIsOpen] = useState<boolean>(false)
 
-	const warningPriceImpact = priceImpact > 10 && totalFees > 5
-	const dangerPriceImpact = priceImpact > 20
+	const { priceImpact, totalFees } = useMemo(() => getPriceImpact({ from, to }), [from, to])
+
+	const warningPriceImpact = useMemo(() => priceImpact > 10 && totalFees > 5, [priceImpact, totalFees])
+	const dangerPriceImpact = useMemo(() => priceImpact > 20, [priceImpact])
+
+	const handleToggle = useCallback(() => {
+		setIsOpen(prevState => !prevState)
+	}, [])
 
 	return (
 		<div className={classNames.wrap}>
@@ -42,12 +40,7 @@ export const FeeDetailsDropdown = ({ route }: Props) => {
 					variant={dangerPriceImpact ? 'error' : 'warning'}
 				/>
 			)}
-			<div
-				className={classNames.container}
-				onClick={() => {
-					setIsOpen(!isOpen)
-				}}
-			>
+			<div className={classNames.container} onClick={handleToggle}>
 				<div className="row w-full jsb ac">
 					<p className="body2">Price impact</p>
 					<p className={`${classNames.priceFee} body2`}>{formatValue(totalFees)}</p>

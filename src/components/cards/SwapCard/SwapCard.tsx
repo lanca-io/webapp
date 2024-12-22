@@ -3,7 +3,7 @@ import classNames from './SwapCard.module.pcss'
 import { useSwapCardEffects } from './SwapCardEffects'
 import { SwapInput } from './SwapInput/SwapInput'
 import { SwapProgress } from './SwapProgress/SwapProgress'
-import { type SwapAction, SwapCardStage, type SwapState } from './swapReducer/types'
+import { type SwapAction, SwapActionType, SwapCardStage, type SwapState } from './swapReducer/types'
 import { Card } from '../Card/Card'
 import { TrophyIcon } from '../../../assets/icons/TrophyIcon'
 import { Button } from '../../layout/buttons/Button/Button'
@@ -53,11 +53,11 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 	useSwapCardEffects({ swapState, swapDispatch, typingTimeoutRef })
 
 	const handleGoBack = () => {
-		swapDispatch({ type: 'RESET_AMOUNTS', direction: 'from' })
-		swapDispatch({ type: 'RESET_AMOUNTS', direction: 'to' })
-		swapDispatch({ type: 'CLEAR_ROUTES' })
-		swapDispatch({ type: 'SET_SWAP_STAGE', payload: SwapCardStage.input })
-		swapDispatch({ type: 'SET_SWAP_STEPS', payload: [] })
+		swapDispatch({ type: SwapActionType.RESET_AMOUNTS, direction: 'from' })
+		swapDispatch({ type: SwapActionType.RESET_AMOUNTS, direction: 'to' })
+		swapDispatch({ type: SwapActionType.CLEAR_ROUTES })
+		swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.input })
+		swapDispatch({ type: SwapActionType.SET_SWAP_STEPS, payload: [] })
 	}
 
 	return (

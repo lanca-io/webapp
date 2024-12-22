@@ -58,7 +58,6 @@ export const chains = [
 	optimismSepolia,
 ]
 
-// 2. Create wagmiConfig
 const metadata = {
 	name: 'Concero',
 	description: 'Concero',
@@ -95,7 +94,6 @@ export const config = createConfig({
 	],
 	transports: {
 		[mainnet.id]: http(),
-		[sepolia.id]: http(),
 		[polygon.id]: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://polygon.meowrpc.com')]),
 		[polygonZkEvm.id]: http(),
 		[arbitrum.id]: fallback([
@@ -136,7 +134,6 @@ export const config = createConfig({
 	],
 })
 
-// 3. Create modal
 createWeb3Modal({
 	wagmiConfig: config,
 	projectId,
@@ -151,7 +148,33 @@ export const configChainsViem = {
 	[base.id]: base,
 }
 
-export const publicClient = createPublicClient({
-	chain: mainnet,
-	transport: http(),
-})
+const viemChains: Record<number, { chain: any; transport: any }> = {
+	[mainnet.id]: { chain: mainnet, transport: http() },
+	[polygon.id]: {
+		chain: polygon,
+		transport: fallback([http('https://polygon-bor-rpc.publicnode.com'), http('https://polygon.meowrpc.com')]),
+	},
+	[arbitrum.id]: {
+		chain: arbitrum,
+		transport: fallback([http('https://arbitrum.llamarpc.com'), http('https://arbitrum-one-rpc.publicnode.com')]),
+	},
+	[avalanche.id]: {
+		chain: avalanche,
+		transport: fallback([http('https://avalanche.drpc.org'), http('https://avalanche-c-chain-rpc.publicnode.com')]),
+	},
+	[base.id]: {
+		chain: base,
+		transport: fallback([http('https://base-rpc.publicnode.com'), http('https://base.meowrpc.com')]),
+	},
+}
+
+export const getPublicClient = (chainId: number) => {
+	const chainConfig = viemChains[chainId]
+	if (!chainConfig) {
+		throw new Error(`Unsupported chain ID: ${chainId}`)
+	}
+	return createPublicClient({
+		chain: chainConfig.chain,
+		transport: chainConfig.transport,
+	})
+}
