@@ -19,6 +19,8 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 	const { selectedRoute } = swapState
 	const [userPoints, setUserPoints] = useState<number>(0)
 
+	console.log(swapState.from)
+
 	const typingTimeoutRef = useRef<number>()
 	const isInputStages = swapState.stage === SwapCardStage.input || swapState.stage === SwapCardStage.review
 	const isSuccess = swapState.stage === SwapCardStage.success

@@ -14,11 +14,12 @@ import { ChainsPicker } from './ChainsPicker/ChainsPicker'
 import { Modal } from '../Modal/Modal'
 import { SelectionContext } from '../../../hooks/SelectionContext'
 import { WriteIcon } from '../../../assets/icons/WriteIcon'
+import { type ConceroChain } from 'lanca-sdk-demo'
 
 interface TokensModalProps {
 	isOpen: boolean
 	onClose: () => void
-	onSelect: (token: Token, chain: Chain) => void
+	onSelect: (token: Token, chain: ConceroChain) => void
 	direction: 'from' | 'to'
 }
 
@@ -76,7 +77,7 @@ export function TokensModal({ isOpen, onClose, onSelect, direction }: TokensModa
 		}
 	}
 
-	const handleSelectChain = (chain: Chain | null) => {
+	const handleSelectChain = (chain: ConceroChain | null) => {
 		tokensModalDispatch({ type: TokenModalActionType.SET_SELECTED_CHAIN, chain })
 	}
 
