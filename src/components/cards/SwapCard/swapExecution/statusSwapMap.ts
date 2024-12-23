@@ -14,7 +14,6 @@ const handleStatusChange = (swapDispatch: Dispatch<SwapAction>, status: Status, 
 	switch (status) {
 		case Status.PENDING:
 			step.title = 'Pending approval'
-			step.body = 'Please open your wallet and sign the transaction'
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [step],
@@ -29,7 +28,6 @@ const handleStatusChange = (swapDispatch: Dispatch<SwapAction>, status: Status, 
 			break
 		case Status.FAILED:
 			step.title = 'Transaction failed'
-			step.body = 'Something went wrong'
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [step],
@@ -44,7 +42,6 @@ const handleStatusChange = (swapDispatch: Dispatch<SwapAction>, status: Status, 
 			break
 		case Status.REJECTED:
 			step.title = 'Transaction rejected'
-			step.body = 'User rejected the transaction'
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [step],

@@ -1,5 +1,5 @@
 import { type ConceroChain } from 'lanca-sdk-demo'
-import { type Chain, type Token, type TokenBalance } from '../../../../api/concero/types'
+import { type Token, type TokenBalance } from '../../../../api/concero/types'
 
 export enum TokenModalActionType {
 	SET_SELECTED_CHAIN = 0,

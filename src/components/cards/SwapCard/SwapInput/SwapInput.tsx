@@ -36,7 +36,9 @@ export const SwapInput = React.memo(({ swapState, swapDispatch }: SwapInputProps
 				size="sm"
 				variant="secondary"
 				className={classNames.arrowsIcon}
-				onClick={() => { swapDispatch({ type: SwapActionType.SWAP_DIRECTIONS }); }}
+				onClick={() => {
+					swapDispatch({ type: SwapActionType.SWAP_DIRECTIONS })
+				}}
 			>
 				<SwapIcon />
 			</IconButton>

@@ -21,7 +21,6 @@ export async function executeConceroRoute({ swapState, swapDispatch, route, wall
 		const addExecutionListener = (state: RouteType) => {
 			state.steps.forEach(step => {
 				if (step.type in statusSwapMap) {
-					console.log('step', step)
 					statusSwapMap[step.type](swapDispatch, state)
 				}
 			})
