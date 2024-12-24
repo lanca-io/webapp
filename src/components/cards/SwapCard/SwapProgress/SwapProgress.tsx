@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react'
+import { type FC, useState, useEffect } from 'react'
 import classNames from './SwapProgress.module.pcss'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
 import { StageType, SwapCardStage, type SwapState } from '../swapReducer/types'
@@ -153,15 +153,15 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 
 			{!isWarning && (
 				<div className={classNames.progressContainer}>
-					<TransactionStep status={steps[0]?.status as Status} title="Approvals" />
+					<TransactionStep status={steps[0]?.status} title="Approvals" />
 
 					{isBridge && (
 						<>
 							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status as Status} title="Bridge" />
+							<TransactionStep status={steps[1]?.status} title="Bridge" />
 							<TrailArrowRightIcon />
 							<TransactionStep
-								status={steps[1]?.status === Status.SUCCESS ? Status.SUCCESS : Status.NOT_STARTED}
+								status={steps[1]?.status === Status.SUCCESS ? Status.SUCCESS : Status.PENDING}
 								title="Swap"
 							/>
 						</>
@@ -170,7 +170,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 					{!isBridge && (
 						<>
 							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status as Status} title="Swap" />
+							<TransactionStep status={steps[1]?.status} title="Swap" />
 						</>
 					)}
 				</div>

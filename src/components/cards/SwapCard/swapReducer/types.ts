@@ -1,8 +1,7 @@
 import { type Provider } from '../../../../api/concero/types'
 import { type ErrorType } from '../SwapButton/constants'
 import { type TokenAmount } from '../../../../utils/TokenAmount'
-import { type RouteType, type Status, type ConceroChain, type ConceroToken, type StepType } from 'lanca-sdk-demo'
-
+import { type RouteType, type Status, type ConceroChain, type ConceroToken } from 'lanca-sdk-demo'
 export enum StageType {
 	approve = 1,
 	transaction = 2,
@@ -14,7 +13,7 @@ export enum StageType {
 export interface StageStep {
 	title: string
 	status: Status
-	type?: StepType
+	type?: StageType
 	body?: string
 	txLink?: string
 }

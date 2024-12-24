@@ -129,6 +129,7 @@ createAppKit({
 	metadata,
 	projectId,
 	features: {
+		send: false,
 		socials: false,
 		analytics: true,
 		email: false,

@@ -1,84 +1,291 @@
-import { type SwapAction, SwapActionType, type StageStep } from '../swapReducer/types'
+import { SwapActionType, type SwapAction, StageType } from '../swapReducer/types'
 import type { Dispatch } from 'react'
-import { type RouteType, Status, StepType } from 'lanca-sdk-demo'
+import { Status, StepType } from 'lanca-sdk-demo'
+import { SwapCardStage } from '../swapReducer/types'
 
-type swapStateFunction = (swapDispatch: Dispatch<SwapAction>, state: RouteType) => void
+type swapStateFunction = (swapDispatch: Dispatch<SwapAction>) => void
 
-const handleStatusChange = (swapDispatch: Dispatch<SwapAction>, status: Status, stepType: StepType) => {
-	const step: StageStep = {
-		title: `${stepType} ${status.toLowerCase()}`,
-		status,
-		type: stepType,
-	}
-
-	switch (status) {
-		case Status.PENDING:
-			step.title = 'Pending approval'
+export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> = {
+	[StepType.SWITCH_CHAIN]: {
+		[Status.PENDING]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_LOADING, payload: true })
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.progress })
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
-				payload: [step],
+				payload: [{ title: 'Signature required', status: Status.PENDING, type: StageType.approve }],
 			})
-			break
-		case Status.SUCCESS:
-			step.title = 'Transaction successful'
+		},
+		[Status.SUCCESS]: swapDispatch => {
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
-				payload: [step],
+				payload: [{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve }],
 			})
-			break
-		case Status.FAILED:
-			step.title = 'Transaction failed'
+		},
+		[Status.FAILED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
-				payload: [step],
+				payload: [
+					{
+						title: 'Transaction failed',
+						body: 'Internal error',
+						status: Status.FAILED,
+						type: StageType.error,
+					},
+				],
 			})
-			break
-		case Status.NOT_STARTED:
-			step.title = 'Transaction not started'
+		},
+		[Status.NOT_STARTED]: swapDispatch => {
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
-				payload: [step],
+				payload: [{ title: 'Transaction in progress...', status: Status.NOT_STARTED, type: StageType.approve }],
 			})
-			break
-		case Status.REJECTED:
-			step.title = 'Transaction rejected'
+		},
+		[Status.REJECTED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
-				payload: [step],
+				payload: [
+					{
+						title: 'Transaction rejected',
+						body: 'User rejected the transaction',
+						status: Status.REJECTED,
+						type: StageType.error,
+					},
+				],
 			})
-			break
-	}
-}
-
-export const statusSwapMap: Record<StepType, swapStateFunction> = {
-	[StepType.SRC_SWAP]: (swapDispatch, state) => {
-		const lastStep = state.steps.find(step => step.type === StepType.SRC_SWAP)
-		if (lastStep?.execution) {
-			handleStatusChange(swapDispatch, lastStep.execution.status, StepType.SRC_SWAP)
-		}
+		},
 	},
-	[StepType.BRIDGE]: (swapDispatch, state) => {
-		const lastStep = state.steps.find(step => step.type === StepType.BRIDGE)
-		if (lastStep?.execution) {
-			handleStatusChange(swapDispatch, lastStep.execution.status, StepType.BRIDGE)
-		}
+	[StepType.ALLOWANCE]: {
+		[Status.PENDING]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Signature required',
+						status: Status.PENDING,
+						type: StageType.approve,
+						body: 'Please open your wallet and sign the transaction',
+					},
+				],
+			})
+		},
+		[Status.SUCCESS]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve }],
+			})
+		},
+		[Status.FAILED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction failed',
+						body: 'Something went wrong',
+						status: Status.FAILED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
+		[Status.NOT_STARTED]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [{ title: 'Not started', status: Status.NOT_STARTED, type: StageType.approve }],
+			})
+		},
+		[Status.REJECTED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction rejected',
+						body: 'User rejected the transaction',
+						status: Status.REJECTED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
 	},
-	[StepType.DST_SWAP]: (swapDispatch, state) => {
-		const lastStep = state.steps.find(step => step.type === StepType.DST_SWAP)
-		if (lastStep?.execution) {
-			handleStatusChange(swapDispatch, lastStep.execution.status, StepType.DST_SWAP)
-		}
+	[StepType.SRC_SWAP]: {
+		[Status.PENDING]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve },
+					{ title: 'Pending', status: Status.PENDING, type: StageType.transaction },
+				],
+			})
+		},
+		[Status.SUCCESS]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STAGE,
+				payload: SwapCardStage.success,
+			})
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve },
+					{ title: 'Pending', status: Status.SUCCESS, type: StageType.transaction },
+					{ title: 'Finished', status: Status.SUCCESS, type: StageType.success },
+				],
+			})
+		},
+		[Status.FAILED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction failed',
+						body: 'Something went wrong',
+						status: Status.FAILED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
+		[Status.NOT_STARTED]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [{ title: 'Not started', status: Status.NOT_STARTED, type: StageType.approve }],
+			})
+		},
+		[Status.REJECTED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction rejected',
+						body: 'User rejected the transaction',
+						status: Status.REJECTED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
 	},
-	[StepType.ALLOWANCE]: (swapDispatch, state) => {
-		const lastStep = state.steps.find(step => step.type === StepType.ALLOWANCE)
-		if (lastStep?.execution) {
-			handleStatusChange(swapDispatch, lastStep.execution.status, StepType.ALLOWANCE)
-		}
+	[StepType.DST_SWAP]: {
+		[Status.PENDING]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve },
+					{ title: 'Pending', status: Status.PENDING, type: StageType.transaction },
+				],
+			})
+		},
+		[Status.SUCCESS]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STAGE,
+				payload: SwapCardStage.success,
+			})
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve },
+					{ title: 'Pending', status: Status.SUCCESS, type: StageType.transaction },
+					{ title: 'Finished', status: Status.SUCCESS, type: StageType.success },
+				],
+			})
+		},
+		[Status.FAILED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction failed',
+						body: 'Something went wrong',
+						status: Status.FAILED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
+		[Status.NOT_STARTED]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [{ title: 'Not started', status: Status.NOT_STARTED, type: StageType.approve }],
+			})
+		},
+		[Status.REJECTED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction rejected',
+						body: 'User rejected the transaction',
+						status: Status.REJECTED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
 	},
-	[StepType.SWITCH_CHAIN]: (swapDispatch, state) => {
-		const lastStep = state.steps.find(step => step.type === StepType.SWITCH_CHAIN)
-		if (lastStep?.execution) {
-			handleStatusChange(swapDispatch, lastStep.execution.status, StepType.SWITCH_CHAIN)
-		}
+	[StepType.BRIDGE]: {
+		[Status.PENDING]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve },
+					{ title: 'Pending', status: Status.PENDING, type: StageType.transaction },
+				],
+			})
+		},
+		[Status.SUCCESS]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STAGE,
+				payload: SwapCardStage.success,
+			})
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{ title: 'Signature required', status: Status.SUCCESS, type: StageType.approve },
+					{ title: 'Pending', status: Status.SUCCESS, type: StageType.transaction },
+					{ title: 'Finished', status: Status.SUCCESS, type: StageType.success },
+				],
+			})
+		},
+		[Status.FAILED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction failed',
+						body: 'Something went wrong',
+						status: Status.FAILED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
+		[Status.NOT_STARTED]: swapDispatch => {
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [{ title: 'Not started', status: Status.NOT_STARTED, type: StageType.approve }],
+			})
+		},
+		[Status.REJECTED]: swapDispatch => {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({
+				type: SwapActionType.SET_SWAP_STEPS,
+				payload: [
+					{
+						title: 'Transaction rejected',
+						body: 'User rejected the transaction',
+						status: Status.REJECTED,
+						type: StageType.error,
+					},
+				],
+			})
+		},
 	},
 }
