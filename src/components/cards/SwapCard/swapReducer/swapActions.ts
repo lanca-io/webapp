@@ -69,9 +69,27 @@ export const swapActions: Record<SwapActionType, (state: SwapState, action: Swap
 
 	[SwapActionType.APPEND_SWAP_STEP]: (state, action) => {
 		if (action.type === SwapActionType.APPEND_SWAP_STEP) {
+			const newSteps = Array.isArray(action.payload) ? action.payload : [action.payload]
+			const updatedSteps = [...state.steps]
+
+			newSteps.forEach(newStep => {
+				const exists = updatedSteps.some(
+					step =>
+						step.title === newStep.title &&
+						step.status === newStep.status &&
+						step.type === newStep.type &&
+						step.body === newStep.body &&
+						step.txLink === newStep.txLink &&
+						step.txType === newStep.txType,
+				)
+				if (!exists) {
+					updatedSteps.push(newStep)
+				}
+			})
+
 			return {
 				...state,
-				steps: [...state.steps, ...(Array.isArray(action.payload) ? action.payload : [action.payload])],
+				steps: updatedSteps,
 			}
 		}
 		return state

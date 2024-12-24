@@ -37,10 +37,14 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 	const [time, setTime] = useState(0)
 	const { to, from, steps, stage } = swapState
 
+	console.log('Steps', steps)
+
 	const isBridge = to.chain.id !== from.chain.id
 	const isFailed = stage === SwapCardStage.failed
 	const isSuccess = stage === SwapCardStage.success
+
 	const currentStep = steps[steps.length - 1]
+
 	const isTransactionStage = currentStep?.type === StageType.transaction
 	const isWarning = currentStep?.type === StageType.warning
 	const isAwait = currentStep && currentStep.status === Status.PENDING
@@ -153,7 +157,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 
 			{!isWarning && (
 				<div className={classNames.progressContainer}>
-					<TransactionStep status={steps[0]?.status} title="Approvals" />
+					<TransactionStep status={steps[0].status} title="Approvals" />
 
 					{isBridge && (
 						<>
