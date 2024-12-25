@@ -1,5 +1,5 @@
 import { handleBeforeUnload } from '../../../../utils/leavingPageEvents'
-import { type SwapState, SwapActionType, type SwapAction } from './types'
+import { type SwapState, SwapActionType, type SwapAction, StageType } from './types'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action as trackingAction, category as trackingCategory } from '../../../../constants/tracking'
 import { Status } from 'lanca-sdk-demo'
@@ -78,9 +78,7 @@ export const swapActions: Record<SwapActionType, (state: SwapState, action: Swap
 						step.title === newStep.title &&
 						step.status === newStep.status &&
 						step.type === newStep.type &&
-						step.body === newStep.body &&
-						step.txLink === newStep.txLink &&
-						step.txType === newStep.txType,
+						(step.type !== StageType.transaction || step.txType === newStep.txType),
 				)
 				if (!exists) {
 					updatedSteps.push(newStep)

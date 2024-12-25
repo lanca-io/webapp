@@ -1,4 +1,4 @@
-import { SwapActionType, type SwapAction, StageType, TransactionType } from '../swapReducer/types'
+import { SwapActionType, type SwapAction, StageType } from '../swapReducer/types'
 import type { Dispatch } from 'react'
 import { Status, StepType } from 'lanca-sdk-demo'
 import { SwapCardStage } from '../swapReducer/types'
@@ -61,7 +61,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Approval Pending',
 						status: Status.PENDING,
 						type: StageType.approve,
-						body: 'Approval is pending',
+						txType: StepType.ALLOWANCE,
 					},
 				],
 			})
@@ -89,7 +89,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 		[Status.NOT_STARTED]: swapDispatch => {
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
-				payload: [{ title: 'Approval Initiating', status: Status.NOT_STARTED, type: StageType.approve }],
+				payload: [{ title: 'Approval not started', status: Status.NOT_STARTED, type: StageType.approve }],
 			})
 		},
 		[Status.REJECTED]: swapDispatch => {
@@ -118,7 +118,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Source Transaction Pending',
 						status: Status.PENDING,
 						type: StageType.transaction,
-						txType: TransactionType.src_swap,
+						txType: StepType.SRC_SWAP,
 					},
 				],
 			})
@@ -131,7 +131,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Source Transaction successful',
 						status: Status.SUCCESS,
 						type: StageType.transaction,
-						txType: TransactionType.src_swap,
+						txType: StepType.SRC_SWAP,
 					},
 				],
 			})
@@ -160,7 +160,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Source Transaction not started',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
-						txType: TransactionType.src_swap,
+						txType: StepType.SRC_SWAP,
 					},
 				],
 			})
@@ -191,7 +191,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Destination Transaction Pending',
 						status: Status.PENDING,
 						type: StageType.transaction,
-						txType: TransactionType.dst_swap,
+						txType: StepType.DST_SWAP,
 					},
 				],
 			})
@@ -204,7 +204,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Destination Transaction Success',
 						status: Status.SUCCESS,
 						type: StageType.success,
-						txType: TransactionType.dst_swap,
+						txType: StepType.DST_SWAP,
 					},
 				],
 			})
@@ -231,7 +231,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Destination Transaction not started',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
-						txType: TransactionType.src_swap,
+						txType: StepType.DST_SWAP,
 					},
 				],
 			})
@@ -262,7 +262,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Bridge Pending',
 						status: Status.PENDING,
 						type: StageType.transaction,
-						txType: TransactionType.bridge,
+						txType: StepType.BRIDGE,
 					},
 				],
 			})
@@ -275,13 +275,13 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Bridging Successfull',
 						status: Status.SUCCESS,
 						type: StageType.approve,
-						txType: TransactionType.bridge,
+						txType: StepType.BRIDGE,
 					},
 				],
 			})
 		},
 		[Status.FAILED]: swapDispatch => {
-			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.warning })
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -302,7 +302,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						title: 'Bridging not started',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
-						txType: TransactionType.bridge,
+						txType: StepType.BRIDGE,
 					},
 				],
 			})

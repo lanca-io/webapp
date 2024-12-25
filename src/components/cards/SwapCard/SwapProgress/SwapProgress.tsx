@@ -1,7 +1,7 @@
-import { type FC, useState, useEffect } from 'react'
+import { type FC, useState, useEffect, type Dispatch } from 'react'
 import classNames from './SwapProgress.module.pcss'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
-import { StageType, SwapCardStage, type SwapState } from '../swapReducer/types'
+import { StageType, SwapCardStage, type SwapState, SwapActionType, type SwapAction } from '../swapReducer/types'
 import { Button } from '../../../layout/buttons/Button/Button'
 import { PendingStateSvg } from '../../../../assets/images/transactionStates/PendingStateSvg'
 import { Separator } from '../../../layout/Separator/Separator'
@@ -18,11 +18,13 @@ import { CrossIcon } from '../../../../assets/icons/CrossIcon'
 import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
+import { zeroAddress } from 'viem'
 import { truncateWallet } from '../../../../utils/formatting'
 import { Status } from 'lanca-sdk-demo'
 
 interface SwapProgressProps {
 	swapState: SwapState
+	swapDispatch: Dispatch<SwapAction>
 	handleGoBack: () => void
 }
 
@@ -33,37 +35,44 @@ const chainsTwitterMap: Record<string, string> = {
 	[avalanche.id]: 'avax',
 }
 
-export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack }) => {
+export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, handleGoBack }) => {
+	const { to, from, selectedRoute, steps, stage } = swapState
+
 	const [time, setTime] = useState(0)
-	const { to, from, steps, stage } = swapState
-
-	console.log('Steps', steps)
-
+	const isNativeSwap = from.token.address === zeroAddress
 	const isBridge = to.chain.id !== from.chain.id
 	const isFailed = stage === SwapCardStage.failed
 	const isSuccess = stage === SwapCardStage.success
+	const isWarning = stage === SwapCardStage.warning
 
 	const currentStep = steps[steps.length - 1]
 
-	const isTransactionStage = currentStep?.type === StageType.transaction
-	const isWarning = currentStep?.type === StageType.warning
-	const isAwait = currentStep && currentStep.status === Status.PENDING
+	const isTransactionStage = currentStep?.type === StageType.transaction && currentStep?.status === Status.PENDING
+	const isApprovalStage = currentStep?.type === StageType.approve && currentStep?.status === Status.PENDING
+
+	useEffect(() => {
+		const lastStepType = selectedRoute?.steps[selectedRoute.steps.length - 1]?.type
+		const isTxCompleted = steps.some(step => step.txType === lastStepType && step.status === Status.SUCCESS)
+		if (isTxCompleted) {
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.success })
+		}
+	}, [steps, selectedRoute])
 
 	useEffect(() => {
 		const timerId = setInterval(() => {
-			if (isAwait || isSuccess || isFailed) return
+			if (isApprovalStage || isSuccess || isFailed) return
 
 			setTime(prev => prev + 1)
 		}, 1000)
 
-		if (isSuccess || isAwait || isFailed) {
+		if (isSuccess || isApprovalStage || isFailed) {
 			clearInterval(timerId)
 		}
 
 		return () => {
 			clearInterval(timerId)
 		}
-	}, [swapState])
+	}, [isApprovalStage, isSuccess, isFailed])
 
 	const txType = isBridge ? 'Bridge' : 'Swap'
 
@@ -151,76 +160,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 		[SwapCardStage.warning]: 'Uh Oh...',
 	}
 
-	const progressDetails = (
-		<>
-			{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
-
-			{!isWarning && (
-				<div className={classNames.progressContainer}>
-					<TransactionStep status={steps[0].status} title="Approvals" />
-
-					{isBridge && (
-						<>
-							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status} title="Bridge" />
-							<TrailArrowRightIcon />
-							<TransactionStep
-								status={steps[1]?.status === Status.SUCCESS ? Status.SUCCESS : Status.PENDING}
-								title="Swap"
-							/>
-						</>
-					)}
-
-					{!isBridge && (
-						<>
-							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status} title="Swap" />
-						</>
-					)}
-				</div>
-			)}
-
-			{!isWarning && <Separator />}
-
-			{isAwait && (
-				<div className={classNames.infoMessage}>
-					<div className={classNames.wrapIcon}>
-						<PencilIcon />
-					</div>
-					<h4 className={classNames.messageTitle}>Signature required</h4>
-					<p className={classNames.messageSubtitle}>Please open your wallet and sign the transaction</p>
-				</div>
-			)}
-
-			{isWarning && (
-				<div className="gap-lg">
-					<div className="gap-sm">
-						<h4 className={classNames.warningTitle}>Dont worry</h4>
-						<p>Your funds are safe but it will take a bit longer to complete the transaction. </p>
-						<p className={classNames.warningSubtitle}>
-							Funds are being migrated using Chainlink CCIP and will arrive in about 20 minutes.
-						</p>
-					</div>
-					<Separator />
-					{currentStep.txLink && (
-						<div className="row ac jsb">
-							<p>CCIP TXid:</p>
-							<p>{truncateWallet(currentStep.txLink)}</p>
-						</div>
-					)}
-				</div>
-			)}
-
-			{currentStep && !isAwait && !isWarning && (
-				<Alert
-					title={`${isTransactionStage ? `${txType} ` : ''} ${currentStep.title}`}
-					variant={isFailed ? 'error' : 'neutral'}
-					icon={isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />}
-				/>
-			)}
-		</>
-	)
-
 	return (
 		<div className={classNames.container}>
 			<div className={classNames.header}>
@@ -239,7 +178,80 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 
 			{!isTransactionStage && stateImages[stage]}
 
-			{isSuccess ? <FinishTxInfo time={time} to={to} /> : progressDetails}
+			{isSuccess ? (
+				<FinishTxInfo time={time} to={to} />
+			) : (
+				<>
+					{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
+
+					{!isWarning && (
+						<div className={classNames.progressContainer}>
+							{!isNativeSwap && <TransactionStep status={steps[0].status} title="Approvals" />}
+							{isBridge && (
+								<>
+									{!isNativeSwap && <TrailArrowRightIcon />}
+									<TransactionStep status={steps[1]?.status} title="Bridge" />
+									<TrailArrowRightIcon />
+									<TransactionStep
+										status={steps[1]?.status === Status.SUCCESS ? Status.SUCCESS : Status.PENDING}
+										title="Swap"
+									/>
+								</>
+							)}
+
+							{!isBridge && (
+								<>
+									<TrailArrowRightIcon />
+									<TransactionStep status={steps[1]?.status} title="Swap" />
+								</>
+							)}
+						</div>
+					)}
+
+					{!isWarning && <Separator />}
+
+					{isApprovalStage && (
+						<div className={classNames.infoMessage}>
+							<div className={classNames.wrapIcon}>
+								<PencilIcon />
+							</div>
+							<h4 className={classNames.messageTitle}>Signature required</h4>
+							<p className={classNames.messageSubtitle}>
+								Please open your wallet and sign the transaction
+							</p>
+						</div>
+					)}
+
+					{isWarning && (
+						<div className="gap-lg">
+							<div className="gap-sm">
+								<h4 className={classNames.warningTitle}>Dont worry</h4>
+								<p>Your funds are safe but it will take a bit longer to complete the transaction. </p>
+								<p className={classNames.warningSubtitle}>
+									Funds are being migrated using Chainlink CCIP and will arrive in about 20 minutes.
+								</p>
+							</div>
+							<Separator />
+							{currentStep.txLink && (
+								<div className="row ac jsb">
+									<p>CCIP TXid:</p>
+									<p>{truncateWallet(currentStep.txLink)}</p>
+								</div>
+							)}
+						</div>
+					)}
+
+					{currentStep && !isApprovalStage && !isWarning && (
+						<Alert
+							title={`${isTransactionStage ? `${txType} ` : ''} ${currentStep.title}`}
+							variant={isFailed ? 'error' : 'neutral'}
+							icon={
+								isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />
+							}
+						/>
+					)}
+				</>
+			)}
 
 			{renderButtons[stage] ?? null}
 		</div>

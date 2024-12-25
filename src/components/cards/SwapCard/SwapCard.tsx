@@ -66,7 +66,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 				{isInputStages ? (
 					<SwapInput swapState={swapState} swapDispatch={swapDispatch} />
 				) : (
-					<SwapProgress swapState={swapState} handleGoBack={handleGoBack} />
+					<SwapProgress swapState={swapState} swapDispatch={swapDispatch} handleGoBack={handleGoBack} />
 				)}
 			</Card>
 
