@@ -115,7 +115,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Source Transaction Pending',
+						title: 'Source Swap Pending',
 						status: Status.PENDING,
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
@@ -128,7 +128,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Source Transaction successful',
+						title: 'Source Transaction Successful',
 						status: Status.SUCCESS,
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
@@ -142,7 +142,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Source Transaction failed',
+						title: 'Source Transaction Failed',
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
@@ -157,7 +157,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Source Transaction not started',
+						title: 'Transaction Initializing',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
@@ -171,7 +171,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Source Transaction rejected',
+						title: 'Source Transaction Rejected',
 						body: 'User rejected the transaction',
 						status: Status.REJECTED,
 						type: StageType.error,

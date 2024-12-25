@@ -20,7 +20,7 @@ import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 import { zeroAddress } from 'viem'
 import { truncateWallet } from '../../../../utils/formatting'
-import { Status } from 'lanca-sdk-demo'
+import { Status, StepType } from 'lanca-sdk-demo'
 
 interface SwapProgressProps {
 	swapState: SwapState
@@ -36,25 +36,26 @@ const chainsTwitterMap: Record<string, string> = {
 }
 
 export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, handleGoBack }) => {
-	const { to, from, selectedRoute, steps, stage } = swapState
+	const { to, from, steps, selectedRoute, stage } = swapState
 
-	const [time, setTime] = useState(0)
-	const isNativeSwap = from.token.address === zeroAddress
-	const isBridge = to.chain.id !== from.chain.id
+	const [time, setTime] = useState<number>(0)
+	const isBridge = from.chain.id !== to.chain.id
 	const isFailed = stage === SwapCardStage.failed
 	const isSuccess = stage === SwapCardStage.success
 	const isWarning = stage === SwapCardStage.warning
 
+	const isNativeSwap = from.token.address === zeroAddress
 	const currentStep = steps[steps.length - 1]
 
-	const isTransactionStage = currentStep?.type === StageType.transaction && currentStep?.status === Status.PENDING
-	const isApprovalStage = currentStep?.type === StageType.approve && currentStep?.status === Status.PENDING
+	const isTransactionStage = currentStep?.type === StageType.transaction && currentStep?.status !== Status.SUCCESS
+	const isApprovalStage = currentStep?.type === StageType.approve && currentStep?.status !== Status.SUCCESS
 
 	useEffect(() => {
 		const lastStepType = selectedRoute?.steps[selectedRoute.steps.length - 1]?.type
 		const isTxCompleted = steps.some(step => step.txType === lastStepType && step.status === Status.SUCCESS)
 		if (isTxCompleted) {
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.success })
+			swapDispatch({ type: SwapActionType.SET_SWAP_STEPS, payload: [] })
 		}
 	}, [steps, selectedRoute])
 
@@ -73,8 +74,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 			clearInterval(timerId)
 		}
 	}, [isApprovalStage, isSuccess, isFailed])
-
-	const txType = isBridge ? 'Bridge' : 'Swap'
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[SwapCardStage.failed]: (
@@ -186,14 +185,35 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 
 					{!isWarning && (
 						<div className={classNames.progressContainer}>
-							{!isNativeSwap && <TransactionStep status={steps[0].status} title="Approvals" />}
+							{!isNativeSwap && (
+								<TransactionStep
+									status={
+										currentStep?.txType === StepType.ALLOWANCE
+											? (currentStep.status as Status)
+											: Status.NOT_STARTED
+									}
+									title="Approvals"
+								/>
+							)}
+							{!isBridge && !isNativeSwap && <TrailArrowRightIcon />}
 							{isBridge && (
 								<>
 									{!isNativeSwap && <TrailArrowRightIcon />}
-									<TransactionStep status={steps[1]?.status} title="Bridge" />
+									<TransactionStep
+										status={
+											currentStep?.txType === StepType.BRIDGE
+												? (currentStep.status as Status)
+												: Status.NOT_STARTED
+										}
+										title="Bridge"
+									/>
 									<TrailArrowRightIcon />
 									<TransactionStep
-										status={steps[1]?.status === Status.SUCCESS ? Status.SUCCESS : Status.PENDING}
+										status={
+											currentStep?.txType === StepType.DST_SWAP
+												? (currentStep.status as Status)
+												: Status.NOT_STARTED
+										}
 										title="Swap"
 									/>
 								</>
@@ -201,8 +221,14 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 
 							{!isBridge && (
 								<>
-									<TrailArrowRightIcon />
-									<TransactionStep status={steps[1]?.status} title="Swap" />
+									<TransactionStep
+										status={
+											currentStep?.txType === StepType.SRC_SWAP
+												? (currentStep.status as Status)
+												: Status.NOT_STARTED
+										}
+										title="Swap"
+									/>
 								</>
 							)}
 						</div>
@@ -243,7 +269,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 
 					{currentStep && !isApprovalStage && !isWarning && (
 						<Alert
-							title={`${isTransactionStage ? `${txType} ` : ''} ${currentStep.title}`}
+							title={`${currentStep.title}`}
 							variant={isFailed ? 'error' : 'neutral'}
 							icon={
 								isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />
