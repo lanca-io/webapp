@@ -1,8 +1,9 @@
 import { type PoolConfig } from './types'
 
-import { createPublicClient, erc20Abi, formatUnits, http } from 'viem'
+import { erc20Abi, formatUnits } from 'viem'
 import { arbitrum, avalanche, base, polygon } from 'viem/chains'
-import { conceroProxyMap, defaultRpcsConfig } from 'lanca-sdk-demo'
+import { conceroProxyMap } from 'lanca-sdk-demo'
+import { getPublicClient } from '../../../../web3/wagmi'
 
 const usdcDecimals = 6
 
@@ -29,19 +30,10 @@ export const poolConfigs: Record<string, PoolConfig> = {
 	},
 }
 
-export const getPoolLiquidity = async (chainId: keyof typeof poolConfigs): Promise<string> => {
+export const getPoolLiquidity = async (chainId: string): Promise<string> => {
 	const { usdcContract, conceroContract, chain } = poolConfigs[chainId]
 
-	if (!chain) {
-		throw new Error(`Chain configuration not found for chainId: ${chainId}`)
-	}
-
-	const transport: any = defaultRpcsConfig[chain.id as keyof typeof defaultRpcsConfig] ?? http()
-
-	const publicClient = createPublicClient({
-		chain,
-		transport,
-	})
+	const publicClient = getPublicClient(chain.id)
 
 	const data = await publicClient.readContract({
 		address: usdcContract,

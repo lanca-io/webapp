@@ -115,7 +115,7 @@ const createTransports = () => ({
 	[optimismSepolia.id]: http(),
 })
 
-const transports = createTransports()
+export const transports = createTransports()
 
 export const wagmiAdapter = new WagmiAdapter({
 	networks: chains,
@@ -148,7 +148,7 @@ export const configChainsViem = {
 	[base.id]: base,
 }
 
-const viemChains: Record<number, { chain: any; transport: any }> = {
+export const viemChains: Record<number, { chain: any; transport: any }> = {
 	[mainnet.id]: { chain: mainnet, transport: http() },
 	[polygon.id]: {
 		chain: polygon,
