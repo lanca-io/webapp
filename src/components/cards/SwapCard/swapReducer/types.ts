@@ -19,6 +19,7 @@ export interface StageStep {
 	body?: string
 	txLink?: string
 	txType?: StepType
+	error?: string
 }
 export interface SwapStateDirection {
 	chain: {
