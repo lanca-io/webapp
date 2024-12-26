@@ -10,6 +10,14 @@ interface StageProps {
 	status: Status | null | undefined
 }
 
+const statusClassNames = {
+	[Status.NOT_STARTED]: 'idle',
+	[Status.PENDING]: 'pending',
+	[Status.REJECTED]: 'error',
+	[Status.FAILED]: 'error',
+	[Status.SUCCESS]: 'success',
+}
+
 export const TransactionStep: FC<StageProps> = ({ status, title }) => {
 	const renderIcon = () => {
 		switch (status) {
@@ -30,7 +38,7 @@ export const TransactionStep: FC<StageProps> = ({ status, title }) => {
 	return (
 		<div className={classNames.step}>
 			{renderIcon()}
-			<h4 className={classNames[status ?? Status.NOT_STARTED]}>{title}</h4>
+			<h4 className={classNames[statusClassNames[status ?? Status.NOT_STARTED]]}>{title}</h4>
 		</div>
 	)
 }

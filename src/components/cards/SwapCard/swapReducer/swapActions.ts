@@ -69,6 +69,9 @@ export const swapActions: Record<SwapActionType, (state: SwapState, action: Swap
 
 	[SwapActionType.APPEND_SWAP_STEP]: (state, action) => {
 		if (action.type === SwapActionType.APPEND_SWAP_STEP) {
+			if (state.steps[0]?.status === Status.FAILED || state.steps[0]?.status === Status.REJECTED) {
+				return state
+			}
 			const newSteps = Array.isArray(action.payload) ? action.payload : [action.payload]
 			const updatedSteps = [...state.steps]
 

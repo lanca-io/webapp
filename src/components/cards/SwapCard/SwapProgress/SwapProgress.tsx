@@ -1,7 +1,7 @@
-import { type FC, useState, useEffect, type Dispatch } from 'react'
+import { type FC, type Dispatch } from 'react'
 import classNames from './SwapProgress.module.pcss'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
-import { StageType, SwapCardStage, type SwapState, SwapActionType, type SwapAction } from '../swapReducer/types'
+import { StageType, SwapCardStage, type SwapState, type SwapAction } from '../swapReducer/types'
 import { Button } from '../../../layout/buttons/Button/Button'
 import { PendingStateSvg } from '../../../../assets/images/transactionStates/PendingStateSvg'
 import { Separator } from '../../../layout/Separator/Separator'
@@ -20,7 +20,10 @@ import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 import { zeroAddress } from 'viem'
 import { truncateWallet } from '../../../../utils/formatting'
-import { Status, StepType } from 'lanca-sdk-demo'
+import { Status } from 'lanca-sdk-demo'
+import { useTimer } from './hooks/useTimer'
+import { useTransactionCompletion } from './hooks/useTransactionCompletion'
+import { useSwapStatuses } from './hooks/useSwapStatuses'
 
 interface SwapProgressProps {
 	swapState: SwapState
@@ -38,7 +41,6 @@ const chainsTwitterMap: Record<string, string> = {
 export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, handleGoBack }) => {
 	const { to, from, steps, selectedRoute, stage } = swapState
 
-	const [time, setTime] = useState<number>(0)
 	const isBridge = from.chain.id !== to.chain.id
 	const isFailed = stage === SwapCardStage.failed
 	const isSuccess = stage === SwapCardStage.success
@@ -50,30 +52,10 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 	const isTransactionStage = currentStep?.type === StageType.transaction && currentStep?.status !== Status.SUCCESS
 	const isApprovalStage = currentStep?.type === StageType.approve && currentStep?.status !== Status.SUCCESS
 
-	useEffect(() => {
-		const lastStepType = selectedRoute?.steps[selectedRoute.steps.length - 1]?.type
-		const isTxCompleted = steps.some(step => step.txType === lastStepType && step.status === Status.SUCCESS)
-		if (isTxCompleted) {
-			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.success })
-			swapDispatch({ type: SwapActionType.SET_SWAP_STEPS, payload: [] })
-		}
-	}, [steps, selectedRoute])
+	const { approvalStatus, bridgeStatus, swapStatus, dstSwapStatus } = useSwapStatuses({ steps })
 
-	useEffect(() => {
-		const timerId = setInterval(() => {
-			if (isApprovalStage || isSuccess || isFailed) return
-
-			setTime(prev => prev + 1)
-		}, 1000)
-
-		if (isSuccess || isApprovalStage || isFailed) {
-			clearInterval(timerId)
-		}
-
-		return () => {
-			clearInterval(timerId)
-		}
-	}, [isApprovalStage, isSuccess, isFailed])
+	const time = useTimer(isApprovalStage, isSuccess, isFailed)
+	useTransactionCompletion(steps, selectedRoute, swapDispatch)
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[SwapCardStage.failed]: (
@@ -185,50 +167,20 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 
 					{!isWarning && (
 						<div className={classNames.progressContainer}>
-							{!isNativeSwap && (
-								<TransactionStep
-									status={
-										currentStep?.txType === StepType.ALLOWANCE
-											? (currentStep.status as Status)
-											: Status.NOT_STARTED
-									}
-									title="Approvals"
-								/>
-							)}
+							{!isNativeSwap && <TransactionStep status={approvalStatus} title="Approvals" />}
 							{!isBridge && !isNativeSwap && <TrailArrowRightIcon />}
 							{isBridge && (
 								<>
 									{!isNativeSwap && <TrailArrowRightIcon />}
-									<TransactionStep
-										status={
-											currentStep?.txType === StepType.BRIDGE
-												? (currentStep.status as Status)
-												: Status.NOT_STARTED
-										}
-										title="Bridge"
-									/>
+									<TransactionStep status={bridgeStatus} title="Bridge" />
 									<TrailArrowRightIcon />
-									<TransactionStep
-										status={
-											currentStep?.txType === StepType.DST_SWAP
-												? (currentStep.status as Status)
-												: Status.NOT_STARTED
-										}
-										title="Swap"
-									/>
+									<TransactionStep status={dstSwapStatus} title="Swap" />
 								</>
 							)}
 
 							{!isBridge && (
 								<>
-									<TransactionStep
-										status={
-											currentStep?.txType === StepType.SRC_SWAP
-												? (currentStep.status as Status)
-												: Status.NOT_STARTED
-										}
-										title="Swap"
-									/>
+									<TransactionStep status={swapStatus} title="Swap" />
 								</>
 							)}
 						</div>

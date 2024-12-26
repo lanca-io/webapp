@@ -69,7 +69,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 		[Status.SUCCESS]: swapDispatch => {
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
-				payload: [{ title: 'Approval Successful', status: Status.SUCCESS, type: StageType.approve }],
+				payload: [
+					{
+						title: 'Approval Successful',
+						status: Status.SUCCESS,
+						type: StageType.approve,
+						txType: StepType.ALLOWANCE,
+					},
+				],
 			})
 		},
 		[Status.FAILED]: swapDispatch => {
@@ -78,10 +85,11 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Approval Failed',
+						title: 'Transaction failed',
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
+						txType: StepType.ALLOWANCE,
 					},
 				],
 			})
@@ -89,7 +97,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 		[Status.NOT_STARTED]: swapDispatch => {
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
-				payload: [{ title: 'Approval not started', status: Status.NOT_STARTED, type: StageType.approve }],
+				payload: [
+					{
+						title: 'Approval not started',
+						status: Status.NOT_STARTED,
+						type: StageType.approve,
+						txType: StepType.ALLOWANCE,
+					},
+				],
 			})
 		},
 		[Status.REJECTED]: swapDispatch => {
@@ -98,10 +113,11 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Approval rejected',
+						title: 'Transaction rejected',
 						body: 'User rejected the transaction',
 						status: Status.REJECTED,
 						type: StageType.error,
+						txType: StepType.ALLOWANCE,
 					},
 				],
 			})
@@ -115,7 +131,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Source Swap Pending',
+						title: 'Swap in progress...',
 						status: Status.PENDING,
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
@@ -128,7 +144,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Source Transaction Successful',
+						title: 'Swap success',
 						status: Status.SUCCESS,
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
@@ -142,22 +158,21 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Source Transaction Failed',
+						title: 'Swap failed',
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
+						txType: StepType.SRC_SWAP,
 					},
 				],
 			})
 		},
 		[Status.NOT_STARTED]: swapDispatch => {
-			swapDispatch({ type: SwapActionType.SET_LOADING, payload: true })
-			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.progress })
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Transaction Initializing',
+						title: 'Swap in progress...',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
@@ -171,10 +186,11 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Source Transaction Rejected',
+						title: 'Transaction rejected',
 						body: 'User rejected the transaction',
 						status: Status.REJECTED,
 						type: StageType.error,
+						txType: StepType.SRC_SWAP,
 					},
 				],
 			})
@@ -188,7 +204,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Destination Transaction Pending',
+						title: 'Swap in progress...',
 						status: Status.PENDING,
 						type: StageType.transaction,
 						txType: StepType.DST_SWAP,
@@ -201,7 +217,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Destination Transaction Success',
+						title: 'Swap success',
 						status: Status.SUCCESS,
 						type: StageType.success,
 						txType: StepType.DST_SWAP,
@@ -215,10 +231,11 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Destination Transaction Failed',
+						title: 'Swap failed',
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
+						txType: StepType.DST_SWAP,
 					},
 				],
 			})
@@ -228,7 +245,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Destination Transaction not started',
+						title: 'Swap in progress...',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
 						txType: StepType.DST_SWAP,
@@ -246,6 +263,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						body: 'User rejected the transaction',
 						status: Status.REJECTED,
 						type: StageType.error,
+						txType: StepType.DST_SWAP,
 					},
 				],
 			})
@@ -259,7 +277,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Bridge Pending',
+						title: 'Bridge in progress...',
 						status: Status.PENDING,
 						type: StageType.transaction,
 						txType: StepType.BRIDGE,
@@ -272,7 +290,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Bridging Successfull',
+						title: 'Bridging success',
 						status: Status.SUCCESS,
 						type: StageType.approve,
 						txType: StepType.BRIDGE,
@@ -281,7 +299,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			})
 		},
 		[Status.FAILED]: swapDispatch => {
-			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.warning })
+			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -290,6 +308,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
+						txType: StepType.BRIDGE,
 					},
 				],
 			})
@@ -299,7 +318,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Bridging not started',
+						title: 'Bridge in progress...',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
 						txType: StepType.BRIDGE,
@@ -313,10 +332,11 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Bridging rejected',
+						title: 'Transaction rejected',
 						body: 'Transaction is rejected',
 						status: Status.REJECTED,
 						type: StageType.error,
+						txType: StepType.BRIDGE,
 					},
 				],
 			})
