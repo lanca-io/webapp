@@ -68,20 +68,12 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 		),
 		[SwapCardStage.warning]: (
 			<>
-				{currentStep?.txLink && (
-					<div className="gap-lg w-full">
-						<Separator />
-						<a
-							target="_blank"
-							href={`https://ccip.chain.link/#/side-drawer/msg/${currentStep.txLink}`}
-							rel="noreferrer"
-						>
-							<Button isFull={true} variant="secondary" size="lg">
-								View in explorer
-							</Button>
-						</a>
-					</div>
-				)}
+				<div className="gap-lg w-full">
+					<Separator />
+					<Button isFull={true} onClick={handleGoBack} variant="secondaryColor" size="lg">
+						Try again
+					</Button>
+				</div>
 			</>
 		),
 		[SwapCardStage.success]: (
@@ -138,7 +130,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 		[SwapCardStage.progress]: 'Transaction in progress...',
 		[SwapCardStage.failed]: 'Transaction failed',
 		[SwapCardStage.success]: 'Swap Successful!',
-		[SwapCardStage.warning]: 'Uh Oh...',
+		[SwapCardStage.warning]: 'CCIP Error',
 	}
 
 	return (

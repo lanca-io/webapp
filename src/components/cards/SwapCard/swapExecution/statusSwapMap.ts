@@ -86,7 +86,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Transaction failed',
+						title: 'Transaction rejected',
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
