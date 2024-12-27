@@ -19,7 +19,6 @@ import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 import { zeroAddress } from 'viem'
-import { truncateWallet } from '../../../../utils/formatting'
 import { Status } from 'lanca-sdk-demo'
 import { useTimer } from './hooks/useTimer'
 import { useTransactionCompletion } from './hooks/useTransactionCompletion'
@@ -65,16 +64,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 					Try again
 				</Button>
 			</div>
-		),
-		[SwapCardStage.warning]: (
-			<>
-				<div className="gap-lg w-full">
-					<Separator />
-					<Button isFull={true} onClick={handleGoBack} variant="secondaryColor" size="lg">
-						Try again
-					</Button>
-				</div>
-			</>
 		),
 		[SwapCardStage.success]: (
 			<>
@@ -195,19 +184,11 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 					{isWarning && (
 						<div className="gap-lg">
 							<div className="gap-sm">
-								<h4 className={classNames.warningTitle}>Dont worry</h4>
-								<p>Your funds are safe but it will take a bit longer to complete the transaction. </p>
-								<p className={classNames.warningSubtitle}>
-									Funds are being migrated using Chainlink CCIP and will arrive in about 20 minutes.
+								<h4 className={classNames.warningTitle}>Funds will arrive in about 20 mintues</h4>
+								<p className={classNames.warningMessage}>
+									Your funds are safe but it will take a bit longer to complete the transaction.{' '}
 								</p>
 							</div>
-							<Separator />
-							{currentStep.txLink && (
-								<div className="row ac jsb">
-									<p>CCIP TXid:</p>
-									<p>{truncateWallet(currentStep.txLink)}</p>
-								</div>
-							)}
 						</div>
 					)}
 
