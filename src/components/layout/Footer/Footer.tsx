@@ -81,10 +81,7 @@ export const Footer = () => {
 								<SocialIconWrap href="https://x.com/lanca_io" variant="iconDark">
 									<TwitterIcon />
 								</SocialIconWrap>
-								<SocialIconWrap
-									href="https://discord.com/channels/1155792755105214535"
-									variant="iconBlue"
-								>
+								<SocialIconWrap href="http://discord.gg/lanca" variant="iconBlue">
 									<DiscordIcon />
 								</SocialIconWrap>
 							</div>
