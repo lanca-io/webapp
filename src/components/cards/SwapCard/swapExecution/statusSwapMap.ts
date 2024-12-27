@@ -54,7 +54,6 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 	// APPROVAL
 	[StepType.ALLOWANCE]: {
 		[Status.PENDING]: swapDispatch => {
-			console.log('APPROVAL PENDING')
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
