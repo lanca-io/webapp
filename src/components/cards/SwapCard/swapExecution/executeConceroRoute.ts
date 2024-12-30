@@ -35,7 +35,7 @@ export async function executeConceroRoute({ swapState, swapDispatch, route, wall
 							],
 						})
 					} else {
-						statusSwapMap[step.type][step.execution.status](swapDispatch)
+						statusSwapMap[step.type][step.execution.status](swapDispatch, state)
 					}
 				}
 			})

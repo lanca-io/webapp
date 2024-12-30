@@ -1,9 +1,9 @@
 import { SwapActionType, type SwapAction, StageType } from '../swapReducer/types'
 import type { Dispatch } from 'react'
-import { Status, StepType } from 'lanca-sdk-demo'
+import { type RouteType, Status, StepType } from 'lanca-sdk-demo'
 import { SwapCardStage } from '../swapReducer/types'
 
-type swapStateFunction = (swapDispatch: Dispatch<SwapAction>) => void
+type swapStateFunction = (swapDispatch: Dispatch<SwapAction>, state: RouteType) => void
 
 export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> = {
 	// CHAIN SWITCHING
@@ -272,12 +272,13 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 
 	// BRIDGE
 	[StepType.BRIDGE]: {
-		[Status.PENDING]: swapDispatch => {
+		[Status.PENDING]: (swapDispatch, state) => {
+			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Bridge in progress...',
+						title: hasDstSwap ? 'Bridge & Swap in progress...' : 'Bridge in progress...',
 						status: Status.PENDING,
 						type: StageType.transaction,
 						txType: StepType.BRIDGE,
@@ -285,12 +286,13 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.SUCCESS]: swapDispatch => {
+		[Status.SUCCESS]: (swapDispatch, state) => {
+			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Bridging success',
+						title: hasDstSwap ? 'Bridge & Swap success' : 'Bridge success',
 						status: Status.SUCCESS,
 						type: StageType.approve,
 						txType: StepType.BRIDGE,
@@ -298,13 +300,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.FAILED]: swapDispatch => {
+		[Status.FAILED]: (swapDispatch, state) => {
+			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Bridge failed',
+						title: hasDstSwap ? 'Bridge & Swap failed' : 'Bridge failed',
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
@@ -313,12 +316,13 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.NOT_STARTED]: swapDispatch => {
+		[Status.NOT_STARTED]: (swapDispatch, state) => {
+			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
 					{
-						title: 'Bridge in progress...',
+						title: hasDstSwap ? 'Bridge & Swap in progress...' : 'Bridge in progress...',
 						status: Status.NOT_STARTED,
 						type: StageType.transaction,
 						txType: StepType.BRIDGE,
@@ -326,13 +330,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.REJECTED]: swapDispatch => {
+		[Status.REJECTED]: (swapDispatch, state) => {
+			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Transaction rejected',
+						title: hasDstSwap ? 'Bridge & Swap rejected' : 'Bridge rejected',
 						body: 'Transaction is rejected',
 						status: Status.REJECTED,
 						type: StageType.error,
