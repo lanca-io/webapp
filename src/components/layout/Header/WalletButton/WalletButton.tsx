@@ -1,4 +1,4 @@
-import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useAppKit } from '@reown/appkit/react'
 import { action, category } from '../../../../constants/tracking'
 import { useAccount } from 'wagmi'
 import { IconWallet } from '@tabler/icons-react'
@@ -10,7 +10,7 @@ import { trackEvent } from '../../../../hooks/useTracking'
 
 export const WalletButton = () => {
 	const { address, isConnected, isDisconnected, isConnecting } = useAccount()
-	const { open } = useWeb3Modal()
+	const { open } = useAppKit()
 	const { t } = useTranslation()
 
 	function handleClick() {

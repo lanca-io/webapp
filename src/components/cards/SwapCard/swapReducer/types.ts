@@ -1,11 +1,10 @@
-import { type Chain, type Provider } from '../../../../api/concero/types'
-import { type TransactionStatus } from 'rango-sdk'
+import { type Provider } from '../../../../api/concero/types'
 import { type ErrorType } from '../SwapButton/constants'
 import { type TokenAmount } from '../../../../utils/TokenAmount'
-import { type Status } from '../../../../sdk/types/executeSettingsTypes'
-import { type RouteData } from '../../../../sdk/types/routeTypes'
+import { type RouteType, type Status, type ConceroChain, type ConceroToken, type StepType } from 'lanca-sdk-demo'
 
 export enum StageType {
+	chain = 0,
 	approve = 1,
 	transaction = 2,
 	success = 3,
@@ -16,11 +15,12 @@ export enum StageType {
 export interface StageStep {
 	title: string
 	status: Status
-	type: StageType
+	type?: StageType
 	body?: string
-	txLink?: string | null | undefined
+	txLink?: string
+	txType?: StepType
+	error?: string
 }
-
 export interface SwapStateDirection {
 	chain: {
 		name: string
@@ -65,24 +65,23 @@ export interface Balance {
 export interface SwapState {
 	from: SwapStateDirection
 	to: SwapStateDirection
-	routes: RouteData[]
-	selectedRoute: RouteData | null
-
+	balance: Balance | null
+	routes: RouteType[]
+	isNoRoutes: boolean
+	isLoading: boolean
+	selectedRoute: RouteType | null
 	typingTimeout: number
 	stage: SwapCardStage
 	steps: StageStep[]
 	settings: Settings
+	chains: any[]
 	buttonState: ButtonState
-	balance: Balance
-	walletBalances: null
-
-	settingsModalOpen: boolean
-	isNoRoutes: boolean
-	isLoading: boolean
+	walletBalances: any
 	isDestinationAddressVisible: boolean
+	settingsModalOpen: boolean
 	isTestnet: boolean
 	isSufficientLiquidity: boolean
-	inputError: null
+	inputError: ErrorType | null
 }
 
 export interface Settings {
@@ -91,62 +90,49 @@ export interface Settings {
 	allowSwitchChain: boolean
 }
 
-type ActionDirection = 'from' | 'to'
+export type ActionDirection = 'from' | 'to'
 
 export enum SwapActionType {
 	POPULATE_ROUTES = 'POPULATE_ROUTES',
-	CLEAR_ROUTES = 'CLEAR_ROUTES',
-	SET_BALANCE = 'SET_BALANCE',
 	SET_LOADING = 'SET_LOADING',
-	SET_SELECTED_ROUTE = 'SET_SELECTED_ROUTE',
+	SET_IS_SUFFICIENT_LIQUIDITY = 'SET_IS_SUFFICIENT_LIQUIDITY',
+	SET_INPUT_ERROR = 'SET_INPUT_ERROR',
+	CLEAR_ROUTES = 'CLEAR_ROUTES',
+	RESET_AMOUNTS = 'RESET_AMOUNTS',
+	SET_IS_NO_ROUTES = 'SET_IS_NO_ROUTES',
+	SET_SWAP_STAGE = 'SET_SWAP_STAGE',
+	UPDATE_LAST_SWAP_STEP = 'UPDATE_LAST_SWAP_STEP',
+	SET_BALANCE = 'SET_BALANCE',
 	SET_CHAIN = 'SET_CHAIN',
 	SET_TOKEN = 'SET_TOKEN',
 	SET_AMOUNT = 'SET_AMOUNT',
-	RESET_AMOUNTS = 'RESET_AMOUNTS',
 	SET_ADDRESS = 'SET_ADDRESS',
-	TOGGLE_INSURANCE = 'TOGGLE_INSURANCE',
-	SET_SWAP_STAGE = 'SET_SWAP_STAGE',
-	TOGGLE_SETTINGS_MODAL_OPEN = 'TOGGLE_SETTINGS_MODAL_OPEN',
 	SET_SETTINGS = 'SET_SETTINGS',
 	SET_SWAP_STEPS = 'SET_SWAP_STEPS',
+	SWAP_DIRECTIONS = 'SWAP_DIRECTIONS',
 	APPEND_SWAP_STEP = 'APPEND_SWAP_STEP',
-	SET_TO_ADDRESS = 'SET_TO_ADDRESS',
-	UPSERT_SWAP_STEP = 'UPSERT_SWAP_STEP',
-	UPDATE_LAST_SWAP_STEP = 'UPDATE_LAST_SWAP_STEP',
-	UPDATE_PREV_RANGO_STEPS = 'UPDATE_PREV_RANGO_STEPS',
-	SET_WALLET_BALANCES = 'SET_WALLET_BALANCES',
-	SET_INPUT_ERROR = 'SET_INPUT_ERROR',
 }
 
 export type SwapAction =
-	| { type: 'POPULATE_ROUTES'; payload: any; fromAmount: string | null }
-	| { type: 'CLEAR_ROUTES' }
-	| { type: 'SET_BALANCE'; payload: Balance | null }
-	| { type: 'SET_LOADING'; payload: boolean }
-	| { type: 'SET_SELECTED_ROUTE'; payload: any }
-	| { type: 'SET_CHAIN'; direction: ActionDirection; payload: { chain: Chain } }
-	| { type: 'SET_TOKEN'; direction: ActionDirection; payload: { token: Token } }
+	| { type: SwapActionType.POPULATE_ROUTES; payload: RouteType[]; fromAmount: string | null }
+	| { type: SwapActionType.SET_LOADING; payload: boolean }
+	| { type: SwapActionType.SET_IS_SUFFICIENT_LIQUIDITY; payload: boolean }
+	| { type: SwapActionType.SET_INPUT_ERROR; payload: ErrorType | null }
+	| { type: SwapActionType.CLEAR_ROUTES }
+	| { type: SwapActionType.RESET_AMOUNTS; direction: ActionDirection }
+	| { type: SwapActionType.SET_IS_NO_ROUTES; status: boolean }
+	| { type: SwapActionType.SET_SWAP_STAGE; payload: SwapCardStage }
+	| { type: SwapActionType.UPDATE_LAST_SWAP_STEP }
+	| { type: SwapActionType.SET_BALANCE; payload: Balance | null }
+	| { type: SwapActionType.SET_CHAIN; direction: ActionDirection; payload: { chain: ConceroChain } }
+	| { type: SwapActionType.SET_TOKEN; direction: ActionDirection; payload: { token: ConceroToken } }
 	| {
-			type: 'SET_AMOUNT'
+			type: SwapActionType.SET_AMOUNT
 			direction: ActionDirection
 			payload: { amount?: string; amount_usd?: number }
 	  }
-	| { type: 'RESET_AMOUNTS'; direction: ActionDirection }
-	| { type: 'SET_ADDRESS'; direction: ActionDirection; payload: string }
-	| { type: 'TOGGLE_INSURANCE'; payload: Response }
-	| { type: 'SET_SWAP_STAGE'; payload: SwapCardStage }
-	| { type: 'TOGGLE_SETTINGS_MODAL_OPEN' }
-	| { type: 'SET_SETTINGS'; payload: any }
-	| { type: 'SET_SWAP_STEPS'; payload: StageStep[] }
-	| { type: 'APPEND_SWAP_STEP'; payload: StageStep[] }
-	| { type: 'SET_TO_ADDRESS'; payload: string }
-	| { type: 'UPSERT_SWAP_STEP'; payload: any }
-	| { type: 'UPDATE_LAST_SWAP_STEP' }
-	| { type: 'UPDATE_PREV_RANGO_STEPS'; currentTransactionStatus: TransactionStatus }
-	| { type: SwapActionType.SET_WALLET_BALANCES; balances: any }
-	| { type: 'SET_IS_NO_ROUTES'; status: boolean }
-	| { type: 'SWAP_DIRECTIONS' }
-	| { type: 'SET_IS_DESTINATION_ADDRESS_VISIBLE'; status: boolean }
-	| { type: 'TOGGLE_TESTNET' }
-	| { type: 'SET_IS_SUFFICIENT_LIQUIDITY'; payload: boolean }
-	| { type: 'SET_INPUT_ERROR'; payload: ErrorType | null }
+	| { type: SwapActionType.SET_ADDRESS; direction: ActionDirection; payload: string }
+	| { type: SwapActionType.SET_SETTINGS; payload: any }
+	| { type: SwapActionType.SET_SWAP_STEPS; payload: StageStep[] }
+	| { type: SwapActionType.SWAP_DIRECTIONS }
+	| { type: SwapActionType.APPEND_SWAP_STEP; payload: StageStep[] }

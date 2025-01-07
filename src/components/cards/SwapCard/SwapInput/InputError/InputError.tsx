@@ -1,12 +1,12 @@
 import { InfoIcon } from '../../../../../assets/icons/InfoIcon'
 import className from './InputError.module.pcss'
 
-interface Props {
+interface InputErrorProps {
 	errorText: string
 	color?: string
 }
 
-export const InputError = ({ errorText, color }: Props) => {
+export const InputError = ({ errorText, color }: InputErrorProps) => {
 	return (
 		<div className={className.container}>
 			<InfoIcon color={color} />

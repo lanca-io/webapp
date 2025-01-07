@@ -1,5 +1,5 @@
 import { isFloatInput } from '../../../../utils/validation'
-import { SwapCardStage } from '../swapReducer/types'
+import { SwapActionType, SwapCardStage } from '../swapReducer/types'
 import type { ForwardedRef, MutableRefObject } from 'react'
 
 export const handleAreaClick = (
@@ -18,7 +18,7 @@ export const handleAreaClick = (
 export const handleAmountChange = ({ value, state, dispatch, direction }) => {
 	if (value === '') {
 		return dispatch({
-			type: 'RESET_AMOUNTS',
+			type: SwapActionType.RESET_AMOUNTS,
 			direction,
 		})
 	}

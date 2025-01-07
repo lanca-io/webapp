@@ -1,41 +1,63 @@
-import { type SwapState } from './types'
+import { SwapCardStage, type SwapState, type SwapStateDirection, type Settings, type ButtonState } from './types'
 import { ErrorType } from '../SwapButton/constants'
 
-export const swapInitialState = (selection): SwapState => ({
-	from: {
+interface Selection {
+	swapCard: {
+		from: {
+			chain: any
+			token: any
+		}
+		to: {
+			chain: any
+			token: any
+		}
+	}
+}
+
+export const swapInitialState = (selection: Selection): SwapState => {
+	const from: SwapStateDirection = {
 		chain: selection.swapCard.from.chain,
 		token: selection.swapCard.from.token,
 		amount: '',
 		amount_usd: 0.0,
 		address: '',
-	},
-	to: {
+	}
+
+	const to: SwapStateDirection = {
 		chain: selection.swapCard.to.chain,
 		token: selection.swapCard.to.token,
 		amount: '',
 		amount_usd: 0.0,
 		address: '',
-	},
-	balance: null,
-	routes: [],
-	isNoRoutes: false,
-	isLoading: false,
-	selectedRoute: null,
-	typingTimeout: 0,
-	response: null,
-	stage: 'input',
-	steps: [], // [ { status, title, body, txLink } ]
-	status: 'pending', // success, failure, pending, awaiting
-	settings: {
+	}
+
+	const settings: Settings = {
 		slippage_percent: '5',
 		showDestinationAddress: false,
 		allowSwitchChain: true,
-	},
-	chains: [],
-	buttonState: { type: ErrorType.ENTER_AMOUNT },
-	walletBalances: null,
-	isDestinationAddressVisible: false,
-	settingsModalOpen: false,
-	isTestnet: false,
-	isSufficientLiquidity: true,
-})
+	}
+
+	const buttonState: ButtonState = { type: ErrorType.ENTER_AMOUNT }
+
+	return {
+		from,
+		to,
+		balance: null,
+		routes: [],
+		isNoRoutes: false,
+		isLoading: false,
+		selectedRoute: null,
+		typingTimeout: 0,
+		stage: SwapCardStage.input,
+		steps: [],
+		settings,
+		chains: [],
+		buttonState,
+		walletBalances: null,
+		isDestinationAddressVisible: false,
+		settingsModalOpen: false,
+		isTestnet: false,
+		isSufficientLiquidity: true,
+		inputError: null,
+	}
+}

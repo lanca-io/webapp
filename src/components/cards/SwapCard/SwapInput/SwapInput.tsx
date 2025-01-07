@@ -1,20 +1,24 @@
+import React, { useCallback } from 'react'
 import { TokenArea } from '../TokenArea/TokenArea'
 import { SwapDetails } from '../SwapDetails/SwapDetails'
 import classNames from './SwapInput.module.pcss'
 import { type SwapInputProps } from './types'
 import { SwapButton } from '../SwapButton/SwapButton'
-import { handleSwap } from '../swapExecution/handleSwap'
 import { SwapIcon } from '../../../../assets/icons/SwapIcon'
 import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
-import { FeeDetailsDropdown } from '../SwapDetails/FeeDetailsDropdown/FeeDetailsDropdown'
+import { FeeDropdown } from '../SwapDetails/FeeDropdown/FeeDropdown'
 import { Separator } from '../../../layout/Separator/Separator'
 import { getWalletClient } from '@wagmi/core'
 import { config } from '../../../../web3/wagmi'
+import { SwapActionType } from '../swapReducer/types'
+import { handleSwap } from '../swapExecution/handleSwap'
 
-export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
-	const handleSwapButtonClick = async () => {
+export const SwapInput = React.memo(({ swapState, swapDispatch }: SwapInputProps) => {
+	const { from, to, balance, stage, inputError, selectedRoute, isLoading } = swapState
+
+	const handleSwapButtonClick = useCallback(async () => {
 		try {
-			const walletClient = await getWalletClient(config, { chainId: Number(swapState.from.chain.id) })
+			const walletClient = await getWalletClient(config, { chainId: Number(from.chain.id) })
 			await handleSwap({
 				swapState,
 				swapDispatch,
@@ -23,7 +27,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 		} catch (error) {
 			console.error('Error initializing swap:', error)
 		}
-	}
+	}, [from.chain.id, swapState, swapDispatch])
 
 	const switchDirectionButton = (
 		<div className={classNames.separatorWrap}>
@@ -33,7 +37,7 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 				variant="secondary"
 				className={classNames.arrowsIcon}
 				onClick={() => {
-					swapDispatch({ type: 'SWAP_DIRECTIONS' })
+					swapDispatch({ type: SwapActionType.SWAP_DIRECTIONS })
 				}}
 			>
 				<SwapIcon />
@@ -46,23 +50,23 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 		<div className={classNames.tokenAreasContainer}>
 			<TokenArea
 				direction="from"
-				selection={swapState.from}
+				selection={from}
 				swapDispatch={swapDispatch}
-				balance={swapState.balance}
-				stage={swapState.stage}
-				error={swapState.inputError}
-				route={swapState.selectedRoute}
+				balance={balance}
+				stage={stage}
+				error={inputError}
+				route={selectedRoute}
 			/>
 
 			{switchDirectionButton}
 
 			<TokenArea
 				direction="to"
-				selection={swapState.to}
+				selection={to}
 				swapDispatch={swapDispatch}
-				isLoading={swapState.isLoading}
-				stage={swapState.stage}
-				route={swapState.selectedRoute}
+				isLoading={isLoading}
+				stage={stage}
+				route={selectedRoute}
 			/>
 
 			<Separator />
@@ -75,13 +79,13 @@ export const SwapInput = ({ swapState, swapDispatch }: SwapInputProps) => {
 
 			<SwapDetails swapState={swapState} swapDispatch={swapDispatch} />
 
-			<SwapButton isLoading={swapState.isLoading} error={swapState.inputError} onClick={handleSwapButtonClick} />
+			<SwapButton isLoading={isLoading} error={inputError} onClick={handleSwapButtonClick} />
 
-			{swapState.selectedRoute && (
+			{selectedRoute && (
 				<div className={classNames.feeDetails}>
-					<FeeDetailsDropdown swapDispatch={swapDispatch} route={swapState.selectedRoute} />
+					<FeeDropdown route={selectedRoute} />
 				</div>
 			)}
 		</div>
 	)
-}
+})

@@ -1,4 +1,4 @@
-import React, { type FC, useContext, useEffect, useRef } from 'react'
+import { type FC, useContext, useEffect, useRef } from 'react'
 import { createChart } from 'lightweight-charts'
 import { animated, useSpring } from '@react-spring/web'
 import { ThemeContext } from '../../../hooks/themeContext'
@@ -22,28 +22,6 @@ const useFadeInAnimation = () =>
 		config: { duration: 300 },
 		reset: true,
 	})
-
-const averageData = (data: DataPoint[], interval: number): DataPoint[] => {
-	const result: DataPoint[] = []
-	let sum = 0
-	let count = 0
-
-	for (let i = 0; i < data.length; i++) {
-		sum += data[i].value
-		count++
-
-		if (count === interval || i === data.length - 1) {
-			result.push({
-				time: data[i].time,
-				value: sum / count,
-			})
-			sum = 0
-			count = 0
-		}
-	}
-
-	return result
-}
 
 export const Chart: FC<ChartProps> = ({ data, secondData = null }) => {
 	const chartRef = useRef<HTMLDivElement>(null)

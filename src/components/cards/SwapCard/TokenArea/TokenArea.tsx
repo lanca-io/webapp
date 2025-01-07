@@ -7,17 +7,16 @@ import { useTokenAreaReducer } from './useTokenAreaReducer/tokenAreaReducer'
 import { isFloatInput } from '../../../../utils/validation'
 import { useTranslation } from 'react-i18next'
 import { TokensModal } from '../../../modals/TokensModal/TokensModal'
-import { type Chain } from '../../../../api/concero/types'
 import { AmountUsd } from './AmountUsd'
 import { config } from '../../../../constants/config'
-import { SwapCardStage } from '../swapReducer/types'
+import { SwapActionType, SwapCardStage } from '../swapReducer/types'
 import { Badge } from '../../../layout/Badge/Badge'
 import { TrailArrowRightIcon } from '../../../../assets/icons/TrailArrowRightIcon'
 import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
 import { InputError } from '../SwapInput/InputError/InputError'
 import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
 import { getBalance } from '../../../../utils/getBalance'
-import { useAccount } from 'wagmi'
+import { type ConceroChain } from 'lanca-sdk-demo'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,
@@ -28,18 +27,18 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	error,
 	route,
 }) => {
-	const { address } = useAccount()
 	const { t } = useTranslation()
+	const { address, token, chain, amount } = selection
 
 	const [loading, setLoading] = useState<boolean>(false)
 	const [state, tokenAreaDispatch] = useTokenAreaReducer()
-	const inputRef = useRef<ForwardedRef<HTMLInputElement>>()
 
+	const inputRef = useRef<ForwardedRef<HTMLInputElement>>()
 	const isTransactionError = error ? errorTypeMap[error] === ErrorCategory.input : false
 	const isError = error && isTransactionError
 
 	const onChangeText = (value: string) => {
-		swapDispatch({ type: 'SET_INPUT_ERROR', payload: null })
+		swapDispatch({ type: SwapActionType.SET_INPUT_ERROR, payload: null })
 
 		if (value && !isFloatInput(value)) tokenAreaDispatch({ type: 'SET_SHAKE', payload: true })
 		if (direction === 'from') handleAmountChange({ value, state, dispatch: swapDispatch, direction })
@@ -53,9 +52,9 @@ export const TokenArea: FC<TokenAreaProps> = ({
 		handleAmountChange({ value: amount.formatted, state, dispatch: swapDispatch, direction: 'from' })
 	}
 
-	const handleSelectToken = (token: Token, chain: Chain) => {
-		swapDispatch({ type: 'SET_CHAIN', direction, payload: { chain } })
-		swapDispatch({ type: 'SET_TOKEN', direction, payload: { token } })
+	const handleSelectToken = (token: Token, chain: ConceroChain) => {
+		swapDispatch({ type: SwapActionType.SET_CHAIN, direction, payload: { chain } })
+		swapDispatch({ type: SwapActionType.SET_TOKEN, direction, payload: { token } })
 		tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: false })
 	}
 
@@ -66,7 +65,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 		getBalance({ dispatch: swapDispatch, from: selection, address }).finally(() => {
 			setLoading(false)
 		})
-	}, [selection.token.address, selection.chain.id, selection.amount, address])
+	}, [token.address, chain.id, amount, address])
 
 	return (
 		<>
