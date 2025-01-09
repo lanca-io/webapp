@@ -26,6 +26,8 @@ const executeRouteBase = async (walletClient: WalletClient, route: RouteData, ex
 	if (!route) throw new Error('Route is not passed!')
 
 	const data = route
+
+	console.log('data', data)
 	const { switchChainHook } = executionConfigs
 	const sendState = useSendStateHook(executionConfigs)
 
@@ -69,6 +71,8 @@ const executeRouteBase = async (walletClient: WalletClient, route: RouteData, ex
 	})
 
 	const inputRouteData: InputRouteData = buildRouteData(data, clientAddress)
+
+	console.log('inputRouteData', inputRouteData)
 	const conceroAddress = conceroAddressesMap[data.from.chain.id]
 
 	sendState({
@@ -103,6 +107,7 @@ export const executeRoute = async (
 	const sendState = useSendStateHook(executionConfigs)
 
 	try {
+		console.log('executeRoute')
 		const txHash = await executeRouteBase(walletClient, route, executionConfigs)
 
 		sendState({
