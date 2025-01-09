@@ -45,10 +45,6 @@ const trackBridgeTransaction = async (
 		event: parseAbiItem(
 			'event ConceroBridgeSent(bytes32 indexed conceroMessageId, uint256 amount, uint64 dstChainSelector, address receiver, bytes compressedDstSwapData)',
 		),
-		args: {
-			from: clientAddress,
-			to: clientAddress,
-		},
 		fromBlock: txReceipt.blockNumber,
 		toBlock: 'latest',
 	})
