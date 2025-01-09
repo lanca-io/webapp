@@ -52,7 +52,7 @@ export const viemChains: Record<string, { chain: Chain; transport?: Transport }>
 	},
 	[optimism.id]: {
 		chain: optimism,
-		transport: fallback([http(), http('https://optimism-rpc.publicnode.com')]),
+		transport: fallback([http('https://optimism-rpc.publicnode.com'), http()]),
 	},
 	[sepolia.id]: {
 		chain: sepolia,
