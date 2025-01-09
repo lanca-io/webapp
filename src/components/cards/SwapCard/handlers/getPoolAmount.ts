@@ -2,6 +2,7 @@ import { type Address, type Chain, createPublicClient, erc20Abi, formatUnits, ht
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 import { config } from '../../../../sdk/configs/config'
 import { viemChains } from '../../../../sdk/configs/chainsConfig'
+import { optimism } from 'viem/chains'
 
 export interface IPoolConfig {
 	chain: Chain
@@ -31,6 +32,11 @@ export const poolConfigs: Record<string, IPoolConfig> = {
 		chain: avalanche,
 		conceroContract: config.CONCERO_POOL_AVALANCHE,
 		usdcContract: config.USDC_AVALANCHE,
+	},
+	'10': {
+		chain: optimism,
+		conceroContract: config.CONCERO_POOL_OPTIMISM,
+		usdcContract: config.USDC_OPTIMISM,
 	},
 }
 
