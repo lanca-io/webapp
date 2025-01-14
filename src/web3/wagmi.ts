@@ -87,7 +87,13 @@ const createTransports = () => ({
 	[moonriver.id]: http(),
 	[moonbeam.id]: http(),
 	[boba.id]: http(),
-	[optimism.id]: http(),
+	[optimism.id]: fallback([
+		http('https://optimism.llamarpc.com'),
+		http('https://op-pokt.nodies.app'),
+		http('https://optimism-rpc.publicnode.com'),
+		http('https://optimism.meowrpc.com'),
+		http(),
+	]),
 	[fuse.id]: http(),
 	[bsc.id]: http(),
 	[avalanche.id]: fallback([
@@ -185,6 +191,16 @@ export const viemChains: Record<number, { chain: any; transport: any }> = {
 			http('https://public.stackup.sh/api/v1/node/base-mainnet'),
 			http(),
 			http('https://mainnet.base.org'),
+		]),
+	},
+	[optimism.id]: {
+		chain: optimism,
+		transport: fallback([
+			http('https://optimism.llamarpc.com'),
+			http('https://op-pokt.nodies.app'),
+			http('https://optimism-rpc.publicnode.com'),
+			http('https://optimism.meowrpc.com'),
+			http(),
 		]),
 	},
 }
