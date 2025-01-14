@@ -28,7 +28,9 @@ export function ChainListItem({ chain, isSelected, onSelect, isTestnet }: ChainI
 		>
 			<div className={`${classNames.chainButton}`}>
 				<ChainIcon
-					src={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${isTestnet ? testnetToMainnetChainsMap[chain.id] : chain.id}.svg`}
+					src={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${
+						isTestnet ? testnetToMainnetChainsMap[chain.id] : chain.id
+					}.svg`}
 				/>
 			</div>
 			<p className="body2">{chain.name}</p>

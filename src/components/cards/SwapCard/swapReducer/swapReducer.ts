@@ -1,7 +1,7 @@
 import { type Dispatch, useContext, useEffect, useReducer } from 'react'
 import { swapActions } from './swapActions'
 import { swapInitialState } from './swapInitialState'
-import { type SwapAction, type SwapState } from './types'
+import { SwapActionType, type SwapAction, type SwapState } from './types'
 import { SelectionContext } from '../../../../hooks/SelectionContext'
 import { DataContext } from '../../../../hooks/DataContext/DataContext'
 
@@ -12,11 +12,12 @@ function swapReducer(state: SwapState, action: SwapAction): SwapState {
 }
 
 export const useSwapReducer = (): [SwapState, Dispatch<SwapAction>] => {
-	const { selection } = useContext(SelectionContext)
+	const { selection } = useContext(SelectionContext) ?? {
+		selection: { swapCard: { from: { chain: {}, token: {} }, to: { chain: {}, token: {} } } },
+	}
 	const { tokens } = useContext(DataContext)
 	const [state, dispatch] = useReducer(swapReducer, swapInitialState(selection))
 
-	// a crutch that is needed because we initialize swapReducer using selectionContext which has hardcoded tokens
 	useEffect(() => {
 		if (
 			state.from.token.priceUsd === null &&
@@ -26,8 +27,32 @@ export const useSwapReducer = (): [SwapState, Dispatch<SwapAction>] => {
 			tokens['8453'] &&
 			tokens['137']
 		) {
-			dispatch({ type: 'SET_TOKEN', payload: { token: tokens['8453'][0] }, direction: 'from' })
-			dispatch({ type: 'SET_TOKEN', payload: { token: tokens['137'][0] }, direction: 'to' })
+			dispatch({
+				type: SwapActionType.SET_TOKEN,
+				payload: {
+					token: {
+						...tokens['8453'][0],
+						chainId: '8453',
+						logoURL: tokens['8453'][0].logoURI,
+						address: `0x${tokens['8453'][0].address}`,
+						priceUsd: tokens['8453'][0].priceUsd ?? 0,
+					},
+				},
+				direction: 'from',
+			})
+			dispatch({
+				type: SwapActionType.SET_TOKEN,
+				payload: {
+					token: {
+						...tokens['137'][0],
+						chainId: '137',
+						logoURL: tokens['137'][0].logoURI,
+						address: `0x${tokens['137'][0].address}`,
+						priceUsd: tokens['137'][0].priceUsd ?? 0,
+					},
+				},
+				direction: 'to',
+			})
 		}
 	}, [tokens])
 

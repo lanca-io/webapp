@@ -77,7 +77,9 @@ export const TextInput: FC<TextInputProps & { ref?: MutableRefObject<ForwardedRe
 
 			return (
 				<div
-					className={`${wrapperClassName} ${inputClass} ${isFocused && variant === 'default' ? classNames.focused : ''}`}
+					className={`${wrapperClassName} ${inputClass} ${
+						isFocused && variant === 'default' ? classNames.focused : ''
+					}`}
 					onClick={handleAreaClick}
 					style={{ width: '100%' }}
 				>

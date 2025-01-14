@@ -1,5 +1,5 @@
 import { type Dispatch } from 'react'
-import { type SwapAction } from '../components/cards/SwapCard/swapReducer/types'
+import { SwapActionType, type SwapAction } from '../components/cards/SwapCard/swapReducer/types'
 import { TokenAmount } from './TokenAmount'
 import { configChainsViem } from '../web3/wagmi'
 import { createPublicClient, getContract, http } from 'viem'
@@ -26,7 +26,7 @@ interface HandleBalanceProps {
 }
 
 const handleError = (dispatch: Dispatch<SwapAction>) => {
-	dispatch({ type: 'SET_BALANCE', payload: null })
+	dispatch({ type: SwapActionType.SET_BALANCE, payload: null })
 }
 
 export async function getBalance({ dispatch, from, address }: HandleBalanceProps) {
@@ -58,7 +58,7 @@ export async function getBalance({ dispatch, from, address }: HandleBalanceProps
 		}
 
 		dispatch({
-			type: 'SET_BALANCE',
+			type: SwapActionType.SET_BALANCE,
 			payload: {
 				amount: new TokenAmount(String(userBalanceAmount), from.token.decimals),
 				symbol: from.token.symbol,

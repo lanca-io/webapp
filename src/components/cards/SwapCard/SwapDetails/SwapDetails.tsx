@@ -1,64 +1,69 @@
-import { type FC, useEffect, useRef, useState } from 'react'
-import classNames from './SwapDetails.module.pcss'
+import { type FC, useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { type SwapDetailsProps } from '../types'
 import { animated, useSpring } from '@react-spring/web'
 import { easeQuadInOut } from 'd3-ease'
-import { ReviewRouteCard } from './ReviewRouteCard/ReviewRouteCard'
-import { RouteDetailsModal } from './RouteDetailsModal/RouteDetailsModal'
+import { ReviewRoute } from './ReviewRoute/ReviewRoute'
+import { ReviewModal } from './ReviewModal/ReviewModal'
 import { Alert } from '../../../layout/Alert/Alert'
 import { Separator } from '../../../layout/Separator/Separator'
 import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
 
+import classNames from './SwapDetails.module.pcss'
+
 export const SwapDetails: FC<SwapDetailsProps> = ({ swapState }) => {
-	const [animatedContainerHeight, setAnimatedContainerHeight] = useState<number>(0)
-	const [isReviewRouteModalVisible, setIsReviewRouteModalVisible] = useState<boolean>(false)
-	const reviewRouteCardRef = useRef<HTMLDivElement>(null)
-	const { selectedRoute, inputError } = swapState
+	const { selectedRoute, inputError, from, to, stage } = swapState
 
-	const amountUsdFrom = swapState.from.amount
-		? Number(swapState.from.amount) * Number(swapState.from.token.priceUsd)
-		: 0
-	const amountUsdTo = swapState.to.amount ? Number(swapState.to.amount) * Number(swapState.to.token.priceUsd) : 0
+	const [containerHeight, setContainerHeight] = useState<number>(0)
+	const [isReviewModalVisible, setIsReviewModalVisible] = useState<boolean>(false)
 
-	const totalFeeUsd = amountUsdFrom - amountUsdTo
+	const reviewCardRef = useRef<HTMLDivElement>(null)
+
+	const amountUsdFrom = useMemo(
+		() => (from.amount ? Number(from.amount) * Number(from.token.priceUsd) : 0),
+		[from.amount, from.token.priceUsd],
+	)
+	const amountUsdTo = useMemo(
+		() => (to.amount ? Number(to.amount) * Number(to.token.priceUsd) : 0),
+		[to.amount, to.token.priceUsd],
+	)
+	const totalFeeUsd = useMemo(() => amountUsdFrom - amountUsdTo, [amountUsdFrom, amountUsdTo])
 
 	const isTransactionError = inputError ? errorTypeMap[inputError] === ErrorCategory.transaction : false
 	const isError = inputError && isTransactionError
 
 	const containerAnimation = useSpring({
-		height: selectedRoute || isError ? animatedContainerHeight : 0,
+		height: selectedRoute || isError ? containerHeight : 0,
 		opacity: selectedRoute || isError ? 1 : 0,
 		config: { duration: 200, easing: easeQuadInOut },
 	})
 
 	useEffect(() => {
-		if (!reviewRouteCardRef.current) return
+		if (!reviewCardRef.current) return
 
-		setAnimatedContainerHeight(isError ? 80 : 120)
-	}, [reviewRouteCardRef.current, swapState.stage, inputError])
+		setContainerHeight(isError ? 80 : 120)
+	}, [reviewCardRef.current, stage, inputError, isError])
+
+	const handleReviewClick = useCallback(() => {
+		setIsReviewModalVisible(true)
+	}, [])
 
 	return (
 		<animated.div style={containerAnimation}>
-			<div ref={reviewRouteCardRef} className={classNames.swapDetailsContainer}>
-				<div
-					className={classNames.reviewContainer}
-					onClick={() => {
-						setIsReviewRouteModalVisible(true)
-					}}
-				>
+			<div ref={reviewCardRef} className={classNames.swapDetailsContainer}>
+				<div className={classNames.reviewContainer} onClick={handleReviewClick}>
 					{isError ? (
 						<Alert title={errorTextMap[inputError]} variant="error" />
 					) : (
-						<ReviewRouteCard selectedRoute={selectedRoute} />
+						<ReviewRoute selectedRoute={selectedRoute} />
 					)}
 					<Separator />
 				</div>
 				{selectedRoute && (
-					<RouteDetailsModal
+					<ReviewModal
 						amountUsd={totalFeeUsd}
 						selectedRoute={selectedRoute}
-						isOpen={isReviewRouteModalVisible}
-						setIsOpen={setIsReviewRouteModalVisible}
+						isOpen={isReviewModalVisible}
+						setIsOpen={setIsReviewModalVisible}
 					/>
 				)}
 			</div>

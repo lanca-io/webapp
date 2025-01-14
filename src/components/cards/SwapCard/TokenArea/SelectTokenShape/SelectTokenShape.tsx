@@ -1,15 +1,16 @@
+import { memo } from 'react'
 import classNames from './SelectTokenShape.module.pcss'
 
-interface Props {
+interface SelectTokenShapeProps {
 	symbol: string
 	chainName: string
 }
 
-export const SelectTokenShape = ({ symbol, chainName }: Props) => {
+export const SelectTokenShape: React.FC<SelectTokenShapeProps> = memo(({ symbol, chainName }) => {
 	return (
 		<div className={classNames.selectTokenShape}>
 			<h4>{symbol}</h4>
-			<p className={'body2'}>{chainName}</p>
+			<p className={classNames.body2}>{chainName}</p>
 		</div>
 	)
-}
+})

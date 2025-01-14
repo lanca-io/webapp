@@ -2,8 +2,6 @@ import { type ChangeEvent, type UIEvent, useContext, useEffect, useRef } from 'r
 import { useTranslation } from 'react-i18next'
 import classNames from './TokensModal.module.pcss'
 import { TextInput } from '../../layout/input/TextInput'
-import { IconSearch, IconX } from '@tabler/icons-react'
-import { colors } from '../../../constants/colors'
 import type { Chain, Token } from '../../../api/concero/types'
 import { DataContext } from '../../../hooks/DataContext/DataContext'
 import { useAccount } from 'wagmi'
@@ -16,11 +14,12 @@ import { ChainsPicker } from './ChainsPicker/ChainsPicker'
 import { Modal } from '../Modal/Modal'
 import { SelectionContext } from '../../../hooks/SelectionContext'
 import { WriteIcon } from '../../../assets/icons/WriteIcon'
+import { type ConceroChain } from 'lanca-sdk-demo'
 
 interface TokensModalProps {
 	isOpen: boolean
 	onClose: () => void
-	onSelect: (token: Token, chain: Chain) => void
+	onSelect: (token: Token, chain: ConceroChain) => void
 	direction: 'from' | 'to'
 }
 
@@ -78,7 +77,7 @@ export function TokensModal({ isOpen, onClose, onSelect, direction }: TokensModa
 		}
 	}
 
-	const handleSelectChain = (chain: Chain | null) => {
+	const handleSelectChain = (chain: ConceroChain | null) => {
 		tokensModalDispatch({ type: TokenModalActionType.SET_SELECTED_CHAIN, chain })
 	}
 
