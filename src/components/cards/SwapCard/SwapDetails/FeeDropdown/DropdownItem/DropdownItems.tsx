@@ -1,5 +1,7 @@
+import { TooltipWrapper } from '../../../../../wrappers/WithTooltip/TooltipWrapper'
 import classNames from './DropdownItems.module.pcss'
 import { type ReactElement, useMemo } from 'react'
+import { InfoIcon } from '../../../../../../assets/icons/InfoIcon'
 
 interface DropdownItemProps {
 	isBridge: boolean
@@ -12,7 +14,31 @@ interface FeeItem {
 	percent: string
 }
 
+interface Props {
+	title?: string
+	description: string
+	tooltipId: string
+}
+
+const InfoTooltip = ({ description, tooltipId }: Props) => {
+	return (
+		<TooltipWrapper
+			place="top-start"
+			className={classNames.tooltip}
+			tooltipId={tooltipId}
+			tooltipContent={
+				<div className="gap-xs">
+					<p className="body1">{description}</p>
+				</div>
+			}
+		>
+			<InfoIcon />
+		</TooltipWrapper>
+	)
+}
+
 const feeItems: FeeItem[] = [
+	{ description: 'Slippage', percent: '0.5 %' },
 	{ description: 'Concero Fee', percent: '0.1 %' },
 	{ description: 'Chainlink services', percent: '0.1 %' },
 	{ description: 'Integrator Fee', percent: '0.1 %' },
@@ -21,7 +47,14 @@ const feeItems: FeeItem[] = [
 
 const FeeItemComponent = ({ description, impact, percent }: FeeItem & { impact: string }): ReactElement => (
 	<div className={classNames.item}>
-		<p className={'body1'}>{description}</p>
+		<div className={classNames.descriptions}>
+			<p className={'body1'}>{description}</p>
+			<InfoTooltip
+				description="The slippage is the difference between the expected price of a trade and the price at which the trade is executed."
+				tooltipId={description}
+			/>
+		</div>
+
 		<div className={classNames.values}>
 			<p className={`${classNames.impact} body1`}>{impact}</p>
 			<p className={'body1'}>{percent}</p>
