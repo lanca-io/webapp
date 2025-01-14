@@ -1,7 +1,7 @@
-import { type FC, useEffect, useState } from 'react'
+import { type FC, type Dispatch } from 'react'
 import classNames from './SwapProgress.module.pcss'
 import { TransactionStep } from '../../../layout/TransactionStep/TransactionStep'
-import { StageType, SwapCardStage, type SwapState } from '../swapReducer/types'
+import { StageType, SwapCardStage, type SwapState, type SwapAction } from '../swapReducer/types'
 import { Button } from '../../../layout/buttons/Button/Button'
 import { PendingStateSvg } from '../../../../assets/images/transactionStates/PendingStateSvg'
 import { Separator } from '../../../layout/Separator/Separator'
@@ -18,10 +18,15 @@ import { CrossIcon } from '../../../../assets/icons/CrossIcon'
 import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
-import { truncateWallet } from '../../../../utils/formatting'
+import { zeroAddress } from 'viem'
+import { Status, StepType } from 'lanca-sdk-demo'
+import { useTimer } from './hooks/useTimer'
+import { useTransactionCompletion } from './hooks/useTransactionCompletion'
+import { useSwapStatuses } from './hooks/useSwapStatuses'
 
 interface SwapProgressProps {
 	swapState: SwapState
+	swapDispatch: Dispatch<SwapAction>
 	handleGoBack: () => void
 }
 
@@ -32,35 +37,25 @@ const chainsTwitterMap: Record<string, string> = {
 	[avalanche.id]: 'avax',
 }
 
-export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack }) => {
-	const [time, setTime] = useState(0)
-	const { to, from, steps, stage } = swapState
+export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, handleGoBack }) => {
+	const { to, from, steps, selectedRoute, stage } = swapState
 
-	const isBridge = to.chain.id !== from.chain.id
+	const isBridge = from.chain.id !== to.chain.id
 	const isFailed = stage === SwapCardStage.failed
 	const isSuccess = stage === SwapCardStage.success
+	const isWarning = stage === SwapCardStage.warning
+
+	const isNativeSwap = from.token.address === zeroAddress
 	const currentStep = steps[steps.length - 1]
-	const isTransactionStage = currentStep?.type === StageType.transaction
-	const isWarning = currentStep?.type === StageType.warning
-	const isAwait = currentStep && currentStep.status === 'await'
 
-	useEffect(() => {
-		const timerId = setInterval(() => {
-			if (isAwait || isSuccess || isFailed) return
+	const isTransactionStage = currentStep?.type === StageType.transaction && currentStep?.status !== Status.SUCCESS
+	const isApprovalStage = currentStep?.type === StageType.approve && currentStep?.status !== Status.SUCCESS
+	const hasDestinationSwap = selectedRoute?.steps.some(step => step.type === StepType.DST_SWAP)
 
-			setTime(prev => prev + 1)
-		}, 1000)
+	const { approvalStatus, bridgeStatus, swapStatus } = useSwapStatuses({ steps })
 
-		if (isSuccess || isAwait || isFailed) {
-			clearInterval(timerId)
-		}
-
-		return () => {
-			clearInterval(timerId)
-		}
-	}, [swapState])
-
-	const txType = isBridge ? 'Bridge' : 'Swap'
+	const time = useTimer(isApprovalStage, isSuccess, isFailed)
+	useTransactionCompletion(steps, selectedRoute, swapDispatch)
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[SwapCardStage.failed]: (
@@ -70,24 +65,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 					Try again
 				</Button>
 			</div>
-		),
-		[SwapCardStage.warning]: (
-			<>
-				{currentStep?.txLink && (
-					<div className="gap-lg w-full">
-						<Separator />
-						<a
-							target="_blank"
-							href={`https://ccip.chain.link/#/side-drawer/msg/${currentStep.txLink}`}
-							rel="noreferrer"
-						>
-							<Button isFull={true} variant="secondary" size="lg">
-								View in explorer
-							</Button>
-						</a>
-					</div>
-				)}
-			</>
 		),
 		[SwapCardStage.success]: (
 			<>
@@ -103,7 +80,11 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 							size="lg"
 							onClick={() => {
 								window.open(
-									`https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${chainsTwitterMap[swapState.from.chain.id]}%20to%20%40${chainsTwitterMap[swapState.to.chain.id]}%20in%20just%20${time}%20sec%20on%20%40lanca_io!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`,
+									`https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${
+										chainsTwitterMap[swapState.from.chain.id]
+									}%20to%20%40${
+										chainsTwitterMap[swapState.to.chain.id]
+									}%20in%20just%20${time}%20sec%20on%20%40lanca_io!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`,
 									'_blank',
 								)
 							}}
@@ -143,78 +124,8 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 		[SwapCardStage.progress]: 'Transaction in progress...',
 		[SwapCardStage.failed]: 'Transaction failed',
 		[SwapCardStage.success]: 'Swap Successful!',
-		[SwapCardStage.warning]: 'Uh Oh...',
+		[SwapCardStage.warning]: 'CCIP Error',
 	}
-
-	const progressDetails = (
-		<>
-			{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
-
-			{!isWarning && (
-				<div className={classNames.progressContainer}>
-					<TransactionStep status={steps[0]?.status} title="Approvals" />
-
-					{isBridge && (
-						<>
-							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status} title="Bridge" />
-							<TrailArrowRightIcon />
-							<TransactionStep
-								status={steps[1]?.status === 'success' ? 'success' : 'idle'}
-								title="Swap"
-							/>
-						</>
-					)}
-
-					{!isBridge && (
-						<>
-							<TrailArrowRightIcon />
-							<TransactionStep status={steps[1]?.status} title="Swap" />
-						</>
-					)}
-				</div>
-			)}
-
-			{!isWarning && <Separator />}
-
-			{isAwait && (
-				<div className={classNames.infoMessage}>
-					<div className={classNames.wrapIcon}>
-						<PencilIcon />
-					</div>
-					<h4 className={classNames.messageTitle}>Signature required</h4>
-					<p className={classNames.messageSubtitle}>Please open your wallet and sign the transaction</p>
-				</div>
-			)}
-
-			{isWarning && (
-				<div className="gap-lg">
-					<div className="gap-sm">
-						<h4 className={classNames.warningTitle}>Dont worry</h4>
-						<p>Your funds are safe but it will take a bit longer to complete the transaction. </p>
-						<p className={classNames.warningSubtitle}>
-							Funds are being migrated using Chainlink CCIP and will arrive in about 20 minutes.
-						</p>
-					</div>
-					<Separator />
-					{currentStep.txLink && (
-						<div className="row ac jsb">
-							<p>CCIP TXid:</p>
-							<p>{truncateWallet(currentStep.txLink)}</p>
-						</div>
-					)}
-				</div>
-			)}
-
-			{currentStep && !isAwait && !isWarning && (
-				<Alert
-					title={`${isTransactionStage ? `${txType} ` : ''} ${currentStep.title}`}
-					variant={isFailed ? 'error' : 'neutral'}
-					icon={isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />}
-				/>
-			)}
-		</>
-	)
 
 	return (
 		<div className={classNames.container}>
@@ -234,7 +145,70 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, handleGoBack })
 
 			{!isTransactionStage && stateImages[stage]}
 
-			{isSuccess ? <FinishTxInfo time={time} to={to} /> : progressDetails}
+			{isSuccess ? (
+				<FinishTxInfo time={time} to={to} />
+			) : (
+				<>
+					{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
+
+					{!isWarning && (
+						<div className={classNames.progressContainer}>
+							{!isNativeSwap && <TransactionStep status={approvalStatus} title="Approvals" />}
+							{!isBridge && !isNativeSwap && <TrailArrowRightIcon />}
+							{isBridge && (
+								<>
+									{!isNativeSwap && <TrailArrowRightIcon />}
+									<TransactionStep
+										status={bridgeStatus}
+										title={hasDestinationSwap ? 'Bridge & Swap' : 'Bridge'}
+									/>
+								</>
+							)}
+
+							{!isBridge && (
+								<>
+									<TransactionStep status={swapStatus} title="Swap" />
+								</>
+							)}
+						</div>
+					)}
+
+					{!isWarning && <Separator />}
+
+					{isApprovalStage && (
+						<div className={classNames.infoMessage}>
+							<div className={classNames.wrapIcon}>
+								<PencilIcon />
+							</div>
+							<h4 className={classNames.messageTitle}>Signature required</h4>
+							<p className={classNames.messageSubtitle}>
+								Please open your wallet and sign the transaction
+							</p>
+						</div>
+					)}
+
+					{isWarning && (
+						<div className="gap-lg">
+							<div className="gap-sm">
+								<h4 className={classNames.warningTitle}>Funds will arrive in about 20 mintues</h4>
+								<p className={classNames.warningMessage}>
+									Your funds are safe but it will take a bit longer to complete the transaction.{' '}
+								</p>
+							</div>
+						</div>
+					)}
+
+					{currentStep && !isApprovalStage && !isWarning && (
+						<Alert
+							title={`${currentStep.title}`}
+							variant={isFailed ? 'error' : 'neutral'}
+							icon={
+								isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />
+							}
+						/>
+					)}
+				</>
+			)}
 
 			{renderButtons[stage] ?? null}
 		</div>

@@ -1,67 +1,80 @@
 import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
-import { type GetConceroRoutes } from './types'
-import { findRoute } from '../../../../sdk/findRoute'
-import type { Address } from 'viem'
-import { type Route, type RouteData, type Step } from '../../../../sdk/types/routeTypes'
-import { ErrorType } from '../SwapButton/constants'
-import { getPoolAmount } from '../handlers/getPoolAmount'
+import { type GetConceroRoutes, type RouteRequest } from './types'
+import { type Address } from 'viem'
+import type { RouteType, RouteStep, RouteBaseStep, ConceroChain } from 'lanca-sdk-demo'
 
-const routeDataProvider = (route: RouteData): RouteData => {
+import { SwapActionType } from '../swapReducer/types'
+import { ErrorType } from '../SwapButton/constants'
+import { getPoolLiquidity } from './getPoolLiquidity'
+import { lanca } from '../../../../utils/initLancaSDK'
+
+const validateRouteSteps = (route: RouteType): RouteType => {
 	const { from, to } = route
 
-	const chainDataMap = {
+	const chainDataMap: Record<string, ConceroChain> = {
 		[from.chain.id]: from.chain,
 		[to.chain.id]: to.chain,
 	}
 
-	const newSteps = route.steps.map((step): Step => {
-		const fromChainId = step.from.chain ? step.from.chain : step.from.chainId
-		const toChainId = step.to.chain ? step.to.chain : step.to.chainId
+	const isValidStep = (step: RouteStep | RouteBaseStep): step is RouteStep => 'from' in step && 'to' in step
 
-		return {
-			...step,
-			from: {
-				...step.from,
-				chainData: fromChainId ? chainDataMap[fromChainId] : null,
-			},
-			to: {
-				...step.to,
-				chainData: toChainId ? chainDataMap[toChainId] : null,
-			},
+	const validatedSteps = route.steps.map(step => {
+		if (isValidStep(step)) {
+			const fromChainId = step.from.chain?.id
+			const toChainId = step.to.chain?.id
+
+			return {
+				...step,
+				from: {
+					...step.from,
+					chain: fromChainId ? chainDataMap[fromChainId] : step.from.chain,
+				},
+				to: {
+					...step.to,
+					chain: toChainId ? chainDataMap[toChainId] : step.to.chain,
+				},
+			}
 		}
+		return step
 	})
 
 	return {
 		...route,
-		steps: newSteps,
+		steps: validatedSteps,
 	}
 }
 
 const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): Promise<boolean> => {
 	try {
-		const routeRequest = {
-			fromChainId: swapState.from.chain.id,
-			fromAmount: swapState.from.amount,
-			fromTokenAddress: swapState.from.token.address as Address,
-			fromAddress: swapState.from.address as Address,
-			toChainId: swapState.to.chain.id,
-			toTokenAddress: swapState.to.token.address as Address,
-			toAddress: swapState.to.address as Address,
+		const { from, to } = swapState
+
+		const tolerance = '0.5'
+		const routeRequest: RouteRequest = {
+			fromChainId: from.chain.id,
+			toChainId: to.chain.id,
+			fromToken: from.token.address as Address,
+			toToken: to.token.address as Address,
+			amount: from.amount,
+			fromAddress: from.address as Address,
+			toAddress: to.address as Address,
+			slippageTolerance: tolerance,
 		}
 
-		const conceroRoute: Route = await findRoute(routeRequest)
+		const conceroRoute = await lanca.getRoute(routeRequest)
+		if (!conceroRoute) return false
 
-		if (!conceroRoute?.success) return false
+		const validStepsRoute = validateRouteSteps(conceroRoute)
 
 		swapDispatch({
-			type: 'POPULATE_ROUTES',
-			payload: [routeDataProvider(conceroRoute.data)],
-			fromAmount: swapState.from.amount,
+			type: SwapActionType.POPULATE_ROUTES,
+			payload: [validStepsRoute],
+			fromAmount: from.amount,
 		})
 
-		return conceroRoute.success
+		return true
 	} catch (error) {
+		console.error(error)
 		return false
 	}
 }
@@ -71,17 +84,24 @@ export const getRoutes = async (swapState: SwapState, swapDispatch: Dispatch<Swa
 
 	if (!from.amount || !parseFloat(from.amount)) return
 
-	swapDispatch({ type: 'SET_LOADING', payload: true })
+	swapDispatch({ type: SwapActionType.SET_LOADING, payload: true })
 
 	const isBridge = from.chain.id !== to.chain.id
 
 	if (isBridge) {
-		const dstChainId = to.chain.id
-		const poolAmount = await getPoolAmount(dstChainId)
-		const fromAmountUsd = Number(from.amount) * from.token.priceUsd
+		try {
+			const poolAmount = await getPoolLiquidity(to.chain.id)
+			const fromAmountUsd = Number(from.amount) * (from.token.priceUsd ?? 0)
 
-		if (fromAmountUsd > Number(poolAmount)) {
-			swapDispatch({ type: 'SET_IS_SUFFICIENT_LIQUIDITY', payload: false })
+			if (fromAmountUsd > Number(poolAmount)) {
+				swapDispatch({ type: SwapActionType.SET_IS_SUFFICIENT_LIQUIDITY, payload: false })
+				swapDispatch({ type: SwapActionType.SET_INPUT_ERROR, payload: ErrorType.NOT_SUFFICIENT_LIQUIDITY })
+				swapDispatch({ type: SwapActionType.SET_LOADING, payload: false })
+				return
+			}
+		} catch (error) {
+			console.error('Error fetching pool amount:', error)
+			swapDispatch({ type: SwapActionType.SET_LOADING, payload: false })
 			return
 		}
 	}
@@ -90,11 +110,12 @@ export const getRoutes = async (swapState: SwapState, swapDispatch: Dispatch<Swa
 		const isSuccess: boolean = await getConceroRoute({ swapState, swapDispatch })
 
 		if (!isSuccess) {
-			swapDispatch({ type: 'SET_INPUT_ERROR', payload: ErrorType.NO_ROUTES })
+			swapDispatch({ type: SwapActionType.SET_INPUT_ERROR, payload: ErrorType.NO_ROUTES })
 		}
 	} catch (error) {
-		console.error(error)
+		console.error('Error fetching route:', error)
+		swapDispatch({ type: SwapActionType.SET_INPUT_ERROR, payload: ErrorType.FETCH_ROUTE_FAILED })
 	} finally {
-		swapDispatch({ type: 'SET_LOADING', payload: false })
+		swapDispatch({ type: SwapActionType.SET_LOADING, payload: false })
 	}
 }

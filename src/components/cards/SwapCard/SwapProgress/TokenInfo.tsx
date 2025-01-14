@@ -15,7 +15,7 @@ export const TokenInfo: FC<TokenInfoProps> = ({ direction }) => {
 
 	return (
 		<div className={classNames.tokenInfoItem}>
-			<Avatar src={token.logoURI} size="sm" />
+			<Avatar src={token.logoURL} size="sm" />
 			<h4>{formatNumber(Number(amount))}</h4>
 			<h4>{token.symbol}</h4>
 			<h4>{t('swapProgressCard.on')}</h4>
