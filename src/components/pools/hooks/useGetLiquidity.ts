@@ -36,7 +36,9 @@ export const getPoolLiquidity = async (childrenOnly = false) => {
 	try {
 		const formattedPoolConfigs = poolConfigs.filter(poolConfig => (childrenOnly ? !poolConfig.isParent : true))
 
-		const totalValuesOnChain = await Promise.all(formattedPoolConfigs.map(async config => await getLiquidityOnChain(config)))
+		const totalValuesOnChain = await Promise.all(
+			formattedPoolConfigs.map(async config => await getLiquidityOnChain(config)),
+		)
 
 		const totalLiquidity = totalValuesOnChain.reduce((acc, value) => acc + value, 0)
 

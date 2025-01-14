@@ -27,7 +27,12 @@ export function TooltipWrapper({ children, tooltipId, tooltipContent, className,
 		<div>
 			<div data-tooltip-id={tooltipId}>{children}</div>
 
-			<Tooltip place={place} id={tooltipId} className={`${classNames.tooltip} ${className}`}>
+			<Tooltip
+				place={place}
+				id={tooltipId}
+				style={{ opacity: 1 }}
+				className={`${classNames.tooltip} ${className}`}
+			>
 				{tooltipContent}
 			</Tooltip>
 		</div>

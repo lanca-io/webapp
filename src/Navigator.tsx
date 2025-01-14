@@ -7,7 +7,7 @@ import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScree
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
 import { Footer } from './components/layout/Footer/Footer'
-import { PoolScreen } from './components/screens/PoolScreen/PoolScreen'
+import { USDCPoolScreen } from './components/screens/PoolScreen/USDCPoolScreen'
 
 const SwapScreen = lazy(
 	async () =>
@@ -39,7 +39,7 @@ export const Navigator = () => {
 						path={routes.pools}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
-								<PoolScreen />
+								<USDCPoolScreen />
 							</Suspense>
 						}
 					/>
