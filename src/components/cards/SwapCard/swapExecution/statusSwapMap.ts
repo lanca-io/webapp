@@ -2,6 +2,8 @@ import { SwapActionType, type SwapAction, StageType } from '../swapReducer/types
 import type { Dispatch } from 'react'
 import { type RouteType, Status, StepType } from 'lanca-sdk-demo'
 import { SwapCardStage } from '../swapReducer/types'
+import { trackEvent } from '../../../../hooks/useTracking'
+import { action, category } from '../../../../constants/tracking'
 
 type swapStateFunction = (swapDispatch: Dispatch<SwapAction>, state: RouteType) => void
 
@@ -20,8 +22,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				payload: [{ title: 'Switch chain successfull', status: Status.SUCCESS, type: StageType.chain }],
 			})
 		},
-		[Status.FAILED]: swapDispatch => {
+		[Status.FAILED]: (swapDispatch, state) => {
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapFailed,
+				label: 'swap_failed',
+				data: { route: state },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -35,8 +43,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			})
 		},
 		[Status.NOT_STARTED]: () => {},
-		[Status.REJECTED]: swapDispatch => {
+		[Status.REJECTED]: (swapDispatch, state) => {
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapRejected,
+				label: 'User rejected swap',
+				data: { route: state },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -66,7 +80,10 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.SUCCESS]: swapDispatch => {
+		[Status.SUCCESS]: (swapDispatch, state) => {
+			const txHash = state.steps.find(
+				step => step.type === StepType.ALLOWANCE && step.execution?.status === Status.SUCCESS,
+			)?.execution?.txHash
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
@@ -75,12 +92,22 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						status: Status.SUCCESS,
 						type: StageType.approve,
 						txType: StepType.ALLOWANCE,
+						txLink: txHash,
 					},
 				],
 			})
 		},
-		[Status.FAILED]: swapDispatch => {
+		[Status.FAILED]: (swapDispatch, state) => {
+			const txHash = state.steps.find(
+				step => step.type === StepType.ALLOWANCE && step.execution?.status === Status.FAILED,
+			)?.execution?.txHash
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapFailed,
+				label: 'swap_failed',
+				data: { route: state, txHash },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -107,8 +134,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.REJECTED]: swapDispatch => {
+		[Status.REJECTED]: (swapDispatch, state) => {
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapRejected,
+				label: 'User rejected swap',
+				data: { route: state },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -139,7 +172,10 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.SUCCESS]: swapDispatch => {
+		[Status.SUCCESS]: (swapDispatch, state) => {
+			const txHash = state.steps.find(
+				step => step.type === StepType.SRC_SWAP && step.execution?.status === Status.SUCCESS,
+			)?.execution?.txHash
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
@@ -148,12 +184,22 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						status: Status.SUCCESS,
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
+						txLink: txHash,
 					},
 				],
 			})
 		},
-		[Status.FAILED]: swapDispatch => {
+		[Status.FAILED]: (swapDispatch, state) => {
+			const txHash = state.steps.find(
+				step => step.type === StepType.SRC_SWAP && step.execution?.status === Status.FAILED,
+			)?.execution?.txHash
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapFailed,
+				label: 'swap_failed',
+				data: { route: state, txHash },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -180,8 +226,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.REJECTED]: swapDispatch => {
+		[Status.REJECTED]: (swapDispatch, state) => {
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapRejected,
+				label: 'User rejected swap',
+				data: { route: state },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -212,7 +264,10 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.SUCCESS]: swapDispatch => {
+		[Status.SUCCESS]: (swapDispatch, state) => {
+			const txHash = state.steps.find(
+				step => step.type === StepType.DST_SWAP && step.execution?.status === Status.SUCCESS,
+			)?.execution?.txHash
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
@@ -221,12 +276,22 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						status: Status.SUCCESS,
 						type: StageType.success,
 						txType: StepType.DST_SWAP,
+						txLink: txHash,
 					},
 				],
 			})
 		},
-		[Status.FAILED]: swapDispatch => {
+		[Status.FAILED]: (swapDispatch, state) => {
+			const txHash = state.steps.find(
+				step => step.type === StepType.DST_SWAP && step.execution?.status === Status.FAILED,
+			)?.execution?.txHash
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapFailed,
+				label: 'swap_failed',
+				data: { route: state, txHash },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -253,8 +318,14 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				],
 			})
 		},
-		[Status.REJECTED]: swapDispatch => {
+		[Status.REJECTED]: (swapDispatch, state) => {
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapRejected,
+				label: 'User rejected swap',
+				data: { route: state },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -288,6 +359,9 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 		},
 		[Status.SUCCESS]: (swapDispatch, state) => {
 			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
+			const txHash = state.steps.find(
+				step => step.type === StepType.BRIDGE && step.execution?.status === Status.SUCCESS,
+			)?.execution?.txHash
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
@@ -296,13 +370,23 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						status: Status.SUCCESS,
 						type: StageType.approve,
 						txType: StepType.BRIDGE,
+						txLink: txHash,
 					},
 				],
 			})
 		},
 		[Status.FAILED]: (swapDispatch, state) => {
 			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
+			const txHash = state.steps.find(
+				step => step.type === StepType.BRIDGE && step.execution?.status === Status.FAILED,
+			)?.execution?.txHash
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapFailed,
+				label: 'swap_failed',
+				data: { route: state, txHash },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
@@ -333,6 +417,12 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 		[Status.REJECTED]: (swapDispatch, state) => {
 			const hasDstSwap = state.steps.some(step => step.type === StepType.DST_SWAP)
 			swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.failed })
+			trackEvent({
+				category: category.SwapCard,
+				action: action.SwapRejected,
+				label: 'User rejected swap',
+				data: { route: state },
+			})
 			swapDispatch({
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
