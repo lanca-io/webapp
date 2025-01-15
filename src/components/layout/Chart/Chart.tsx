@@ -1,18 +1,17 @@
-import { type FC, useContext, useEffect, useRef } from 'react'
-import { createChart } from 'lightweight-charts'
+import { type FC, useEffect, useRef } from 'react'
+import { createChart, type IChartApi } from 'lightweight-charts'
 import { animated, useSpring } from '@react-spring/web'
-import { ThemeContext } from '../../../hooks/themeContext'
 import { areaSeriesOptions, chartOptions } from './chartOptions'
 import { createTooltip, updateTooltip } from './Tooltip'
+import dayjs from 'dayjs'
 
-interface DataPoint {
-	time: string
+export interface ChartData {
 	value: number
+	time: number
 }
 
 interface ChartProps {
-	data: DataPoint[]
-	secondData?: DataPoint[] | null
+	data: ChartData[]
 }
 
 const useFadeInAnimation = () =>
@@ -23,23 +22,32 @@ const useFadeInAnimation = () =>
 		reset: true,
 	})
 
-export const Chart: FC<ChartProps> = ({ data, secondData = null }) => {
+export const Chart: FC<ChartProps> = ({ data }) => {
 	const chartRef = useRef<HTMLDivElement>(null)
 	const tooltipRef = useRef<HTMLDivElement | null>(null)
 	const seriesRef = useRef<any>(null)
-	const { colors, theme } = useContext(ThemeContext)
+
 	const fadeProps = useFadeInAnimation()
+
+	const clearData = data.map(item => {
+		return {
+			value: Number(item.value.toFixed(2)),
+			time: dayjs(item.time).format('YYYY-MM-DD'),
+		}
+	})
 
 	useEffect(() => {
 		if (!chartRef.current) return
-		const chart = createChart(chartRef.current, chartOptions(colors))
-		setupChartStyles(chart, colors)
-		seriesRef.current = chart.addAreaSeries(areaSeriesOptions(colors, theme))
-		seriesRef.current.setData(data)
-		const secondSeries = addSecondSeries(chart, secondData, colors, theme)
+		const chart = createChart(chartRef.current, chartOptions)
+
+		setupChartStyles(chart)
+
+		seriesRef.current = chart.addAreaSeries(areaSeriesOptions)
+		seriesRef.current.setData(clearData)
 		tooltipRef.current = createTooltip()
 		chartRef.current.appendChild(tooltipRef.current)
 		chart.timeScale().fitContent()
+
 		const handleResize = () => {
 			const { clientWidth, clientHeight } = chartRef.current!
 			chart.resize(clientWidth, clientHeight)
@@ -48,33 +56,17 @@ export const Chart: FC<ChartProps> = ({ data, secondData = null }) => {
 		}
 		window.addEventListener('resize', handleResize)
 		chart.subscribeCrosshairMove(param => {
-			if (tooltipRef.current)
-				updateTooltip(param, seriesRef.current, secondSeries, tooltipRef.current, chartRef.current, '$')
+			if (tooltipRef.current) updateTooltip(param, seriesRef.current, tooltipRef.current, chartRef.current, '$')
 		})
 
 		return () => {
 			cleanupChart(chart, handleResize)
 		}
-	}, [colors, data])
+	}, [clearData])
 
-	const setupChartStyles = (chart, colors) => {
-		chart.timeScale().applyOptions({ borderColor: 'transparent' })
-		chart.priceScale('right').applyOptions({
-			borderColor: 'transparent',
-			textColor: colors.text.secondary,
-		})
-	}
-
-	const addSecondSeries = (chart, secondData, colors, theme) => {
-		let secondSeries = null
-		if (secondData) {
-			secondSeries = chart.addAreaSeries({
-				priceScaleId: 'secondPriceScale',
-				...areaSeriesOptions(colors, theme, 2),
-			})
-			secondSeries.setData(secondData)
-		}
-		return secondSeries
+	const setupChartStyles = (chart: IChartApi) => {
+		chart.timeScale().applyOptions({ visible: true, borderColor: 'transparent' })
+		chart.priceScale('right').applyOptions({ visible: false })
 	}
 
 	const cleanupChart = (chart, handleResize) => {
