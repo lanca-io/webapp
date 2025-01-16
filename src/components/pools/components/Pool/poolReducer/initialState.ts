@@ -2,7 +2,7 @@ import { config } from '../../../../../constants/config'
 import { parentPoolBase, lpTokenBase } from '../../../config/poolMainnetAddresses'
 import { parentPoolBaseSepolia, lpTokenBaseSepolia } from '../../../config/poolTestnetAddresses'
 import { ErrorType } from '../../../config/errors/ErrorType'
-import { type PoolMode , PoolCardStage } from './types'
+import { type PoolMode, PoolCardStage } from './types'
 
 const createTokenConfig = (isTestnet: boolean) => {
 	const chainId = isTestnet ? '84532' : '8453'
