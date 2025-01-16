@@ -4,7 +4,11 @@ import { Loader } from '../../Loader/Loader'
 import { getButtonClasses } from './getButtonClasses'
 import classNames from './Button.module.pcss'
 
-export const Button: FC<ButtonProps> = ({
+interface ExtendedButtonProps extends ButtonProps {
+	textColor?: string
+}
+
+export const Button: FC<ExtendedButtonProps> = ({
 	size = 'md',
 	variant = 'primary',
 	leftIcon,
@@ -15,6 +19,7 @@ export const Button: FC<ButtonProps> = ({
 	onClick,
 	className,
 	isFull,
+	textColor,
 }) => {
 	const buttonClasses = getButtonClasses(size, variant, isLoading, isDisabled, isFull, className)
 
@@ -25,6 +30,7 @@ export const Button: FC<ButtonProps> = ({
 			disabled={isDisabled}
 			onClick={!isDisabled ? onClick : undefined}
 			aria-label={variant + size}
+			style={{ color: textColor }}
 		>
 			{!isLoading && leftIcon}
 			<span className={classNames.innerButton}>{isLoading ? <Loader /> : children}</span>

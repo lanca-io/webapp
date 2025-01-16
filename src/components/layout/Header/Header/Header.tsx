@@ -1,10 +1,12 @@
 import { type FC, type ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import classNames from './Header.module.pcss'
 import { Logo } from '../../Logo/Logo'
 import { useMediaQuery } from '../../../../hooks/useMediaQuery'
 import { WalletButton } from '../WalletButton/WalletButton'
 import { BurgerMenu } from '../BurgerMenu/BurgerMenu'
 import { Button } from '../../buttons/Button/Button'
+import { routes } from '../../../../constants/routes'
 
 interface HeaderProps {
 	children?: ReactNode
@@ -12,6 +14,11 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ children }) => {
 	const isMobile = useMediaQuery('mobile')
+	const location = useLocation()
+
+	const getButtonTextColor = (path: string) => {
+		return location.pathname === path ? 'var(--color-primary-600)' : 'inherit'
+	}
 
 	return (
 		<header className={classNames.header}>
@@ -22,21 +29,15 @@ export const Header: FC<HeaderProps> = ({ children }) => {
 				</div>
 				{!isMobile && (
 					<ul className="gap-xs">
-						<a
-							className={classNames.link}
-							target="_blank"
-							href="https://app.concero.io/pool"
-							rel="noreferrer"
-						>
-							<Button variant="tetrary">Provide Liquidity</Button>
+						<a className={classNames.link} href={routes.home} rel="noreferrer">
+							<Button variant="tetrary" textColor={getButtonTextColor(routes.home)}>
+								Swap
+							</Button>
 						</a>
-						<a
-							className={classNames.link}
-							target="_blank"
-							href="https://app.concero.io/rewards"
-							rel="noreferrer"
-						>
-							<Button variant="tetrary">Rewards</Button>
+						<a className={classNames.link} href={routes.pools} rel="noreferrer">
+							<Button variant="tetrary" textColor={getButtonTextColor(routes.pools)}>
+								Provide Liquidity
+							</Button>
 						</a>
 					</ul>
 				)}

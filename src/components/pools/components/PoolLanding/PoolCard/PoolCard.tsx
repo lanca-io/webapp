@@ -132,7 +132,7 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 							Deposit
 						</Button>
 					</Link>
-					<Link to={routes.home} className={classNames.button}>
+					<Link to={routes.usdcPools} className={classNames.button}>
 						<Button isFull size="md" variant="secondaryColor" isDisabled={isDisabled}>
 							Open Earnings
 						</Button>
@@ -142,3 +142,5 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 		</Card>
 	)
 }
+
+// NEED to update route paths here
