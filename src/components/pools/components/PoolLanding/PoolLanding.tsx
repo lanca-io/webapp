@@ -19,7 +19,7 @@ export const PoolLanding = (): JSX.Element => {
 			<div className="gap-lg">
 				<div className={classNames.section}>
 					<VolumeCard fees={fees} isLoading={feesLoading} />
-					<RewardsCard fees={fees} isLoading={false} />
+					<RewardsCard fees={fees} isLoading={feesLoading} />
 				</div>
 				<div className="gap-lg row">
 					<StatCard title="LP Providers" value={lpProviders} isLoading={providersLoading} />

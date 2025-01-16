@@ -1,8 +1,10 @@
 import { formatTime, toLocaleNumber } from '../../../../utils/formatting'
+import classNames from './Chart.module.pcss'
 
 export function createTooltip() {
 	const toolTip = document.createElement('div')
 	toolTip.style.position = 'absolute'
+	toolTip.className = classNames.tooltip
 	toolTip.style.left = '12px'
 	toolTip.style.zIndex = '10'
 	toolTip.style.opacity = '1'
@@ -30,8 +32,8 @@ export function updateTooltip(param: any, mainSeries: any, toolTip: any, chartEl
 
 		let content = ''
 
-		content += `<b>${toLocaleNumber(price)}</b>`
-		content += `<p style='font-size: 0.875rem; font-weight: 400; color: var(--color-grey-500);'>${formatTime(
+		content += `<b>$${toLocaleNumber(price)}</b>`
+		content += `<p style='font-weight: 500; color: var(--color-grey-500);'>${formatTime(
 			param.time,
 			'DD MMM. YYYY',
 		)}</p>`

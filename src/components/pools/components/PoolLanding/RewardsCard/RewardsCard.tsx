@@ -1,10 +1,8 @@
 import { createTimeFilters } from '../../../../../utils/chartTimeFilters'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { groupDataByWeeks } from '../../../../../utils/charts'
+import { useMemo, useState } from 'react'
 import { ChartCard } from '../../../../layout/ChartCard/ChartCard'
 import classNames from './RewardsCard.module.pcss'
-import { toLocaleNumber } from '../../../../../utils/formatting'
-import type { ChartData } from '../../../../layout/Charts/Chart/Chart'
+import { useGetWeeklyVolume } from '../../../hooks/useGetWeeklyVolume'
 import type { Fee } from '../../../hooks/useGetFees'
 
 type Size = 'small' | 'medium'
@@ -32,44 +30,13 @@ export const RewardsCard = ({
 	size = 'medium',
 }: Props) => {
 	const timeFilters = useMemo(() => createTimeFilters(), [])
-	const [volumeData, setVolumeData] = useState<ChartData[]>([])
 	const [activeFilter, setActiveFilter] = useState(timeFilters[timeFilters.length - 1])
-	const [commonValue, setCommonValue] = useState<string>()
 
-	const getTotalVolume = useCallback(() => {
-		if (!Array.isArray(fees)) {
-			console.error('Invalid fees data provided')
-			return
-		}
-
-		try {
-			const chartData = fees
-				.filter(fee => {
-					const feeTime = fee.timestamp
-					const { startTime, endTime } = activeFilter
-
-					return (!startTime || feeTime >= startTime) && (!endTime || feeTime <= endTime)
-				})
-				.map(fee => ({
-					time: fee.timestamp * 1000,
-					value: fee.feeMade,
-				}))
-
-			const totalValue = chartData.reduce((acc, item) => acc + item.value, 0)
-
-			setCommonValue('$' + toLocaleNumber(totalValue))
-			setVolumeData(groupDataByWeeks(chartData))
-		} catch (error) {
-			console.error('Error processing fee data:', error)
-			setVolumeData([])
-			setCommonValue('$0')
-		}
-	}, [fees, activeFilter])
-
-	useEffect(() => {
-		if (!fees?.length) return
-		getTotalVolume()
-	}, [getTotalVolume, fees])
+	const {
+		groupedVolumeData,
+		totalVolumeFormatted,
+		isLoading: isVolumeLoading,
+	} = useGetWeeklyVolume(fees, activeFilter)
 
 	const filterProps = useMemo(
 		() =>
@@ -88,11 +55,11 @@ export const RewardsCard = ({
 	return (
 		<ChartCard
 			description={REWARDS_DESCRIPTION}
-			isLoading={isLoading}
+			isLoading={isLoading || isVolumeLoading}
 			className={`${classNames.rewardsCard} ${className}`.trim()}
 			titleCard={title}
-			data={volumeData}
-			commonValue={commonValue}
+			data={groupedVolumeData}
+			commonValue={totalVolumeFormatted}
 			isBar={true}
 			{...filterProps}
 			height={height}

@@ -43,7 +43,7 @@ export const chartOptions = {
 	handleScale: false,
 }
 
-const lineColor = '#0C9FE8'
+const lineColor = '#ace1fb'
 
 const getTopColor = () => {
 	return '#ACE1FB'
