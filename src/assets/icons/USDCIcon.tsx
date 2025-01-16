@@ -1,5 +1,10 @@
-export const USDCIcon = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+interface IconProps {
+	width?: string
+	height?: string
+}
+
+export const USDCIcon = ({ width = '48', height = '48' }: IconProps) => (
+	<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 48 48" fill="none">
 		<g clipPath="url(#clip0_2232_1240)">
 			<path
 				d="M44 0H4C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0Z"
