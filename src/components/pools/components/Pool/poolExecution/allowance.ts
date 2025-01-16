@@ -1,5 +1,5 @@
 import { StageType, type PoolAction, type PoolState, PoolActionType } from '../poolReducer/types'
-import { type Address, erc20Abi, parseUnits, type PublicClient, type WalletClient } from 'viem'
+import { type Address, erc20Abi, parseUnits, type WalletClient } from 'viem'
 import { type Dispatch } from 'react'
 import { parentPoolBase } from '../../../config/poolMainnetAddresses'
 import { parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
@@ -11,7 +11,7 @@ const parentPool = config.IS_TESTNET ? parentPoolBaseSepolia : parentPoolBase
 export async function handleAllowance(
 	poolState: PoolState,
 	poolDispatch: Dispatch<PoolAction>,
-	publicClient: PublicClient,
+	publicClient: any,
 	walletClient: WalletClient,
 ) {
 	const { from } = poolState
@@ -27,11 +27,6 @@ export async function handleAllowance(
 
 		if (allowanceCheck >= parsedAmount) return
 
-		poolDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Pending approval', status: 'pending', type: StageType.approve }],
-		})
-
 		const approveTx = await walletClient.writeContract({
 			account: from.address as Address,
 			abi: erc20Abi,
@@ -44,6 +39,11 @@ export async function handleAllowance(
 
 		const { status } = await publicClient.waitForTransactionReceipt({
 			hash: approveTx,
+		})
+
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STEPS,
+			payload: [{ title: 'Pending approval', status: 'pending', type: StageType.approve }],
 		})
 
 		if (status === 'reverted') {

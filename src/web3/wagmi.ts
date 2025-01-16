@@ -1,5 +1,5 @@
 import { http } from 'wagmi'
-import { createPublicClient, fallback } from 'viem'
+import { createPublicClient, fallback, createWalletClient } from 'viem'
 import {
 	type AppKitNetwork,
 	arbitrum,
@@ -211,6 +211,17 @@ export const getPublicClient = (chainId: number) => {
 		throw new Error(`Unsupported chain ID: ${chainId}`)
 	}
 	return createPublicClient({
+		chain: chainConfig.chain,
+		transport: chainConfig.transport,
+	})
+}
+
+export const getWalletClient = async (chainId: number) => {
+	const chainConfig = viemChains[chainId]
+	if (!chainConfig) {
+		throw new Error(`Unsupported chain ID: ${chainId}`)
+	}
+	return createWalletClient({
 		chain: chainConfig.chain,
 		transport: chainConfig.transport,
 	})
