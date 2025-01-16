@@ -26,6 +26,7 @@ export const PoolLanding = (): JSX.Element => {
 					<StatCard title="Transactions" value={transactionsCount} isLoading={txCountLoading} />
 				</div>
 				<div className="gap-sm">
+					<h6 className={classNames.sectionHeading}>Pools</h6>
 					<div className={classNames.section}>
 						<PoolCard title="USDC" fees={fees} isDisabled={false} icon={<PoolUSDC />} />
 						<PoolCard title="ETH" fees={fees} isDisabled={true} icon={<PoolETH />} />
