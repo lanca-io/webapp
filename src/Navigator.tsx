@@ -5,9 +5,10 @@ import { Header } from './components/layout/Header/Header/Header'
 import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
-import posthog from 'posthog-js'
 import { Footer } from './components/layout/Footer/Footer'
-import { USDCPoolScreen } from './components/screens/PoolScreen/USDCPoolScreen'
+import { PoolScreen } from './components/screens/PoolScreen/PoolScreen'
+
+import posthog from 'posthog-js'
 
 const SwapScreen = lazy(
 	async () =>
@@ -39,7 +40,7 @@ export const Navigator = () => {
 						path={routes.pools}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
-								<USDCPoolScreen />
+								<PoolScreen />
 							</Suspense>
 						}
 					/>
