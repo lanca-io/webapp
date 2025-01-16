@@ -1,8 +1,8 @@
 import classNames from './PoolLiquidityCard.module.pcss'
-import { Card } from '../../../../cards/Card/Card'
-import { useGetLiquidity } from '../../../hooks/useGetLiquidity'
+import { Card } from '../../../../../cards/Card/Card'
+import { useGetLiquidity } from '../../../../hooks/useGetLiquidity'
 import { ProgressBar } from './ProgressBar/ProgressBar'
-import { InfoTooltip } from '../../../../layout/InfoTooltip/InfoTooltip'
+import { InfoTooltip } from '../../../../../layout/InfoTooltip/InfoTooltip'
 
 const description =
 	'For security reasons, our pools have a maximum capacity limit. However, this can sometimes be exceeded because the pool also stores the fees it has earned.'

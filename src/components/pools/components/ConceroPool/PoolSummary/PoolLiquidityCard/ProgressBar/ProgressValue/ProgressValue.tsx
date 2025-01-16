@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from './ProgressValue.module.pcss'
-import { toLocaleNumber } from '../../../../../../../utils/formatting'
-import { SkeletonLoader } from '../../../../../../layout/SkeletonLoader/SkeletonLoader'
+import { toLocaleNumber } from '../../../../../../../../utils/formatting'
+import { SkeletonLoader } from '../../../../../../../layout/SkeletonLoader/SkeletonLoader'
 
 interface ProgressValueProps {
 	isLoading: boolean

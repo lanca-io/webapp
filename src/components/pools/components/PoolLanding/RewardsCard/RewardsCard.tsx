@@ -15,6 +15,7 @@ interface Props {
 	height?: number
 	size?: Size
 	className?: string
+	showTooltip?: boolean
 }
 
 const REWARDS_DESCRIPTION =
@@ -28,6 +29,7 @@ export const RewardsCard = ({
 	className = '',
 	title = 'Rewards',
 	size = 'medium',
+	showTooltip = true,
 }: Props) => {
 	const timeFilters = useMemo(() => createTimeFilters(), [])
 	const [activeFilter, setActiveFilter] = useState(timeFilters[timeFilters.length - 1])
@@ -64,6 +66,7 @@ export const RewardsCard = ({
 			{...filterProps}
 			height={height}
 			size={sizeValue}
+			showTooltip={showTooltip}
 		/>
 	)
 }

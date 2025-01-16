@@ -6,10 +6,10 @@ import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
 import { ArrowLeftIcon } from '../../../../assets/icons/ArrowLeftIcon'
 import { routes } from '../../../../constants/routes'
 import { USDCIcon } from '../../../../assets/icons/USDCIcon'
-import { PoolLiquidityCard } from '../PoolSummary/PoolLiquidityCard/PoolLiquidityCard'
+import { PoolSummary } from './PoolSummary/PoolSummary'
 
 const BackArrow: React.FC = () => (
-	<Link to={routes.home} className={classNames.backArrow}>
+	<Link to={routes.pools} className={classNames.backArrow}>
 		<IconButton variant="secondary">
 			<ArrowLeftIcon />
 		</IconButton>
@@ -38,7 +38,7 @@ export const ConceroPool: React.FC = () => {
 		<>
 			{backArrow}
 			{heading}
-			<PoolLiquidityCard />
+			<PoolSummary />
 		</>
 	)
 }

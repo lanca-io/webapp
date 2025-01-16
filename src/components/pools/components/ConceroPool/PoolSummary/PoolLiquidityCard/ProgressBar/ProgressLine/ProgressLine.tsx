@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import classNames from './ProgressLine.module.pcss'
-import { SkeletonLoader } from '../../../../../../layout/SkeletonLoader/SkeletonLoader'
+import { SkeletonLoader } from '../../../../../../../layout/SkeletonLoader/SkeletonLoader'
 
 interface ProgressLineProps {
 	isLoading: boolean

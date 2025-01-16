@@ -1,5 +1,5 @@
 import React from 'react'
-import { toLocaleNumber } from '../../../../../../../utils/formatting'
+import { toLocaleNumber } from '../../../../../../../../utils/formatting'
 
 interface ProgressRangeProps {
 	minValue: number

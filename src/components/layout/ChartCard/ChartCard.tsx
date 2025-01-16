@@ -33,6 +33,7 @@ export interface BarChartCardProps {
 	height?: number
 	size?: 'S' | 'M'
 	isLoading: boolean
+	showTooltip?: boolean // New prop to control tooltip visibility
 }
 
 export const ChartCard = ({
@@ -50,6 +51,7 @@ export const ChartCard = ({
 	height,
 	size,
 	isLoading,
+	showTooltip = true,
 }: BarChartCardProps) => {
 	const isSmall = size === 'S'
 
@@ -67,8 +69,12 @@ export const ChartCard = ({
 			<div>
 				<div className={classNames.header}>
 					<div className="row gap-sm ac">
-						<h4 className={classNames.title}>{titleCard}</h4>
-						{description && <InfoTooltip description={description} tooltipId={titleCard} />}
+						{!isSmall ? (
+							<h4 className={classNames.title}>{titleCard}</h4>
+						) : (
+							<h4 className={classNames.smallTitle}>{titleCard}</h4>
+						)}
+						{description && showTooltip && <InfoTooltip description={description} tooltipId={titleCard} />}
 					</div>
 					<div className="row gap-xs">
 						{setActiveItem &&
