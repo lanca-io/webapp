@@ -22,6 +22,12 @@ export async function executeConceroRoute({ swapState, swapDispatch, route, wall
 				if (step.execution?.status && step.type) {
 					if (step.type === StepType.BRIDGE && step.execution.error?.includes('CCIP')) {
 						swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.warning })
+						trackEvent({
+							category: category.SwapCard,
+							action: action.ClFunctionsFailed,
+							label: 'cl_functions_failed',
+							data: { route, txHash: step.execution.txHash },
+						})
 						swapDispatch({
 							type: SwapActionType.SET_SWAP_STEPS,
 							payload: [

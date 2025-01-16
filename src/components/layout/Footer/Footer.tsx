@@ -38,9 +38,11 @@ export const Footer = () => {
 							Bring cross chain to your <br /> product.
 						</h3>
 						<p className={`${classNames.subtitle} body2`}>Contact us to learn the benefits</p>
-						<Button size="sm" variant="secondaryColor" rightIcon={<ArrowRight />}>
-							Lanka SDK
-						</Button>
+						<a target="_blank" rel="noreferrer" href="http://docs.lanca.io/">
+							<Button size="sm" variant="secondaryColor" rightIcon={<ArrowRight />}>
+								Lanca SDK
+							</Button>
+						</a>
 					</div>
 
 					<div className={classNames.navigation}>
