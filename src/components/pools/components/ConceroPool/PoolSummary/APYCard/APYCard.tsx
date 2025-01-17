@@ -92,6 +92,7 @@ export const APYCard = ({ fees, isLoading }: Props) => {
 			subtitle="Total APY"
 			data={apyData}
 			commonValue={`${commonValue}%`}
+			symbol="percent"
 		/>
 	)
 }

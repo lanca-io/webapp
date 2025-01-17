@@ -9,6 +9,7 @@ import { Button } from '../../../../layout/buttons/Button/Button'
 import { type Fee } from '../../../hooks/useGetFees'
 import { usePoolMetrics } from '../../../hooks/useGetPoolMetrics'
 import { routes } from '../../../../../constants/routes'
+import { PoolCard as PoolButton } from '../../Pool/Pool'
 import classNames from './PoolCard.module.pcss'
 
 interface PoolCardProps {
@@ -79,17 +80,17 @@ const PoolStats = ({
 				{isDisabled ? (
 					<b className={classNames.stat}>-</b>
 				) : isLoading ? (
-					<SkeletonLoader height={21} width={67} />
+					<>
+						<SkeletonLoader height={21} width={67} />
+						<p>/</p>
+						<SkeletonLoader height={21} width={67} />
+					</>
 				) : (
-					<b className={classNames.stat}>${toLocaleNumber(poolLiquidity)}</b>
-				)}
-				<p>/</p>
-				{isDisabled ? (
-					<b className={classNames.stat}>-</b>
-				) : isLoading ? (
-					<SkeletonLoader height={21} width={67} />
-				) : (
-					<b className={classNames.stat}>${toLocaleNumber(maxCap)}</b>
+					<>
+						<b className={classNames.stat}>${toLocaleNumber(poolLiquidity)}</b>
+						<p>/</p>
+						<b className={classNames.stat}>${toLocaleNumber(maxCap)}</b>
+					</>
 				)}
 			</div>
 		</div>
@@ -127,11 +128,7 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 					isLoading={isLoading}
 				/>
 				<div className={classNames.buttons}>
-					<Link to={routes.home} className={classNames.button}>
-						<Button isFull size="md" isDisabled={isDisabled}>
-							Deposit
-						</Button>
-					</Link>
+					<PoolButton poolIsFilled={true} depositButtonClasses={classNames.button} isDepositOnly />
 					<Link to={routes.usdcPools} className={classNames.button}>
 						<Button isFull size="md" variant="secondaryColor" isDisabled={isDisabled}>
 							Open Earnings
@@ -142,5 +139,3 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 		</Card>
 	)
 }
-
-// NEED to update route paths here

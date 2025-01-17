@@ -21,7 +21,7 @@ export const PoolLanding = (): JSX.Element => {
 					<VolumeCard fees={fees} isLoading={feesLoading} />
 					<RewardsCard fees={fees} isLoading={feesLoading} />
 				</div>
-				<div className="gap-lg row">
+				<div className={`gap-lg row ${classNames.statSection}`}>
 					<StatCard title="LP Providers" value={lpProviders} isLoading={providersLoading} />
 					<StatCard title="Transactions" value={transactionsCount} isLoading={txCountLoading} />
 				</div>

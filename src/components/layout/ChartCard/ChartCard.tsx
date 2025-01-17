@@ -34,6 +34,7 @@ export interface BarChartCardProps {
 	size?: 'S' | 'M'
 	isLoading: boolean
 	showTooltip?: boolean // New prop to control tooltip visibility
+	symbol?: 'dollar' | 'percent' // New prop for symbol
 }
 
 export const ChartCard = ({
@@ -52,10 +53,11 @@ export const ChartCard = ({
 	size,
 	isLoading,
 	showTooltip = true,
+	symbol = 'dollar', // Default value for symbol
 }: BarChartCardProps) => {
 	const isSmall = size === 'S'
 
-	const chart = isBar ? <BarChart height={height} data={data} /> : <Chart data={data} />
+	const chart = isBar ? <BarChart height={height} data={data} /> : <Chart data={data} symbol={symbol} />
 
 	const title =
 		commonValue && isSmall ? (

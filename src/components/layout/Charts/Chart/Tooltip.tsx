@@ -15,7 +15,13 @@ const toolTipWidth = 150
 const toolTipHeight = 20
 const toolTipMargin = 15
 
-export function updateTooltip(param: any, mainSeries: any, toolTip: any, chartElement: any) {
+export function updateTooltip(
+	param: any,
+	mainSeries: any,
+	toolTip: any,
+	chartElement: any,
+	symbol: 'dollar' | 'percent',
+) {
 	if (
 		param.point === undefined ||
 		!param.time ||
@@ -32,7 +38,14 @@ export function updateTooltip(param: any, mainSeries: any, toolTip: any, chartEl
 
 		let content = ''
 
-		content += `<b>$${toLocaleNumber(price)}</b>`
+		const customSymbol = symbol === 'dollar' ? '$' : '%'
+
+		if (symbol === 'dollar') {
+			content += `<b>${customSymbol}${toLocaleNumber(price)}</b>`
+		} else {
+			content += `<b>${toLocaleNumber(price)}${customSymbol}</b>`
+		}
+
 		content += `<p style='font-weight: 500; color: var(--color-grey-500);'>${formatTime(
 			param.time,
 			'DD MMM. YYYY',

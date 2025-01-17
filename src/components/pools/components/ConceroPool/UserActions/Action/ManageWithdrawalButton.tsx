@@ -1,5 +1,5 @@
 import { UserActionStatus, type UserTransaction } from '../UserActions'
-import { TransactionStatus , retryWithdrawal } from '../../../Pool/poolExecution/withdrawal'
+import { TransactionStatus, retryWithdrawal } from '../../../Pool/poolExecution/withdrawal'
 import { type Dispatch, type SetStateAction } from 'react'
 import { useAccount } from 'wagmi'
 import { Button } from '../../../../../layout/buttons/Button/Button'

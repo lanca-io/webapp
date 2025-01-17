@@ -12,6 +12,7 @@ export interface ChartData {
 
 interface ChartProps {
 	data: ChartData[]
+	symbol?: 'dollar' | 'percent'
 }
 
 const useFadeInAnimation = () =>
@@ -51,7 +52,7 @@ const cleanupChart = (
 	}
 }
 
-export const Chart: FC<ChartProps> = ({ data }) => {
+export const Chart: FC<ChartProps> = ({ data, symbol = 'dollar' }) => {
 	const chartRef = useRef<HTMLDivElement>(null)
 	const tooltipRef = useRef<HTMLDivElement | null>(null)
 	const seriesRef = useRef<ISeriesApi<'Area'> | null>(null)
@@ -85,13 +86,14 @@ export const Chart: FC<ChartProps> = ({ data }) => {
 
 		window.addEventListener('resize', handleResize)
 		chart.subscribeCrosshairMove(param => {
-			if (tooltipRef.current) updateTooltip(param, seriesRef.current!, tooltipRef.current, chartRef.current!)
+			if (tooltipRef.current)
+				updateTooltip(param, seriesRef.current!, tooltipRef.current, chartRef.current!, symbol)
 		})
 
 		return () => {
 			cleanupChart(chart, handleResize, tooltipRef)
 		}
-	}, [clearData, handleResize])
+	}, [clearData, handleResize, symbol])
 
 	return <animated.div className="f1" ref={chartRef} style={fadeProps} />
 }
