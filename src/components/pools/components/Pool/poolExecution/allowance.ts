@@ -27,6 +27,18 @@ export async function handleAllowance(
 
 		if (allowanceCheck >= parsedAmount) return
 
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STEPS,
+			payload: [
+				{
+					title: 'Approval required',
+					body: 'Please approve the fund transfer in your wallet',
+					type: StageType.approve,
+					status: 'await',
+				},
+			],
+		})
+
 		const approveTx = await walletClient.writeContract({
 			account: from.address as Address,
 			abi: erc20Abi,
@@ -41,11 +53,6 @@ export async function handleAllowance(
 			hash: approveTx,
 		})
 
-		poolDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Pending approval', status: 'pending', type: StageType.approve }],
-		})
-
 		if (status === 'reverted') {
 			poolDispatch({
 				type: PoolActionType.SET_SWAP_STEPS,
@@ -53,7 +60,13 @@ export async function handleAllowance(
 			})
 			throw new Error('Approve transaction reverted')
 		}
+
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STEPS,
+			payload: [{ title: 'Pending approval', status: 'pending', type: StageType.approve }],
+		})
 	} catch (error) {
+		console.error('Error during allowance handling:', error)
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [{ title: 'Approval failed', status: 'error', type: StageType.approve }],

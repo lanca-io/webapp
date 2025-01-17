@@ -1,5 +1,5 @@
-import { type Address, type WalletClient, type Hash, decodeEventLog } from 'viem'
-import { PoolActionType, PoolCardStage, type PoolAction, type PoolState } from '../poolReducer/types'
+import { type Address, type WalletClient, type Hash, decodeEventLog, parseUnits } from 'viem'
+import { PoolActionType, PoolCardStage, StageType, type PoolAction, type PoolState } from '../poolReducer/types'
 import { type Dispatch } from 'react'
 import { config } from '../../../../../constants/config'
 import { parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
@@ -8,7 +8,6 @@ import { base, baseSepolia } from 'viem/chains'
 import { handleAllowance } from './allowance'
 import { getPublicClient, getWalletClient } from '../../../../../web3/wagmi'
 import { ParentPoolABI } from '../../../config/abi/ParentPoolABI1_5'
-import { addingAmountDecimals } from '../../../../../utils/formatting'
 import { trackEvent } from '../../../../../hooks/useTracking'
 import { category, action } from '../../../../../constants/tracking'
 import { parseAbi } from 'viem'
@@ -31,39 +30,49 @@ export async function handleWithdrawal(
 ) {
 	const { to, from } = poolState
 
+	trackEvent({
+		category: category.PoolCard,
+		action: action.BeginWithdrawalRequest,
+		label: 'concero_begin_withdrawal',
+		data: { from, to },
+	})
+
 	if (to.amount === '' || to.amount === '0') return
 
 	poolDispatch({ type: PoolActionType.SET_LOADING, payload: true })
 	poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.progress })
-	poolDispatch({
-		type: PoolActionType.SET_SWAP_STEPS,
-		payload: [
-			{
-				title: 'Action required',
-				body: 'Please approve the transaction in your wallet',
-				status: 'await',
-				txLink: null,
-			},
-		],
-	})
 
 	try {
 		await walletClient.switchChain({ id: chain.id })
 		await handleAllowance(poolState, poolDispatch, publicClient, walletClient)
 
-		const depositAmount = addingAmountDecimals(from.amount, from.token.decimals)
-		if (!depositAmount) throw new Error('Invalid deposit amount')
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STEPS,
+			payload: [
+				{ title: 'Approval required', status: 'success', type: StageType.approve },
+				{ title: 'Transaction confirmation', status: 'await', type: StageType.requestTx },
+			],
+		})
 
+		const withdrawalAmount = parseUnits(from.amount, from.token.decimals)
 		const { request } = await publicClient.simulateContract({
 			account: from.address as Address,
 			abi: ParentPoolABI,
 			functionName: 'startWithdrawal',
 			address: parentPool,
-			args: [BigInt(depositAmount)],
+			args: [withdrawalAmount],
 			gas: 4_000_000n,
 		})
 
 		const txHash = await walletClient.writeContract(request)
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STEPS,
+			payload: [
+				{ title: 'Signature required', status: 'success', type: StageType.approve },
+				{ title: 'Transaction confirmation', status: 'pending', type: StageType.requestTx },
+			],
+		})
+
 		await checkTxStatus(txHash, publicClient, poolDispatch)
 	} catch (error) {
 		console.error(error)
