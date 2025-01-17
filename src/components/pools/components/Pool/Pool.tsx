@@ -2,8 +2,8 @@ import { useRef, useState, useCallback, useMemo } from 'react'
 import { usePoolReducer } from './poolReducer/poolReducer'
 import { Modal } from '../../../modals/Modal/Modal'
 import { usePoolCardEffects } from './usePoolCardEffects'
-// import { SwapInput } from './SwapInput/SwapInput'
-// import { SwapProgress } from './SwapProgress/SwapProgress'
+import { SwapInput } from './SwapInput/SwapInput'
+import { SwapProgress } from './SwapProgress/SwapProgress'
 import { PoolActionType, PoolCardStage } from './poolReducer/types'
 import { Button } from '../../../layout/buttons/Button/Button'
 import { useAccount } from 'wagmi'
@@ -34,7 +34,7 @@ export const PoolCard = ({
 	const { open } = useAppKit()
 
 	const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
-	// const isInputStages = poolState.stage === PoolCardStage.input || poolState.stage === PoolCardStage.review
+	const isInputStages = poolState.stage === PoolCardStage.input || poolState.stage === PoolCardStage.review
 
 	const handleGoBack = useCallback(() => {
 		poolDispatch({ type: PoolActionType.RESET_AMOUNTS, direction: 'from' })
@@ -140,11 +140,11 @@ export const PoolCard = ({
 				show={isOpen}
 				setShow={handleClose}
 			>
-				{/* {isInputStages ? (
-                    <SwapInput onClose={handleClose} swapState={swapState} swapDispatch={swapDispatch} />
-                ) : (
-                    <SwapProgress swapState={swapState} swapDispatch={swapDispatch} handleGoBack={handleGoBack} />
-                )} */}
+				{isInputStages ? (
+					<SwapInput onClose={handleClose} poolState={poolState} poolDispatch={poolDispatch} />
+				) : (
+					<SwapProgress poolState={poolState} poolDispatch={poolDispatch} handleGoBack={handleGoBack} />
+				)}
 			</Modal>
 		</>
 	)
