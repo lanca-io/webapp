@@ -4,7 +4,7 @@ import { getInputError } from './handleInputError'
 import { calculateLpAmount, calculateWithdrawableAmount } from './handleFetchLpInfo'
 import { type PoolAction, PoolCardStage, type PoolState, PoolActionType, type PoolMode } from '../poolReducer/types'
 
-export const setLpBalance = async (
+export const handleSetLpBalance = async (
 	poolState: PoolState,
 	swapDispatch: Dispatch<PoolAction>,
 	typingTimeoutRef: MutableRefObject<ReturnType<typeof setTimeout> | undefined>,
