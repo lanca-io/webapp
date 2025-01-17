@@ -12,7 +12,7 @@ import { trackEvent } from '../../../../../hooks/useTracking'
 import { category, action } from '../../../../../constants/tracking'
 import { parseAbi } from 'viem'
 
-enum TransactionStatus {
+export enum TransactionStatus {
 	SUCCESS = 'SUCCESS',
 	FAILED = 'FAILED',
 	PENDING = 'PENDING',

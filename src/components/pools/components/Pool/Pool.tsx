@@ -16,7 +16,7 @@ interface Props {
 	depositButtonClasses?: string
 	withdrawalButtonClasses?: string
 	poolIsFilled?: boolean
-	userIsNotDeposited?: boolean
+	userHasDeposited?: boolean
 }
 
 const poolDescription = 'The pool has reached its max capacity and you cannot deposit money into it.'
@@ -26,7 +26,7 @@ export const PoolCard = ({
 	depositButtonClasses,
 	withdrawalButtonClasses,
 	poolIsFilled,
-	userIsNotDeposited,
+	userHasDeposited,
 }: Props) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [poolState, poolDispatch] = usePoolReducer()
@@ -107,7 +107,7 @@ export const PoolCard = ({
 	const withdrawalButton = useMemo(
 		() => (
 			<Button
-				isDisabled={!address || userIsNotDeposited}
+				isDisabled={!address || !userHasDeposited}
 				className={withdrawalButtonClasses}
 				onClick={() => {
 					poolDispatch({ type: PoolActionType.TOGGLE_POOL_MODE, payload: 'withdraw' })
@@ -119,7 +119,7 @@ export const PoolCard = ({
 				Withdraw
 			</Button>
 		),
-		[address, userIsNotDeposited, withdrawalButtonClasses, poolDispatch],
+		[address, userHasDeposited, withdrawalButtonClasses, poolDispatch],
 	)
 
 	return (

@@ -1,10 +1,11 @@
 import { memo } from 'react'
 import type { PoolStateDirection } from '../../poolReducer/types'
 import { SelectTokenShape } from '../../TokenArea/SelectTokenShape/SelectTokenShape'
-import classNames from './FinishTxInfo.module.pcss'
 import { Separator } from '../../../../../layout/Separator/Separator'
 import { Alert } from '../../../../../layout/Alert/Alert'
 import { Badge } from '../../../../../layout/Badge/Badge'
+
+import classNames from './FinishTxInfo.module.pcss'
 
 interface Props {
 	to: PoolStateDirection

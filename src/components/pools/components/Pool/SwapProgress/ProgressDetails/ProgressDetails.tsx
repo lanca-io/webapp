@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { TrailArrowRightIcon } from '../../../../../../assets/icons/TrailArrowRightIcon'
 import { Badge } from '../../../../../layout/Badge/Badge'
 import { type PoolStateDirection } from '../../poolReducer/types'
-import classNames from './SwapProgressDetails.module.pcss'
+import classNames from './ProgressDetails.module.pcss'
 
 interface Props {
 	from: PoolStateDirection

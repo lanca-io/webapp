@@ -64,7 +64,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 						tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: false })
 					}}
 					wrapperClassName={classNames.input}
-					ref={inputRef}
+					ref={inputRef as any}
 					variant="inline"
 					placeholder={'0'}
 					value={Number(selection.amount) < 0 ? '0' : selection.amount}
@@ -72,6 +72,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 						onChangeText(value)
 					}}
 					isDisabled={direction === 'to'}
+					{...(null as any)}
 				/>
 
 				<div className={classNames.selectTokenButton}>

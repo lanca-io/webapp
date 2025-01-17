@@ -7,6 +7,8 @@ import { getPublicClient } from '../../../web3/wagmi'
 import { parentPoolBase } from '../config/poolMainnetAddresses'
 import { parentPoolBaseSepolia } from '../config/poolTestnetAddresses'
 
+// Move this to handlers/useGetMaxCap.ts
+
 export const getMaxCap = async (): Promise<number | undefined> => {
 	try {
 		const { IS_TESTNET } = config

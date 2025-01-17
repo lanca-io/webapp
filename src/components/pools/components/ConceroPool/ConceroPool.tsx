@@ -7,6 +7,7 @@ import { ArrowLeftIcon } from '../../../../assets/icons/ArrowLeftIcon'
 import { routes } from '../../../../constants/routes'
 import { USDCIcon } from '../../../../assets/icons/USDCIcon'
 import { PoolSummary } from './PoolSummary/PoolSummary'
+import { Earnings } from './Earnings/Earnings'
 
 const BackArrow: React.FC = () => (
 	<Link to={routes.pools} className={classNames.backArrow}>
@@ -28,7 +29,7 @@ const PoolHeading = (): JSX.Element => {
 }
 
 export const ConceroPool: React.FC = () => {
-	const { poolLiquidity, maxCap } = useGetLiquidity()
+	const { poolLiquidity, maxCap, isLoading } = useGetLiquidity()
 	const poolCapReached = poolLiquidity > maxCap - 100
 
 	const backArrow = useMemo(() => <BackArrow />, [])
@@ -38,6 +39,7 @@ export const ConceroPool: React.FC = () => {
 		<>
 			{backArrow}
 			{heading}
+			<Earnings poolIsFilled={poolCapReached} poolDataIsLoading={isLoading} />
 			<PoolSummary />
 		</>
 	)
