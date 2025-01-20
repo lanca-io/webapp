@@ -45,6 +45,101 @@ const statusColorMap = {
 }
 
 export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, handleGoBack }) => {
+	// const poolState = {
+	//     from: {
+	//         chain: {
+	//             addressPatterns: ["^(0x)[0-9A-Fa-f]{40}$"],
+	//             explorerURI: "https://basescan.org",
+	//             id: "8453",
+	//             logoURI: "https://api.concero.io/static/icons/chains/filled/8453.svg",
+	//             name: "Base",
+	//             symbol: "ETH",
+	//             tokens: [],
+	//             providers: []
+	//         },
+	//         token: {
+	//             address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+	//             chain_id: "8453",
+	//             decimals: 6,
+	//             is_popular: true,
+	//             logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
+	//             name: "USD Coin",
+	//             priceUsd: 1,
+	//             symbol: "USDC",
+	//             coinGeckoId: ""
+	//         },
+	//         amount: "",
+	//         amount_usd: 0,
+	//         address: "0x239d5b78680e9AD600Ab41E56508670BA9E78F51",
+	//         isLpToken: false
+	//     },
+	//     to: {
+	//         chain: {
+	//             addressPatterns: ["^(0x)[0-9A-Fa-f]{40}$"],
+	//             explorerURI: "https://basescan.org",
+	//             id: "8453",
+	//             logoURI: "https://api.concero.io/static/icons/chains/filled/8453.svg",
+	//             name: "Base",
+	//             symbol: "ETH",
+	//             tokens: [],
+	//             providers: []
+	//         },
+	//         token: {
+	//             address: "0x7419f60B8f50BB7F9E612998140b79A810a340C3",
+	//             chain_id: "8453",
+	//             decimals: 18,
+	//             is_popular: true,
+	//             logoURI: "/conceroToken.svg",
+	//             name: "Concero LP",
+	//             priceUsd: null,
+	//             symbol: "CLP",
+	//             coinGeckoId: ""
+	//         },
+	//         amount: "0",
+	//         amount_usd: 0,
+	//         address: "0x239d5b78680e9AD600Ab41E56508670BA9E78F51",
+	//         isLpToken: true
+	//     },
+	//     poolMode: "deposit",
+	//     balance: {
+	//         amount: {
+	//             rawAmount: "1006667",
+	//             decimals: 6
+	//         },
+	//         symbol: "USDC"
+	//     },
+	//     routes: [],
+	//     isNoRoutes: false,
+	//     isLoading: true,
+	//     selectedRoute: null,
+	//     typingTimeout: 0,
+	//     response: null,
+	//     stage: PoolCardStage.success,
+	//     steps: [
+	// 		{ title: 'Signature required', status: 'success', type: StageType.approve },
+	// 		{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+	// 		{ title: 'Deposit in progress...', status: 'success', type: StageType.transaction },
+	//     ],
+	//     status: "pending",
+	//     settings: {
+	//         slippage_percent: "5",
+	//         showDestinationAddress: false,
+	//         allowSwitchChain: true
+	//     },
+	//     chains: [],
+	//     buttonState: {
+	//         type: 1
+	//     },
+	//     walletBalances: null,
+	//     isDestinationAddressVisible: false,
+	//     settingsModalOpen: false,
+	//     isTestnet: false,
+	//     isWithdrawInitiated: false,
+	//     withdrawDeadline: null,
+	//     inputError: null,
+	//     loading: true,
+	//     swapStage: PoolCardStage.progress,
+	// }
 	const [time, setTime] = useState(60)
 	const [approvalTime, setApprovalTime] = useState(60)
 	const { to, from, stage, steps, poolMode } = poolState

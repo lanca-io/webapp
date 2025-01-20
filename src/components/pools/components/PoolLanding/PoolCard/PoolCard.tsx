@@ -128,7 +128,13 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 					isLoading={isLoading}
 				/>
 				<div className={classNames.buttons}>
-					<PoolButton poolIsFilled={true} depositButtonClasses={classNames.button} isDepositOnly />
+					{!isDisabled ? (
+						<PoolButton poolIsFilled={true} depositButtonClasses={classNames.button} isDepositOnly />
+					) : (
+						<Button isFull size="md" variant="secondaryColor" isDisabled={isDisabled}>
+							Deposit
+						</Button>
+					)}
 					<Link to={routes.usdcPools} className={classNames.button}>
 						<Button isFull size="md" variant="secondaryColor" isDisabled={isDisabled}>
 							Open Earnings
