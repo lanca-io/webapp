@@ -1,12 +1,13 @@
-import { StageType, type PoolAction, type PoolState, PoolActionType } from '../poolReducer/types'
+import { StageType, type PoolAction, type PoolState, PoolActionType, PoolCardStage } from '../poolReducer/types'
 import { type Address, erc20Abi, parseUnits, type WalletClient } from 'viem'
 import { type Dispatch } from 'react'
 import { parentPoolBase } from '../../../config/poolMainnetAddresses'
 import { parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
 import { config } from '../../../../../constants/config'
-import { base } from 'viem/chains'
+import { base, baseSepolia } from 'viem/chains'
 
 const parentPool = config.IS_TESTNET ? parentPoolBaseSepolia : parentPoolBase
+const chain = config.IS_TESTNET ? baseSepolia : base
 
 export async function handleAllowance(
 	poolState: PoolState,
@@ -46,7 +47,7 @@ export async function handleAllowance(
 			address: from.token.address as Address,
 			args: [parentPool, parsedAmount],
 			gas: 100_000n,
-			chain: base,
+			chain,
 		})
 
 		const { status } = await publicClient.waitForTransactionReceipt({
@@ -54,6 +55,8 @@ export async function handleAllowance(
 		})
 
 		if (status === 'reverted') {
+			poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
+			poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
 			poolDispatch({
 				type: PoolActionType.SET_SWAP_STEPS,
 				payload: [{ title: 'Approval failed', status: 'error', type: StageType.approve }],
@@ -65,12 +68,14 @@ export async function handleAllowance(
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [{ title: 'Pending approval', status: 'pending', type: StageType.approve }],
 		})
-	} catch (error) {
+	} catch (error: any) {
 		console.error('Error during allowance handling:', error)
+		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
+		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [{ title: 'Approval failed', status: 'error', type: StageType.approve }],
 		})
-		throw error
+		throw new Error(`AllowanceError: ${error.message}`)
 	}
 }

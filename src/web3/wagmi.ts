@@ -203,6 +203,10 @@ export const viemChains: Record<number, { chain: any; transport: any }> = {
 			http(),
 		]),
 	},
+	[baseSepolia.id]: {
+		chain: baseSepolia,
+		transport: http('https://base-sepolia-rpc.publicnode.com'),
+	},
 }
 
 export const getPublicClient = (chainId: number) => {

@@ -47,7 +47,7 @@ const createTokenConfig = (isTestnet: boolean) => {
 			chain_id: chainId,
 			decimals: 18,
 			is_popular: true,
-			logoURI: './conceroToken.svg',
+			logoURI: '/conceroToken.svg',
 			name: 'Concero LP',
 			priceUsd: null,
 			symbol: isTestnet ? 'LP' : 'CLP',

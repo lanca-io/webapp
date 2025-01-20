@@ -50,7 +50,7 @@ export async function handleWithdrawal(
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
 				{ title: 'Approval required', status: 'success', type: StageType.approve },
-				{ title: 'Transaction confirmation', status: 'await', type: StageType.requestTx },
+				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.requestTx },
 			],
 		})
 
@@ -69,24 +69,33 @@ export async function handleWithdrawal(
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
 				{ title: 'Signature required', status: 'success', type: StageType.approve },
-				{ title: 'Transaction confirmation', status: 'pending', type: StageType.requestTx },
+				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.requestTx },
 			],
 		})
 
 		await checkTxStatus(txHash, publicClient, poolDispatch)
-	} catch (error) {
-		console.error(error)
-		poolDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Transaction failed', body: 'Something went wrong', status: 'error' }],
-		})
-		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+	} catch (error: any) {
+		if (error.message.includes('AllowanceError')) {
+			console.error('Allowance error:', error)
+		} else {
+			console.error(error)
+			poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+			poolDispatch({
+				type: PoolActionType.APPEND_SWAP_STEP,
+				payload: {
+					title: 'Deposit failed',
+					body: 'Something went wrong',
+					status: 'error',
+					type: StageType.requestTx,
+				},
+			})
+		}
 	} finally {
 		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
 	}
 }
 
-const checkTxStatus = async (txHash: Hash, publicClient: any, swapDispatch: Dispatch<PoolAction>) => {
+const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Dispatch<PoolAction>) => {
 	const receipt = await publicClient.waitForTransactionReceipt({
 		hash: txHash,
 		timeout: 300_000,
@@ -96,13 +105,14 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, swapDispatch: Disp
 	})
 
 	if (receipt.status === 'reverted') {
-		swapDispatch({
+		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
+		poolDispatch({
 			type: PoolActionType.SET_SWAP_STAGE,
 			payload: PoolCardStage.failed,
 		})
-		swapDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Transaction failed', body: 'Something went wrong', status: 'error' }],
+		poolDispatch({
+			type: PoolActionType.APPEND_SWAP_STEP,
+			payload: { title: 'Withdrawal failed', body: 'Something went wrong', status: 'error' },
 		})
 
 		trackEvent({
@@ -124,15 +134,14 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, swapDispatch: Disp
 			})
 
 			if (decodedLog.eventName === 'ConceroParentPool_WithdrawRequestInitiated') {
-				swapDispatch({
-					type: PoolActionType.SET_SWAP_STAGE,
-					payload: PoolCardStage.success,
-				})
-				swapDispatch({
+				poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
+				poolDispatch({
 					type: PoolActionType.SET_SWAP_STEPS,
-					payload: [{ status: 'success', title: 'Sending transaction' }],
+					payload: [
+						{ title: 'Signature required', status: 'success', type: StageType.approve },
+						{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+					],
 				})
-
 				trackEvent({
 					category: category.PoolCard,
 					action: action.SuccessWithdrawalRequest,

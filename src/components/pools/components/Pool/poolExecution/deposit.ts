@@ -50,7 +50,7 @@ export async function handleDeposit(
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
 				{ title: 'Approval required', status: 'success', type: StageType.approve },
-				{ title: 'Transaction confirmation', status: 'await', type: StageType.requestTx },
+				{ title: 'Deposit in progress...', status: 'pending', type: StageType.requestTx },
 			],
 		})
 
@@ -65,22 +65,32 @@ export async function handleDeposit(
 		})
 
 		const txHash = await walletClient.writeContract(request)
+
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
-				{ title: 'Signature required', status: 'success', type: StageType.approve },
-				{ title: 'Start deposit Confirmation', status: 'pending', type: StageType.requestTx },
+				{ title: 'Approval required', status: 'success', type: StageType.approve },
+				{ title: 'Deposit in progress...', status: 'pending', type: StageType.requestTx },
 			],
 		})
 
 		await checkStartDepositStatus(txHash, publicClient, walletClient, poolDispatch, poolState)
-	} catch (error) {
-		console.error(error)
-		poolDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Transaction failed', body: 'Something went wrong', status: 'error' }],
-		})
-		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+	} catch (error: any) {
+		if (error.message.includes('AllowanceError')) {
+			console.error('Allowance error:', error)
+		} else {
+			console.error(error)
+			poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+			poolDispatch({
+				type: PoolActionType.APPEND_SWAP_STEP,
+				payload: {
+					title: 'Deposit failed',
+					body: 'Something went wrong',
+					status: 'error',
+					type: StageType.requestTx,
+				},
+			})
+		}
 	} finally {
 		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
 	}
@@ -102,13 +112,19 @@ const checkStartDepositStatus = async (
 	})
 
 	if (receipt.status === 'reverted') {
+		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STAGE,
 			payload: PoolCardStage.failed,
 		})
 		poolDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Transaction failed', body: 'Start deposit failed', status: 'error' }],
+			type: PoolActionType.APPEND_SWAP_STEP,
+			payload: {
+				title: 'Deposit failed',
+				body: 'Start deposit failed',
+				status: 'error',
+				type: StageType.requestTx,
+			},
 		})
 
 		trackEvent({
@@ -124,8 +140,8 @@ const checkStartDepositStatus = async (
 		type: PoolActionType.SET_SWAP_STEPS,
 		payload: [
 			{ title: 'Signature required', status: 'success', type: StageType.approve },
-			{ title: 'Start deposit confirmation', status: 'success', type: StageType.requestTx },
-			{ title: 'Complete deposit confirmation', status: 'await', type: StageType.transaction },
+			{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+			{ title: 'Deposit in progress...', status: 'pending', type: StageType.transaction },
 		],
 	})
 
@@ -146,13 +162,14 @@ const checkStartDepositStatus = async (
 	})
 
 	if (!depositInitiatedLog) {
+		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STAGE,
 			payload: PoolCardStage.failed,
 		})
 		poolDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Transaction failed', body: 'Could not obtain logs', status: 'error' }],
+			type: PoolActionType.APPEND_SWAP_STEP,
+			payload: { title: 'Deposit failed', body: 'Could not obtain logs', status: 'error' },
 		})
 
 		trackEvent({
@@ -172,7 +189,6 @@ const checkStartDepositStatus = async (
 
 	const depositRequestId = decodedLog.args?.requestId
 	await sleep(25_000)
-
 	await completeDeposit(poolState, poolDispatch, depositRequestId, walletClient, publicClient)
 }
 
@@ -200,8 +216,8 @@ const completeDeposit = async (
 		type: PoolActionType.SET_SWAP_STEPS,
 		payload: [
 			{ title: 'Signature required', status: 'success', type: StageType.approve },
-			{ title: 'Start deposit confirmation', status: 'success', type: StageType.requestTx },
-			{ title: 'Complete deposit confirmation', status: 'pending', type: StageType.transaction },
+			{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+			{ title: 'Deposit in progress...', status: 'pending', type: StageType.transaction },
 		],
 	})
 
@@ -214,13 +230,14 @@ const completeDeposit = async (
 	})
 
 	if (receipt.status === 'reverted') {
+		poolDispatch({ type: PoolActionType.SET_LOADING, payload: true })
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STAGE,
 			payload: PoolCardStage.failed,
 		})
 		poolDispatch({
-			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Transaction failed', body: 'Something went wrong', status: 'error' }],
+			type: PoolActionType.APPEND_SWAP_STEP,
+			payload: { title: 'Deposit failed', body: 'Something went wrong', status: 'error' },
 		})
 
 		trackEvent({
@@ -246,8 +263,8 @@ const completeDeposit = async (
 					type: PoolActionType.SET_SWAP_STEPS,
 					payload: [
 						{ title: 'Signature required', status: 'success', type: StageType.approve },
-						{ title: 'Start deposit confirmation', status: 'success', type: StageType.requestTx },
-						{ title: 'Complete deposit confirmation', status: 'success', type: StageType.transaction },
+						{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+						{ title: 'Deposit in progress...', status: 'success', type: StageType.transaction },
 					],
 				})
 
