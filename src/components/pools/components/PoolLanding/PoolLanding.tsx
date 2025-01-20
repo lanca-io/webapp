@@ -18,7 +18,7 @@ export const PoolLanding = (): JSX.Element => {
 
 	return (
 		<div className={classNames.container}>
-			<div className="gap-xxl">
+			<div className="gap-xl">
 				<div className={classNames.section}>
 					<VolumeCard fees={fees} isLoading={feesLoading} />
 					<RewardsCard fees={fees} isLoading={feesLoading} />
