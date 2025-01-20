@@ -3,43 +3,51 @@
 	transition: 0.2s ease-in-out;
 }
 
+.tokenSelectInput {
+	gap: var(--sp-xs);
+}
+
+.tokenInput {
+	gap: var(--sp-xxs);
+}
+
 .input {
 	background: transparent;
-	border: none;
 	margin: 0;
 	padding: 0;
-	width: calc(100% - 110px);
 
 	input {
-		padding: 0;
 		font-size: 32px;
 		font-weight: 500;
 		color: var(--color-grey-700);
 		overflow: hidden;
 		text-overflow: ellipsis;
+		padding: 0;
 	}
 }
 
 .tokenRowHeader {
 	color: var(--color-grey-600);
+	font-size: 0.875rem;
 }
 
 .tokenRow {
 	align-items: center;
 	flex-direction: row;
 	justify-content: space-between;
-	gap: var(--sp-sm);
-	margin-top: var(--sp-sm);
-	margin-bottom: var(--sp-xs);
+	gap: var(--sp-xs);
 }
 
 .selectTokenButton {
+	max-width: 132px;
+	height: 52px;
 	width: 100%;
-	gap: var(--sp-xs);
+	border-radius: var(--sp-md);
+	background: var(--color-grey-100);
+	padding: var(--sp-xs) var(--sp-md) var(--sp-xs) var(--sp-sm);
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	cursor: pointer;
 	transition: 0.2s ease-in-out;
 }
 

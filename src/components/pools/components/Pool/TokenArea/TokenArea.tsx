@@ -53,46 +53,48 @@ export const TokenArea: FC<TokenAreaProps> = ({
 				handleAreaClick(inputRef, stage)
 			}}
 		>
-			<p className={`body2 ${classNames.tokenRowHeader}`}>{t(`tokenArea.${direction}`)}</p>
+			<div className={classNames.tokenSelectInput}>
+				<p className={`body2 ${classNames.tokenRowHeader}`}>{t(`tokenArea.${direction}`)}</p>
+				<div className={classNames.tokenInput}>
+					<div className={classNames.tokenRow}>
+						<TextInput
+							onFocus={() => {
+								tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: true })
+							}}
+							onBlur={() => {
+								tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: false })
+							}}
+							wrapperClassName={classNames.input}
+							ref={inputRef as any}
+							variant="inline"
+							placeholder={'0'}
+							value={Number(selection.amount) < 0 ? '0' : selection.amount}
+							onChangeText={(value: any) => {
+								onChangeText(value)
+							}}
+							isDisabled={direction === 'to'}
+							{...(null as any)}
+						/>
 
-			<div className={classNames.tokenRow}>
-				<TextInput
-					onFocus={() => {
-						tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: true })
-					}}
-					onBlur={() => {
-						tokenAreaDispatch({ type: 'SET_IS_FOCUSED', payload: false })
-					}}
-					wrapperClassName={classNames.input}
-					ref={inputRef as any}
-					variant="inline"
-					placeholder={'0'}
-					value={Number(selection.amount) < 0 ? '0' : selection.amount}
-					onChangeText={(value: any) => {
-						onChangeText(value)
-					}}
-					isDisabled={direction === 'to'}
-					{...(null as any)}
-				/>
-
-				<div className={classNames.selectTokenButton}>
-					<Badge
-						size="l"
-						tokenLogoSrc={selection.token.logoURI}
-						chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${selection.chain.id}.svg`}
+						<div className={classNames.selectTokenButton}>
+							<Badge
+								size="l"
+								tokenLogoSrc={selection.token.logoURI}
+								chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${selection.chain.id}.svg`}
+							/>
+							<SelectTokenShape symbol={selection.token.symbol} chainName={selection.chain.name} />
+						</div>
+					</div>
+					<AmountUSD
+						loading={isLoading}
+						state={state}
+						balance={balance}
+						selection={selection}
+						direction={direction}
+						handleMaxButtonClick={handleMaxButtonClick}
 					/>
-					<SelectTokenShape symbol={selection.token.symbol} chainName={selection.chain.name} />
 				</div>
 			</div>
-
-			<AmountUSD
-				loading={isLoading}
-				state={state}
-				balance={balance}
-				selection={selection}
-				direction={direction}
-				handleMaxButtonClick={handleMaxButtonClick}
-			/>
 
 			{isError && direction === 'from' && (
 				<InputError color="var(--color-danger-700)" errorText={errorTextMap[error]} />

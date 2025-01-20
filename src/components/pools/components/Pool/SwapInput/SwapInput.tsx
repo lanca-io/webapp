@@ -67,7 +67,7 @@ export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) 
 	return (
 		<div>
 			<div className={classNames.header}>
-				<IconButton onClick={onClose} className={classNames.close} variant="secondary" size="sm">
+				<IconButton onClick={onClose} className={classNames.close} variant="secondary" size="md">
 					<TrailArrowLeftIcon />
 				</IconButton>
 				<h4>{poolMode === 'deposit' ? 'Deposit' : 'Withdrawal'}</h4>
@@ -79,7 +79,7 @@ export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) 
 
 			<Button
 				isFull
-				size="lg"
+				size="md"
 				variant="primary"
 				isLoading={isLoading}
 				onClick={
