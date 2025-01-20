@@ -22,11 +22,11 @@ interface PoolCardProps {
 const PoolStatus = ({ isDisabled }: { isDisabled: boolean }) => (
 	<div className={classNames.poolStatus}>
 		{!isDisabled ? (
-			<Tag className={classNames.poolStatus} variant="positive">
+			<Tag className={classNames.poolStatus} size="sm" variant="positive">
 				LP cup increased
 			</Tag>
 		) : (
-			<Tag className={classNames.poolStatus} variant="neutral">
+			<Tag className={classNames.poolStatus} size="sm" variant="neutral">
 				Coming soon
 			</Tag>
 		)}
@@ -131,12 +131,24 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 					{!isDisabled ? (
 						<PoolButton poolIsFilled={true} depositButtonClasses={classNames.button} isDepositOnly />
 					) : (
-						<Button isFull size="md" variant="secondaryColor" isDisabled={isDisabled}>
+						<Button
+							isFull
+							size="md"
+							className={classNames.button}
+							variant="secondaryColor"
+							isDisabled={isDisabled}
+						>
 							Deposit
 						</Button>
 					)}
-					<Link to={routes.usdcPools} className={classNames.button}>
-						<Button isFull size="md" variant="secondaryColor" isDisabled={isDisabled}>
+					<Link to={routes.usdcPools}>
+						<Button
+							isFull
+							size="md"
+							className={classNames.button}
+							variant="secondaryColor"
+							isDisabled={isDisabled}
+						>
 							Open Earnings
 						</Button>
 					</Link>

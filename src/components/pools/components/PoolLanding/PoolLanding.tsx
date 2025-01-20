@@ -8,6 +8,8 @@ import { StatCard } from './StatCard/StatCard'
 import { PoolCard } from './PoolCard/PoolCard'
 import { PoolUSDC } from '../../../../assets/icons/PoolUSDC'
 import { PoolETH } from '../../../../assets/icons/PoolETH'
+import { RefreshIcon } from '../../../../assets/icons/RefreshIcon'
+import { LPIcon } from '../../../../assets/icons/LPIcon'
 
 export const PoolLanding = (): JSX.Element => {
 	const { fees, isLoading: feesLoading } = useGetFees()
@@ -16,14 +18,19 @@ export const PoolLanding = (): JSX.Element => {
 
 	return (
 		<div className={classNames.container}>
-			<div className="gap-lg">
+			<div className="gap-xxl">
 				<div className={classNames.section}>
 					<VolumeCard fees={fees} isLoading={feesLoading} />
 					<RewardsCard fees={fees} isLoading={feesLoading} />
 				</div>
-				<div className={`gap-lg row ${classNames.statSection}`}>
-					<StatCard title="LP Providers" value={lpProviders} isLoading={providersLoading} />
-					<StatCard title="Transactions" value={transactionsCount} isLoading={txCountLoading} />
+				<div className={`gap-xxl row ${classNames.statSection}`}>
+					<StatCard
+						title="Transactions"
+						value={transactionsCount}
+						isLoading={txCountLoading}
+						icon={<RefreshIcon />}
+					/>
+					<StatCard title="LP Providers" value={lpProviders} isLoading={providersLoading} icon={<LPIcon />} />
 				</div>
 				<div className="gap-sm">
 					<h6 className={classNames.sectionHeading}>Pools</h6>

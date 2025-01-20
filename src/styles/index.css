@@ -77,16 +77,16 @@ body::-webkit-scrollbar {
 .light {
 	/* primary colors */
 	--color-primary-25: #f5fbfe;
-	--color-primary-50: #e8f7fe;
-	--color-primary-100: #d7f0fd;
-	--color-primary-200: #a8dffa;
-	--color-primary-300: #79cef8;
-	--color-primary-400: #3ab7f5;
-	--color-primary-500: #0b9ae1;
-	--color-primary-600: #097bb3;
-	--color-primary-700: #075d87;
-	--color-primary-800: #043e5a;
-	--color-primary-900: #022232;
+	--color-primary-50: #eff9fe;
+	--color-primary-100: #d2effd;
+	--color-primary-200: #ace1fb;
+	--color-primary-300: #66c7f7;
+	--color-primary-400: #0c9fe8;
+	--color-primary-500: #0a7db6;
+	--color-primary-600: #086796;
+	--color-primary-700: #07577f;
+	--color-primary-800: #06496a;
+	--color-primary-900: #053d59;
 
 	/* grey */
 	--color-grey-25: #fcfcfd;

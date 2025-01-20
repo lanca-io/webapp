@@ -30,12 +30,12 @@ export const Header: FC<HeaderProps> = ({ children }) => {
 				{!isMobile && (
 					<ul className="gap-xs">
 						<a className={classNames.link} href={routes.home} rel="noreferrer">
-							<Button variant="tetrary" textColor={getButtonTextColor(routes.home)}>
+							<Button className={classNames.headerButton} textColor={getButtonTextColor(routes.home)}>
 								Swap
 							</Button>
 						</a>
 						<a className={classNames.link} href={routes.pools} rel="noreferrer">
-							<Button variant="tetrary" textColor={getButtonTextColor(routes.pools)}>
+							<Button className={classNames.headerButton} textColor={getButtonTextColor(routes.pools)}>
 								Provide Liquidity
 							</Button>
 						</a>
