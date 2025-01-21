@@ -83,6 +83,7 @@ export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) 
 				size="md"
 				variant="primary"
 				isLoading={isLoading}
+				className={classNames.actionButton}
 				onClick={
 					isConnected
 						? async () => {

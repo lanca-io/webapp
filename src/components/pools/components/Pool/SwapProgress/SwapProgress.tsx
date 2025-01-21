@@ -128,7 +128,13 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 		[PoolCardStage.failed]: (
 			<div className="gap-lg w-full">
 				<Separator />
-				<Button isFull onClick={handleGoBack} variant="secondaryColor" size="md">
+				<Button
+					isFull
+					onClick={handleGoBack}
+					variant="secondaryColor"
+					size="md"
+					className={classNames.actionButton}
+				>
 					Try again
 				</Button>
 			</div>
@@ -136,7 +142,13 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 		[PoolCardStage.success]: (
 			<div className="gap-lg w-full">
 				<Separator />
-				<Button isFull onClick={handleGoBack} variant="secondaryColor" size="md">
+				<Button
+					isFull
+					onClick={handleGoBack}
+					variant="secondaryColor"
+					size="md"
+					className={classNames.actionButton}
+				>
 					Manage Earnings
 				</Button>
 			</div>
