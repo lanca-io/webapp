@@ -18,25 +18,34 @@ export const PoolLanding = (): JSX.Element => {
 
 	return (
 		<div className={classNames.container}>
-			<div className="gap-xl">
-				<div className={classNames.section}>
-					<VolumeCard fees={fees} isLoading={feesLoading} />
-					<RewardsCard fees={fees} isLoading={feesLoading} />
-				</div>
-				<div className={`gap-xxl row ${classNames.statSection}`}>
-					<StatCard
-						title="Transactions"
-						value={transactionsCount}
-						isLoading={txCountLoading}
-						icon={<RefreshIcon />}
-					/>
-					<StatCard title="LP Providers" value={lpProviders} isLoading={providersLoading} icon={<LPIcon />} />
-				</div>
-				<div className="gap-sm">
-					<h6 className={classNames.sectionHeading}>Pools</h6>
+			<div className="gap-xxl">
+				<div className="gap-lg">
 					<div className={classNames.section}>
-						<PoolCard title="USDC" fees={fees} isDisabled={false} icon={<PoolUSDC />} />
-						<PoolCard title="ETH" fees={fees} isDisabled={true} icon={<PoolETH />} />
+						<VolumeCard fees={fees} isLoading={feesLoading} />
+						<RewardsCard fees={fees} isLoading={feesLoading} />
+					</div>
+					<div className={`gap-lg row ${classNames.statSection}`}>
+						<StatCard
+							title="Transactions"
+							value={transactionsCount}
+							isLoading={txCountLoading}
+							icon={<RefreshIcon />}
+						/>
+						<StatCard
+							title="LP Providers"
+							value={lpProviders}
+							isLoading={providersLoading}
+							icon={<LPIcon />}
+						/>
+					</div>
+				</div>
+				<div className="gap-xxl">
+					<div className="gap-sm">
+						<h6 className={classNames.sectionHeading}>Pools</h6>
+						<div className={classNames.section}>
+							<PoolCard title="USDC" fees={fees} isDisabled={false} icon={<PoolUSDC />} />
+							<PoolCard title="ETH" fees={fees} isDisabled={true} icon={<PoolETH />} />
+						</div>
 					</div>
 				</div>
 			</div>

@@ -61,7 +61,7 @@ export const ChartCard = ({
 
 	const title =
 		commonValue && isSmall ? (
-			<h3 className={classNames.value}>{commonValue}</h3>
+			<h3 className={classNames.smallValue}>{commonValue}</h3>
 		) : (
 			<h2 className={classNames.value}>{commonValue}</h2>
 		)
