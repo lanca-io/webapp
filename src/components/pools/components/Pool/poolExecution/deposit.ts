@@ -1,5 +1,5 @@
-import { type Address, type WalletClient, type Hash, decodeEventLog, parseUnits, type Log } from 'viem'
-import { PoolActionType, PoolCardStage, StageType, type PoolAction, type PoolState } from '../poolReducer/types'
+import { type Address, decodeEventLog, type Hash, type Log, parseUnits, type WalletClient } from 'viem'
+import { type PoolAction, PoolActionType, PoolCardStage, type PoolState, StageType } from '../poolReducer/types'
 import { type Dispatch } from 'react'
 import { config } from '../../../../../constants/config'
 import { parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
@@ -9,7 +9,7 @@ import { handleAllowance } from './allowance'
 import { getPublicClient } from '../../../../../web3/wagmi'
 import { ParentPoolABI } from '../../../config/abi/ParentPoolABI1_5'
 import { trackEvent } from '../../../../../hooks/useTracking'
-import { category, action } from '../../../../../constants/tracking'
+import { action, category } from '../../../../../constants/tracking'
 import { sleep } from '../../../../../utils/sleep'
 
 interface DepositInitiatedArgs {
@@ -61,7 +61,6 @@ export async function handleDeposit(
 			functionName: 'startDeposit',
 			address: parentPool,
 			args: [depositAmount],
-			gas: 2_000_000n,
 		})
 
 		const txHash = await walletClient.writeContract(request)
@@ -105,10 +104,8 @@ const checkStartDepositStatus = async (
 ) => {
 	const receipt = await publicClient.waitForTransactionReceipt({
 		hash: txHash,
-		timeout: 300_000,
-		pollingInterval: 3_000,
-		retryCount: 30,
-		confirmations: 5,
+		timeout: 0,
+		confirmations: 2,
 	})
 
 	if (receipt.status === 'reverted') {
@@ -153,9 +150,10 @@ const checkStartDepositStatus = async (
 				abi: ParentPoolABI,
 				data: log.data,
 				topics: log.topics,
+				strict: false,
 			})
 
-			return decodedLog.eventName === 'ConceroParentPool_DepositInitiated'
+			return decodedLog.eventName === 'DepositInitiated'
 		} catch (error) {
 			return false
 		}
@@ -208,7 +206,6 @@ const completeDeposit = async (
 		functionName: 'completeDeposit',
 		address: parentPool,
 		args: [depositRequestId],
-		gas: 4_000_000n,
 	})
 
 	const txHash = await walletClient.writeContract(request)
@@ -223,10 +220,8 @@ const completeDeposit = async (
 
 	const receipt = await publicClient.waitForTransactionReceipt({
 		hash: txHash,
-		timeout: 300_000,
-		pollingInterval: 3_000,
-		retryCount: 30,
-		confirmations: 5,
+		timeout: 0,
+		confirmations: 2,
 	})
 
 	if (receipt.status === 'reverted') {
@@ -249,35 +244,20 @@ const completeDeposit = async (
 		return
 	}
 
-	for (const log of receipt.logs) {
-		try {
-			const decodedLog = decodeEventLog({
-				abi: ParentPoolABI,
-				data: log.data,
-				topics: log.topics,
-			})
+	poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
+	poolDispatch({
+		type: PoolActionType.SET_SWAP_STEPS,
+		payload: [
+			{ title: 'Signature required', status: 'success', type: StageType.approve },
+			{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+			{ title: 'Deposit in progress...', status: 'success', type: StageType.transaction },
+		],
+	})
 
-			if (decodedLog.eventName === 'ConceroParentPool_DepositCompleted') {
-				poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
-				poolDispatch({
-					type: PoolActionType.SET_SWAP_STEPS,
-					payload: [
-						{ title: 'Signature required', status: 'success', type: StageType.approve },
-						{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
-						{ title: 'Deposit in progress...', status: 'success', type: StageType.transaction },
-					],
-				})
-
-				trackEvent({
-					category: category.PoolCard,
-					action: action.SuccessDeposit,
-					label: action.SuccessDeposit,
-					data: { from, to, txHash },
-				})
-				return
-			}
-		} catch (err) {
-			console.error('Error decoding log:', err)
-		}
-	}
+	trackEvent({
+		category: category.PoolCard,
+		action: action.SuccessDeposit,
+		label: action.SuccessDeposit,
+		data: { from, to, txHash },
+	})
 }

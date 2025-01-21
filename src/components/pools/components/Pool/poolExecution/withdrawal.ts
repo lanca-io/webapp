@@ -1,5 +1,5 @@
-import { type Address, type WalletClient, type Hash, decodeEventLog, parseUnits } from 'viem'
-import { PoolActionType, PoolCardStage, StageType, type PoolAction, type PoolState } from '../poolReducer/types'
+import { type Address, type Hash, parseAbi, parseUnits, type WalletClient } from 'viem'
+import { type PoolAction, PoolActionType, PoolCardStage, type PoolState, StageType } from '../poolReducer/types'
 import { type Dispatch } from 'react'
 import { config } from '../../../../../constants/config'
 import { parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
@@ -9,8 +9,7 @@ import { handleAllowance } from './allowance'
 import { getPublicClient, getWalletClient } from '../../../../../web3/wagmi'
 import { ParentPoolABI } from '../../../config/abi/ParentPoolABI1_5'
 import { trackEvent } from '../../../../../hooks/useTracking'
-import { category, action } from '../../../../../constants/tracking'
-import { parseAbi } from 'viem'
+import { action, category } from '../../../../../constants/tracking'
 
 export enum TransactionStatus {
 	SUCCESS = 'SUCCESS',
@@ -61,7 +60,6 @@ export async function handleWithdrawal(
 			functionName: 'startWithdrawal',
 			address: parentPool,
 			args: [withdrawalAmount],
-			gas: 4_000_000n,
 		})
 
 		const txHash = await walletClient.writeContract(request)
@@ -98,10 +96,8 @@ export async function handleWithdrawal(
 const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Dispatch<PoolAction>) => {
 	const receipt = await publicClient.waitForTransactionReceipt({
 		hash: txHash,
-		timeout: 300_000,
-		pollingInterval: 3_000,
-		retryCount: 30,
-		confirmations: 5,
+		timeout: 0,
+		confirmations: 2,
 	})
 
 	if (receipt.status === 'reverted') {
@@ -124,36 +120,21 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 		return
 	}
 
-	for (const log of receipt.logs) {
-		try {
-			const decodedLog = decodeEventLog({
-				abi: ParentPoolABI,
-				data: log.data,
-				topics: log.topics,
-				strict: false,
-			})
+	poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
+	poolDispatch({
+		type: PoolActionType.SET_SWAP_STEPS,
+		payload: [
+			{ title: 'Signature required', status: 'success', type: StageType.approve },
+			{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+		],
+	})
 
-			if (decodedLog.eventName === 'ConceroParentPool_WithdrawRequestInitiated') {
-				poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
-				poolDispatch({
-					type: PoolActionType.SET_SWAP_STEPS,
-					payload: [
-						{ title: 'Signature required', status: 'success', type: StageType.approve },
-						{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
-					],
-				})
-				trackEvent({
-					category: category.PoolCard,
-					action: action.SuccessWithdrawalRequest,
-					label: 'action_success_withdraw_request',
-					data: { txHash },
-				})
-				return
-			}
-		} catch (err) {
-			console.error('Error decoding log:', err)
-		}
-	}
+	trackEvent({
+		category: category.PoolCard,
+		action: action.SuccessWithdrawalRequest,
+		label: 'action_success_withdraw_request',
+		data: { txHash },
+	})
 }
 
 export const retryWithdrawal = async (address: Address, chainId: number): Promise<TransactionStatus> => {
@@ -171,10 +152,8 @@ export const retryWithdrawal = async (address: Address, chainId: number): Promis
 
 	const receipt = await publicClient.waitForTransactionReceipt({
 		hash,
-		timeout: 60_000,
-		pollingInterval: 3_000,
-		retryCount: 50,
-		confirmations: 5,
+		timeout: 0,
+		confirmations: 2,
 	})
 
 	if (receipt.status === 'reverted') {
@@ -187,34 +166,12 @@ export const retryWithdrawal = async (address: Address, chainId: number): Promis
 		return TransactionStatus.FAILED
 	}
 
-	for (const log of receipt.logs) {
-		try {
-			const decodedLog = decodeEventLog({
-				abi: ParentPoolABI,
-				data: log.data,
-				topics: log.topics,
-				strict: false,
-			})
-
-			if (decodedLog.eventName === 'ConceroAutomation_RetryPerformed') {
-				trackEvent({
-					category: category.PoolUserActions,
-					action: action.SuccessRetryWithdrawalRequest,
-					label: action.SuccessRetryWithdrawalRequest,
-					data: { txHash: hash },
-				})
-				return TransactionStatus.SUCCESS
-			}
-		} catch (err) {
-			console.error('Error decoding log:', err)
-		}
-	}
-
 	trackEvent({
 		category: category.PoolUserActions,
-		action: action.FailedRetryWithdrawalRequest,
-		label: action.FailedRetryWithdrawalRequest,
+		action: action.SuccessRetryWithdrawalRequest,
+		label: action.SuccessRetryWithdrawalRequest,
 		data: { txHash: hash },
 	})
-	return TransactionStatus.FAILED
+
+	return TransactionStatus.SUCCESS
 }

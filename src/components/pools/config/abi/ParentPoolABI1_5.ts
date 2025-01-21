@@ -97,6 +97,11 @@ export const ParentPoolABI = [
 	},
 	{
 		inputs: [],
+		name: 'DepositDeadlinePassed',
+		type: 'error',
+	},
+	{
+		inputs: [],
 		name: 'DepositRequestNotReady',
 		type: 'error',
 	},
@@ -382,7 +387,7 @@ export const ParentPoolABI = [
 			{
 				indexed: false,
 				internalType: 'uint256',
-				name: '_amount',
+				name: 'amount',
 				type: 'uint256',
 			},
 			{
@@ -654,11 +659,6 @@ export const ParentPoolABI = [
 				name: '_requestId',
 				type: 'bytes32',
 			},
-			{
-				internalType: 'enum ICCIP.CcipTxType',
-				name: '_ccipTxType',
-				type: 'uint8',
-			},
 		],
 		name: 'distributeLiquidity',
 		outputs: [],
@@ -690,6 +690,38 @@ export const ParentPoolABI = [
 				internalType: 'struct IParentPool.DepositOnTheWay[150]',
 				name: '',
 				type: 'tuple[150]',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+		],
+		name: 'getDstTotalFeeInUsdc',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'pure',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'getLiquidityCap',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
 			},
 		],
 		stateMutability: 'view',
@@ -748,6 +780,19 @@ export const ParentPoolABI = [
 				internalType: 'bytes32',
 				name: '',
 				type: 'bytes32',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'getWithdrawalsOnTheWayAmount',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
 			},
 		],
 		stateMutability: 'view',
@@ -1158,19 +1203,6 @@ export const ParentPoolABI = [
 	{
 		inputs: [
 			{
-				internalType: 'bytes32',
-				name: '_hashSum',
-				type: 'bytes32',
-			},
-		],
-		name: 'setDistributeLiquidityJsCodeHashSum',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
 				internalType: 'uint8',
 				name: '_slotId',
 				type: 'uint8',
@@ -1259,6 +1291,19 @@ export const ParentPoolABI = [
 	{
 		inputs: [
 			{
+				internalType: 'bytes32',
+				name: '_hashSum',
+				type: 'bytes32',
+			},
+		],
+		name: 'setRedistributeLiquidityJsCodeHashSum',
+		outputs: [],
+		stateMutability: 'payable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
 				internalType: 'uint256',
 				name: '_usdcAmount',
 				type: 'uint256',
@@ -1298,7 +1343,7 @@ export const ParentPoolABI = [
 				type: 'bool',
 			},
 		],
-		stateMutability: 'view',
+		stateMutability: 'pure',
 		type: 'function',
 	},
 	{
