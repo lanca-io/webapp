@@ -167,7 +167,12 @@ const checkStartDepositStatus = async (
 		})
 		poolDispatch({
 			type: PoolActionType.APPEND_SWAP_STEP,
-			payload: { title: 'Deposit failed', body: 'Could not obtain logs', status: 'error' },
+			payload: {
+				title: 'Deposit failed',
+				body: 'Could not obtain logs',
+				status: 'error',
+				type: StageType.requestTx,
+			},
 		})
 
 		trackEvent({
@@ -201,63 +206,93 @@ const completeDeposit = async (
 
 	if (stage === PoolCardStage.failed) return
 
-	const { request } = await publicClient.simulateContract({
-		abi: ParentPoolABI,
-		functionName: 'completeDeposit',
-		address: parentPool,
-		args: [depositRequestId],
-	})
+	try {
+		const { request } = await publicClient.simulateContract({
+			abi: ParentPoolABI,
+			functionName: 'completeDeposit',
+			address: parentPool,
+			args: [depositRequestId],
+		})
 
-	const txHash = await walletClient.writeContract(request)
-	poolDispatch({
-		type: PoolActionType.SET_SWAP_STEPS,
-		payload: [
-			{ title: 'Signature required', status: 'success', type: StageType.approve },
-			{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
-			{ title: 'Deposit in progress...', status: 'pending', type: StageType.transaction },
-		],
-	})
+		const txHash = await walletClient.writeContract(request)
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STEPS,
+			payload: [
+				{ title: 'Signature required', status: 'success', type: StageType.approve },
+				{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+				{ title: 'Deposit in progress...', status: 'pending', type: StageType.transaction },
+			],
+		})
 
-	const receipt = await publicClient.waitForTransactionReceipt({
-		hash: txHash,
-		timeout: 0,
-		confirmations: 2,
-	})
+		const receipt = await publicClient.waitForTransactionReceipt({
+			hash: txHash,
+			timeout: 0,
+			confirmations: 2,
+		})
 
-	if (receipt.status === 'reverted') {
-		poolDispatch({ type: PoolActionType.SET_LOADING, payload: true })
+		if (receipt.status === 'reverted') {
+			poolDispatch({ type: PoolActionType.SET_LOADING, payload: true })
+			poolDispatch({
+				type: PoolActionType.SET_SWAP_STAGE,
+				payload: PoolCardStage.failed,
+			})
+			poolDispatch({
+				type: PoolActionType.APPEND_SWAP_STEP,
+				payload: {
+					title: 'Deposit failed',
+					body: 'Something went wrong',
+					status: 'error',
+					type: StageType.transaction,
+				},
+			})
+
+			trackEvent({
+				category: category.PoolCard,
+				action: action.FailedDeposit,
+				label: action.FailedDeposit,
+				data: { txHash },
+			})
+			return
+		}
+
+		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STEPS,
+			payload: [
+				{ title: 'Signature required', status: 'success', type: StageType.approve },
+				{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+				{ title: 'Deposit in progress...', status: 'success', type: StageType.transaction },
+			],
+		})
+
+		trackEvent({
+			category: category.PoolCard,
+			action: action.SuccessDeposit,
+			label: action.SuccessDeposit,
+			data: { from, to, txHash },
+		})
+	} catch (error) {
+		console.error('Error during completeDeposit:', error)
+		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STAGE,
 			payload: PoolCardStage.failed,
 		})
 		poolDispatch({
 			type: PoolActionType.APPEND_SWAP_STEP,
-			payload: { title: 'Deposit failed', body: 'Something went wrong', status: 'error' },
+			payload: {
+				title: 'Deposit failed',
+				body: 'Something went wrong',
+				status: 'error',
+				type: StageType.transaction,
+			},
 		})
 
 		trackEvent({
 			category: category.PoolCard,
 			action: action.FailedDeposit,
 			label: action.FailedDeposit,
-			data: { txHash },
+			data: { from, to },
 		})
-		return
 	}
-
-	poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
-	poolDispatch({
-		type: PoolActionType.SET_SWAP_STEPS,
-		payload: [
-			{ title: 'Signature required', status: 'success', type: StageType.approve },
-			{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
-			{ title: 'Deposit in progress...', status: 'success', type: StageType.transaction },
-		],
-	})
-
-	trackEvent({
-		category: category.PoolCard,
-		action: action.SuccessDeposit,
-		label: action.SuccessDeposit,
-		data: { from, to, txHash },
-	})
 }

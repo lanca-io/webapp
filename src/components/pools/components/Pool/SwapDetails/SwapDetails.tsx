@@ -3,7 +3,9 @@ import classNames from './SwapDetails.module.pcss'
 import { animated, useSpring } from '@react-spring/web'
 import { easeQuadInOut } from 'd3-ease'
 import { Separator } from '../../../../layout/Separator/Separator'
+import { Alert } from '../../../../layout/Alert/Alert'
 import { type PoolAction, type PoolState, PoolCardStage } from '../poolReducer/types'
+import { InfoIcon } from '../../../../../assets/icons/InfoIcon'
 
 interface SwapDetailsProps {
 	poolState: PoolState
@@ -34,10 +36,17 @@ export const SwapDetails: FC<SwapDetailsProps> = ({ poolState }) => {
 		setAnimatedContainerHeight(80)
 	}, [stage])
 
+	const alert = isDeposit ? (
+		<Alert variant="neutral" title="You can access your funds in 7 days." icon={<InfoIcon />} />
+	) : (
+		<Alert variant="neutral" title="Expect your funds in your wallet in 7 days." icon={<InfoIcon />} />
+	)
+
 	return (
 		<animated.div style={containerAnimation}>
 			<div ref={reviewRouteCardRef} className={classNames.swapDetailsContainer}>
 				<div className={classNames.reviewContainer}>
+					{alert}
 					<Separator />
 				</div>
 			</div>

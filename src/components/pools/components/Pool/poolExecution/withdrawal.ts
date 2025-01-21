@@ -49,7 +49,7 @@ export async function handleWithdrawal(
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
 				{ title: 'Approval required', status: 'success', type: StageType.approve },
-				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.requestTx },
+				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.transaction },
 			],
 		})
 
@@ -67,7 +67,7 @@ export async function handleWithdrawal(
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
 				{ title: 'Signature required', status: 'success', type: StageType.approve },
-				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.requestTx },
+				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.transaction },
 			],
 		})
 
@@ -81,10 +81,10 @@ export async function handleWithdrawal(
 			poolDispatch({
 				type: PoolActionType.APPEND_SWAP_STEP,
 				payload: {
-					title: 'Deposit failed',
+					title: 'Withdrawal failed',
 					body: 'Something went wrong',
 					status: 'error',
-					type: StageType.requestTx,
+					type: StageType.transaction,
 				},
 			})
 		}
@@ -125,7 +125,7 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 		type: PoolActionType.SET_SWAP_STEPS,
 		payload: [
 			{ title: 'Signature required', status: 'success', type: StageType.approve },
-			{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+			{ title: 'Withdrawal in progress...', status: 'success', type: StageType.transaction },
 		],
 	})
 

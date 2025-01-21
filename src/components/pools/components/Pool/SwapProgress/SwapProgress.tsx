@@ -149,18 +149,35 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 		[PoolCardStage.success]: `${isDeposit ? 'Deposit' : 'Withdrawal Request'} Successful!`,
 	}
 
+	const transactionStatus = steps
+		.slice()
+		.reverse()
+		.find(step => step.type === StageType.transaction)?.status
+
+	const approvalStatus = steps
+		.slice()
+		.reverse()
+		.find(step => step.type === StageType.approve)?.status
+
+	const requestTxStatus = steps
+		.slice()
+		.reverse()
+		.find(step => step.type === StageType.requestTx)?.status
+
 	const progressDetails = (
 		<>
 			<ProgressDetails from={from} to={to} stage={stage} steps={steps} />
 
 			<div className={classNames.progressContainer}>
-				<TransactionStep status={steps[0]?.status} title="Approvals" />
+				<TransactionStep status={approvalStatus ?? 'idle'} title="Approvals" />
 				<TrailArrowRightIcon />
-
-				<TransactionStep
-					status={steps[isDeposit ? 2 : 1]?.status}
-					title={isDeposit ? 'Deposit' : 'Withdrawal'}
-				/>
+				{isDeposit && (
+					<>
+						<TransactionStep status={requestTxStatus ?? 'idle'} title="Request" />
+						<TrailArrowRightIcon />
+					</>
+				)}
+				<TransactionStep status={transactionStatus ?? 'idle'} title={isDeposit ? 'Deposit' : 'Withdrawal'} />
 			</div>
 
 			{isDepositRequested && time > 0 && !isDepositTxSigned && (

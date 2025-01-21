@@ -1,7 +1,8 @@
 import { TokenArea } from '../TokenArea/TokenArea'
 import { handleWithdrawal } from '../poolExecution/withdrawal'
+import { config } from '../../../../../web3/wagmi'
 import { handleDeposit } from '../poolExecution/deposit'
-import { getWalletClient } from '../../../../../web3/wagmi'
+import { getWalletClient } from '@wagmi/core'
 import { Separator } from '../../../../layout/Separator/Separator'
 import { SwapDetails } from '../SwapDetails/SwapDetails'
 import { IconButton } from '../../../../layout/buttons/IconButton/IconButton'
@@ -33,7 +34,7 @@ export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) 
 	const isDisabled: boolean = (isDeposit && !amountIsAvailable) || !isConnected
 
 	const handleStartTx = async () => {
-		const walletClient = await getWalletClient(Number(from.chain.id))
+		const walletClient = await getWalletClient(config, { chainId: Number(from.chain.id) })
 		if (from.amount.length === 0) {
 			poolDispatch({ type: PoolActionType.SET_INPUT_ERROR, payload: ErrorType.ENTER_AMOUNT })
 			return

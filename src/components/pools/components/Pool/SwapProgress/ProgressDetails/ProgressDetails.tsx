@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { PoolCardStage, StageType } from '../../poolReducer/types'
 import { TrailArrowRightIcon } from '../../../../../../assets/icons/TrailArrowRightIcon'
 import { Badge } from '../../../../../layout/Badge/Badge'
@@ -11,24 +11,26 @@ interface Props {
 	to: any
 }
 
-const stageImageMap: Partial<Record<PoolCardStage, string>> = {
-	[PoolCardStage.progress]: '/Process.png',
-	[PoolCardStage.success]: '/Success.png',
-	[PoolCardStage.failed]: '/Error.png',
-}
-
 export const ProgressDetails = memo(({ stage, steps, from, to }: Props) => {
-	const imageSrc = stageImageMap[stage] || '/Process.png'
 	const currentStep = steps[steps.length - 1]
 
-	const showTokenTransfer =
-		currentStep && (currentStep.type === StageType.transaction || currentStep.type === StageType.requestTx)
+	const showTokenTransfer = useMemo(() => {
+		return currentStep && (currentStep.type === StageType.transaction || currentStep.type === StageType.requestTx)
+	}, [currentStep])
+
+	const imageSrc = useMemo(() => {
+		if (stage === PoolCardStage.failed) return '/Error.png'
+		if (stage === PoolCardStage.success) return '/Success.png'
+		if (!showTokenTransfer) return '/Process.png'
+		return null
+	}, [stage, showTokenTransfer])
 
 	return (
 		<div className="row ac gap-sm">
-			{!showTokenTransfer && <img src={imageSrc} alt={stage} className="icon" />}
-			{showTokenTransfer && (
-				<div className="row ac gap-sm">
+			{imageSrc ? (
+				<img src={imageSrc} alt={stage} className="icon" />
+			) : (
+				<>
 					<div className={classNames.tokenBox}>
 						<Badge size="xl" tokenLogoSrc={from.token.logoURI} chainLogoSrc={from.chain.logoURI} />
 					</div>
@@ -36,7 +38,7 @@ export const ProgressDetails = memo(({ stage, steps, from, to }: Props) => {
 					<div className={classNames.tokenBox}>
 						<Badge size="xl" tokenLogoSrc={to.token.logoURI} chainLogoSrc={to.chain.logoURI} />
 					</div>
-				</div>
+				</>
 			)}
 		</div>
 	)
