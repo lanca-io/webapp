@@ -10,7 +10,6 @@ import { useAccount } from 'wagmi'
 import { useAppKit } from '@reown/appkit/react'
 import { TooltipWrapper } from '../../../wrappers/WithTooltip/TooltipWrapper'
 import classNames from './Pool.module.pcss'
-import { LancaSwap } from './Popups/LancaSwap/LancaSwap'
 
 interface Props {
 	isDepositOnly?: boolean
@@ -125,8 +124,6 @@ export const PoolCard = ({
 		[address, userHasDeposited, withdrawalButtonClasses, poolDispatch],
 	)
 
-	const shouldShowLancaSwap = poolState.inputError === 2 && poolState.poolMode === 'deposit'
-
 	return (
 		<>
 			{isDepositOnly ? (
@@ -144,7 +141,6 @@ export const PoolCard = ({
 				isHeaderVisible={false}
 				show={isOpen}
 				setShow={handleClose}
-				popup={shouldShowLancaSwap ? <LancaSwap /> : null}
 			>
 				{isInputStages ? (
 					<SwapInput onClose={handleClose} poolState={poolState} poolDispatch={poolDispatch} />

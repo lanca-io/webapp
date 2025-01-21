@@ -11,7 +11,6 @@ export interface ModalProps {
 	className?: string
 	isHeaderVisible?: boolean
 	position?: 'top' | 'bottom' | 'center'
-	popup?: ReactNode // New prop for the optional second component
 }
 
 const positionClassMap = {
@@ -28,7 +27,6 @@ export const Modal: FC<ModalProps> = ({
 	children,
 	className,
 	isHeaderVisible = true,
-	popup, // Destructure the new prop
 }) => {
 	const stopPropagation = (event: MouseEvent<HTMLDivElement, MouseEvent>) => {
 		event.stopPropagation()
@@ -92,7 +90,6 @@ export const Modal: FC<ModalProps> = ({
 						</animated.div>
 					) : null,
 				)}
-				<div className={`${classNames.popupContainer} ${className}`}>{popup}</div>
 			</animated.div>
 		)
 	)
