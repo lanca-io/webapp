@@ -50,8 +50,6 @@ export const PoolCard = ({
 		setIsOpen(false)
 	}, [handleGoBack])
 
-	console.log('poolState', poolState)
-
 	const disabledDepositButton = useMemo(
 		() => (
 			<TooltipWrapper

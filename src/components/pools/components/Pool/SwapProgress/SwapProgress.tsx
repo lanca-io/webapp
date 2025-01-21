@@ -53,11 +53,12 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 	const cancelTransaction = () => {
 		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
 		poolDispatch({
-			type: PoolActionType.UPSERT_SWAP_STEP,
+			type: PoolActionType.APPEND_SWAP_STEP,
 			payload: {
-				title: 'Transaction failed',
+				title: 'Deposit failed',
 				body: 'Something went wrong',
 				status: 'error',
+				type: StageType.transaction,
 			},
 		})
 
@@ -70,11 +71,11 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 	}
 
 	useEffect(() => {
-		if (!isDepositRequested) return
+		if (!isDepositRequested || isFailed) return
 
 		const timerId = setInterval(() => {
 			setTime(prevTime => {
-				if (prevTime < 0 && isFailed) {
+				if (prevTime < 0) {
 					cancelTransaction()
 					clearInterval(timerId)
 				}
@@ -90,7 +91,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 		return () => {
 			clearInterval(timerId)
 		}
-	}, [isDepositRequested])
+	}, [isDepositRequested, isFailed])
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[PoolCardStage.failed]: (
@@ -124,7 +125,10 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 	}
 
 	const title: Record<string, string> | Record<string, null> = {
-		[PoolCardStage.progress]: `Preparing ${isDeposit ? 'deposit' : 'withdrawal'}...`,
+		[PoolCardStage.progress]:
+			currentStep?.type === StageType.transaction || currentStep?.type === StageType.requestTx
+				? `${isDeposit ? 'Deposit' : 'Withdrawal'}...`
+				: `Preparing ${isDeposit ? 'deposit' : 'withdrawal'}...`,
 		[PoolCardStage.failed]: `${isDeposit ? 'Deposit' : 'Withdrawal'} failed`,
 		[PoolCardStage.success]: `${isDeposit ? 'Deposit' : 'Withdrawal Request'} Successful!`,
 	}
@@ -160,7 +164,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 				<TransactionStep status={transactionStatus ?? 'idle'} title={isDeposit ? 'Deposit' : 'Withdrawal'} />
 			</div>
 
-			{isDepositRequested && time > 0 && !isDepositTxSigned && (
+			{isDepositRequested && time > 0 && !isDepositTxSigned && !isFailed && (
 				<Tag
 					variant={getTimerStatus(time)}
 					size="md"
