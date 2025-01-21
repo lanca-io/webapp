@@ -19,12 +19,18 @@ interface PoolCardProps {
 	icon: React.ReactNode
 }
 
-const PoolStatus = ({ isDisabled }: { isDisabled: boolean }) => (
+const PoolStatus = ({ isDisabled, isPoolFilled }: { isDisabled: boolean; isPoolFilled: boolean }) => (
 	<div className={classNames.poolStatus}>
 		{!isDisabled ? (
-			<Tag className={classNames.poolStatus} size="sm" variant="positive">
-				LP cup increased
-			</Tag>
+			isPoolFilled ? (
+				<Tag className={classNames.poolStatus} size="sm" variant="neutral">
+					Full
+				</Tag>
+			) : (
+				<Tag className={classNames.poolStatus} size="sm" variant="positive">
+					Almost full
+				</Tag>
+			)
 		) : (
 			<Tag className={classNames.poolStatus} size="sm" variant="neutral">
 				Coming soon
@@ -113,12 +119,14 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 	const { poolLiquidity, maxCap, isLoading: isLiquidityLoading } = useGetLiquidity()
 	const { apy, totalRewards, isLoading: isMetricsLoading } = usePoolMetrics(fees, poolLiquidity, isLiquidityLoading)
 
+	const isPoolFilled = poolLiquidity >= maxCap
+
 	const isLoading = isLiquidityLoading || isMetricsLoading
 
 	return (
 		<Card className={`w-full ${classNames.container}`}>
 			<div className={classNames.content}>
-				<PoolStatus isDisabled={isDisabled} />
+				<PoolStatus isDisabled={isDisabled} isPoolFilled={isPoolFilled} />
 				<GeneralInfo title={title} icon={icon} isDisabled={isDisabled} isLoading={isLoading} apy={apy} />
 				<PoolStats
 					poolLiquidity={poolLiquidity}

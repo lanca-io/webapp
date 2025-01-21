@@ -18,7 +18,7 @@ export const ProgressValue: React.FC<ProgressValueProps> = ({ isLoading, current
 		<SkeletonLoader width={type === 'big' ? 128 : 64} height={type === 'big' ? 27.5 : 20} />
 	) : (
 		<h3 className={valueClass}>
-			{toLocaleNumber(currentValue)} <span className={maxValueClass}>/{toLocaleNumber(maxValue)}</span>
+			{`$${toLocaleNumber(currentValue)}`} <span className={maxValueClass}>/{toLocaleNumber(maxValue)}</span>
 		</h3>
 	)
 }
