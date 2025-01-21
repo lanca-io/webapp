@@ -39,7 +39,6 @@ const statusColorMap = {
 
 export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, handleGoBack }) => {
 	const [time, setTime] = useState(60)
-	const [approvalTime, setApprovalTime] = useState(60)
 	const { to, from, stage, steps, poolMode } = poolState
 
 	const isFailed = stage === PoolCardStage.failed
@@ -70,18 +69,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 		})
 	}
 
-	const cancelApproval = () => {
-		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
-		poolDispatch({
-			type: PoolActionType.UPSERT_SWAP_STEP,
-			payload: {
-				title: 'Approval failed',
-				body: 'The transaction approval has expired.',
-				status: 'error',
-			},
-		})
-	}
-
 	useEffect(() => {
 		if (!isDepositRequested) return
 
@@ -104,25 +91,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 			clearInterval(timerId)
 		}
 	}, [isDepositRequested])
-
-	useEffect(() => {
-		if (steps[0]?.status !== 'await') return
-
-		const approvalTimerId = setInterval(() => {
-			setApprovalTime(prevTime => {
-				if (prevTime < 0) {
-					cancelApproval()
-					clearInterval(approvalTimerId)
-				}
-
-				return prevTime - 1
-			})
-		}, 1000)
-
-		return () => {
-			clearInterval(approvalTimerId)
-		}
-	}, [steps])
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[PoolCardStage.failed]: (
@@ -202,16 +170,6 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 				</Tag>
 			)}
 
-			{steps[0]?.status === 'await' && approvalTime > 0 && (
-				<Tag
-					variant={getTimerStatus(approvalTime)}
-					size="md"
-					leftIcon={<TimeIcon color={statusColorMap[getTimerStatus(approvalTime)]} />}
-				>
-					{approvalTime}s
-				</Tag>
-			)}
-
 			{isAwait && (
 				<div className={classNames.infoMessage}>
 					<div className={classNames.wrapIcon}>
@@ -222,19 +180,11 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 				</div>
 			)}
 
-			{currentStep && !isAwait && approvalTime > 0 && (
+			{currentStep && !isAwait && (
 				<Alert
 					title={currentStep.title}
 					variant={isFailed ? 'error' : 'neutral'}
 					icon={isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />}
-				/>
-			)}
-
-			{approvalTime <= 0 && (
-				<Alert
-					title="The transaction approval has expired."
-					variant="warning"
-					icon={<InfoIcon color="var(--color-warning-700)" />}
 				/>
 			)}
 		</>
