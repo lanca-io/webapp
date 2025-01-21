@@ -1,16 +1,17 @@
 import classNames from './MobileBreadcrumbs.module.pcss'
 import { Button } from '../../../buttons/Button/Button'
+import { routes } from '../../../../../constants/routes'
 
 export function MobileBreadcrumbs() {
 	return (
 		<ul className={classNames.container}>
-			<a href="https://app.concero.io/rewards" className={classNames.link}>
-				<Button className="w-full" variant={'tetrary'} size={'md'}>
-					Rewards
+			<a className={classNames.link} href={routes.home} rel="noreferrer">
+				<Button size="md" variant="tetrary">
+					Swap
 				</Button>
 			</a>
-			<a href="https://app.concero.io/pool" className={classNames.link}>
-				<Button variant={'tetrary'} size={'md'}>
+			<a className={classNames.link} href={routes.pools} rel="noreferrer">
+				<Button size="md" variant="tetrary">
 					Provide Liquidity
 				</Button>
 			</a>
