@@ -9,7 +9,9 @@ import { Button } from '../../../layout/buttons/Button/Button'
 import { useAccount } from 'wagmi'
 import { useAppKit } from '@reown/appkit/react'
 import { TooltipWrapper } from '../../../wrappers/WithTooltip/TooltipWrapper'
+import { LancaSwap } from './Popups/LancaSwap/LancaSwap'
 import classNames from './Pool.module.pcss'
+import { LPStreak } from './Popups/LPStreak/LPStreak'
 
 interface Props {
 	isDepositOnly?: boolean
@@ -49,6 +51,8 @@ export const PoolCard = ({
 		handleGoBack()
 		setIsOpen(false)
 	}, [handleGoBack])
+
+	console.log(poolState)
 
 	const disabledDepositButton = useMemo(
 		() => (
@@ -122,6 +126,15 @@ export const PoolCard = ({
 		[address, userHasDeposited, withdrawalButtonClasses, poolDispatch],
 	)
 
+	const showPopup = useMemo(() => {
+		if (poolState.stage === PoolCardStage.input && poolState.poolMode === 'deposit' && poolState.inputError === 2) {
+			return <LancaSwap />
+		} else if (poolState.stage === PoolCardStage.success && poolState.poolMode === 'deposit') {
+			return <LPStreak />
+		}
+		return null
+	}, [poolState.stage, poolState.poolMode, poolState.inputError])
+
 	return (
 		<>
 			{isDepositOnly ? (
@@ -139,6 +152,7 @@ export const PoolCard = ({
 				isHeaderVisible={false}
 				show={isOpen}
 				setShow={handleClose}
+				popup={showPopup}
 			>
 				{isInputStages ? (
 					<SwapInput onClose={handleClose} poolState={poolState} poolDispatch={poolDispatch} />
