@@ -48,7 +48,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 
 	const isDeposit = poolMode === 'deposit'
 	const isDepositRequested = steps[1] ? steps[1].type === StageType.requestTx && steps[1].status === 'success' : false
-	const isDepositTxSigned = steps[2] ? steps[2].type === StageType.transaction : false
+	const isDepositTxSigned = steps[2] ? steps[2].type === StageType.transactionSigned : false
 
 	const cancelTransaction = () => {
 		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })

@@ -220,6 +220,7 @@ const completeDeposit = async (
 			payload: [
 				{ title: 'Signature required', status: 'success', type: StageType.approve },
 				{ title: 'Deposit in progress...', status: 'success', type: StageType.requestTx },
+				{ title: 'Deposit in progress...', status: 'pending', type: StageType.transactionSigned },
 				{ title: 'Deposit in progress...', status: 'pending', type: StageType.transaction },
 			],
 		})
