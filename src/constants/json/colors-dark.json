@@ -5,7 +5,7 @@
 			"lighter": "#c7aefc",
 			"light": "#ab86fa",
 			"mainLight": "#8f5df9",
-			"main": "#7335f7",
+			"main": "linear-gradient(89.91deg, #ACE1FB 0.05%, #0C9FE8 104.8%)",
 			"mainDark": "#5c2ac6",
 			"dark": "#452094",
 			"darker": "#2e1563",

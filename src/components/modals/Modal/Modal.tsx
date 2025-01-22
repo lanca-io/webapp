@@ -11,6 +11,7 @@ export interface ModalProps {
 	className?: string
 	isHeaderVisible?: boolean
 	position?: 'top' | 'bottom' | 'center'
+	popup?: React.ReactNode | null
 }
 
 const positionClassMap = {
@@ -27,6 +28,7 @@ export const Modal: FC<ModalProps> = ({
 	children,
 	className,
 	isHeaderVisible = true,
+	popup,
 }) => {
 	const stopPropagation = (event: MouseEvent<HTMLDivElement, MouseEvent>) => {
 		event.stopPropagation()
@@ -89,6 +91,11 @@ export const Modal: FC<ModalProps> = ({
 							{children}
 						</animated.div>
 					) : null,
+				)}
+				{popup && (
+					<animated.div className={`${className}`} style={{ marginTop: '16px' }}>
+						{popup}
+					</animated.div>
 				)}
 			</animated.div>
 		)

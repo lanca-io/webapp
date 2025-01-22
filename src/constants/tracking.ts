@@ -6,6 +6,8 @@ export enum category {
 	SwapCard = 'cat_swap_card',
 	ChartCard = 'cat_chart_card',
 	Wallet = 'cat_wallet',
+	PoolCard = 'cat_pool_card',
+	PoolUserActions = 'cat_user_actions',
 }
 export enum param {
 	// Transaction:
@@ -57,5 +59,23 @@ export enum action {
 	// Staking
 	FilterTagClicked = 'action_filter_tag_clicked',
 	ProtocolModalOpened = 'action_protocol_modal_opened',
+
+	// Pool deposit
+	BeginDeposit = 'action_begin_deposit',
+	SuccessDeposit = 'action_success_deposit',
+	FailedDeposit = 'action_failed_deposit',
+
+	// Pool withdrawal
+	BeginWithdrawalRequest = 'action_begin_withdrawal_request',
+	SuccessWithdrawalRequest = 'action_success_withdrawal_request',
+	FailedWithdrawalRequest = 'action_failed_withdrawal_request',
+
+	BeginWithdrawalComplete = 'action_begin_withdrawal_complete',
+	SuccessWithdrawalComplete = 'action_success_withdrawal_complete',
+	FailedWithdrawalComplete = 'action_failed_withdrawal_complete',
+
+	BeginRetryWithdrawalRequest = 'action_begin_deposit_request',
+	SuccessRetryWithdrawalRequest = 'action_success_deposit_request',
+	FailedRetryWithdrawalRequest = 'action_failed_deposit_request',
 }
 export enum label {}
