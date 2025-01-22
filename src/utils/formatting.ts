@@ -231,3 +231,17 @@ export function formatNumber(num: number, options: FormatNumberOptions = {}): st
 
 	return result
 }
+
+export const roundToPrecision = (num: number, precision: number) => {
+	const factor = Math.pow(10, precision)
+	return Math.round(num * factor) / factor
+}
+
+export const toLocaleNumber = (num: number | string, fixed = 0) => {
+	if (!num) return 0
+
+	const number = Number(num)
+	const formattedNumber = number % 1 === 0 ? number.toString() : roundToPrecision(number, fixed).toString()
+
+	return formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}

@@ -5,12 +5,24 @@ import { Header } from './components/layout/Header/Header/Header'
 import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
-import posthog from 'posthog-js'
 import { Footer } from './components/layout/Footer/Footer'
+import posthog from 'posthog-js'
 
 const SwapScreen = lazy(
 	async () =>
 		await import('./components/screens/SwapScreen/SwapScreen').then(module => ({ default: module.SwapScreen })),
+)
+
+const PoolScreen = lazy(
+	async () =>
+		await import('./components/screens/PoolScreen/PoolScreen').then(module => ({ default: module.PoolScreen })),
+)
+
+const USDCPoolScreen = lazy(
+	async () =>
+		await import('./components/screens/PoolScreen/USDCPoolScreen').then(module => ({
+			default: module.USDCPoolScreen,
+		})),
 )
 
 export const Navigator = () => {
@@ -31,6 +43,22 @@ export const Navigator = () => {
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
 								<SwapScreen />
+							</Suspense>
+						}
+					/>
+					<Route
+						path={routes.pools}
+						element={
+							<Suspense fallback={<FullScreenLoader />}>
+								<PoolScreen />
+							</Suspense>
+						}
+					/>
+					<Route
+						path={routes.usdcPools}
+						element={
+							<Suspense fallback={<FullScreenLoader />}>
+								<USDCPoolScreen />
 							</Suspense>
 						}
 					/>
