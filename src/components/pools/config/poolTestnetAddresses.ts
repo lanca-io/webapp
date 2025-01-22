@@ -7,4 +7,3 @@ export const childPoolAvalancheFuji = '0xDB338166e403495996c2E0C87729962E8420477
 
 // Other Addresses
 export const lpTokenBaseSepolia = '0x68F5b6A4D229446E54F89e5E404A0F1DE4ebD7C5' as Address
-export const automationsBaseSepolia = '0x50c10bC0B4d694837fa95b7c4b02D847B372c1cd' as Address

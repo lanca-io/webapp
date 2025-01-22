@@ -9,4 +9,3 @@ export const childPoolOptimism = '0x8698c6DF1E354Ce3ED0dE508EF7AF4baB85D2F2D' as
 
 // Other Addresses
 export const lpTokenBase = '0x7419f60B8f50BB7F9E612998140b79A810a340C3' as Address
-export const automationsBase = '0xf60a6c3a791fb4783ce6f86f56da66d06c95b971' as Address
