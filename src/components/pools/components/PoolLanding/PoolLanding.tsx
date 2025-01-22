@@ -32,7 +32,7 @@ export const PoolLanding = (): JSX.Element => {
 							icon={<RefreshIcon />}
 						/>
 						<StatCard
-							title="LP Providers"
+							title="Liquidity Providers"
 							value={lpProviders}
 							isLoading={providersLoading}
 							icon={<LPIcon />}
