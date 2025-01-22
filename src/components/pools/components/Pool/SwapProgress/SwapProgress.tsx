@@ -130,7 +130,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 				? `${isDeposit ? 'Deposit' : 'Withdrawal'}...`
 				: `Preparing ${isDeposit ? 'deposit' : 'withdrawal'}...`,
 		[PoolCardStage.failed]: `${isDeposit ? 'Deposit' : 'Withdrawal'} failed`,
-		[PoolCardStage.success]: `${isDeposit ? 'Deposit' : 'Withdrawal Request'} Successful!`,
+		[PoolCardStage.success]: `${isDeposit ? 'Deposit' : 'Withdrawal'} successful!`,
 	}
 
 	const transactionStatus = steps
