@@ -18,7 +18,7 @@ export const PoolSummary = () => {
 						isLoading={isLoading}
 						size="small"
 						title="Rewards Distributed"
-						height={72}
+						height={68}
 						withFilter={false}
 						showTooltip={false}
 					/>

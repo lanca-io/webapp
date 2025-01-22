@@ -15,7 +15,9 @@ export const LancaSwap = (): JSX.Element => {
 				</div>
 			</div>
 			<a href={routes.home} target="_blank" rel="noreferrer">
-				<Button size="md">Swap</Button>
+				<Button size="md" variant="secondaryColor">
+					Swap
+				</Button>
 			</a>
 		</div>
 	)

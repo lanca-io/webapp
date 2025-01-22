@@ -118,7 +118,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 					size="md"
 					className={classNames.actionButton}
 				>
-					Manage Earnings
+					Done
 				</Button>
 			</div>
 		),

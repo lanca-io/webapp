@@ -28,7 +28,7 @@ export const ProgressDetails = memo(({ stage, steps, from, to }: Props) => {
 	return (
 		<div className="row ac gap-sm">
 			{imageSrc ? (
-				<img src={imageSrc} alt={stage} className="icon" />
+				<img src={imageSrc} alt={stage} className="icon" width={160} height={160} />
 			) : (
 				<>
 					<div className={classNames.tokenBox}>

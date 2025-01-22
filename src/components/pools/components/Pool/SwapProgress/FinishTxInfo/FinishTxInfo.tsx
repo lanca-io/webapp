@@ -25,7 +25,7 @@ export const FinishTxInfo = memo(({ to: { amount, token, chain }, isDeposit }: P
 				<p className={classNames.title}>You {title}</p>
 
 				<div className="row gap-sm ac">
-					<h2 className={classNames.title}>{Number(amount).toFixed(3)}</h2>
+					<h2 className={classNames.subtitle}>{Number(amount).toFixed(3)}</h2>
 					<div className="row gap-xs ac">
 						<Badge size="l" tokenLogoSrc={token.logoURI} chainLogoSrc={chain.logoURI} />
 						<SelectTokenShape symbol={token.symbol} chainName={chain.name} />

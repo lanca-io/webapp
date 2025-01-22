@@ -16,8 +16,10 @@ export const Header: FC<HeaderProps> = ({ children }) => {
 	const isMobile = useMediaQuery('mobile')
 	const location = useLocation()
 
-	const getButtonTextColor = (path: string) => {
-		return location.pathname === path ? 'var(--color-primary-600)' : 'inherit'
+	const getButtonClass = (path: string) => {
+		return location.pathname === path
+			? `${classNames.headerButton} ${classNames.activeButton}`
+			: classNames.headerButton
 	}
 
 	return (
@@ -30,14 +32,10 @@ export const Header: FC<HeaderProps> = ({ children }) => {
 				{!isMobile && (
 					<ul className="gap-xs">
 						<a className={classNames.link} href={routes.home} rel="noreferrer">
-							<Button className={classNames.headerButton} textColor={getButtonTextColor(routes.home)}>
-								Swap
-							</Button>
+							<Button className={getButtonClass(routes.home)}>Swap</Button>
 						</a>
 						<a className={classNames.link} href={routes.pools} rel="noreferrer">
-							<Button className={classNames.headerButton} textColor={getButtonTextColor(routes.pools)}>
-								Provide Liquidity
-							</Button>
+							<Button className={getButtonClass(routes.pools)}>Provide Liquidity</Button>
 						</a>
 					</ul>
 				)}
