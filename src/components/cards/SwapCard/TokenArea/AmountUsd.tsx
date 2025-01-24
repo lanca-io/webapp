@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import classNames from './TokenArea.module.pcss'
 import { Loader } from '../../../layout/Loader/Loader'
 import { type RouteType } from 'lanca-sdk-demo'
+import { format } from '../../../../utils/numberFormatting'
 
 interface AmountUsdProps {
 	direction: 'from' | 'to'
@@ -28,7 +29,7 @@ export function AmountUsd({
 	const { t } = useTranslation()
 
 	const { formattedBalance, amountUsd, isAmountUsdNaN } = useMemo(() => {
-		const balanceValue = numberToFormatString(Number(userBalance?.amount.rounded), 4, true)
+		const balanceValue = format(Number(userBalance?.amount.rounded), 4)
 		const amountUsdValue =
 			direction === 'from'
 				? numberToFormatString(
