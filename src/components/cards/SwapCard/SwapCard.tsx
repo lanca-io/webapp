@@ -9,6 +9,7 @@ import { TrophyIcon } from '../../../assets/icons/TrophyIcon'
 import { Button } from '../../layout/buttons/Button/Button'
 import { fetchUserByAddress } from '../../../api/concero/user/fetchUserByAddress'
 import type { Address } from 'viem'
+import { format } from '../../../utils/numberFormatting'
 
 export interface Props {
 	swapState: SwapState
@@ -77,7 +78,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 							<TrophyIcon />
 						</div>
 						<p className={classNames.pointsTitle}>
-							You got <b>{userPoints.toFixed(2)} CERs</b>
+							You got <b>{format(userPoints, 2)} CERs</b>
 						</p>
 					</div>
 					<a href="https://app.concero.io/rewards" target="_blank" rel="noreferrer">
