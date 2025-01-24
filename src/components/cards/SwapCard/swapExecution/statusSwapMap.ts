@@ -27,7 +27,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapFailed,
-				label: 'swap_failed',
+				label: action.SwapFailed,
 				data: { route: state },
 			})
 			swapDispatch({
@@ -48,7 +48,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapRejected,
-				label: 'User rejected swap',
+				label: 'User rejected chain switch',
 				data: { route: state },
 			})
 			swapDispatch({
@@ -112,7 +112,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 				type: SwapActionType.SET_SWAP_STEPS,
 				payload: [
 					{
-						title: 'Transaction rejected',
+						title: 'Transaction failed',
 						body: 'Something went wrong',
 						status: Status.FAILED,
 						type: StageType.error,
@@ -139,7 +139,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapRejected,
-				label: 'User rejected swap',
+				label: action.SwapRejected,
 				data: { route: state },
 			})
 			swapDispatch({
@@ -231,7 +231,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapRejected,
-				label: 'User rejected swap',
+				label: action.SwapRejected,
 				data: { route: state },
 			})
 			swapDispatch({
@@ -289,7 +289,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapFailed,
-				label: 'swap_failed',
+				label: action.SwapFailed,
 				data: { route: state, txHash },
 			})
 			swapDispatch({
@@ -323,7 +323,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapRejected,
-				label: 'User rejected swap',
+				label: action.SwapRejected,
 				data: { route: state },
 			})
 			swapDispatch({
@@ -384,7 +384,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapFailed,
-				label: 'swap_failed',
+				label: action.SwapFailed,
 				data: { route: state, txHash },
 			})
 			swapDispatch({
@@ -420,7 +420,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			trackEvent({
 				category: category.SwapCard,
 				action: action.SwapRejected,
-				label: 'User rejected swap',
+				label: action.SwapRejected,
 				data: { route: state },
 			})
 			swapDispatch({
