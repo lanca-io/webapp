@@ -82,7 +82,7 @@ export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, 
 					<SkeletonLoader className={classNames.balanceSkeleton} />
 				) : token.balance ? (
 					<>
-						<h4>{numberToFormatString(Number(tokenAmount), 3, true)}</h4>
+						<h4>{format(Number(tokenAmount), 3)}</h4>
 						{token.priceUsd && token.priceUsd > 0 ? (
 							<p className={'body1'}>{format(token.priceUsd * Number(tokenAmount), 3, '$')}</p>
 						) : null}
