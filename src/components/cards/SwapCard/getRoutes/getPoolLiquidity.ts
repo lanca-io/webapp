@@ -1,7 +1,7 @@
 import { type PoolConfig } from './types'
 
 import { erc20Abi, formatUnits } from 'viem'
-import { arbitrum, avalanche, base, polygon } from 'viem/chains'
+import { arbitrum, avalanche, base, optimism, polygon } from 'viem/chains'
 import { conceroProxyMap } from 'lanca-sdk-demo'
 import { getPublicClient } from '../../../../web3/wagmi'
 
@@ -27,6 +27,11 @@ export const poolConfigs: Record<string, PoolConfig> = {
 		chain: avalanche,
 		conceroContract: conceroProxyMap.CONCERO_POOL_AVALANCHE,
 		usdcContract: conceroProxyMap.USDC_AVALANCHE,
+	},
+	'10': {
+		chain: optimism,
+		conceroContract: conceroProxyMap.CONCERO_POOL_OPTIMISM,
+		usdcContract: conceroProxyMap.USDC_OPTIMISM,
 	},
 }
 
