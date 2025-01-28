@@ -71,27 +71,29 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 	}
 
 	useEffect(() => {
-		if (!isDepositRequested || isFailed) return
+		if (!isDepositRequested || isFailed || isDepositTxSigned) return
 
 		const timerId = setInterval(() => {
 			setTime(prevTime => {
-				if (prevTime < 0) {
+				if (isDepositTxSigned) {
+					clearInterval(timerId)
+					return prevTime
+				}
+
+				if (prevTime <= 0) {
 					cancelTransaction()
 					clearInterval(timerId)
+					return prevTime
 				}
 
 				return prevTime - 1
 			})
-
-			if (isDepositTxSigned) {
-				clearInterval(timerId)
-			}
 		}, 1000)
 
 		return () => {
 			clearInterval(timerId)
 		}
-	}, [isDepositRequested, isFailed])
+	}, [isDepositRequested, isFailed, isDepositTxSigned])
 
 	const renderButtons: Record<string, JSX.Element> | Record<string, null> = {
 		[PoolCardStage.failed]: (

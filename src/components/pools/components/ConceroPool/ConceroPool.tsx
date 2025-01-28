@@ -29,17 +29,16 @@ const PoolHeading = (): JSX.Element => {
 }
 
 export const ConceroPool: React.FC = () => {
-	const { poolLiquidity, maxCap, isLoading } = useGetLiquidity()
-	const poolCapReached = poolLiquidity > maxCap - 100
+	const { isPoolFull, isLoading } = useGetLiquidity()
 
 	const backArrow = useMemo(() => <BackArrow />, [])
-	const heading = useMemo(() => <PoolHeading />, [poolCapReached])
+	const heading = useMemo(() => <PoolHeading />, [isPoolFull])
 
 	return (
 		<>
 			{backArrow}
 			{heading}
-			<Earnings poolIsFilled={poolCapReached} poolDataIsLoading={isLoading} />
+			<Earnings poolIsFilled={isPoolFull} poolDataIsLoading={isLoading} />
 			<PoolSummary />
 		</>
 	)
