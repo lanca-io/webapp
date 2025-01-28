@@ -20,7 +20,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({ poolState }) => {
 	const isDeposit = poolMode === 'deposit'
 	const isReview = stage === PoolCardStage.review
 
-	const minAmount = useMemo(() => (isDeposit ? 100 : 0), [isDeposit])
+	const minAmount = useMemo(() => (isDeposit ? 250 : 0), [isDeposit])
 	const amountIsAvailable = useMemo(() => Number(from.amount) >= minAmount, [from.amount, minAmount])
 	const isOpen = useMemo(() => !isLoading && isReview && amountIsAvailable, [isLoading, isReview, amountIsAvailable])
 

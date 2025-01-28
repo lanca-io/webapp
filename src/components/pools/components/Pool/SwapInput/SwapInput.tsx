@@ -27,7 +27,7 @@ export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) 
 	const { isConnected } = useAccount()
 	const { open } = useAppKit()
 
-	const amountIsAvailable = Number(from.amount) >= 100
+	const amountIsAvailable = Number(from.amount) >= 250
 
 	const isDeposit = poolMode === 'deposit'
 	const actionText: string = isDeposit ? 'Request Deposit' : 'Request Withdrawal'
