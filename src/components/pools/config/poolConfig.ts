@@ -64,3 +64,20 @@ export const poolLoansInUseAbiITem = [
 		stateMutability: 'view',
 	},
 ]
+
+export const isPoolFullAbi = [
+	{
+		constant: true,
+		inputs: [],
+		name: 'isFull',
+		outputs: [
+			{
+				name: '',
+				type: 'bool',
+			},
+		],
+		payable: false,
+		stateMutability: 'view',
+		type: 'function',
+	},
+]
