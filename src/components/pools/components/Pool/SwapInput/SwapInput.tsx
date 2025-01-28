@@ -40,8 +40,6 @@ export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) 
 			return
 		}
 
-		console.log(walletClient)
-
 		if (isDeposit) {
 			await handleDeposit(poolState, poolDispatch, walletClient)
 		} else {
