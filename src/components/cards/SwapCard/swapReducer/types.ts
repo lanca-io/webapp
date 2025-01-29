@@ -1,7 +1,7 @@
 import { type Provider } from '../../../../api/concero/types'
 import { type ErrorType } from '../SwapButton/constants'
 import { type TokenAmount } from '../../../../utils/TokenAmount'
-import { type RouteType, type Status, type ConceroChain, type ConceroToken, type StepType } from 'lanca-sdk-demo'
+import { type RouteType, type Status, type LancaChain, type LancaToken, type StepType } from 'lanca-sdk-demo'
 
 export enum StageType {
 	chain = 0,
@@ -124,8 +124,8 @@ export type SwapAction =
 	| { type: SwapActionType.SET_SWAP_STAGE; payload: SwapCardStage }
 	| { type: SwapActionType.UPDATE_LAST_SWAP_STEP }
 	| { type: SwapActionType.SET_BALANCE; payload: Balance | null }
-	| { type: SwapActionType.SET_CHAIN; direction: ActionDirection; payload: { chain: ConceroChain } }
-	| { type: SwapActionType.SET_TOKEN; direction: ActionDirection; payload: { token: ConceroToken } }
+	| { type: SwapActionType.SET_CHAIN; direction: ActionDirection; payload: { chain: LancaChain } }
+	| { type: SwapActionType.SET_TOKEN; direction: ActionDirection; payload: { token: LancaToken } }
 	| {
 			type: SwapActionType.SET_AMOUNT
 			direction: ActionDirection

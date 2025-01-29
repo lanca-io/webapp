@@ -1,9 +1,9 @@
 import { type Dispatch } from 'react'
-import { type ConceroToken, type ConceroChain } from 'lanca-sdk-demo'
+import { type LancaToken, type LancaChain } from 'lanca-sdk-demo'
 
 export interface Direction {
-	token: ConceroToken
-	chain: ConceroChain
+	token: LancaToken
+	chain: LancaChain
 }
 
 export const setHistoryCard = (dispatch: Dispatch<any>, from: Direction, to: Direction): void => {
