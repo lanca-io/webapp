@@ -16,6 +16,7 @@ import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
 import { InputError } from '../SwapInput/InputError/InputError'
 import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
 import { getBalance } from '../../../../utils/getBalance'
+import { type LancaChain } from 'lanca-sdk-demo'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,
@@ -51,7 +52,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 		handleAmountChange({ value: amount.formatted, state, dispatch: swapDispatch, direction: 'from' })
 	}
 
-	const handleSelectToken = (token: Token, chain: any) => {
+	const handleSelectToken = (token: Token, chain: LancaChain) => {
 		swapDispatch({ type: SwapActionType.SET_CHAIN, direction, payload: { chain } })
 		swapDispatch({ type: SwapActionType.SET_TOKEN, direction, payload: { token } })
 		tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: false })

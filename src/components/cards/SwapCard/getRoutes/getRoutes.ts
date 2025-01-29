@@ -2,7 +2,7 @@ import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
 import { type GetConceroRoutes, type RouteRequest } from './types'
 import { type Address } from 'viem'
-import type { RouteType, RouteStep, RouteBaseStep, ConceroChain } from 'lanca-sdk-demo'
+import type { RouteType, RouteStep, RouteBaseStep, LancaChain } from 'lanca-sdk-demo'
 
 import { SwapActionType } from '../swapReducer/types'
 import { ErrorType } from '../SwapButton/constants'
@@ -12,7 +12,7 @@ import { lanca } from '../../../../utils/initLancaSDK'
 const validateRouteSteps = (route: RouteType): RouteType => {
 	const { from, to } = route
 
-	const chainDataMap: Record<string, ConceroChain> = {
+	const chainDataMap: Record<string, LancaChain> = {
 		[from.chain.id]: from.chain,
 		[to.chain.id]: to.chain,
 	}
