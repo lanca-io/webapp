@@ -1,4 +1,5 @@
 export const config = {
+	CHILD_POOLS_COUNT: 5,
 	IS_TESTNET: false,
 	baseURL: process.env.CONCERO_API_URL!,
 	headers: { 'Content-Type': 'application/json' },
