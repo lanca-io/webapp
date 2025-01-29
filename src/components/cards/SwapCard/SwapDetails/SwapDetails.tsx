@@ -40,7 +40,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({ swapState }) => {
 	useEffect(() => {
 		if (!reviewCardRef.current) return
 
-		setContainerHeight(isError ? 80 : 120)
+		setContainerHeight(isError ? 80 : 130)
 	}, [reviewCardRef.current, stage, inputError, isError])
 
 	const handleReviewClick = useCallback(() => {

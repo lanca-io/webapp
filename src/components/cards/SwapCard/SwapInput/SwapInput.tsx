@@ -74,7 +74,7 @@ export const SwapInput = React.memo(({ swapState, swapDispatch }: SwapInputProps
 	)
 
 	return (
-		<div className={classNames.container}>
+		<div>
 			{tokenArea}
 
 			<SwapDetails swapState={swapState} swapDispatch={swapDispatch} />
