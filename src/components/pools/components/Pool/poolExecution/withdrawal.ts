@@ -6,7 +6,8 @@ import { parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
 import { parentPoolBase } from '../../../config/poolMainnetAddresses'
 import { base, baseSepolia } from 'viem/chains'
 import { handleAllowance } from './allowance'
-import { getPublicClient, getWalletClient } from '../../../../../web3/wagmi'
+import { getWalletClient } from '@wagmi/core'
+import { config as web3config , getPublicClient } from '../../../../../web3/wagmi'
 import { ParentPoolABI } from '../../../config/abi/ParentPoolABI1_5'
 import { trackEvent } from '../../../../../hooks/useTracking'
 import { action, category } from '../../../../../constants/tracking'
@@ -138,7 +139,7 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 }
 
 export const retryWithdrawal = async (address: Address, chainId: number): Promise<TransactionStatus> => {
-	const walletClient = await getWalletClient(chainId)
+	const walletClient = await getWalletClient(web3config, { chainId })
 	await walletClient.switchChain({ id: chain.id })
 
 	const hash = await walletClient.writeContract({
