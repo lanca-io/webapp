@@ -85,7 +85,7 @@ export const useGetLiquidity = () => {
 			])
 			setIsPoolFull(isDepositEnabled ?? false)
 			setPoolLiquidity(Number(newPoolLiquidity))
-			setMaxCap(Number(cap))
+			setMaxCap(Number(cap) * config.CHILD_POOLS_COUNT)
 		} catch (error) {
 			console.error('Error setting liquidity:', error)
 		} finally {
