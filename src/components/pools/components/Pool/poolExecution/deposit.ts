@@ -55,15 +55,22 @@ export async function handleDeposit(
 		})
 
 		const depositAmount = parseUnits(from.amount, from.token.decimals)
-		const { request } = await publicClient.simulateContract({
+		// const { request } = await publicClient.simulateContract({
+		// 	account: from.address as Address,
+		// 	abi: ParentPoolABI,
+		// 	functionName: 'startDeposit',
+		// 	address: parentPool,
+		// 	args: [depositAmount],
+		// })
+
+		const txHash = await walletClient.writeContract({
 			account: from.address as Address,
 			abi: ParentPoolABI,
 			functionName: 'startDeposit',
 			address: parentPool,
 			args: [depositAmount],
+			chain,
 		})
-
-		const txHash = await walletClient.writeContract(request)
 
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
@@ -207,14 +214,21 @@ const completeDeposit = async (
 	if (stage === PoolCardStage.failed) return
 
 	try {
-		const { request } = await publicClient.simulateContract({
+		// const { request } = await publicClient.simulateContract({
+		// 	abi: ParentPoolABI,
+		// 	functionName: 'completeDeposit',
+		// 	address: parentPool,
+		// 	args: [depositRequestId],
+		// })
+
+		const txHash = await walletClient.writeContract({
+			account: from.address as Address,
 			abi: ParentPoolABI,
 			functionName: 'completeDeposit',
 			address: parentPool,
 			args: [depositRequestId],
+			chain,
 		})
-
-		const txHash = await walletClient.writeContract(request)
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [

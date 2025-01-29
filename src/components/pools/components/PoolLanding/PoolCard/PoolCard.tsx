@@ -28,7 +28,7 @@ const PoolStatus = ({ isDisabled, isPoolFilled }: { isDisabled: boolean; isPoolF
 				</Tag>
 			) : (
 				<Tag className={classNames.poolStatus} size="sm" variant="positive">
-					Almost full
+					LP cap increased
 				</Tag>
 			)
 		) : (
@@ -137,7 +137,11 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 				/>
 				<div className={classNames.buttons}>
 					{!isDisabled ? (
-						<PoolButton poolIsFilled={true} depositButtonClasses={classNames.button} isDepositOnly />
+						<PoolButton
+							poolIsFilled={isPoolFilled}
+							depositButtonClasses={classNames.button}
+							isDepositOnly
+						/>
 					) : (
 						<Button
 							isFull

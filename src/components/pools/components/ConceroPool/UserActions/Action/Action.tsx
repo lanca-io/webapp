@@ -52,7 +52,7 @@ export const UserAction = ({ action, retryTimeLeft, setRetryTimeLeft }: Props) =
 		),
 	}
 
-	const amountSign = action.eventType === ParentPoolEventType.DepositCompleted ? '+' : '-'
+	const amountSign = action.eventType === ParentPoolEventType.DepositCompleted ? '-' : '-'
 
 	const retryTimeLeftInMinutes = Math.floor(retryTimeLeft / 60)
 
