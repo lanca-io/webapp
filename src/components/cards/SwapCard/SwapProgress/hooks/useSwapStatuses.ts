@@ -53,7 +53,7 @@ export const useSwapStatuses = ({ steps }: SwapStatusesProps) => {
 			.slice()
 			.reverse()
 			.find(step => step.txType === txType)
-		return step ? (step.status) : Status.NOT_STARTED
+		return step ? step.status : Status.NOT_STARTED
 	}
 
 	const approvalStatus = getLastStatus(StepType.ALLOWANCE)
