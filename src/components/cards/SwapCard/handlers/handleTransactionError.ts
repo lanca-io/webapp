@@ -4,7 +4,7 @@ import { SwapActionType } from '../swapReducer/types'
 import { logTxToDB } from '../../../../utils/logTxToDB'
 import { action, category } from '../../../../constants/tracking'
 import { trackEvent } from '../../../../hooks/useTracking'
-import { type RouteType, Status } from 'lanca-sdk-demo'
+import { type IRouteType, Status } from 'lanca-sdk-demo'
 
 const dispatchSwapStep = (swapDispatch: Dispatch<SwapAction>, title: string, body: string, status: Status) => {
 	const step: StageStep = { title, body, status }
@@ -22,14 +22,14 @@ const trackSwapEvent = (eventCategory: string, eventAction: string, label: strin
 	})
 }
 
-const logTransaction = (selectedRoute: RouteType, status: string) => {
+const logTransaction = (selectedRoute: IRouteType, status: string) => {
 	logTxToDB({
 		status,
 		tx_data: selectedRoute,
 	})
 }
 
-export const handleTransactionError = (e: Error, swapDispatch: Dispatch<SwapAction>, selectedRoute: RouteType) => {
+export const handleTransactionError = (e: Error, swapDispatch: Dispatch<SwapAction>, selectedRoute: IRouteType) => {
 	swapDispatch({ type: SwapActionType.UPDATE_LAST_SWAP_STEP })
 	const errorMessage = e.toString().toLowerCase()
 

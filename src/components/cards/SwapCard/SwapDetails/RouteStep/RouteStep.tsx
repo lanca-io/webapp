@@ -3,10 +3,15 @@ import classNames from './RouteStep.module.pcss'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
-import { type SwapDirectionData, StepType, type RouteStep as RouteStepType, type RouteBaseStep } from 'lanca-sdk-demo'
+import {
+	type ISwapDirectionData,
+	StepType,
+	type IRouteStep as RouteStepType,
+	type IRouteBaseStep,
+} from 'lanca-sdk-demo'
 
 interface DirectionProps {
-	direction: SwapDirectionData
+	direction: ISwapDirectionData
 	title: string
 }
 
@@ -36,7 +41,7 @@ const Direction = memo(({ direction, title }: DirectionProps) => {
 })
 
 interface InnerStepCardProps {
-	step: RouteStepType | RouteBaseStep
+	step: RouteStepType | IRouteBaseStep
 }
 
 export function RouteStep({ step }: InnerStepCardProps) {

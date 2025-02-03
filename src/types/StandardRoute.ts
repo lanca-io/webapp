@@ -1,4 +1,4 @@
-import { type RouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from 'lanca-sdk-demo'
 
 export interface Providers {
 	name: string
@@ -101,5 +101,5 @@ export interface StandardRoute {
 	insurance?: Insurance | null
 	provider: 'rango' | 'lifi'
 	execution?: any
-	originalRoute: RouteType
+	originalRoute: IRouteType
 }

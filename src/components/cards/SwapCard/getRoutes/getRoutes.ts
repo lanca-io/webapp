@@ -2,22 +2,22 @@ import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
 import { type GetConceroRoutes, type RouteRequest } from './types'
 import { type Address } from 'viem'
-import type { RouteType, RouteStep, RouteBaseStep, LancaChain } from 'lanca-sdk-demo'
+import type { IRouteType, IRouteStep, IRouteBaseStep, ILancaChain } from 'lanca-sdk-demo'
 
 import { SwapActionType } from '../swapReducer/types'
 import { ErrorType } from '../SwapButton/constants'
 import { getPoolLiquidity } from './getPoolLiquidity'
 import { lanca } from '../../../../utils/initLancaSDK'
 
-const validateRouteSteps = (route: RouteType): RouteType => {
+const validateRouteSteps = (route: IRouteType): IRouteType => {
 	const { from, to } = route
 
-	const chainDataMap: Record<string, LancaChain> = {
+	const chainDataMap: Record<string, ILancaChain> = {
 		[from.chain.id]: from.chain,
 		[to.chain.id]: to.chain,
 	}
 
-	const isValidStep = (step: RouteStep | RouteBaseStep): step is RouteStep => 'from' in step && 'to' in step
+	const isValidStep = (step: IRouteStep | IRouteBaseStep): step is IRouteStep => 'from' in step && 'to' in step
 
 	const validatedSteps = route.steps.map(step => {
 		if (isValidStep(step)) {
@@ -62,6 +62,9 @@ const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): P
 		}
 
 		const conceroRoute = await lanca.getRoute(routeRequest)
+
+		console.log('Concero route:', conceroRoute)
+
 		if (!conceroRoute) return false
 
 		const validStepsRoute = validateRouteSteps(conceroRoute)

@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
 import { SelectTokenShape } from '../../TokenArea/SelectTokenShape/SelectTokenShape'
-import { type SwapDirectionData } from 'lanca-sdk-demo'
+import { type ISwapDirectionData } from 'lanca-sdk-demo'
 import { type ActionDirection } from '../../swapReducer/types'
 
 import classNames from './SwapAmount.module.pcss'
 
 interface SwapAmountProps {
-	direction: SwapDirectionData
+	direction: ISwapDirectionData
 	directionSide: ActionDirection
 }
 

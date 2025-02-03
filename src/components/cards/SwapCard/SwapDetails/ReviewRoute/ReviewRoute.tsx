@@ -3,10 +3,10 @@ import classNames from './ReviewRoute.module.pcss'
 import { RouteInfo } from '../RouteInfo/RouteInfo'
 import { Button } from '../../../../layout/buttons/Button/Button'
 import { TrailArrowRightIcon } from '../../../../../assets/icons/TrailArrowRightIcon'
-import { type RouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from 'lanca-sdk-demo'
 
 interface ReviewRouteProps {
-	selectedRoute: RouteType | null
+	selectedRoute: IRouteType | null
 }
 
 export function ReviewRoute({ selectedRoute }: ReviewRouteProps) {

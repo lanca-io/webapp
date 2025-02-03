@@ -5,13 +5,13 @@ import { RouteInfo } from '../RouteInfo/RouteInfo'
 import { SwapAmount } from '../SwapAmount/SwapAmount'
 import { Separator } from '../../../../layout/Separator/Separator'
 import { RouteStep } from '../RouteStep/RouteStep'
-import { type RouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from 'lanca-sdk-demo'
 import classNames from './ReviewModal.module.pcss'
 
 interface ReviewModalProps {
 	isOpen: boolean
 	setIsOpen: (param: boolean) => void
-	selectedRoute: RouteType
+	selectedRoute: IRouteType
 	amountUsd: number
 }
 

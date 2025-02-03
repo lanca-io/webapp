@@ -1,8 +1,8 @@
-import { type SwapDirectionData } from 'lanca-sdk-demo'
+import { type ISwapDirectionData } from 'lanca-sdk-demo'
 
 interface PriceImpactProps {
-	from: SwapDirectionData
-	to: SwapDirectionData
+	from: ISwapDirectionData
+	to: ISwapDirectionData
 }
 
 export const getPriceImpact = ({ from, to }: PriceImpactProps) => {

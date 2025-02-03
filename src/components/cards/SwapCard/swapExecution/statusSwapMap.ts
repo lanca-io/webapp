@@ -1,11 +1,11 @@
 import { SwapActionType, type SwapAction, StageType } from '../swapReducer/types'
 import type { Dispatch } from 'react'
-import { type RouteType, Status, StepType } from 'lanca-sdk-demo'
+import { type IRouteType, Status, StepType } from 'lanca-sdk-demo'
 import { SwapCardStage } from '../swapReducer/types'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action, category } from '../../../../constants/tracking'
 
-type swapStateFunction = (swapDispatch: Dispatch<SwapAction>, state: RouteType) => void
+type swapStateFunction = (swapDispatch: Dispatch<SwapAction>, state: IRouteType) => void
 
 export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> = {
 	// CHAIN SWITCHING

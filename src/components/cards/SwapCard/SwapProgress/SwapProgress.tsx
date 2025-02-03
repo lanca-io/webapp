@@ -50,8 +50,8 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 
 	const isTransactionStage = currentStep?.type === StageType.transaction && currentStep?.status !== Status.SUCCESS
 	const isApprovalStage = currentStep?.type === StageType.approve && currentStep?.status !== Status.SUCCESS
-	const hasDestinationSwap = selectedRoute?.steps.some(step => step.type === StepType.DST_SWAP)
-	const hasSourceSwap = selectedRoute?.steps.some(step => step.type === StepType.SRC_SWAP)
+	const hasDestinationSwap = selectedRoute?.steps.some((step: any) => step.type === StepType.DST_SWAP)
+	const hasSourceSwap = selectedRoute?.steps.some((step: any) => step.type === StepType.SRC_SWAP)
 
 	const { approvalStatus, bridgeStatus, swapStatus } = useSwapStatuses({ steps })
 
