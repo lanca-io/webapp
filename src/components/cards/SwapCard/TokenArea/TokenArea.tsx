@@ -30,8 +30,6 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	const { t } = useTranslation()
 	const { address, token, chain, amount } = selection
 
-	console.log(selection)
-
 	const [loading, setLoading] = useState<boolean>(false)
 	const [state, tokenAreaDispatch] = useTokenAreaReducer()
 

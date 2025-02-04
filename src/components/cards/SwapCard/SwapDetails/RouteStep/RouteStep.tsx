@@ -9,6 +9,7 @@ import {
 	type IRouteStep as RouteStepType,
 	type IRouteBaseStep,
 } from 'lanca-sdk-demo'
+import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
 interface DirectionProps {
 	direction: ISwapDirectionData
@@ -20,6 +21,11 @@ const Direction = memo(({ direction, title }: DirectionProps) => {
 
 	const chainImg = `${config.CONCERO_ASSETS_URI}/icons/chains/filled/${chain.id}.svg`
 
+	const formattedAmount = useMemo(() => {
+		const tokenAmounts = new TokenAmounts(amount, token.decimals)
+		return tokenAmounts.format(3)
+	}, [amount, token.decimals])
+
 	return (
 		<div className={classNames.tagContainer}>
 			<p className={'body2'}>{title}:</p>
@@ -27,7 +33,7 @@ const Direction = memo(({ direction, title }: DirectionProps) => {
 				{token.logoURL && <Badge size="m" tokenLogoSrc={token.logoURL} />}
 
 				<div className="row gap-xs ac">
-					<h4 className={classNames.price}>{Number(amount).toFixed(3)}</h4>
+					<h4 className={classNames.price}>{formattedAmount}</h4>
 					<p className={`${classNames.symbol} body4`}>{token.symbol}</p>
 				</div>
 

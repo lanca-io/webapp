@@ -1,7 +1,7 @@
 import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
 import { type GetConceroRoutes, type RouteRequest } from './types'
-import { type Address } from 'viem'
+import { parseUnits, type Address } from 'viem'
 import type { IRouteType, IRouteStep, IRouteBaseStep, ILancaChain } from 'lanca-sdk-demo'
 
 import { SwapActionType } from '../swapReducer/types'
@@ -50,21 +50,19 @@ const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): P
 		const { from, to } = swapState
 
 		const tolerance = '0.5'
+		const amount = parseUnits(from.amount, from.token.decimals)
 		const routeRequest: RouteRequest = {
 			fromChainId: from.chain.id,
 			toChainId: to.chain.id,
 			fromToken: from.token.address as Address,
 			toToken: to.token.address as Address,
-			amount: from.amount,
+			amount: amount.toString(),
 			fromAddress: from.address as Address,
 			toAddress: to.address as Address,
 			slippageTolerance: tolerance,
 		}
 
 		const conceroRoute = await lanca.getRoute(routeRequest)
-
-		console.log('Concero route:', conceroRoute)
-
 		if (!conceroRoute) return false
 
 		const validStepsRoute = validateRouteSteps(conceroRoute)
@@ -94,7 +92,7 @@ export const getRoutes = async (swapState: SwapState, swapDispatch: Dispatch<Swa
 	if (isBridge) {
 		try {
 			const poolAmount = await getPoolLiquidity(to.chain.id)
-			const fromAmountUsd = Number(from.amount) * (from.token.priceUsd ?? 0)
+			const fromAmountUsd = (Number(from.amount) / Number(from.token.decimals)) * (from.token.priceUsd ?? 0)
 
 			if (fromAmountUsd > Number(poolAmount)) {
 				swapDispatch({ type: SwapActionType.SET_IS_SUFFICIENT_LIQUIDITY, payload: false })
