@@ -19,7 +19,6 @@ export const useTransactionCompletion = (steps: any[], selectedRoute: any, swapD
 				label: 'swap_success',
 				data: { route: selectedRoute, txHash },
 			})
-			swapDispatch({ type: SwapActionType.SET_SWAP_STEPS, payload: [] })
 		}
 	}, [steps, selectedRoute, swapDispatch])
 }

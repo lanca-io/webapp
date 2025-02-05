@@ -20,6 +20,7 @@ export interface StageStep {
 	txLink?: string
 	txType?: StepType
 	error?: string
+	receivedAmount?: string
 }
 export interface SwapStateDirection {
 	chain: {

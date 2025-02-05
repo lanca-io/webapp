@@ -147,7 +147,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 			{!isTransactionStage && stateImages[stage]}
 
 			{isSuccess ? (
-				<FinishTxInfo time={time} to={to} />
+				<FinishTxInfo time={time} to={to} receivedAmount={currentStep?.receivedAmount} />
 			) : (
 				<>
 					{isTransactionStage && <SwapProgressDetails from={from} to={to} />}

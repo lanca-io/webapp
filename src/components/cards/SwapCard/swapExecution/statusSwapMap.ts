@@ -176,6 +176,9 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			const txHash = state.steps.find(
 				step => step.type === StepType.SRC_SWAP && step.execution?.status === Status.SUCCESS,
 			)?.execution?.txHash
+			const receivedAmount = state.steps.find(
+				step => step.type === StepType.SRC_SWAP && step.execution?.status === Status.SUCCESS,
+			)?.execution?.receivedAmount
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
@@ -185,6 +188,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						type: StageType.transaction,
 						txType: StepType.SRC_SWAP,
 						txLink: txHash,
+						receivedAmount,
 					},
 				],
 			})
@@ -268,6 +272,9 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			const txHash = state.steps.find(
 				step => step.type === StepType.DST_SWAP && step.execution?.status === Status.SUCCESS,
 			)?.execution?.txHash
+			const receivedAmount = state.steps.find(
+				step => step.type === StepType.DST_SWAP && step.execution?.status === Status.SUCCESS,
+			)?.execution?.receivedAmount
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
@@ -277,6 +284,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						type: StageType.success,
 						txType: StepType.DST_SWAP,
 						txLink: txHash,
+						receivedAmount,
 					},
 				],
 			})
@@ -362,6 +370,9 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 			const txHash = state.steps.find(
 				step => step.type === StepType.BRIDGE && step.execution?.status === Status.SUCCESS,
 			)?.execution?.txHash
+			const receivedAmount = state.steps.find(
+				step => step.type === StepType.BRIDGE && step.execution?.status === Status.SUCCESS,
+			)?.execution?.receivedAmount
 			swapDispatch({
 				type: SwapActionType.APPEND_SWAP_STEP,
 				payload: [
@@ -371,6 +382,7 @@ export const statusSwapMap: Record<StepType, Record<Status, swapStateFunction>> 
 						type: StageType.approve,
 						txType: StepType.BRIDGE,
 						txLink: txHash,
+						receivedAmount,
 					},
 				],
 			})
