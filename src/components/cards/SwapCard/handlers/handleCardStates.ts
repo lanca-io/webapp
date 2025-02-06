@@ -1,5 +1,5 @@
 import { type Dispatch } from 'react'
-import { type ILancaToken, type ILancaChain } from 'lanca-sdk-demo'
+import { type ILancaToken, type ILancaChain } from '@lanca/sdk'
 
 export interface Direction {
 	token: ILancaToken

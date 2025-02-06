@@ -3,12 +3,7 @@ import classNames from './RouteStep.module.pcss'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
-import {
-	type ISwapDirectionData,
-	StepType,
-	type IRouteStep as RouteStepType,
-	type IRouteBaseStep,
-} from 'lanca-sdk-demo'
+import { type ISwapDirectionData, StepType, type IRouteStep as RouteStepType, type IRouteBaseStep } from '@lanca/sdk'
 import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
 interface DirectionProps {

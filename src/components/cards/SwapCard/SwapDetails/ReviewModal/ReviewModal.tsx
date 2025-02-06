@@ -5,7 +5,7 @@ import { RouteInfo } from '../RouteInfo/RouteInfo'
 import { SwapAmount } from '../SwapAmount/SwapAmount'
 import { Separator } from '../../../../layout/Separator/Separator'
 import { RouteStep } from '../RouteStep/RouteStep'
-import { type IRouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 import classNames from './ReviewModal.module.pcss'
 
 interface ReviewModalProps {

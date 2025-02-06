@@ -2,7 +2,7 @@ import { type SwapAction, type SwapState } from '../swapReducer/types'
 import { type Dispatch } from 'react'
 import { type GetConceroRoutes, type RouteRequest } from './types'
 import { parseUnits, type Address } from 'viem'
-import type { IRouteType, IRouteStep, IRouteBaseStep, ILancaChain } from 'lanca-sdk-demo'
+import type { IRouteType, IRouteStep, IRouteBaseStep, ILancaChain } from '@lanca/sdk'
 
 import { SwapActionType } from '../swapReducer/types'
 import { ErrorType } from '../SwapButton/constants'

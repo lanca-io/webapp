@@ -1,4 +1,4 @@
-import { type ILancaChain } from 'lanca-sdk-demo'
+import { type ILancaChain } from '@lanca/sdk'
 import { type Token, type TokenBalance } from '../../../../api/concero/types'
 
 export enum TokenModalActionType {

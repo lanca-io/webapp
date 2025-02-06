@@ -12,7 +12,7 @@ import {
 	Status,
 	type IRouteStep,
 	type IRouteBaseStep,
-} from 'lanca-sdk-demo'
+} from '@lanca/sdk'
 import { SwapActionType, SwapCardStage, StageType } from '../swapReducer/types'
 
 interface ExecuteConceroRoute {

@@ -4,7 +4,7 @@ import { type Balance, type SwapStateDirection } from '../swapReducer/types'
 import { useTranslation } from 'react-i18next'
 import classNames from './TokenArea.module.pcss'
 import { Loader } from '../../../layout/Loader/Loader'
-import { type IRouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 import { format } from '../../../../utils/numberFormatting'
 
 interface AmountUsdProps {

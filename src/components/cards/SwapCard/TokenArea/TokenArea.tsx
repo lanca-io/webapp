@@ -16,7 +16,7 @@ import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
 import { InputError } from '../SwapInput/InputError/InputError'
 import { ErrorCategory, errorTextMap, errorTypeMap } from '../SwapButton/constants'
 import { getBalance } from '../../../../utils/getBalance'
-import { type ILancaChain } from 'lanca-sdk-demo'
+import { type ILancaChain } from '@lanca/sdk'
 
 export const TokenArea: FC<TokenAreaProps> = ({
 	direction,

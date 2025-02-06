@@ -3,7 +3,7 @@ import classNames from './RouteInfo.module.pcss'
 import { GasIcon } from '../../../../../assets/icons/GasIcon'
 import { TimeIcon } from '../../../../../assets/icons/TimeIcon'
 import { useContractGas } from '../../../../../hooks/useContractGas/useContractGas'
-import { type IRouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 import { useAccount } from 'wagmi'
 import { Loader } from '../../../../layout/Loader/Loader'
 

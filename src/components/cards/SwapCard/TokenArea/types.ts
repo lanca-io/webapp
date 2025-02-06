@@ -1,7 +1,7 @@
 import { type Balance, type SwapAction, type SwapCardStage, type SwapStateDirection } from '../swapReducer/types'
 import { type Dispatch } from 'react'
 import { type ErrorType } from '../SwapButton/constants'
-import { type IRouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 
 export interface TokenAreaProps {
 	direction: 'to' | 'from'

@@ -2,7 +2,7 @@ import { type PoolConfig } from './types'
 
 import { erc20Abi, formatUnits } from 'viem'
 import { arbitrum, avalanche, base, optimism, polygon } from 'viem/chains'
-import { conceroProxyMap } from 'lanca-sdk-demo'
+import { conceroProxyMap } from '@lanca/sdk'
 import { getPublicClient } from '../../../../web3/wagmi'
 
 const usdcDecimals = 6

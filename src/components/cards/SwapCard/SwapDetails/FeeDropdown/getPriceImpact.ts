@@ -1,4 +1,4 @@
-import { type ISwapDirectionData } from 'lanca-sdk-demo'
+import { type ISwapDirectionData } from '@lanca/sdk'
 import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
 interface PriceImpactProps {

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
 import { SelectTokenShape } from '../../TokenArea/SelectTokenShape/SelectTokenShape'
-import { type ISwapDirectionData } from 'lanca-sdk-demo'
+import { type ISwapDirectionData } from '@lanca/sdk'
 import { type ActionDirection } from '../../swapReducer/types'
 import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 

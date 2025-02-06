@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react'
 import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIcon'
 import { Alert } from '../../../../layout/Alert/Alert'
 import { getPriceImpact } from './getPriceImpact'
-import { type IRouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 import classNames from './FeeDropdown.module.pcss'
 
 interface FeeDropdownProps {

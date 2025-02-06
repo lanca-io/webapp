@@ -1,7 +1,7 @@
 import { type Provider } from '../../../../api/concero/types'
 import { type ErrorType } from '../SwapButton/constants'
 import { type TokenAmount } from '../../../../utils/TokenAmount'
-import { type IRouteType, type Status, type ILancaChain, type ILancaToken, type StepType } from 'lanca-sdk-demo'
+import { type IRouteType, type Status, type ILancaChain, type ILancaToken, type StepType } from '@lanca/sdk'
 
 export enum StageType {
 	chain = 0,

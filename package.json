@@ -25,6 +25,7 @@
     }
   },
   "dependencies": {
+    "@lanca/sdk": "^0.1.0",
     "@lifi/sdk": "^2.5.0",
     "@react-spring/web": "^9.7.3",
     "@reown/appkit": "^1.6.2",

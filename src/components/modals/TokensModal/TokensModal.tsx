@@ -14,7 +14,7 @@ import { ChainsPicker } from './ChainsPicker/ChainsPicker'
 import { Modal } from '../Modal/Modal'
 import { SelectionContext } from '../../../hooks/SelectionContext'
 import { WriteIcon } from '../../../assets/icons/WriteIcon'
-import { type ILancaChain } from 'lanca-sdk-demo'
+import { type ILancaChain } from '@lanca/sdk'
 
 interface TokensModalProps {
 	isOpen: boolean

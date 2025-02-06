@@ -1,6 +1,6 @@
 import { SwapActionType, type SwapAction, StageType } from '../swapReducer/types'
 import type { Dispatch } from 'react'
-import { type IRouteType, Status, StepType } from 'lanca-sdk-demo'
+import { type IRouteType, Status, StepType } from '@lanca/sdk'
 import { SwapCardStage } from '../swapReducer/types'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action, category } from '../../../../constants/tracking'

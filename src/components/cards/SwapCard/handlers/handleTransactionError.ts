@@ -4,7 +4,7 @@ import { SwapActionType } from '../swapReducer/types'
 import { logTxToDB } from '../../../../utils/logTxToDB'
 import { action, category } from '../../../../constants/tracking'
 import { trackEvent } from '../../../../hooks/useTracking'
-import { type IRouteType, Status } from 'lanca-sdk-demo'
+import { type IRouteType, Status } from '@lanca/sdk'
 
 const dispatchSwapStep = (swapDispatch: Dispatch<SwapAction>, title: string, body: string, status: Status) => {
 	const step: StageStep = { title, body, status }

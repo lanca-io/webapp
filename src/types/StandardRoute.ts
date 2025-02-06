@@ -1,4 +1,4 @@
-import { type IRouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 
 export interface Providers {
 	name: string
