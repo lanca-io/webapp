@@ -5,20 +5,27 @@ import { action, category } from '../../../../constants/tracking'
 import { type WalletClient } from 'viem'
 import { lanca } from '../../../../utils/initLancaSDK'
 import { statusSwapMap } from './statusSwapMap'
-import { StepType, type ExecutionConfig, type RouteType, Status, type RouteStep } from 'lanca-sdk-demo'
+import {
+	StepType,
+	type IExecutionConfig,
+	type IRouteType,
+	Status,
+	type IRouteStep,
+	type IRouteBaseStep,
+} from '@lanca/sdk'
 import { SwapActionType, SwapCardStage, StageType } from '../swapReducer/types'
 
 interface ExecuteConceroRoute {
 	swapState: SwapState
 	swapDispatch: Dispatch<SwapAction>
-	route: RouteType
+	route: IRouteType
 	walletClient: WalletClient
 }
 
 export async function executeConceroRoute({ swapState, swapDispatch, route, walletClient }: ExecuteConceroRoute) {
 	try {
-		const addExecutionListener = (state: RouteType) => {
-			state.steps.forEach((step: RouteStep) => {
+		const addExecutionListener = (state: IRouteType) => {
+			state.steps.forEach((step: IRouteStep | IRouteBaseStep) => {
 				if (step.execution?.status && step.type) {
 					if (step.type === StepType.BRIDGE && step.execution.error?.includes('CCIP')) {
 						swapDispatch({ type: SwapActionType.SET_SWAP_STAGE, payload: SwapCardStage.warning })
@@ -47,7 +54,7 @@ export async function executeConceroRoute({ swapState, swapDispatch, route, wall
 			})
 		}
 
-		const executionConfig: ExecutionConfig = {
+		const executionConfig: IExecutionConfig = {
 			updateRouteStatusHook: addExecutionListener,
 		}
 

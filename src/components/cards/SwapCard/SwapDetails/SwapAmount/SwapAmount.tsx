@@ -2,13 +2,14 @@ import { useMemo } from 'react'
 import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
 import { SelectTokenShape } from '../../TokenArea/SelectTokenShape/SelectTokenShape'
-import { type SwapDirectionData } from 'lanca-sdk-demo'
+import { type ISwapDirectionData } from '@lanca/sdk'
 import { type ActionDirection } from '../../swapReducer/types'
+import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
 import classNames from './SwapAmount.module.pcss'
 
 interface SwapAmountProps {
-	direction: SwapDirectionData
+	direction: ISwapDirectionData
 	directionSide: ActionDirection
 }
 
@@ -18,11 +19,16 @@ export const SwapAmount = ({ direction, directionSide }: SwapAmountProps) => {
 		[direction.chain?.id],
 	)
 
+	const formattedAmount = useMemo(() => {
+		const tokenAmounts = new TokenAmounts(direction.amount, direction.token.decimals)
+		return tokenAmounts.format()
+	}, [direction.amount, direction.token.decimals])
+
 	return (
 		<div className="gap-sm">
-			<p className={`${classNames.direction} body2`}>You {directionSide === 'from' ? 'Pay' : 'receive'}</p>
+			<p className={`${classNames.direction} body2`}>You {directionSide === 'from' ? 'Pay' : 'Receive'}</p>
 			<div className="row gap-sm jsb ac w-full">
-				<h1 className={classNames.amount}>{direction.amount ?? 'n/a'}</h1>
+				<h1 className={classNames.amount}>{formattedAmount ?? 'n/a'}</h1>
 				<div className={classNames.token}>
 					<Badge size="l" tokenLogoSrc={direction.token.logoURL} chainLogoSrc={chainLogoSrc} />
 					<SelectTokenShape symbol={direction.token.symbol} chainName={direction.chain.name} />

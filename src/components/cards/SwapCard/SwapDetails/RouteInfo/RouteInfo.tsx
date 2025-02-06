@@ -3,12 +3,12 @@ import classNames from './RouteInfo.module.pcss'
 import { GasIcon } from '../../../../../assets/icons/GasIcon'
 import { TimeIcon } from '../../../../../assets/icons/TimeIcon'
 import { useContractGas } from '../../../../../hooks/useContractGas/useContractGas'
-import { type RouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 import { useAccount } from 'wagmi'
 import { Loader } from '../../../../layout/Loader/Loader'
 
 interface RouteInfoProps {
-	route: RouteType
+	route: IRouteType
 }
 
 export function RouteInfo({ route }: RouteInfoProps) {

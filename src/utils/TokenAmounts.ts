@@ -1,23 +1,25 @@
 import { format } from './numberFormatting'
+import { formatUnits } from 'viem'
 
 export class TokenAmounts {
 	private readonly tokenDecimals: number
-	private readonly tokenAmount: bigint
+	private readonly tokenAmount: string
 
-	private toParsedAmount(): number {
-		return Number(this.amount) / 10 ** this.decimals
+	public toParsedAmount(): string {
+		return formatUnits(BigInt(this.tokenAmount), this.tokenDecimals)
 	}
 
-	constructor(decimals: number, amount: bigint) {
+	constructor(amount: string, decimals: number) {
 		this.tokenDecimals = decimals
 		this.tokenAmount = amount
 	}
 
 	public format(decimalPlaces?: number): string {
-		return decimalPlaces ? format(this.toParsedAmount(), decimalPlaces) : this.toParsedAmount().toString()
+		const parsedAmount = this.toParsedAmount()
+		return decimalPlaces !== undefined ? format(Number(parsedAmount), decimalPlaces) : parsedAmount
 	}
 
-	public get amount(): bigint {
+	public get amount(): string {
 		return this.tokenAmount
 	}
 
