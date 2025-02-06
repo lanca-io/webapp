@@ -4,14 +4,15 @@ import { type Balance, type SwapStateDirection } from '../swapReducer/types'
 import { useTranslation } from 'react-i18next'
 import classNames from './TokenArea.module.pcss'
 import { Loader } from '../../../layout/Loader/Loader'
-import { type RouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
+import { format } from '../../../../utils/numberFormatting'
 
 interface AmountUsdProps {
 	direction: 'from' | 'to'
 	isFocused: boolean
 	userBalance: Balance | null
 	selectedTokenInfo: SwapStateDirection
-	selectedRoute: RouteType | null
+	selectedRoute: IRouteType | null
 	handleMax: () => void
 	loading: boolean
 }
@@ -28,15 +29,18 @@ export function AmountUsd({
 	const { t } = useTranslation()
 
 	const { formattedBalance, amountUsd, isAmountUsdNaN } = useMemo(() => {
-		const balanceValue = numberToFormatString(Number(userBalance?.amount.rounded), 4, true)
+		const balanceValue = format(Number(userBalance?.amount.rounded), 4)
 		const amountUsdValue =
 			direction === 'from'
 				? numberToFormatString(
-						Number(selectedRoute?.from.token.priceUsd ?? 0) * Number(selectedRoute?.from.amount),
+						Number(selectedRoute?.from.token.priceUsd ?? 0) *
+							(Number(selectedRoute?.from.amount ?? 0) /
+								10 ** Number(selectedRoute?.from.token.decimals)),
 						2,
 					)
 				: numberToFormatString(
-						Number(selectedRoute?.to.token.priceUsd ?? 0) * Number(selectedRoute?.to.amount),
+						Number(selectedRoute?.to.token.priceUsd ?? 0) *
+							(Number(selectedRoute?.to.amount ?? 0) / 10 ** Number(selectedRoute?.to.token.decimals)),
 						2,
 					)
 		return {

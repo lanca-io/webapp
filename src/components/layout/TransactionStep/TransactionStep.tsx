@@ -3,7 +3,7 @@ import { Loader } from '../Loader/Loader'
 import classNames from './TransactionStep.module.pcss'
 import { InfoIcon } from '../../../assets/icons/InfoIcon'
 import { SuccessIcon } from '../../../assets/icons/SuccessIcon'
-import { Status } from 'lanca-sdk-demo'
+import { Status } from '@lanca/sdk'
 
 interface StageProps {
 	title: string

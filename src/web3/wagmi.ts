@@ -1,5 +1,5 @@
 import { http } from 'wagmi'
-import { createPublicClient, fallback } from 'viem'
+import { createPublicClient, fallback, createWalletClient } from 'viem'
 import {
 	type AppKitNetwork,
 	arbitrum,
@@ -87,7 +87,13 @@ const createTransports = () => ({
 	[moonriver.id]: http(),
 	[moonbeam.id]: http(),
 	[boba.id]: http(),
-	[optimism.id]: http(),
+	[optimism.id]: fallback([
+		http('https://optimism.llamarpc.com'),
+		http('https://op-pokt.nodies.app'),
+		http('https://optimism-rpc.publicnode.com'),
+		http('https://optimism.meowrpc.com'),
+		http(),
+	]),
 	[fuse.id]: http(),
 	[bsc.id]: http(),
 	[avalanche.id]: fallback([
@@ -145,6 +151,7 @@ export const configChainsViem = {
 	[polygon.id]: polygon,
 	[arbitrum.id]: arbitrum,
 	[avalanche.id]: avalanche,
+	[optimism.id]: optimism,
 	[base.id]: base,
 }
 
@@ -187,6 +194,20 @@ export const viemChains: Record<number, { chain: any; transport: any }> = {
 			http('https://mainnet.base.org'),
 		]),
 	},
+	[optimism.id]: {
+		chain: optimism,
+		transport: fallback([
+			http('https://optimism.llamarpc.com'),
+			http('https://op-pokt.nodies.app'),
+			http('https://optimism-rpc.publicnode.com'),
+			http('https://optimism.meowrpc.com'),
+			http(),
+		]),
+	},
+	[baseSepolia.id]: {
+		chain: baseSepolia,
+		transport: http('https://base-sepolia-rpc.publicnode.com'),
+	},
 }
 
 export const getPublicClient = (chainId: number) => {
@@ -195,6 +216,17 @@ export const getPublicClient = (chainId: number) => {
 		throw new Error(`Unsupported chain ID: ${chainId}`)
 	}
 	return createPublicClient({
+		chain: chainConfig.chain,
+		transport: chainConfig.transport,
+	})
+}
+
+export const getWalletClient = async (chainId: number) => {
+	const chainConfig = viemChains[chainId]
+	if (!chainConfig) {
+		throw new Error(`Unsupported chain ID: ${chainId}`)
+	}
+	return createWalletClient({
 		chain: chainConfig.chain,
 		transport: chainConfig.transport,
 	})

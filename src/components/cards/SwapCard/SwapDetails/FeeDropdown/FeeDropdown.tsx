@@ -2,12 +2,13 @@ import { useState, useMemo, useCallback } from 'react'
 import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIcon'
 import { Alert } from '../../../../layout/Alert/Alert'
 import { getPriceImpact } from './getPriceImpact'
-import { StepType, type RouteType } from 'lanca-sdk-demo'
+import { type IRouteType } from '@lanca/sdk'
 import classNames from './FeeDropdown.module.pcss'
 import { DropdownItems } from './DropdownItem/DropdownItems'
+import { StepType } from '@lanca/sdk'
 
 interface FeeDropdownProps {
-	route: RouteType
+	route: IRouteType
 }
 
 export const formatValue = (value: number): string => {

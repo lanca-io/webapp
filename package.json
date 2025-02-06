@@ -25,6 +25,7 @@
     }
   },
   "dependencies": {
+    "@lanca/sdk": "^0.1.0",
     "@lifi/sdk": "^2.5.0",
     "@react-spring/web": "^9.7.3",
     "@reown/appkit": "^1.6.2",
@@ -37,7 +38,6 @@
     "dayjs": "^1.11.10",
     "ethers": "^5.7.2",
     "i18next": "^23.6.0",
-    "lanca-sdk-demo": "^0.0.50",
     "lightweight-charts": "^4.0.1",
     "posthog-js": "^1.148.0",
     "rango-sdk": "^0.1.40",

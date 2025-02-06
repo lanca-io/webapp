@@ -1,4 +1,6 @@
 export const config = {
+	CHILD_POOLS_COUNT: 5,
+	IS_TESTNET: false,
 	baseURL: process.env.CONCERO_API_URL!,
 	headers: { 'Content-Type': 'application/json' },
 	CRYPTOPANIC_API_KEY: process.env.CRYPTOPANIC_API_KEY!,
@@ -14,4 +16,5 @@ export const config = {
 	CONCERO_ASSETS_URI: process.env.CONCERO_ASSETS_URI!,
 	CONCERO_DOMAIN_URL: process.env.CONCERO_DOMAIN_URL!,
 	APP_IS_NOT_AVAILABLE: false,
+	POOLS_ARE_NOT_AVAILABLE: false,
 }

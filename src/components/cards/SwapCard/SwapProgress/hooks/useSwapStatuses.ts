@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Status, StepType } from 'lanca-sdk-demo'
+import { Status, StepType } from '@lanca/sdk'
 import { type StageStep } from '../../swapReducer/types'
 
 interface SwapStatusesProps {
@@ -24,7 +24,7 @@ export const useSwapStatuses = ({ steps }: SwapStatusesProps) => {
 			.reverse()
 			.find(step => step.txType === StepType.SRC_SWAP)
 		if (lastSwapStep && lastSwapStep.status !== swapStatus) {
-			setSwapStatus(lastSwapStep.status as Status)
+			setSwapStatus(lastSwapStep.status)
 		}
 	}, [steps, swapStatus])
 
@@ -34,7 +34,7 @@ export const useSwapStatuses = ({ steps }: SwapStatusesProps) => {
 			.reverse()
 			.find(step => step.txType === StepType.BRIDGE)
 		if (lastBridgeStep && lastBridgeStep.status !== bridgeStatus) {
-			setBridgeStatus(lastBridgeStep.status as Status)
+			setBridgeStatus(lastBridgeStep.status)
 		}
 	}, [steps, bridgeStatus])
 
@@ -44,7 +44,7 @@ export const useSwapStatuses = ({ steps }: SwapStatusesProps) => {
 			.reverse()
 			.find(step => step.txType === StepType.DST_SWAP)
 		if (lastDstSwapStep && lastDstSwapStep.status !== dstSwapStatus) {
-			setDstSwapStatus(lastDstSwapStep.status as Status)
+			setDstSwapStatus(lastDstSwapStep.status)
 		}
 	}, [steps, dstSwapStatus])
 
@@ -53,7 +53,7 @@ export const useSwapStatuses = ({ steps }: SwapStatusesProps) => {
 			.slice()
 			.reverse()
 			.find(step => step.txType === txType)
-		return step ? (step.status as Status) : Status.NOT_STARTED
+		return step ? step.status : Status.NOT_STARTED
 	}
 
 	const approvalStatus = getLastStatus(StepType.ALLOWANCE)

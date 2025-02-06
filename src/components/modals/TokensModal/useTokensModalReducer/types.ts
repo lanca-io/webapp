@@ -1,4 +1,4 @@
-import { type ConceroChain } from 'lanca-sdk-demo'
+import { type ILancaChain } from '@lanca/sdk'
 import { type Token, type TokenBalance } from '../../../../api/concero/types'
 
 export enum TokenModalActionType {
@@ -13,7 +13,7 @@ export enum TokenModalActionType {
 }
 
 export interface TokensModalState {
-	selectedChain: ConceroChain
+	selectedChain: ILancaChain
 	offset: number
 	tokens: Token[]
 	balanceTokens: TokenBalance | null
@@ -24,7 +24,7 @@ export interface TokensModalState {
 
 export interface SET_SELECTED_CHAIN {
 	type: TokenModalActionType.SET_SELECTED_CHAIN
-	chain: ConceroChain | null
+	chain: ILancaChain | null
 }
 
 export interface SET_OFFSET {

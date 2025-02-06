@@ -33,7 +33,7 @@ export function ChainListItem({ chain, isSelected, onSelect, isTestnet }: ChainI
 					}.svg`}
 				/>
 			</div>
-			<p className="body2">{chain.name}</p>
+			<p className={`${classNames.name} ${isSelected ? classNames.selectedName : null}`}>{chain.name}</p>
 		</div>
 	)
 }

@@ -9,6 +9,8 @@ import { TrophyIcon } from '../../../assets/icons/TrophyIcon'
 import { Button } from '../../layout/buttons/Button/Button'
 import { fetchUserByAddress } from '../../../api/concero/user/fetchUserByAddress'
 import type { Address } from 'viem'
+import { format } from '../../../utils/numberFormatting'
+import { TokenAmounts } from '../../../utils/TokenAmounts'
 
 export interface Props {
 	swapState: SwapState
@@ -18,7 +20,6 @@ export interface Props {
 export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 	const { selectedRoute } = swapState
 	const [userPoints, setUserPoints] = useState<number>(0)
-
 	const typingTimeoutRef = useRef<number>()
 	const isInputStages = swapState.stage === SwapCardStage.input || swapState.stage === SwapCardStage.review
 	const isSuccess = swapState.stage === SwapCardStage.success
@@ -40,7 +41,8 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 			? (user.multiplier.default ?? 0) + (user?.multiplier.dailySwap ?? 0) + (user?.multiplier.liquidityHold ?? 0)
 			: 1
 
-		const usdAmount = Number(selectedRoute.from.amount) * Number(selectedRoute.from.token.priceUsd)
+		const fromAmount = new TokenAmounts(selectedRoute.from.amount, selectedRoute.from.token.decimals)
+		const usdAmount = Number(fromAmount.toParsedAmount()) * Number(selectedRoute.from.token.priceUsd)
 		const newPoints = usdAmount * 0.01 * totalUserMultiplier
 
 		setUserPoints(newPoints)
@@ -77,7 +79,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 							<TrophyIcon />
 						</div>
 						<p className={classNames.pointsTitle}>
-							You got <b>{userPoints.toFixed(2)} CERs</b>
+							You got <b>{format(userPoints, 2)} CERs</b>
 						</p>
 					</div>
 					<a href="https://app.concero.io/rewards" target="_blank" rel="noreferrer">

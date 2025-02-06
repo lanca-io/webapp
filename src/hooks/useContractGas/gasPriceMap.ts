@@ -1,4 +1,4 @@
-import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
+import { arbitrum, avalanche, base, polygon, optimism } from 'wagmi/chains'
 
 interface TxPrice {
 	swap: number
@@ -23,6 +23,11 @@ export const gasUsedMap: Record<number, TxPrice> = {
 		swapAndBridge: 800_000,
 	},
 	[avalanche.id]: {
+		swap: 230_000,
+		bridge: 490_000,
+		swapAndBridge: 720_000,
+	},
+	[optimism.id]: {
 		swap: 230_000,
 		bridge: 490_000,
 		swapAndBridge: 720_000,

@@ -9,6 +9,7 @@ import { IconExternalLink } from '@tabler/icons-react'
 import { easeQuadInOut } from 'd3-ease'
 import { config } from '../../../../constants/config'
 import { Badge } from '../../../layout/Badge/Badge'
+import { format } from '../../../../utils/numberFormatting'
 
 interface TokenListItemProps {
 	token: Token
@@ -81,11 +82,9 @@ export function TokenListItem({ token, isBalanceLoading, onSelect, explorerURI, 
 					<SkeletonLoader className={classNames.balanceSkeleton} />
 				) : token.balance ? (
 					<>
-						<h4>{numberToFormatString(Number(tokenAmount), 3, true)}</h4>
+						<h4>{format(Number(tokenAmount), 3)}</h4>
 						{token.priceUsd && token.priceUsd > 0 ? (
-							<p className={'body1'}>
-								{'$' + numberToFormatString(token.priceUsd * Number(tokenAmount), 3)}
-							</p>
+							<p className={'body1'}>{format(token.priceUsd * Number(tokenAmount), 3, '$')}</p>
 						) : null}
 					</>
 				) : null}
