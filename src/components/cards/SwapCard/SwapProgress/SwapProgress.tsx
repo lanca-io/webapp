@@ -19,7 +19,7 @@ import { FinishTxInfo } from './FinishTxInfo/FinishTxInfo'
 import { SwapProgressDetails } from './SwapProgressDetails/SwapProgressDetails'
 import { arbitrum, avalanche, base, polygon } from 'wagmi/chains'
 import { zeroAddress } from 'viem'
-import { Status, StepType } from 'lanca-sdk-demo'
+import { Status, StepType } from '@lanca/sdk'
 import { useTimer } from './hooks/useTimer'
 import { useTransactionCompletion } from './hooks/useTransactionCompletion'
 import { useSwapStatuses } from './hooks/useSwapStatuses'
@@ -50,8 +50,8 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 
 	const isTransactionStage = currentStep?.type === StageType.transaction && currentStep?.status !== Status.SUCCESS
 	const isApprovalStage = currentStep?.type === StageType.approve && currentStep?.status !== Status.SUCCESS
-	const hasDestinationSwap = selectedRoute?.steps.some(step => step.type === StepType.DST_SWAP)
-	const hasSourceSwap = selectedRoute?.steps.some(step => step.type === StepType.SRC_SWAP)
+	const hasDestinationSwap = selectedRoute?.steps.some((step: any) => step.type === StepType.DST_SWAP)
+	const hasSourceSwap = selectedRoute?.steps.some((step: any) => step.type === StepType.SRC_SWAP)
 
 	const { approvalStatus, bridgeStatus, swapStatus } = useSwapStatuses({ steps })
 
@@ -147,7 +147,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 			{!isTransactionStage && stateImages[stage]}
 
 			{isSuccess ? (
-				<FinishTxInfo time={time} to={to} />
+				<FinishTxInfo time={time} to={to} receivedAmount={currentStep?.receivedAmount} />
 			) : (
 				<>
 					{isTransactionStage && <SwapProgressDetails from={from} to={to} />}

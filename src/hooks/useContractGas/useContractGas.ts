@@ -3,7 +3,7 @@ import { fetchTokens } from '../../api/concero/fetchTokens'
 import { config } from '../../constants/config'
 import { type Token } from '../../api/concero/types'
 import { gasUsedMap } from './gasPriceMap'
-import { type RouteType, StepType, type TxName } from 'lanca-sdk-demo'
+import { type IRouteType, StepType, type TxName } from '@lanca/sdk'
 import { getPublicClient } from '../../web3/wagmi'
 
 const getUsdPrice = async (chainId: string): Promise<Token | null> => {
@@ -16,7 +16,7 @@ const getUsdPrice = async (chainId: string): Promise<Token | null> => {
 	}
 }
 
-export const useContractGas = async (routeData: RouteType, address: Address): Promise<string> => {
+export const useContractGas = async (routeData: IRouteType, address: Address): Promise<string> => {
 	if (!routeData || !address) return 'n/a'
 
 	const toolTypes = routeData.steps.map(step => step.type)

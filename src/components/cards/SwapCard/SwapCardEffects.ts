@@ -7,6 +7,7 @@ import { SelectionContext } from '../../../hooks/SelectionContext'
 import { useAccount } from 'wagmi'
 import { ErrorType } from './SwapButton/constants'
 import { SwapActionType } from './swapReducer/types'
+import { TokenAmounts } from '../../../utils/TokenAmounts'
 
 interface UseSwapCardEffectsProps {
 	swapState: SwapState
@@ -38,15 +39,18 @@ export function useSwapCardEffects({ swapState, swapDispatch, typingTimeoutRef }
 	useEffect(() => {
 		if (!selectedRoute) return
 
-		if (Number(selectedRoute.to.amount) <= 0) {
+		if (BigInt(selectedRoute.to.amount) <= 0n) {
 			swapDispatch({ type: SwapActionType.SET_INPUT_ERROR, payload: ErrorType.AMOUNT_TOO_LOW })
 		}
+
+		const tokenAmounts = new TokenAmounts(selectedRoute.to.amount, selectedRoute.to.token.decimals)
+		const parsedAmount = tokenAmounts.toParsedAmount()
 
 		swapDispatch({
 			type: SwapActionType.SET_AMOUNT,
 			direction: 'to',
 			payload: {
-				amount: selectedRoute.to.amount,
+				amount: parsedAmount,
 				amount_usd: selectedRoute.to.amount_usd,
 			},
 		})

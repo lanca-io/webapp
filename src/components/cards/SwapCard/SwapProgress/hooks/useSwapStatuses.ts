@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Status, StepType } from 'lanca-sdk-demo'
+import { Status, StepType } from '@lanca/sdk'
 import { type StageStep } from '../../swapReducer/types'
 
 interface SwapStatusesProps {

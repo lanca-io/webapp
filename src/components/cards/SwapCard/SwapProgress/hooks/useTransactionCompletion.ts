@@ -1,6 +1,6 @@
 import { useEffect, type Dispatch } from 'react'
 import { SwapActionType, SwapCardStage, type SwapAction } from '../../swapReducer/types'
-import { Status } from 'lanca-sdk-demo'
+import { Status } from '@lanca/sdk'
 import { trackEvent } from '../../../../../hooks/useTracking'
 import { action, category } from '../../../../../constants/tracking'
 
@@ -19,7 +19,6 @@ export const useTransactionCompletion = (steps: any[], selectedRoute: any, swapD
 				label: 'swap_success',
 				data: { route: selectedRoute, txHash },
 			})
-			swapDispatch({ type: SwapActionType.SET_SWAP_STEPS, payload: [] })
 		}
 	}, [steps, selectedRoute, swapDispatch])
 }

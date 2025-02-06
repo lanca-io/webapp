@@ -2,7 +2,7 @@ import { handleBeforeUnload } from '../../../../utils/leavingPageEvents'
 import { type SwapState, SwapActionType, type SwapAction, StageType } from './types'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { action as trackingAction, category as trackingCategory } from '../../../../constants/tracking'
-import { Status } from 'lanca-sdk-demo'
+import { Status } from '@lanca/sdk'
 
 export const swapActions: Record<SwapActionType, (state: SwapState, action: SwapAction) => SwapState> = {
 	[SwapActionType.POPULATE_ROUTES]: (state, action) => {

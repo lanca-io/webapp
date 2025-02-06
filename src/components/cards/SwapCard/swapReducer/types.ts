@@ -1,7 +1,7 @@
 import { type Provider } from '../../../../api/concero/types'
 import { type ErrorType } from '../SwapButton/constants'
 import { type TokenAmount } from '../../../../utils/TokenAmount'
-import { type RouteType, type Status, type LancaChain, type LancaToken, type StepType } from 'lanca-sdk-demo'
+import { type IRouteType, type Status, type ILancaChain, type ILancaToken, type StepType } from '@lanca/sdk'
 
 export enum StageType {
 	chain = 0,
@@ -20,6 +20,7 @@ export interface StageStep {
 	txLink?: string
 	txType?: StepType
 	error?: string
+	receivedAmount?: string
 }
 export interface SwapStateDirection {
 	chain: {
@@ -66,10 +67,10 @@ export interface SwapState {
 	from: SwapStateDirection
 	to: SwapStateDirection
 	balance: Balance | null
-	routes: RouteType[]
+	routes: IRouteType[]
 	isNoRoutes: boolean
 	isLoading: boolean
-	selectedRoute: RouteType | null
+	selectedRoute: IRouteType | null
 	typingTimeout: number
 	stage: SwapCardStage
 	steps: StageStep[]
@@ -114,7 +115,7 @@ export enum SwapActionType {
 }
 
 export type SwapAction =
-	| { type: SwapActionType.POPULATE_ROUTES; payload: RouteType[]; fromAmount: string | null }
+	| { type: SwapActionType.POPULATE_ROUTES; payload: IRouteType[]; fromAmount: string | null }
 	| { type: SwapActionType.SET_LOADING; payload: boolean }
 	| { type: SwapActionType.SET_IS_SUFFICIENT_LIQUIDITY; payload: boolean }
 	| { type: SwapActionType.SET_INPUT_ERROR; payload: ErrorType | null }
@@ -124,8 +125,8 @@ export type SwapAction =
 	| { type: SwapActionType.SET_SWAP_STAGE; payload: SwapCardStage }
 	| { type: SwapActionType.UPDATE_LAST_SWAP_STEP }
 	| { type: SwapActionType.SET_BALANCE; payload: Balance | null }
-	| { type: SwapActionType.SET_CHAIN; direction: ActionDirection; payload: { chain: LancaChain } }
-	| { type: SwapActionType.SET_TOKEN; direction: ActionDirection; payload: { token: LancaToken } }
+	| { type: SwapActionType.SET_CHAIN; direction: ActionDirection; payload: { chain: ILancaChain } }
+	| { type: SwapActionType.SET_TOKEN; direction: ActionDirection; payload: { token: ILancaToken } }
 	| {
 			type: SwapActionType.SET_AMOUNT
 			direction: ActionDirection

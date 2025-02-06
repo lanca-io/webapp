@@ -3,10 +3,11 @@ import classNames from './RouteStep.module.pcss'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '../../../../layout/Badge/Badge'
 import { config } from '../../../../../constants/config'
-import { type SwapDirectionData, StepType, type RouteStep as RouteStepType, type RouteBaseStep } from 'lanca-sdk-demo'
+import { type ISwapDirectionData, StepType, type IRouteStep as RouteStepType, type IRouteBaseStep } from '@lanca/sdk'
+import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
 interface DirectionProps {
-	direction: SwapDirectionData
+	direction: ISwapDirectionData
 	title: string
 }
 
@@ -15,6 +16,11 @@ const Direction = memo(({ direction, title }: DirectionProps) => {
 
 	const chainImg = `${config.CONCERO_ASSETS_URI}/icons/chains/filled/${chain.id}.svg`
 
+	const formattedAmount = useMemo(() => {
+		const tokenAmounts = new TokenAmounts(amount, token.decimals)
+		return tokenAmounts.format(3)
+	}, [amount, token.decimals])
+
 	return (
 		<div className={classNames.tagContainer}>
 			<p className={'body2'}>{title}:</p>
@@ -22,7 +28,7 @@ const Direction = memo(({ direction, title }: DirectionProps) => {
 				{token.logoURL && <Badge size="m" tokenLogoSrc={token.logoURL} />}
 
 				<div className="row gap-xs ac">
-					<h4 className={classNames.price}>{Number(amount).toFixed(3)}</h4>
+					<h4 className={classNames.price}>{formattedAmount}</h4>
 					<p className={`${classNames.symbol} body4`}>{token.symbol}</p>
 				</div>
 
@@ -36,7 +42,7 @@ const Direction = memo(({ direction, title }: DirectionProps) => {
 })
 
 interface InnerStepCardProps {
-	step: RouteStepType | RouteBaseStep
+	step: RouteStepType | IRouteBaseStep
 }
 
 export function RouteStep({ step }: InnerStepCardProps) {
