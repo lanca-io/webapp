@@ -6,6 +6,7 @@ import { useContractGas } from '../../../../../hooks/useContractGas/useContractG
 import { type IRouteType } from '@lanca/sdk'
 import { useAccount } from 'wagmi'
 import { Loader } from '../../../../layout/Loader/Loader'
+import { format } from '../../../../../utils/numberFormatting'
 
 interface RouteInfoProps {
 	route: IRouteType
@@ -31,7 +32,7 @@ export function RouteInfo({ route }: RouteInfoProps) {
 		if (loading) {
 			return <Loader variant="neutral" />
 		}
-		return <p className={`body2 ${classNames.value}`}>{gas ? `$${gas}` : 'n/a'}</p>
+		return <p className={`body2 ${classNames.value}`}>{gas ? `$${format(Number(gas), 6)}` : 'n/a'}</p>
 	}, [loading, gas])
 
 	return (
