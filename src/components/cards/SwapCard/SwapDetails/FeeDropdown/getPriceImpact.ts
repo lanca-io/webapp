@@ -1,35 +1,33 @@
-import { type ISwapDirectionData } from '@lanca/sdk'
+import { type IRouteType, type IRouteStep } from '@lanca/sdk'
 import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
-interface PriceImpactProps {
-	from: ISwapDirectionData
-	fees: any[]
-}
-
-const sumFees = (fees: any[]): number => {
-	let total = 0
-
-	if (Array.isArray(fees)) {
-		for (const fee of fees) {
-			if (fee.token && fee.token.decimals !== undefined && fee.token.priceUsd !== undefined) {
-				const feeAmount = Number(fee.amount) / 10 ** fee.token.decimals
-				total += feeAmount * Number(fee.token.priceUsd)
-			}
+const sumFeesInUsd = (fees: any[]): number => {
+	return fees.reduce((total, fee) => {
+		if (fee.token && fee.token.decimals !== undefined && fee.token.priceUsd !== undefined) {
+			const feeAmount = Number(fee.amount) / 10 ** fee.token.decimals
+			return total + feeAmount * Number(fee.token.priceUsd)
 		}
-	}
-
-	return total
+		return total
+	}, 0)
 }
 
-export const getPriceImpact = ({ from, fees }: PriceImpactProps) => {
+export const getPriceImpact = (route: IRouteType) => {
+	const { steps } = route
+	const from = (steps[0] as IRouteStep).from
+	const to = (steps[steps.length - 1] as IRouteStep).to
+	const fees = steps.flatMap(step => ('fees' in step ? step.fees : []))
+
 	const fromAmount = new TokenAmounts(from.amount, from.token.decimals)
+	const toAmount = new TokenAmounts(to.amount, to.token.decimals)
 
-	const amountUsdFrom = from.amount ? Number(fromAmount.toParsedAmount()) * Number(from.token.priceUsd) : 0
+	const amountUsdFrom = Number(fromAmount.toParsedAmount()) * Number(from.token.priceUsd)
+	const amountUsdTo = Number(toAmount.toParsedAmount()) * Number(to.token.priceUsd)
 
-	const totalFees = sumFees(fees)
-	const priceImpact = amountUsdFrom > 0 ? ((totalFees - amountUsdFrom) / amountUsdFrom) * 100 : 0
+	const totalFees = sumFeesInUsd(fees)
 
-	return { totalFees, priceImpact }
+	const priceImpact = (totalFees / amountUsdFrom) * 100
+	const netGainOrLoss = amountUsdTo - amountUsdFrom
+	const isNetGain = netGainOrLoss > 0
+
+	return { totalFees, priceImpact, netGainOrLoss, isNetGain }
 }
-
-// toAmount - fromAmount - totalFees = positive positive price impact

@@ -22,10 +22,7 @@ export const SwapScreen = () => {
 			return
 		}
 
-		const { priceImpact, totalFees } = getPriceImpact({
-			from: swapState.selectedRoute.from,
-			fees: [],
-		})
+		const { priceImpact, totalFees } = getPriceImpact(swapState.selectedRoute)
 		const warningPriceImpact = priceImpact > 10 && totalFees > 5
 		const dangerPriceImpact = priceImpact > 20 && totalFees > 5
 
