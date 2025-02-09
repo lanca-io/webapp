@@ -5,7 +5,6 @@ import { Header } from './components/layout/Header/Header/Header'
 import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
-import { Footer } from './components/layout/Footer/Footer'
 import posthog from 'posthog-js'
 
 const SwapScreen = lazy(
@@ -64,7 +63,6 @@ export const Navigator = () => {
 					/>
 					<Route path={'/*'} element={<Navigate to={routes.home} />} />
 				</Routes>
-				<Footer />
 			</AppScreen>
 		</BrowserRouter>
 	)

@@ -32,7 +32,7 @@ export function RouteInfo({ route }: RouteInfoProps) {
 		if (loading) {
 			return <Loader variant="neutral" />
 		}
-		return <p className={`body2 ${classNames.value}`}>{gas ? `$${format(Number(gas), 6)}` : 'n/a'}</p>
+		return <p className={`body2 ${classNames.value}`}>{gas ? `${format(Number(gas), 2, '$')}` : 'n/a'}</p>
 	}, [loading, gas])
 
 	return (

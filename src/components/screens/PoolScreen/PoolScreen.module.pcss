@@ -1,10 +1,17 @@
 .poolScreen {
+	display: flex;
 	position: relative;
 	height: 100%;
 	align-items: center;
-	min-height: 100vh;
-	padding: var(--sp-xxl) var(--sp-lg) 50px;
+	min-height: calc(100vh - 56px);
+	padding: var(--sp-xxl) var(--sp-xxl) var(--sp-xxxl) var(--sp-xxl);
 	background: linear-gradient(180deg, #fcfcfd 0%, #f3f5f6 40%);
+	gap: 64px;
+}
+
+.footerWrapper {
+	width: 100%;
+	margin-top: auto;
 }
 
 .poolScreenContainer {

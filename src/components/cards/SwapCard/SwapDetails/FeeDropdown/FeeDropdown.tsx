@@ -3,26 +3,24 @@ import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIc
 import { Alert } from '../../../../layout/Alert/Alert'
 import { getPriceImpact } from './getPriceImpact'
 import { type IRouteType } from '@lanca/sdk'
+import { DropdownItems } from './DropdownItem/DropdownItems'
+import { format } from '../../../../../utils/numberFormatting'
+
 import classNames from './FeeDropdown.module.pcss'
 
 interface FeeDropdownProps {
 	route: IRouteType
 }
 
-export const formatValue = (value: number): string => {
-	if (value === 0) {
-		return '$0.00'
-	} else if (value < 0.01) {
-		return '< $0.01'
-	} else {
-		return `$${value.toFixed(2)}`
-	}
-}
+export const FeeDropdown = ({ route }: FeeDropdownProps) => {
+	const { steps, to, from } = route
 
-export const FeeDropdown = ({ route: { from, to } }: FeeDropdownProps) => {
+	const fees = useMemo(() => {
+		return steps.flatMap(step => ('fees' in step ? step.fees : []))
+	}, [steps])
+
 	const [isOpen, setIsOpen] = useState<boolean>(false)
-
-	const { priceImpact, totalFees } = useMemo(() => getPriceImpact({ from, to }), [from, to])
+	const { priceImpact, totalFees } = useMemo(() => getPriceImpact({ from, fees }), [from, to, fees])
 
 	const warningPriceImpact = useMemo(() => priceImpact > 10 && totalFees > 5, [priceImpact, totalFees])
 	const dangerPriceImpact = useMemo(() => priceImpact > 20, [priceImpact])
@@ -42,8 +40,8 @@ export const FeeDropdown = ({ route: { from, to } }: FeeDropdownProps) => {
 			)}
 			<div className={classNames.container} onClick={handleToggle}>
 				<div className="row w-full jsb ac">
-					<p className="body2">Price impact</p>
-					<p className={`${classNames.priceFee} body2`}>{formatValue(totalFees)}</p>
+					<p className="body4">Price impact</p>
+					<p className={`${classNames.priceFee} body4`}>{`${format(totalFees, 2, '$')}`}</p>
 				</div>
 				<div className={classNames.iconWrap}>
 					<TrailArrowDownIcon />
@@ -51,9 +49,7 @@ export const FeeDropdown = ({ route: { from, to } }: FeeDropdownProps) => {
 			</div>
 			{isOpen && (
 				<div className={classNames.description}>
-					<p>
-						<span>It includes</span> Slippage, Concero fee, <br /> Chainlink services.
-					</p>
+					<DropdownItems from={from} fees={fees} totalFees={totalFees} />
 				</div>
 			)}
 		</div>
