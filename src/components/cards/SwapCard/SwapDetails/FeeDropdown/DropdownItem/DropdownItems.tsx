@@ -28,19 +28,26 @@ const InfoTooltip = ({ description, tooltipId }: Props) => {
 				</div>
 			}
 		>
-			<InfoIcon />
+			<InfoIcon color="#66767d" />
 		</TooltipWrapper>
 	)
 }
 
-const FeeItemComponent = ({ description, impact }: { description: string; impact: string }): ReactElement => (
+const FeeItemComponent = ({
+	name,
+	description,
+	impact,
+	index,
+}: {
+	name: string
+	description: string
+	impact: string
+	index: number
+}): ReactElement => (
 	<div className={classNames.item}>
 		<div className={classNames.descriptions}>
-			<p className={'body1'}>{description}</p>
-			<InfoTooltip
-				description="The slippage is the difference between the expected price of a trade and the price at which the trade is executed."
-				tooltipId={'fee-tooltip'}
-			/>
+			<p className={`body1 ${classNames.description}`}>{name}</p>
+			<InfoTooltip description={description} tooltipId={`fee-tooltip-${index}`} />
 		</div>
 
 		<div className={classNames.values}>
@@ -49,11 +56,25 @@ const FeeItemComponent = ({ description, impact }: { description: string; impact
 	</div>
 )
 
-const feeNameMapping: Record<string, string> = {
-	ConceroMessageFee: 'Concero Message Fee',
-	LancaPoolRebalanceFee: 'Pool Rebalance Fee',
-	LancaFee: 'Lanca Fee',
-	LancaPoolLPFee: 'Lanca Pool LP Fee',
+const feeNameMapping: Record<string, { name: string; description: string }> = {
+	ConceroMessageFee: {
+		name: 'Concero Message Fee',
+		description: 'Fee that Concero takes to maintain & improve cross-chain messaging.',
+	},
+	LancaPoolRebalanceFee: {
+		name: 'Pool Rebalance Fee',
+		description:
+			'This fee maintains balanced liquidity across pools. It scales with transaction size—smaller swaps cost less due to batched operations and shared user costs.',
+	},
+	LancaFee: {
+		name: 'Lanca Fee',
+		description:
+			'This fee is our platform’s service charge, empowering continuous innovation and the delivery of a robust, secure, and seamless cross-chain transaction experience.',
+	},
+	LancaPoolLPFee: {
+		name: 'Lanca Pool LP Fee',
+		description: 'We utilize user-provided liquidity for cross-chain swaps, for which LPs are rewarded with fees.',
+	},
 }
 
 export const DropdownItems = ({ fees }: DropdownItemProps): ReactElement => {
@@ -62,8 +83,19 @@ export const DropdownItems = ({ fees }: DropdownItemProps): ReactElement => {
 			{fees.map((item, index) => {
 				const feeAmount = Number(item.amount) / 10 ** item.token.decimals
 				const feeUsd = feeAmount * Number(item.token.priceUsd)
-				const description = feeNameMapping[item.type] || item.type
-				return <FeeItemComponent key={index} description={description} impact={`${format(feeUsd, 2, '$')}`} />
+				const feeInfo = feeNameMapping[item.type] || {
+					name: item.type,
+					description: 'No description available.',
+				}
+				return (
+					<FeeItemComponent
+						key={index}
+						name={feeInfo.name}
+						description={feeInfo.description}
+						impact={`${format(feeUsd, 2, '$')}`}
+						index={index}
+					/>
+				)
 			})}
 		</div>
 	)

@@ -15,7 +15,7 @@ interface FeeDropdownProps {
 export const FeeDropdown = ({ route }: FeeDropdownProps) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 
-	const { priceImpact, netGainOrLoss, isNetGain, totalFees } = getPriceImpact(route)
+	const { priceImpact, totalFees } = getPriceImpact(route)
 
 	const warningPriceImpact = priceImpact > 10 && totalFees > 5
 	const dangerPriceImpact = priceImpact > 20
@@ -35,12 +35,10 @@ export const FeeDropdown = ({ route }: FeeDropdownProps) => {
 			)}
 			<div className={classNames.container} onClick={handleToggle}>
 				<div className="row w-full jsb ac">
-					<p className="body4">Price impact</p>
-					<p
-						className={`${classNames.priceFee} body4 ${isNetGain ? classNames.netGain : ''}`}
-					>{`${format(netGainOrLoss, 2, '$')}`}</p>
+					<p className={`body4 ${classNames.priceImpact}`}>Total Fees</p>
+					<p className={`${classNames.priceFee} body4`}>{`${format(totalFees, 2, '$')}`}</p>
 				</div>
-				<div className={classNames.iconWrap}>
+				<div className={`${classNames.iconWrap} ${isOpen ? classNames.iconOpen : ''}`}>
 					<TrailArrowDownIcon />
 				</div>
 			</div>

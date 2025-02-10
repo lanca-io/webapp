@@ -4,7 +4,9 @@
 	align-items: center;
 	cursor: pointer;
 }
-
+.priceImpact {
+	color: var(--color-grey-600);
+}
 .priceFee {
 	font-weight: 500;
 	color: var(--color-grey-700);
@@ -17,13 +19,23 @@
 	justify-content: center;
 	align-items: center;
 	padding: var(--sp-sm);
+	border-radius: var(--sp-md);
+	margin-left: var(--sp-sm);
+}
+
+.iconOpen {
+	transform: rotate(180deg);
+}
+
+.iconWrap:hover {
+	background-color: var(--color-grey-100);
 }
 
 .description {
 	font-size: 16px;
-	color: var(--color-grey-700);
+	color: var(--color-grey-600);
 
 	span {
-		color: var(--color-grey-500);
+		color: var(--color-grey-600);
 	}
 }

@@ -2,6 +2,7 @@ import { type IRouteType, type IRouteStep } from '@lanca/sdk'
 import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
 const sumFeesInUsd = (fees: any[]): number => {
+	console.log(fees)
 	return fees.reduce((total, fee) => {
 		if (fee.token && fee.token.decimals !== undefined && fee.token.priceUsd !== undefined) {
 			const feeAmount = Number(fee.amount) / 10 ** fee.token.decimals
@@ -26,8 +27,8 @@ export const getPriceImpact = (route: IRouteType) => {
 	const totalFees = sumFeesInUsd(fees)
 
 	const priceImpact = (totalFees / amountUsdFrom) * 100
-	const netGainOrLoss = amountUsdTo - amountUsdFrom
-	const isNetGain = netGainOrLoss > 0
+	const netGainOrLoss = amountUsdFrom - amountUsdTo
+	const isNetGain = netGainOrLoss < 0
 
 	return { totalFees, priceImpact, netGainOrLoss, isNetGain }
 }
