@@ -2,7 +2,6 @@ import { type IRouteType, type IRouteStep } from '@lanca/sdk'
 import { TokenAmounts } from '../../../../../utils/TokenAmounts'
 
 const sumFeesInUsd = (fees: any[]): number => {
-	console.log(fees)
 	return fees.reduce((total, fee) => {
 		if (fee.token && fee.token.decimals !== undefined && fee.token.priceUsd !== undefined) {
 			const feeAmount = Number(fee.amount) / 10 ** fee.token.decimals
