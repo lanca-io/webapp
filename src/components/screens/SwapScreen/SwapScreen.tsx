@@ -8,6 +8,7 @@ import { getPriceImpact } from '../../cards/SwapCard/SwapDetails/FeeDropdown/get
 import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
 import { config } from '../../../constants/config'
 import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
+import { Footer } from '../../layout/Footer/Footer'
 
 const Swap = memo(withErrorBoundary(SwapCard))
 
@@ -21,10 +22,7 @@ export const SwapScreen = () => {
 			return
 		}
 
-		const { priceImpact, totalFees } = getPriceImpact({
-			from: swapState.selectedRoute.from,
-			to: swapState.selectedRoute.to,
-		})
+		const { priceImpact, totalFees } = getPriceImpact(swapState.selectedRoute)
 		const warningPriceImpact = priceImpact > 10 && totalFees > 5
 		const dangerPriceImpact = priceImpact > 20 && totalFees > 5
 
@@ -50,6 +48,9 @@ export const SwapScreen = () => {
 	return (
 		<div className={`${classNames.container} ${classNames[backgroundTheme]}`}>
 			<Swap swapDispatch={swapDispatch} swapState={swapState} />
+			<div className={classNames.footerWrapper}>
+				<Footer />
+			</div>
 		</div>
 	)
 }

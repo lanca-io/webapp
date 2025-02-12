@@ -1,31 +1,24 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { TrailArrowDownIcon } from '../../../../../assets/icons/TrailArrowDownIcon'
 import { Alert } from '../../../../layout/Alert/Alert'
 import { getPriceImpact } from './getPriceImpact'
 import { type IRouteType } from '@lanca/sdk'
+import { DropdownItems } from './DropdownItem/DropdownItems'
+import { format } from '../../../../../utils/numberFormatting'
+
 import classNames from './FeeDropdown.module.pcss'
 
 interface FeeDropdownProps {
 	route: IRouteType
 }
 
-export const formatValue = (value: number): string => {
-	if (value === 0) {
-		return '$0.00'
-	} else if (value < 0.01) {
-		return '< $0.01'
-	} else {
-		return `$${value.toFixed(2)}`
-	}
-}
-
-export const FeeDropdown = ({ route: { from, to } }: FeeDropdownProps) => {
+export const FeeDropdown = ({ route }: FeeDropdownProps) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 
-	const { priceImpact, totalFees } = useMemo(() => getPriceImpact({ from, to }), [from, to])
+	const { priceImpact, totalFees } = getPriceImpact(route)
 
-	const warningPriceImpact = useMemo(() => priceImpact > 10 && totalFees > 5, [priceImpact, totalFees])
-	const dangerPriceImpact = useMemo(() => priceImpact > 20, [priceImpact])
+	const warningPriceImpact = priceImpact > 10 && totalFees > 5
+	const dangerPriceImpact = priceImpact > 20
 
 	const handleToggle = useCallback(() => {
 		setIsOpen(prevState => !prevState)
@@ -33,7 +26,7 @@ export const FeeDropdown = ({ route: { from, to } }: FeeDropdownProps) => {
 
 	return (
 		<div className={classNames.wrap}>
-			{warningPriceImpact && (
+			{priceImpact > 0 && warningPriceImpact && (
 				<Alert
 					subtitle={dangerPriceImpact ? 'Transaction not advised.' : ''}
 					title={`High price impact (${priceImpact.toFixed(2)}%)`}
@@ -42,18 +35,20 @@ export const FeeDropdown = ({ route: { from, to } }: FeeDropdownProps) => {
 			)}
 			<div className={classNames.container} onClick={handleToggle}>
 				<div className="row w-full jsb ac">
-					<p className="body2">Price impact</p>
-					<p className={`${classNames.priceFee} body2`}>{formatValue(totalFees)}</p>
+					<p className={`body4 ${classNames.priceImpact}`}>Total Fees</p>
+					<p className={`${classNames.priceFee} body4`}>{`${format(totalFees, 2, '$')}`}</p>
 				</div>
-				<div className={classNames.iconWrap}>
+				<div className={`${classNames.iconWrap} ${isOpen ? classNames.iconOpen : ''}`}>
 					<TrailArrowDownIcon />
 				</div>
 			</div>
 			{isOpen && (
 				<div className={classNames.description}>
-					<p>
-						<span>It includes</span> Slippage, Concero fee, <br /> Chainlink services.
-					</p>
+					<DropdownItems
+						from={route.from}
+						fees={route.steps.flatMap(step => ('fees' in step ? step.fees : []))}
+						totalFees={totalFees}
+					/>
 				</div>
 			)}
 		</div>
