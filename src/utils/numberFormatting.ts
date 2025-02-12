@@ -4,7 +4,6 @@
  * @param decimalPlaces - The number of decimal places to include.
  * @returns The formatted number as a string.
  */
-
 export function toFixed(value: number, decimalPlaces: number = 2): string {
 	return value.toFixed(decimalPlaces)
 }
@@ -53,9 +52,36 @@ export function toCurrency(value: number, currencySymbol: string = '$', decimalP
 export function format(value: number, decimalPlaces: number = 2, symbol?: string): string {
 	if (value === 0) return '0'
 
-	if (value < Number(`0.${'0'.repeat(decimalPlaces - 1)}1`)) {
-		return `> ${symbol || ''}0.${'0'.repeat(decimalPlaces - 1)}1`
-	}
+	const absValue = Math.abs(value)
+	const formattedValue =
+		absValue < Number(`0.${'0'.repeat(decimalPlaces - 1)}1`)
+			? `<${symbol || ''}0.${'0'.repeat(decimalPlaces - 1)}1`
+			: `${symbol || ''}${absValue.toFixed(decimalPlaces).replace(/\.?0+$/, '')}`
+
+	return value < 0 ? `-${formattedValue}` : formattedValue
+}
+
+/**
+ * Formats a number to a specified number of decimal places.
+ * It formats the number to the specified number of decimal places,
+ * removing any trailing zeros.
+ * @param value - The number to format.
+ * @param decimalPlaces - The number of decimal places to include.
+ * @returns The formatted number as a string.
+ */
+export function formatWithoutThreshold(value: number, decimalPlaces: number = 2, symbol?: string): string {
+	if (value === 0) return '0'
 
 	return `${symbol || ''}${value.toFixed(decimalPlaces).replace(/\.?0+$/, '')}`
+}
+
+/**
+ * Rounds up a number to a specified number of decimal places.
+ * @param value - The number to round up.
+ * @param decimalPlaces - The number of decimal places to include.
+ * @returns The rounded up number as a string.
+ */
+export function roundUp(value: number, decimalPlaces: number = 2): string {
+	const factor = Math.pow(10, decimalPlaces)
+	return (Math.ceil(value * factor) / factor).toFixed(decimalPlaces)
 }
