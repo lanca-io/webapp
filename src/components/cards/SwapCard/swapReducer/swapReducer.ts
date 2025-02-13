@@ -21,21 +21,21 @@ export const useSwapReducer = (): [SwapState, Dispatch<SwapAction>] => {
 	useEffect(() => {
 		if (
 			state.from.token.priceUsd === null &&
-			state.from.chain.id === '8453' &&
+			state.from.chain.id === '10' &&
 			state.to.chain.id === '137' &&
 			state.to.token.priceUsd === null &&
-			tokens['8453'] &&
+			tokens['10'] &&
 			tokens['137']
 		) {
 			dispatch({
 				type: SwapActionType.SET_TOKEN,
 				payload: {
 					token: {
-						...tokens['8453'][0],
-						chainId: '8453',
-						logoURL: tokens['8453'][0].logoURI,
-						address: `0x${tokens['8453'][0].address}`,
-						priceUsd: tokens['8453'][0].priceUsd ?? 0,
+						...tokens['10'][0],
+						chainId: '10',
+						logoURL: tokens['10'][0].logoURI,
+						address: `0x${tokens['10'][0].address}`,
+						priceUsd: tokens['10'][0].priceUsd ?? 0,
 					},
 				},
 				direction: 'from',
