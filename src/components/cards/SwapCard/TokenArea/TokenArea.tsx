@@ -104,7 +104,7 @@ export const TokenArea: FC<TokenAreaProps> = ({
 							tokenAreaDispatch({ type: 'SET_SHOW_TOKENS_MODAL', payload: true })
 						}}
 					>
-						<div className="row ac">
+						<div className="row ac gap-xs">
 							<Badge
 								size="l"
 								tokenLogoSrc={selection.token.logoURI}

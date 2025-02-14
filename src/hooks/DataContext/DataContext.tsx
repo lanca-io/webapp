@@ -7,11 +7,11 @@ import { type Chain } from '../../api/concero/types'
 
 export const initialState = {
 	tokens: {
-		'8453': [
+		'10': [
 			{
 				name: 'USD Coin',
 				symbol: 'USDC',
-				address: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+				address: '0x0b2c639c533813f4aa9d7837caf62653d097ff85',
 				logoURI:
 					'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
 				decimals: 6,
@@ -35,19 +35,15 @@ export const initialState = {
 	},
 	chains: [
 		{
-			id: '8453',
-			name: 'Base',
+			id: '10',
+			name: 'Optimism',
 			symbol: 'ETH',
 			addressPatterns: ['^(0x)[0-9A-Fa-f]{40}$'],
-			logoURI: 'https://api.concero.io/static/icons/chains/8453.svg',
-			explorerURI: 'https://basescan.org',
+			logoURI: 'https://api.concero.io/static/icons/chains/10.svg',
+			explorerURI: 'https://optimistic.etherscan.io',
 			providers: [
 				{
 					name: 'lifi',
-					symbol: 'ETH',
-				},
-				{
-					name: 'rango',
 					symbol: 'ETH',
 				},
 			],
@@ -131,12 +127,12 @@ export function DataProvider({ children }: DataProviderProps) {
 
 	const initialFetch = async () => {
 		const [ethTokens, polygonTokens, fetchedChains] = await Promise.all([
-			fetchTokens({ chainId: '8453', offset: 0, limit: 15 }),
+			fetchTokens({ chainId: '10', offset: 0, limit: 15 }),
 			fetchTokens({ chainId: '137', offset: 0, limit: 15 }),
 			fetchChains({ offset: 0, limit: 20 }),
 		])
 
-		setTokens({ '8453': ethTokens, '137': polygonTokens })
+		setTokens({ '10': ethTokens, '137': polygonTokens })
 		setChains(fetchedChains)
 	}
 
