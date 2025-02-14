@@ -24,10 +24,6 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 	const isInputStages = swapState.stage === SwapCardStage.input || swapState.stage === SwapCardStage.review
 	const isSuccess = swapState.stage === SwapCardStage.success
 
-	console.log(swapState)
-
-	console.log(selectedRoute)
-
 	const getUser = async () => {
 		try {
 			return await fetchUserByAddress(swapState.from.address as Address)
