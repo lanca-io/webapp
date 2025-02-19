@@ -53,7 +53,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 	const hasDestinationSwap = selectedRoute?.steps.some((step: any) => step.type === StepType.DST_SWAP)
 	const hasSourceSwap = selectedRoute?.steps.some((step: any) => step.type === StepType.SRC_SWAP)
 
-	const { approvalStatus, bridgeStatus, swapStatus } = useSwapStatuses({ steps })
+	const { approvalStatus, bridgeStatus, swapStatus, dstSwapStatus } = useSwapStatuses({ steps })
 
 	const time = useTimer(isApprovalStage, isSuccess, isFailed)
 	useTransactionCompletion(steps, selectedRoute, swapDispatch)
@@ -128,6 +128,29 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 		[SwapCardStage.warning]: 'CCIP Error',
 	}
 
+	const secondToLastStep = selectedRoute?.steps?.[selectedRoute.steps.length - 2]
+	const lastStep = selectedRoute?.steps?.[selectedRoute.steps.length - 1]
+
+	const isSecondToLastStepActive =
+		secondToLastStep &&
+		currentStep.txType === secondToLastStep.type &&
+		(currentStep.status === Status.PENDING ||
+			currentStep.status === Status.SUCCESS ||
+			currentStep.status === Status.FAILED)
+
+	const isLastStepActive =
+		lastStep &&
+		currentStep.txType === lastStep.type &&
+		(currentStep.status === Status.PENDING ||
+			currentStep.status === Status.SUCCESS ||
+			currentStep.status === Status.FAILED)
+
+	const progressContainerClasses = `${classNames.progressContainer} ${
+		selectedRoute?.steps?.length! >= 3 && (isSecondToLastStepActive || isLastStepActive)
+			? classNames.lastActiveSteps
+			: ''
+	} ${selectedRoute?.steps?.length! >= 3 ? classNames.moreThanThreeSteps : ''}`
+
 	return (
 		<div className={classNames.container}>
 			<div className={classNames.header}>
@@ -151,28 +174,29 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 			) : (
 				<>
 					{isTransactionStage && <SwapProgressDetails from={from} to={to} />}
-
 					{!isWarning && (
-						<div className={classNames.progressContainer}>
+						<div className={progressContainerClasses}>
 							{!isNativeSwap && <TransactionStep status={approvalStatus} title="Approvals" />}
-							{!isNativeSwap && <TrailArrowRightIcon />}
+							{!isNativeSwap && <TrailArrowRightIcon color="var(--color-grey-300)" />}
 							{hasSourceSwap && (
 								<>
 									<TransactionStep status={swapStatus} title="Swap" />
 								</>
 							)}
-							{isBridge && hasSourceSwap && <TrailArrowRightIcon />}
+							{isBridge && hasSourceSwap && <TrailArrowRightIcon color="var(--color-grey-300)" />}
 							{isBridge && (
 								<>
-									<TransactionStep
-										status={bridgeStatus}
-										title={hasDestinationSwap ? 'Bridge & Swap' : 'Bridge'}
-									/>
+									<TransactionStep status={bridgeStatus} title="Bridge" />
+								</>
+							)}
+							{isBridge && hasDestinationSwap && <TrailArrowRightIcon color="var(--color-grey-300)" />}
+							{isBridge && hasDestinationSwap && (
+								<>
+									<TransactionStep status={dstSwapStatus} title="Swap" />
 								</>
 							)}
 						</div>
 					)}
-
 					{!isWarning && <Separator />}
 
 					{isApprovalStage && (
@@ -190,7 +214,7 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 					{isWarning && (
 						<div className="gap-lg">
 							<div className="gap-sm">
-								<h4 className={classNames.warningTitle}>Funds will arrive in about 20 mintues</h4>
+								<h4 className={classNames.warningTitle}>Funds will arrive in about 20 minutes</h4>
 								<p className={classNames.warningMessage}>
 									Your funds are safe but it will take a bit longer to complete the transaction.{' '}
 								</p>
