@@ -27,7 +27,7 @@ export const TransactionStep: FC<StageProps> = ({ status, title }) => {
 				return <Loader variant="neutral" />
 			case Status.REJECTED:
 			case Status.FAILED:
-				return <InfoIcon color="var(--color-danger-700)" />
+				return <InfoIcon color="var(--color-danger-600)" />
 			case Status.SUCCESS:
 				return <SuccessIcon />
 			default:
