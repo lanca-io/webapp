@@ -146,10 +146,10 @@ export const SwapProgress: FC<SwapProgressProps> = ({ swapState, swapDispatch, h
 			currentStep.status === Status.FAILED)
 
 	const progressContainerClasses = `${classNames.progressContainer} ${
-		selectedRoute?.steps?.length! >= 3 && (isSecondToLastStepActive || isLastStepActive)
+		selectedRoute?.steps?.length! >= 4 && (isSecondToLastStepActive || isLastStepActive)
 			? classNames.lastActiveSteps
 			: ''
-	} ${selectedRoute?.steps?.length! >= 3 ? classNames.moreThanThreeSteps : ''}`
+	} ${selectedRoute?.steps?.length! >= 4 ? classNames.moreThanThreeSteps : ''}`
 
 	return (
 		<div className={classNames.container}>
