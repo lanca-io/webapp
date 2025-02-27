@@ -4,94 +4,114 @@ export const ParentPoolABI = [
 	{
 		inputs: [
 			{
-				internalType: 'address',
-				name: '_parentPoolProxy',
-				type: 'address',
+				components: [
+					{
+						internalType: 'address',
+						name: 'link',
+						type: 'address',
+					},
+					{
+						internalType: 'address',
+						name: 'usdc',
+						type: 'address',
+					},
+					{
+						internalType: 'address',
+						name: 'lpToken',
+						type: 'address',
+					},
+				],
+				internalType: 'struct LancaParentPool.TokenConfig',
+				name: 'tokenConfig',
+				type: 'tuple',
 			},
 			{
-				internalType: 'address',
-				name: '_parentPoolCLFCLA',
-				type: 'address',
+				components: [
+					{
+						internalType: 'address',
+						name: 'ccipRouter',
+						type: 'address',
+					},
+					{
+						internalType: 'address',
+						name: 'automationForwarder',
+						type: 'address',
+					},
+					{
+						internalType: 'address',
+						name: 'owner',
+						type: 'address',
+					},
+					{
+						internalType: 'address',
+						name: 'lancaParentPoolCLFCLA',
+						type: 'address',
+					},
+					{
+						internalType: 'address',
+						name: 'lancaBridge',
+						type: 'address',
+					},
+					{
+						internalType: 'address',
+						name: 'clfRouter',
+						type: 'address',
+					},
+					{
+						internalType: 'address[3]',
+						name: 'messengers',
+						type: 'address[3]',
+					},
+				],
+				internalType: 'struct LancaParentPool.AddressConfig',
+				name: 'addressConfig',
+				type: 'tuple',
 			},
 			{
-				internalType: 'address',
-				name: '_automationForwarder',
-				type: 'address',
+				components: [
+					{
+						internalType: 'bytes32',
+						name: 'distributeLiquidityJs',
+						type: 'bytes32',
+					},
+					{
+						internalType: 'bytes32',
+						name: 'ethersJs',
+						type: 'bytes32',
+					},
+					{
+						internalType: 'bytes32',
+						name: 'getChildPoolsLiquidityJsCodeHashSum',
+						type: 'bytes32',
+					},
+				],
+				internalType: 'struct LancaParentPool.HashConfig',
+				name: 'hashConfig',
+				type: 'tuple',
 			},
 			{
-				internalType: 'address',
-				name: '_link',
-				type: 'address',
-			},
-			{
-				internalType: 'address',
-				name: '_ccipRouter',
-				type: 'address',
-			},
-			{
-				internalType: 'address',
-				name: '_usdc',
-				type: 'address',
-			},
-			{
-				internalType: 'address',
-				name: '_lpToken',
-				type: 'address',
-			},
-			{
-				internalType: 'address',
-				name: '_infraProxy',
-				type: 'address',
-			},
-			{
-				internalType: 'address',
-				name: '_clfRouter',
-				type: 'address',
-			},
-			{
-				internalType: 'address',
-				name: '_owner',
-				type: 'address',
-			},
-			{
-				internalType: 'address[3]',
-				name: '_messengers',
-				type: 'address[3]',
+				components: [
+					{
+						internalType: 'uint256',
+						name: 'minDepositAmount',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'depositFeeAmount',
+						type: 'uint256',
+					},
+				],
+				internalType: 'struct LancaParentPool.PoolConfig',
+				name: 'poolConfig',
+				type: 'tuple',
 			},
 		],
 		stateMutability: 'nonpayable',
 		type: 'constructor',
 	},
 	{
-		inputs: [
-			{
-				internalType: 'address',
-				name: 'target',
-				type: 'address',
-			},
-		],
-		name: 'AddressEmptyCode',
-		type: 'error',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'address',
-				name: 'account',
-				type: 'address',
-			},
-		],
-		name: 'AddressInsufficientBalance',
-		type: 'error',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'uint256',
-				name: 'minAmount',
-				type: 'uint256',
-			},
-		],
+		inputs: [],
 		name: 'DepositAmountBelowMinimum',
 		type: 'error',
 	},
@@ -111,29 +131,24 @@ export const ParentPoolABI = [
 		type: 'error',
 	},
 	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: 'requestId',
-				type: 'bytes32',
-			},
-		],
+		inputs: [],
 		name: 'DistributeLiquidityRequestAlreadyProceeded',
 		type: 'error',
 	},
 	{
-		inputs: [],
-		name: 'FailedInnerCall',
-		type: 'error',
-	},
-	{
-		inputs: [],
+		inputs: [
+			{
+				internalType: 'enum LibErrors.InvalidAddressType',
+				name: 'errorType',
+				type: 'uint8',
+			},
+		],
 		name: 'InvalidAddress',
 		type: 'error',
 	},
 	{
 		inputs: [],
-		name: 'InvalidAddress',
+		name: 'InvalidCcipTxType',
 		type: 'error',
 	},
 	{
@@ -148,13 +163,7 @@ export const ParentPoolABI = [
 		type: 'error',
 	},
 	{
-		inputs: [
-			{
-				internalType: 'uint256',
-				name: 'maxCap',
-				type: 'uint256',
-			},
-		],
+		inputs: [],
 		name: 'MaxDepositCapReached',
 		type: 'error',
 	},
@@ -164,41 +173,10 @@ export const ParentPoolABI = [
 		type: 'error',
 	},
 	{
-		inputs: [],
-		name: 'NotConceroInfraProxy',
-		type: 'error',
-	},
-	{
-		inputs: [],
-		name: 'NotMessenger',
-		type: 'error',
-	},
-	{
-		inputs: [],
-		name: 'NotOwner',
-		type: 'error',
-	},
-	{
 		inputs: [
 			{
 				internalType: 'address',
-				name: 'sender',
-				type: 'address',
-			},
-		],
-		name: 'NotParentPoolProxy',
-		type: 'error',
-	},
-	{
-		inputs: [],
-		name: 'NotUsdcToken',
-		type: 'error',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'address',
-				name: '',
+				name: 'caller',
 				type: 'address',
 			},
 		],
@@ -220,7 +198,7 @@ export const ParentPoolABI = [
 		inputs: [
 			{
 				internalType: 'address',
-				name: '_sender',
+				name: 'sender',
 				type: 'address',
 			},
 		],
@@ -230,27 +208,16 @@ export const ParentPoolABI = [
 	{
 		inputs: [
 			{
-				internalType: 'bytes',
-				name: 'data',
-				type: 'bytes',
+				internalType: 'enum LibErrors.UnauthorizedType',
+				name: 'errorType',
+				type: 'uint8',
 			},
 		],
-		name: 'UnableToCompleteDelegateCall',
-		type: 'error',
-	},
-	{
-		inputs: [],
 		name: 'Unauthorized',
 		type: 'error',
 	},
 	{
-		inputs: [
-			{
-				internalType: 'uint256',
-				name: 'minAmount',
-				type: 'uint256',
-			},
-		],
+		inputs: [],
 		name: 'WithdrawAmountBelowMinimum',
 		type: 'error',
 	},
@@ -263,6 +230,11 @@ export const ParentPoolABI = [
 			},
 		],
 		name: 'WithdrawRequestDoesntExist',
+		type: 'error',
+	},
+	{
+		inputs: [],
+		name: 'WithdrawalAlreadyTriggered',
 		type: 'error',
 	},
 	{
@@ -356,13 +328,13 @@ export const ParentPoolABI = [
 			{
 				indexed: false,
 				internalType: 'uint256',
-				name: 'usdcAmount',
+				name: 'amount',
 				type: 'uint256',
 			},
 			{
 				indexed: false,
 				internalType: 'uint256',
-				name: '_lpTokensToMint',
+				name: 'lpTokensToMint',
 				type: 'uint256',
 			},
 		],
@@ -381,7 +353,7 @@ export const ParentPoolABI = [
 			{
 				indexed: true,
 				internalType: 'address',
-				name: 'liquidityProvider',
+				name: 'lpAddress',
 				type: 'address',
 			},
 			{
@@ -406,26 +378,13 @@ export const ParentPoolABI = [
 			{
 				indexed: true,
 				internalType: 'bytes32',
-				name: 'conceroMessageId',
-				type: 'bytes32',
-			},
-		],
-		name: 'FailedExecutionLayerTxSettled',
-		type: 'event',
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: 'bytes32',
 				name: 'requestId',
 				type: 'bytes32',
 			},
 			{
 				indexed: true,
 				internalType: 'address',
-				name: 'to',
+				name: 'lpAddress',
 				type: 'address',
 			},
 			{
@@ -442,25 +401,6 @@ export const ParentPoolABI = [
 			},
 		],
 		name: 'WithdrawalCompleted',
-		type: 'event',
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: 'bytes32',
-				name: 'requestId',
-				type: 'bytes32',
-			},
-			{
-				indexed: false,
-				internalType: 'address',
-				name: 'caller',
-				type: 'address',
-			},
-		],
-		name: 'WithdrawalRequestInitiated',
 		type: 'event',
 	},
 	{
@@ -633,7 +573,7 @@ export const ParentPoolABI = [
 		inputs: [
 			{
 				internalType: 'bytes32',
-				name: '_depositRequestId',
+				name: 'depositRequestId',
 				type: 'bytes32',
 			},
 		],
@@ -645,24 +585,115 @@ export const ParentPoolABI = [
 	{
 		inputs: [
 			{
+				internalType: 'bytes32',
+				name: 'id',
+				type: 'bytes32',
+			},
+			{
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+		],
+		name: 'completeRebalancing',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
 				internalType: 'uint64',
-				name: '_chainSelector',
+				name: 'chainSelector',
 				type: 'uint64',
 			},
 			{
 				internalType: 'uint256',
-				name: '_amountToSend',
+				name: 'amountToSend',
 				type: 'uint256',
 			},
 			{
 				internalType: 'bytes32',
-				name: '_requestId',
+				name: 'requestId',
 				type: 'bytes32',
 			},
 		],
 		name: 'distributeLiquidity',
 		outputs: [],
 		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'bytes32',
+				name: 'clfReqId',
+				type: 'bytes32',
+			},
+		],
+		name: 'getClfReqTypeById',
+		outputs: [
+			{
+				internalType: 'enum ILancaParentPool.ClfRequestType',
+				name: '',
+				type: 'uint8',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'getDepositDeadlineSeconds',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'pure',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'bytes32',
+				name: 'clfReqId',
+				type: 'bytes32',
+			},
+		],
+		name: 'getDepositRequestById',
+		outputs: [
+			{
+				components: [
+					{
+						internalType: 'address',
+						name: 'lpAddress',
+						type: 'address',
+					},
+					{
+						internalType: 'uint256',
+						name: 'childPoolsLiquiditySnapshot',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'usdcAmountToDeposit',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'deadline',
+						type: 'uint256',
+					},
+				],
+				internalType: 'struct ILancaParentPool.DepositRequest',
+				name: '',
+				type: 'tuple',
+			},
+		],
+		stateMutability: 'view',
 		type: 'function',
 	},
 	{
@@ -687,9 +718,28 @@ export const ParentPoolABI = [
 						type: 'uint256',
 					},
 				],
-				internalType: 'struct IParentPool.DepositOnTheWay[150]',
+				internalType: 'struct ILancaParentPool.DepositOnTheWay[150]',
 				name: '',
 				type: 'tuple[150]',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'uint64',
+				name: 'chainSelector',
+				type: 'uint64',
+			},
+		],
+		name: 'getDstPoolByChainSelector',
+		outputs: [
+			{
+				internalType: 'address',
+				name: '',
+				type: 'address',
 			},
 		],
 		stateMutability: 'view',
@@ -729,6 +779,32 @@ export const ParentPoolABI = [
 	},
 	{
 		inputs: [],
+		name: 'getMinDepositAmount',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'getOwner',
+		outputs: [
+			{
+				internalType: 'address',
+				name: '',
+				type: 'address',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
 		name: 'getPendingWithdrawalRequestIds',
 		outputs: [
 			{
@@ -755,7 +831,7 @@ export const ParentPoolABI = [
 	},
 	{
 		inputs: [],
-		name: 'getUsdcInUse',
+		name: 'getUsdcLoansInUse',
 		outputs: [
 			{
 				internalType: 'uint256',
@@ -770,7 +846,7 @@ export const ParentPoolABI = [
 		inputs: [
 			{
 				internalType: 'address',
-				name: '_lpAddress',
+				name: 'lpAddress',
 				type: 'address',
 			},
 		],
@@ -780,6 +856,62 @@ export const ParentPoolABI = [
 				internalType: 'bytes32',
 				name: '',
 				type: 'bytes32',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'bytes32',
+				name: 'withdrawalId',
+				type: 'bytes32',
+			},
+		],
+		name: 'getWithdrawalRequestById',
+		outputs: [
+			{
+				components: [
+					{
+						internalType: 'address',
+						name: 'lpAddress',
+						type: 'address',
+					},
+					{
+						internalType: 'uint256',
+						name: 'lpAmountToBurn',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'totalCrossChainLiquiditySnapshot',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'amountToWithdraw',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'liquidityRequestedFromEachPool',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'remainingLiquidityFromChildPools',
+						type: 'uint256',
+					},
+					{
+						internalType: 'uint256',
+						name: 'triggeredAtTimestamp',
+						type: 'uint256',
+					},
+				],
+				internalType: 'struct ILancaParentPool.WithdrawRequest',
+				name: '',
+				type: 'tuple',
 			},
 		],
 		stateMutability: 'view',
@@ -823,12 +955,12 @@ export const ParentPoolABI = [
 	},
 	{
 		inputs: [],
-		name: 'i_lpToken',
+		name: 'isFull',
 		outputs: [
 			{
-				internalType: 'contract LPToken',
+				internalType: 'bool',
 				name: '',
-				type: 'address',
+				type: 'bool',
 			},
 		],
 		stateMutability: 'view',
@@ -838,7 +970,7 @@ export const ParentPoolABI = [
 		inputs: [
 			{
 				internalType: 'bytes',
-				name: '_performData',
+				name: 'performData',
 				type: 'bytes',
 			},
 		],
@@ -851,7 +983,7 @@ export const ParentPoolABI = [
 		inputs: [
 			{
 				internalType: 'uint64',
-				name: '_chainSelector',
+				name: 'chainSelector',
 				type: 'uint64',
 			},
 		],
@@ -865,110 +997,6 @@ export const ParentPoolABI = [
 		name: 'retryPerformWithdrawalRequest',
 		outputs: [],
 		stateMutability: 'nonpayable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'uint64',
-				name: 'chainSelector',
-				type: 'uint64',
-			},
-		],
-		name: 's_childPools',
-		outputs: [
-			{
-				internalType: 'address',
-				name: 'pool',
-				type: 'address',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: 'clfReqId',
-				type: 'bytes32',
-			},
-		],
-		name: 's_clfRequestTypes',
-		outputs: [
-			{
-				internalType: 'enum IParentPool.CLFRequestType',
-				name: '',
-				type: 'uint8',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: 'clfReqId',
-				type: 'bytes32',
-			},
-		],
-		name: 's_depositRequests',
-		outputs: [
-			{
-				internalType: 'address',
-				name: 'lpAddress',
-				type: 'address',
-			},
-			{
-				internalType: 'uint256',
-				name: 'childPoolsLiquiditySnapshot',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'usdcAmountToDeposit',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'deadline',
-				type: 'uint256',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [],
-		name: 's_depositsOnTheWayAmount',
-		outputs: [
-			{
-				internalType: 'uint256',
-				name: '',
-				type: 'uint256',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: '',
-				type: 'bytes32',
-			},
-		],
-		name: 's_distributeLiquidityRequestProcessed',
-		outputs: [
-			{
-				internalType: 'bool',
-				name: '',
-				type: 'bool',
-			},
-		],
-		stateMutability: 'view',
 		type: 'function',
 	},
 	{
@@ -996,258 +1024,24 @@ export const ParentPoolABI = [
 		type: 'function',
 	},
 	{
-		inputs: [],
-		name: 's_liquidityCap',
-		outputs: [
-			{
-				internalType: 'uint256',
-				name: '',
-				type: 'uint256',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [],
-		name: 's_loansInUse',
-		outputs: [
-			{
-				internalType: 'uint256',
-				name: '',
-				type: 'uint256',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [],
-		name: 's_withdrawAmountLocked',
-		outputs: [
-			{
-				internalType: 'uint256',
-				name: '',
-				type: 'uint256',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: 'withdrawalId',
-				type: 'bytes32',
-			},
-		],
-		name: 's_withdrawRequests',
-		outputs: [
-			{
-				internalType: 'address',
-				name: 'lpAddress',
-				type: 'address',
-			},
-			{
-				internalType: 'uint256',
-				name: 'lpSupplySnapshot_DEPRECATED',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'lpAmountToBurn',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'totalCrossChainLiquiditySnapshot',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'amountToWithdraw',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'liquidityRequestedFromEachPool',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'remainingLiquidityFromChildPools',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'triggeredAtTimestamp',
-				type: 'uint256',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: 'withdrawalId',
-				type: 'bytes32',
-			},
-		],
-		name: 's_withdrawTriggered',
-		outputs: [
-			{
-				internalType: 'bool',
-				name: 'isTriggered',
-				type: 'bool',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: 'clfReqId',
-				type: 'bytes32',
-			},
-		],
-		name: 's_withdrawalIdByCLFRequestId',
-		outputs: [
-			{
-				internalType: 'bytes32',
-				name: 'withdrawalId',
-				type: 'bytes32',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'address',
-				name: 'lpAddress',
-				type: 'address',
-			},
-		],
-		name: 's_withdrawalIdByLPAddress',
-		outputs: [
-			{
-				internalType: 'bytes32',
-				name: 'withdrawalId',
-				type: 'bytes32',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'uint256',
-				name: '',
-				type: 'uint256',
-			},
-		],
-		name: 's_withdrawalRequestIds',
-		outputs: [
-			{
-				internalType: 'bytes32',
-				name: '',
-				type: 'bytes32',
-			},
-		],
-		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: '_hashSum',
-				type: 'bytes32',
-			},
-		],
-		name: 'setCollectLiquidityJsCodeHashSum',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
 		inputs: [
 			{
 				internalType: 'uint64',
-				name: '_chainSelector',
+				name: 'chainSelector',
 				type: 'uint64',
 			},
 			{
 				internalType: 'address',
-				name: '_contractAddress',
+				name: 'pool',
 				type: 'address',
 			},
 			{
 				internalType: 'bool',
-				name: '_isAllowed',
+				name: 'isRebalancingNeeded',
 				type: 'bool',
 			},
 		],
-		name: 'setConceroContractSender',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'uint8',
-				name: '_slotId',
-				type: 'uint8',
-			},
-		],
-		name: 'setDonHostedSecretsSlotId',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'uint64',
-				name: '_version',
-				type: 'uint64',
-			},
-		],
-		name: 'setDonHostedSecretsVersion',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: '_ethersHashSum',
-				type: 'bytes32',
-			},
-		],
-		name: 'setEthersHashSum',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: '_hashSum',
-				type: 'bytes32',
-			},
-		],
-		name: 'setGetBalanceJsCodeHashSum',
+		name: 'setDstPool',
 		outputs: [],
 		stateMutability: 'payable',
 		type: 'function',
@@ -1256,7 +1050,7 @@ export const ParentPoolABI = [
 		inputs: [
 			{
 				internalType: 'uint256',
-				name: '_newCap',
+				name: 'newCap',
 				type: 'uint256',
 			},
 		],
@@ -1268,49 +1062,19 @@ export const ParentPoolABI = [
 	{
 		inputs: [
 			{
-				internalType: 'uint64',
-				name: '_chainSelector',
-				type: 'uint64',
-			},
-			{
-				internalType: 'address',
-				name: '_pool',
-				type: 'address',
-			},
-			{
-				internalType: 'bool',
-				name: 'isRebalancingNeeded',
-				type: 'bool',
-			},
-		],
-		name: 'setPools',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'bytes32',
-				name: '_hashSum',
-				type: 'bytes32',
-			},
-		],
-		name: 'setRedistributeLiquidityJsCodeHashSum',
-		outputs: [],
-		stateMutability: 'payable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
 				internalType: 'uint256',
-				name: '_usdcAmount',
+				name: 'usdcAmount',
 				type: 'uint256',
 			},
 		],
 		name: 'startDeposit',
-		outputs: [],
+		outputs: [
+			{
+				internalType: 'bytes32',
+				name: '',
+				type: 'bytes32',
+			},
+		],
 		stateMutability: 'nonpayable',
 		type: 'function',
 	},
@@ -1318,7 +1082,7 @@ export const ParentPoolABI = [
 		inputs: [
 			{
 				internalType: 'uint256',
-				name: '_lpAmount',
+				name: 'lpAmount',
 				type: 'uint256',
 			},
 		],
@@ -1343,30 +1107,36 @@ export const ParentPoolABI = [
 				type: 'bool',
 			},
 		],
-		stateMutability: 'pure',
+		stateMutability: 'view',
 		type: 'function',
 	},
 	{
 		inputs: [
 			{
 				internalType: 'address',
-				name: '_token',
+				name: 'token',
 				type: 'address',
 			},
 			{
 				internalType: 'uint256',
-				name: '_amount',
+				name: 'amount',
 				type: 'uint256',
 			},
 			{
 				internalType: 'address',
-				name: '_receiver',
+				name: 'receiver',
 				type: 'address',
 			},
 		],
 		name: 'takeLoan',
-		outputs: [],
-		stateMutability: 'payable',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'nonpayable',
 		type: 'function',
 	},
 	{
