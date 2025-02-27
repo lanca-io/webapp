@@ -58,9 +58,9 @@ export const poolConfigs: IPoolConfig[] = [
 export const poolLoansInUseAbiITem = [
 	{
 		type: 'function',
-		name: 's_loansInUse',
+		name: 'getUsdcLoansInUse',
 		inputs: [],
-		outputs: [{ name: 's_loansInUse', type: 'uint256', internalType: 'uint256' }],
+		outputs: [{ name: '', type: 'uint256', internalType: 'uint256' }],
 		stateMutability: 'view',
 	},
 ]

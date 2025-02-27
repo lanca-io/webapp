@@ -14,7 +14,7 @@ export const getLiquidityOnChain = async (poolConfig: IPoolConfig) => {
 				{
 					address: conceroContract,
 					abi: poolLoansInUseAbiITem,
-					functionName: 's_loansInUse',
+					functionName: 'getUsdcLoansInUse',
 				},
 				{
 					address: usdcContract,
