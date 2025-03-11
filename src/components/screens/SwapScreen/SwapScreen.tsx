@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { withErrorBoundary } from '../../wrappers/WithErrorBoundary'
-import { SwapCard } from '../../cards/SwapCard/SwapCard'
+// import { SwapCard } from '../../cards/SwapCard/SwapCard'
 import classNames from './SwapScreen.module.pcss'
 import { useSwapReducer } from '../../cards/SwapCard/swapReducer/swapReducer'
 import { ErrorCategory, errorTypeMap } from '../../cards/SwapCard/SwapButton/constants'
@@ -9,8 +9,9 @@ import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
 import { config } from '../../../constants/config'
 import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
 import { Footer } from '../../layout/Footer/Footer'
+import MockFormComponent from './Test'
 
-const Swap = memo(withErrorBoundary(SwapCard))
+const Swap = memo(withErrorBoundary(MockFormComponent))
 
 export const SwapScreen = () => {
 	const [swapState, swapDispatch] = useSwapReducer()
