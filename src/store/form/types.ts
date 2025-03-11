@@ -3,8 +3,8 @@ import type { StoreApi } from 'zustand'
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 
 export interface DefaultValues {
-	fromChain?: number
-	toChain?: number
+	fromChain?: string
+	toChain?: string
 	fromToken?: string
 	toToken?: string
 	fromAmount: string
@@ -59,22 +59,27 @@ export interface ResetOptions {
 	defaultValue?: GenericFormValue
 }
 
-export interface FormActions {
-	setDefaultValues: (formValues: DefaultValues) => void
-	setUserAndDefaultValues: (formValues: Partial<DefaultValues>) => void
+export type ValidationFunction = (value: any) => boolean | string | Promise<boolean | string>
+
+export type FormActions = {
+	getFieldValues: <T extends FormFieldNames[]>(...names: T) => FormFieldArray<T>
 	isTouched: (fieldName: FormFieldNames) => boolean
 	isDirty: (fieldName: FormFieldNames) => boolean
+	resetField: (fieldName: FormFieldNames, options?: { defaultValue?: any }) => void
 	setAsTouched: (fieldName: FormFieldNames) => void
-	resetField: (fieldName: FormFieldNames, resetOptions?: ResetOptions) => void
-	setFieldValue: (fieldName: FormFieldNames, value: GenericFormValue, options?: SetOptions) => void
-	getFieldValues: <T extends FormFieldNames[]>(...names: T) => FormFieldArray<T>
+	setDefaultValues: (defaultValues: DefaultValues) => void
+	setFieldValue: (fieldName: FormFieldNames, value: any, options?: SetOptions) => void
+	setUserAndDefaultValues: (formValues: Partial<DefaultValues>) => void
+	addFieldValidation: (name: FormFieldNames, validationFn: ValidationFunction) => void
+	triggerFieldValidation: (name: FormFieldNames) => Promise<boolean>
+	clearErrors: (name: FormFieldNames) => void
 }
 
 export type FormValuesState = FormProps & FormActions & ValidationProps & ValidationActions
 
 export type FormStoreStore = UseBoundStoreWithEqualityFn<StoreApi<FormValuesState>>
 
-export interface SetOptions {
+export type SetOptions = {
 	isDirty?: boolean
 	isTouched?: boolean
 }

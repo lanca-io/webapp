@@ -8,9 +8,5 @@ export const useValidation = (): Omit<ValidationProps, 'validation'> => {
 		shallow,
 	)
 
-	return {
-		isValid,
-		isValidating,
-		errors,
-	}
+	return { isValid, isValidating, errors }
 }

@@ -1,9 +1,15 @@
-import type { FormFieldChanged } from './types'
-import type { DefaultValues, FormActions, FormFieldNames, GenericFormValue, SetOptions } from './types.js'
+import type {
+	DefaultValues,
+	FormActions,
+	FormFieldNames,
+	GenericFormValue,
+	SetOptions,
+	FormFieldChanged,
+} from './types'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
 import { useEvents } from '../../hooks/useEvents'
-import { useFormStore } from './useFormStore.js'
+import { useFormStore } from './useFormStore'
 import { Event } from '../../types/events'
 
 export const useFieldActions = () => {
@@ -18,9 +24,24 @@ export const useFieldActions = () => {
 			setDefaultValues: store.setDefaultValues,
 			setFieldValue: store.setFieldValue,
 			setUserAndDefaultValues: store.setUserAndDefaultValues,
+			addFieldValidation: store.addFieldValidation,
+			triggerFieldValidation: store.triggerFieldValidation,
+			clearErrors: store.clearErrors,
 		}),
 		shallow,
 	)
+
+	const emitFieldChangedEvent = (
+		fieldName: FormFieldNames,
+		newValue: GenericFormValue,
+		oldValue: GenericFormValue,
+	) => {
+		emitter.emit(Event.FormFieldChanged, {
+			fieldName,
+			newValue,
+			oldValue,
+		} as FormFieldChanged)
+	}
 
 	const setFieldValueWithEmittedEvents = useCallback(
 		(fieldName: FormFieldNames, newValue: GenericFormValue, options?: SetOptions) => {
@@ -29,11 +50,7 @@ export const useFieldActions = () => {
 			actions.setFieldValue(fieldName, newValue, options)
 
 			if (newValue !== oldValue) {
-				emitter.emit(Event.FormFieldChanged, {
-					fieldName,
-					newValue,
-					oldValue,
-				} as FormFieldChanged)
+				emitFieldChangedEvent(fieldName, newValue, oldValue)
 			}
 		},
 		[actions, emitter],
@@ -63,11 +80,7 @@ export const useFieldActions = () => {
 			actions.setUserAndDefaultValues(formValues)
 
 			changedValues.forEach(({ fieldName, newValue, oldValue }) => {
-				emitter.emit(Event.FormFieldChanged, {
-					fieldName,
-					newValue,
-					oldValue,
-				} as FormFieldChanged)
+				emitFieldChangedEvent(fieldName, newValue, oldValue)
 			})
 		},
 		[actions, emitter],

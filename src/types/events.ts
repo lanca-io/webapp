@@ -4,11 +4,18 @@ import type { SettingsProps } from '../store/settings/types'
 export enum Event {
 	FormFieldChanged = 'formFieldChanged',
 	SettingUpdated = 'settingUpdated',
+	ChainUpdated = 'chainUpdated',
 }
 
-export interface Events {
+export type Events = {
 	formFieldChanged: FormFieldChanged
 	settingUpdated: SettingUpdated
+	chainUpdated: ChainChangedEvent
+}
+
+export interface ChainChangedEvent {
+	oldChainId: string | null
+	newChainId: string
 }
 
 export type FormFieldChanged = {

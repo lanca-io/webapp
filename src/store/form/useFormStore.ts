@@ -1,7 +1,7 @@
+import type { FormValuesState } from './types'
 import { useContext } from 'react'
 import { shallow } from 'zustand/shallow'
 import { FormStoreContext } from './FormContext'
-import type { FormValuesState } from './types'
 
 export function useFormStore<T>(selector: (state: FormValuesState) => T, equalityFn = shallow): T {
 	const useStore = useContext(FormStoreContext)

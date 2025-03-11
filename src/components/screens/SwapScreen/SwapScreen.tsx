@@ -9,9 +9,9 @@ import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
 import { config } from '../../../constants/config'
 import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
 import { Footer } from '../../layout/Footer/Footer'
-import MockFormComponent from './Test'
+import { SwapWidget } from '../../swap-widget/SwapWidget'
 
-const Swap = memo(withErrorBoundary(MockFormComponent))
+const Swap = memo(withErrorBoundary(SwapWidget))
 
 export const SwapScreen = () => {
 	const [swapState, swapDispatch] = useSwapReducer()

@@ -1,5 +1,4 @@
 import { createWithEqualityFn } from 'zustand/traditional'
-
 import type {
 	DefaultValues,
 	FormFieldArray,
@@ -7,11 +6,17 @@ import type {
 	FormValueControl,
 	FormValues,
 	FormValuesState,
-} from './types.js'
+	ValidationFunction,
+	SetOptions,
+} from './types'
 
 export const formDefaultValues: DefaultValues = {
-	fromAmount: '',
-	toAmount: '',
+	toChain: '137',
+	fromChain: '10',
+	fromAmount: '0',
+	toAmount: '0',
+	fromToken: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+	toToken: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
 }
 
 const defaultValueToFormValue = <T>(value: T): FormValueControl<T> => ({
@@ -20,43 +25,46 @@ const defaultValueToFormValue = <T>(value: T): FormValueControl<T> => ({
 	value,
 })
 
-const valuesToFormValues = (defaultValues: DefaultValues) => {
-	return (Object.keys(defaultValues) as FormFieldNames[]).reduce<FormValues>((accum: FormValues, key) => {
-		accum[key] = defaultValueToFormValue(defaultValues[key]) as never
+const valuesToFormValues = (defaultValues: DefaultValues): FormValues => {
+	return Object.keys(defaultValues).reduce<FormValues>((accum, key) => {
+		accum[key as FormFieldNames] = defaultValueToFormValue(defaultValues[key as keyof DefaultValues]) as never
 		return accum
 	}, {} as FormValues)
 }
 
-const isString = (str: any) => typeof str === 'string' || str instanceof String
+const isString = (str: any): str is string => typeof str === 'string' || str instanceof String
 
-const getUpdatedTouchedFields = (userValues: FormValues) => {
-	return (Object.keys(userValues) as FormFieldNames[]).reduce<Partial<Record<FormFieldNames, boolean>>>(
-		(accum, key) => {
-			if (userValues[key]?.isTouched) {
-				accum[key] = true
-			}
-			return accum
-		},
-		{},
-	)
+const getUpdatedTouchedFields = (userValues: FormValues): Partial<Record<FormFieldNames, boolean>> => {
+	return Object.keys(userValues).reduce<Partial<Record<FormFieldNames, boolean>>>((accum, key) => {
+		if (userValues[key as FormFieldNames]?.isTouched) {
+			accum[key as FormFieldNames] = true
+		}
+		return accum
+	}, {})
 }
 
-const mergeDefaultFormValues = (userValues: FormValues, defaultValues: FormValues) =>
-	(Object.keys(defaultValues) as FormFieldNames[]).reduce<FormValues>(
+const mergeDefaultFormValues = (userValues: FormValues, defaultValues: FormValues): FormValues => {
+	return Object.keys(defaultValues).reduce<FormValues>(
 		(accum, key) => {
 			const formValue = {
-				isTouched: !!(userValues[key]?.isTouched || defaultValues[key]?.isTouched),
-				isDirty: !!(userValues[key]?.isDirty || defaultValues[key]?.isTouched),
+				isTouched: !!(
+					userValues[key as FormFieldNames]?.isTouched || defaultValues[key as FormFieldNames]?.isTouched
+				),
+				isDirty: !!(
+					userValues[key as FormFieldNames]?.isDirty || defaultValues[key as FormFieldNames]?.isTouched
+				),
 				value:
-					userValues[key]?.value || Number.isFinite(userValues[key]?.value)
-						? userValues[key]?.value
-						: defaultValues[key]?.value,
+					userValues[key as FormFieldNames]?.value ||
+					Number.isFinite(userValues[key as FormFieldNames]?.value)
+						? userValues[key as FormFieldNames]?.value
+						: defaultValues[key as FormFieldNames]?.value,
 			}
-			accum[key] = formValue as never
+			accum[key as FormFieldNames] = formValue as never
 			return accum
 		},
 		{ ...valuesToFormValues(formDefaultValues) },
 	)
+}
 
 export const createFormStore = (defaultValues?: DefaultValues) =>
 	createWithEqualityFn<FormValuesState>((set, get) => {
@@ -72,19 +80,20 @@ export const createFormStore = (defaultValues?: DefaultValues) =>
 			isValidating: false,
 			errors: {},
 			validation: {},
-			setDefaultValues: defaultValue => {
+			setDefaultValues: (defaultValue: DefaultValues) => {
 				const defaultFormValues = valuesToFormValues(defaultValue)
 				set(state => ({
 					defaultValues: defaultFormValues,
 					userValues: mergeDefaultFormValues(state.userValues, defaultFormValues),
 				}))
 			},
-			setUserAndDefaultValues: formValues => {
+			setUserAndDefaultValues: (formValues: Partial<DefaultValues>) => {
 				const currentUserValues = get().userValues
-				;(Object.keys(formValues) as FormFieldNames[]).forEach(key => {
-					if (formValues[key] !== currentUserValues[key]?.value) {
-						get().resetField(key, { defaultValue: formValues[key] })
-						get().setFieldValue(key, formValues[key], { isTouched: true })
+				Object.keys(formValues).forEach(key => {
+					const fieldName = key as FormFieldNames
+					if (formValues[fieldName] !== currentUserValues[fieldName]?.value) {
+						get().resetField(fieldName, { defaultValue: formValues[fieldName] })
+						get().setFieldValue(fieldName, formValues[fieldName], { isTouched: true })
 					}
 				})
 			},
@@ -98,71 +107,46 @@ export const createFormStore = (defaultValues?: DefaultValues) =>
 						isTouched: true,
 					},
 				}
-
-				const touchedFields = getUpdatedTouchedFields(userValues)
-
-				set(state => ({
-					...state,
+				set({
 					userValues,
-					touchedFields,
-				}))
+					touchedFields: getUpdatedTouchedFields(userValues),
+				})
 			},
-			resetField: (fieldName, { defaultValue } = {}) => {
-				if (defaultValue) {
-					const fieldValues = {
-						...get().defaultValues[fieldName],
-						value: defaultValue,
-					}
-					const defaultValues = {
-						...get().defaultValues,
-						[fieldName]: { ...fieldValues },
-					}
-					const userValues = {
-						...get().userValues,
-						[fieldName]: { ...fieldValues },
-					}
-					const touchedFields = getUpdatedTouchedFields(userValues)
-
-					set(() => {
-						return {
-							defaultValues,
-							userValues,
-							touchedFields,
-						}
-					})
-				} else {
-					const userValues = {
-						...get().userValues,
-						[fieldName]: { ...get().defaultValues[fieldName] },
-					}
-					const touchedFields = getUpdatedTouchedFields(userValues)
-
-					set(() => ({
-						userValues,
-						touchedFields,
-					}))
+			resetField: (fieldName: FormFieldNames, { defaultValue }: { defaultValue?: any } = {}) => {
+				const fieldValues = defaultValue
+					? { ...get().defaultValues[fieldName], value: defaultValue }
+					: get().defaultValues[fieldName]
+				const defaultValues = {
+					...get().defaultValues,
+					[fieldName]: fieldValues,
 				}
+				const userValues = {
+					...get().userValues,
+					[fieldName]: fieldValues,
+				}
+				set({
+					defaultValues,
+					userValues,
+					touchedFields: getUpdatedTouchedFields(userValues),
+				})
 			},
-			setFieldValue: (fieldName, value, { isDirty, isTouched } = {}) => {
+			setFieldValue: (fieldName: FormFieldNames, value: any, { isDirty, isTouched }: SetOptions = {}) => {
 				const userValues = {
 					...get().userValues,
 					[fieldName]: {
 						value,
-						isDirty: isDirty === undefined ? get().userValues[fieldName]?.isDirty : isDirty,
-						isTouched: isTouched === undefined ? get().userValues[fieldName]?.isTouched : isTouched,
+						isDirty: isDirty ?? get().userValues[fieldName]?.isDirty,
+						isTouched: isTouched ?? get().userValues[fieldName]?.isTouched,
 					},
 				}
-
-				const touchedFields = getUpdatedTouchedFields(userValues)
-
-				set(() => ({
+				set({
 					userValues,
-					touchedFields,
-				}))
+					touchedFields: getUpdatedTouchedFields(userValues),
+				})
 			},
 			getFieldValues: <T extends FormFieldNames[]>(...names: T) =>
 				names.map(name => get().userValues[name]?.value) as FormFieldArray<T>,
-			addFieldValidation: (name, validationFn) => {
+			addFieldValidation: (name: FormFieldNames, validationFn: ValidationFunction) => {
 				set(state => ({
 					validation: {
 						...state.validation,
@@ -170,15 +154,15 @@ export const createFormStore = (defaultValues?: DefaultValues) =>
 					},
 				}))
 			},
-			triggerFieldValidation: async name => {
+			triggerFieldValidation: async (name: FormFieldNames) => {
 				try {
 					let valid = true
-					set(() => ({ isValid: false, isValidating: true }))
+					set({ isValid: false, isValidating: true })
 
 					const validationFn = get().validation[name]
 
 					if (validationFn) {
-						const result = await validationFn(get().userValues?.[name]?.value)
+						const result = await validationFn(get().userValues[name]?.value)
 						if (isString(result)) {
 							valid = false
 							set(state => ({
@@ -195,21 +179,17 @@ export const createFormStore = (defaultValues?: DefaultValues) =>
 						}
 					}
 
-					set(() => ({ isValid: valid, isValidating: false }))
+					set({ isValid: valid, isValidating: false })
 					return valid
 				} catch (err) {
-					set(() => ({ isValidating: false }))
+					set({ isValidating: false })
 					throw err
 				}
 			},
-			clearErrors: name => {
+			clearErrors: (name: FormFieldNames) => {
 				const newErrors = { ...get().errors }
-
 				delete newErrors[name]
-
-				set(() => ({
-					errors: newErrors,
-				}))
+				set({ errors: newErrors })
 			},
 		}
 	}, Object.is)

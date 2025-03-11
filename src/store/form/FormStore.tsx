@@ -1,6 +1,5 @@
-import type { DefaultValues, FormStoreStore } from './types.js'
+import type { DefaultValues, FormStoreStore, FormRef } from './types'
 import type { PropsWithChildren } from 'react'
-import type { FormRef } from './types'
 import { useMemo, useRef } from 'react'
 import { FormStoreContext } from './FormContext'
 import { FormUpdater } from './useFormUpdater'
@@ -12,12 +11,12 @@ const initialiseDefaultValues = (
 	fromAmount?: number | string,
 	toAmount?: number | string,
 	toAddress?: string,
-) => ({
+): DefaultValues => ({
 	...formDefaultValues,
 	...defaultValues,
 	fromAmount:
-		(typeof fromAmount === 'number' ? fromAmount?.toPrecision() : fromAmount) || formDefaultValues.fromAmount,
-	toAmount: (typeof toAmount === 'number' ? toAmount?.toPrecision() : toAmount) || formDefaultValues.toAmount,
+		(typeof fromAmount === 'number' ? fromAmount.toPrecision() : fromAmount) || formDefaultValues.fromAmount,
+	toAmount: (typeof toAmount === 'number' ? toAmount.toPrecision() : toAmount) || formDefaultValues.toAmount,
 	toAddress: toAddress || formDefaultValues.toAddress,
 })
 
@@ -29,22 +28,21 @@ interface FormStoreProviderProps extends PropsWithChildren {
 export const FormStoreProvider: React.FC<FormStoreProviderProps> = ({ children, formRef, initialValues = {} }) => {
 	const storeRef = useRef<FormStoreStore | null>(null)
 
-	const reactiveFormValues = useMemo(
-		() => ({
-			...initialValues,
-		}),
-		[initialValues],
-	)
+	const reactiveFormValues = useMemo(() => ({ ...initialValues }), [initialValues])
 
-	if (!storeRef.current) {
-		storeRef.current = createFormStore(
+	const initialStoreValues = useMemo(
+		() =>
 			initialiseDefaultValues(
 				reactiveFormValues,
 				initialValues.fromAmount,
 				initialValues.toAmount,
 				initialValues.toAddress,
 			),
-		)
+		[reactiveFormValues, initialValues.fromAmount, initialValues.toAmount, initialValues.toAddress],
+	)
+
+	if (!storeRef.current) {
+		storeRef.current = createFormStore(initialStoreValues)
 	}
 
 	useFormRef(storeRef.current, formRef)
