@@ -6,14 +6,18 @@ export type ChainsState = {
 	chains: ILancaChain[]
 	isLoading: boolean
 	error: string | null
-	selectedChain: ILancaChain | null
+	sourceChain: ILancaChain | null
+	destinationChain: ILancaChain | null
 	setChains: (chains: ILancaChain[]) => void
 	clearChains: () => void
 	setLoading: (isLoading: boolean) => void
 	setError: (error: string) => void
 	clearError: () => void
-	selectChain: (chain: ILancaChain) => void
-	clearSelectedChain: () => void
+	selectSourceChain: (chain: ILancaChain) => void
+	selectDestinationChain: (chain: ILancaChain) => void
+	clearSourceChain: () => void
+	clearDestinationChain: () => void
+	swapChains: () => void
 }
 
 export type ChainStore = UseBoundStoreWithEqualityFn<StoreApi<ChainsState>>

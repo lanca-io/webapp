@@ -7,14 +7,19 @@ import { ChainChangedEvent, Event } from '../../types/events'
 
 export const useChainActions = () => {
 	const emitter = useEvents()
-	const selectedChain = useChainStore(state => state.selectedChain)
-	const { selectChain, clearSelectedChain } = useChainStore(
-		store => ({
-			selectChain: store.selectChain,
-			clearSelectedChain: store.clearSelectedChain,
-		}),
-		shallow,
-	)
+	const sourceChain = useChainStore(state => state.sourceChain)
+	const destinationChain = useChainStore(state => state.destinationChain)
+	const { selectSourceChain, selectDestinationChain, clearSourceChain, clearDestinationChain, swapChains } =
+		useChainStore(
+			store => ({
+				selectSourceChain: store.selectSourceChain,
+				selectDestinationChain: store.selectDestinationChain,
+				clearSourceChain: store.clearSourceChain,
+				clearDestinationChain: store.clearDestinationChain,
+				swapChains: store.swapChains,
+			}),
+			shallow,
+		)
 
 	const emitChainChangedEvent = useCallback(
 		(oldChainId: string | null, newChainId: string) => {
@@ -26,25 +31,48 @@ export const useChainActions = () => {
 		[emitter],
 	)
 
-	const selectChainWithEmittedEvents = useCallback(
+	const selectSourceChainWithEmittedEvents = useCallback(
 		(newChain: ILancaChain) => {
-			const oldChainId = selectedChain?.id || null
+			const oldChainId = sourceChain?.id || null
 			const newChainId = newChain.id
 
-			selectChain(newChain)
+			selectSourceChain(newChain)
 
 			if (newChainId !== oldChainId) {
 				emitChainChangedEvent(oldChainId, newChainId)
 			}
 		},
-		[selectedChain, selectChain, emitChainChangedEvent],
+		[sourceChain, selectSourceChain, emitChainChangedEvent],
+	)
+
+	const selectDestinationChainWithEmittedEvents = useCallback(
+		(newChain: ILancaChain) => {
+			const oldChainId = destinationChain?.id || null
+			const newChainId = newChain.id
+
+			selectDestinationChain(newChain)
+
+			if (newChainId !== oldChainId) {
+				emitChainChangedEvent(oldChainId, newChainId)
+			}
+		},
+		[destinationChain, selectDestinationChain, emitChainChangedEvent],
 	)
 
 	return useMemo(
 		() => ({
-			selectChain: selectChainWithEmittedEvents,
-			clearSelectedChain,
+			selectSourceChain: selectSourceChainWithEmittedEvents,
+			selectDestinationChain: selectDestinationChainWithEmittedEvents,
+			clearSourceChain,
+			clearDestinationChain,
+			swapChains,
 		}),
-		[selectChainWithEmittedEvents, clearSelectedChain],
+		[
+			selectSourceChainWithEmittedEvents,
+			selectDestinationChainWithEmittedEvents,
+			clearSourceChain,
+			clearDestinationChain,
+			swapChains,
+		],
 	)
 }

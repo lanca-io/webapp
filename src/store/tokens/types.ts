@@ -20,15 +20,36 @@ export type Token = {
 }
 
 export type TokensState = {
-	tokens: Token[]
-	isLoading: boolean
-	error: string | null
-	offset: number
-	searchValue: string
-	setTokens: (tokens: Token[]) => void
-	setLoading: (isLoading: boolean) => void
-	setError: (error: string) => void
-	setOffset: (offset: number) => void
-	setSearchValue: (searchValue: string) => void
-	clearTokens: () => void
+	sourceTokens: Token[]
+	destinationTokens: Token[]
+
+	selectedSourceToken: Token | null
+	selectedDestinationToken: Token | null
+
+	isSourceLoading: boolean
+	isDestinationLoading: boolean
+	sourceError: string | null
+	destinationError: string | null
+
+	sourceOffset: number
+	destinationOffset: number
+	sourceSearchValue: string
+	destinationSearchValue: string
+
+	setSourceTokens: (tokens: Token[]) => void
+	setDestinationTokens: (tokens: Token[]) => void
+	selectSourceToken: (token: Token) => void
+	selectDestinationToken: (token: Token) => void
+	clearSourceToken: () => void
+	clearDestinationToken: () => void
+	setSourceLoading: (isLoading: boolean) => void
+	setDestinationLoading: (isLoading: boolean) => void
+	setSourceError: (error: string | null) => void
+	setDestinationError: (error: string | null) => void
+	setSourceOffset: (offset: number) => void
+	setDestinationOffset: (offset: number) => void
+	setSourceSearchValue: (searchValue: string) => void
+	setDestinationSearchValue: (searchValue: string) => void
+	clearSourceTokens: () => void
+	clearDestinationTokens: () => void
 }

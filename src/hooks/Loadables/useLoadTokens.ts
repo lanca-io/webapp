@@ -1,55 +1,98 @@
-import { useEffect, useCallback } from 'react'
-import { useTokensStore } from '../../store/tokens/useTokensStore'
-import { useChainsStore } from '../../store/chains/useChainsStore'
+import { useEffect } from 'react'
+import { useTokensStore } from '../../store/tokens/TokensStore'
+import { useChainStore } from '../../store/chains/ChainsStore'
 import { useQuery } from '@tanstack/react-query'
 import { handleFetchTokens } from '../../handlers/tokens'
 
 export const useLoadTokens = () => {
-	const { selectedChain } = useChainsStore()
-	const { setTokens, setLoading, setError, offset, setOffset, searchValue, clearTokens } = useTokensStore()
+	const sourceChain = useChainStore(state => state.sourceChain)
+	const destChain = useChainStore(state => state.destinationChain)
+	const chainsLoading = useChainStore(state => state.isLoading)
 
-	const fetchTokens = useCallback(async () => {
-		if (!selectedChain) return []
+	// Source tokens state
+	const setSourceTokens = useTokensStore(state => state.setSourceTokens)
+	const setSourceLoading = useTokensStore(state => state.setSourceLoading)
+	const setSourceError = useTokensStore(state => state.setSourceError)
+	const sourceOffset = useTokensStore(state => state.sourceOffset)
+	const sourceSearchValue = useTokensStore(state => state.sourceSearchValue)
+	const clearSourceTokens = useTokensStore(state => state.clearSourceTokens)
 
-		setLoading(true)
+	// Destination tokens state
+	const setDestinationTokens = useTokensStore(state => state.setDestinationTokens)
+	const setDestinationLoading = useTokensStore(state => state.setDestinationLoading)
+	const setDestinationError = useTokensStore(state => state.setDestinationError)
+	const destinationOffset = useTokensStore(state => state.destinationOffset)
+	const destinationSearchValue = useTokensStore(state => state.destinationSearchValue)
+	const clearDestinationTokens = useTokensStore(state => state.clearDestinationTokens)
+
+	// Fetch source tokens
+	const fetchSourceTokens = async () => {
+		if (!sourceChain) return []
+		setSourceLoading(true)
 		try {
-			const newTokens = await handleFetchTokens(selectedChain.id, offset, 15, searchValue)
-			setTokens(newTokens)
-			return newTokens
+			const tokens = await handleFetchTokens(sourceChain.id, sourceOffset, 15, sourceSearchValue)
+			return tokens
 		} catch (error) {
 			if (error instanceof Error) {
-				setError(error.message)
+				setSourceError(error.message)
 			} else {
-				setError('An unknown error occurred')
+				setSourceError('An unknown error occurred')
 			}
 			return []
 		} finally {
-			setLoading(false)
+			setSourceLoading(false)
 		}
-	}, [selectedChain, offset, searchValue, setLoading, setTokens, setError])
+	}
 
-	const { data } = useQuery({
-		queryKey: ['tokens', selectedChain?.id, offset, searchValue],
-		queryFn: fetchTokens,
-		enabled: !!selectedChain,
+	// Fetch destination tokens
+	const fetchDestinationTokens = async () => {
+		if (!destChain) return []
+		setDestinationLoading(true)
+		try {
+			const tokens = await handleFetchTokens(destChain.id, destinationOffset, 15, destinationSearchValue)
+			return tokens
+		} catch (error) {
+			if (error instanceof Error) {
+				setDestinationError(error.message)
+			} else {
+				setDestinationError('An unknown error occurred')
+			}
+			return []
+		} finally {
+			setDestinationLoading(false)
+		}
+	}
+
+	const { data: sourceTokensData } = useQuery({
+		queryKey: ['sourceTokens', sourceChain?.id, sourceOffset, sourceSearchValue],
+		queryFn: fetchSourceTokens,
+		enabled: !chainsLoading && !!sourceChain,
+	})
+
+	// Destination tokens query
+	const { data: destTokensData } = useQuery({
+		queryKey: ['destinationTokens', destChain?.id, destinationOffset, destinationSearchValue],
+		queryFn: fetchDestinationTokens,
+		enabled: !chainsLoading && !!destChain,
 	})
 
 	useEffect(() => {
-		if (data) {
-			setTokens(data)
+		if (sourceTokensData) {
+			setSourceTokens(sourceTokensData)
 		}
-	}, [data, setTokens])
+	}, [sourceTokensData, setSourceTokens])
 
 	useEffect(() => {
-		clearTokens()
-		setOffset(0)
-	}, [selectedChain, clearTokens, setOffset])
+		if (destTokensData) {
+			setDestinationTokens(destTokensData)
+		}
+	}, [destTokensData, setDestinationTokens])
 
 	useEffect(() => {
-		setOffset(0)
-	}, [searchValue, setOffset])
+		clearSourceTokens()
+	}, [sourceChain, sourceSearchValue, sourceOffset])
 
 	useEffect(() => {
-		fetchTokens()
-	}, [searchValue, offset, fetchTokens])
+		clearDestinationTokens()
+	}, [destChain, destinationSearchValue, destinationOffset])
 }

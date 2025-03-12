@@ -1,14 +1,16 @@
 import type { FC } from 'react'
 import type { ILancaChain } from '@lanca/sdk'
 import { Chain } from './Chain/Chain'
-import { useChainsStore } from '../../../../store/chains/useChainsStore'
+import { useChainStore } from '../../../../store/chains/ChainsStore'
 import classNames from './ChainMenu.module.pcss'
 
 export const ChainMenu: FC = () => {
-	const { chains, selectedChain, selectChain } = useChainsStore()
+	const chains = useChainStore(state => state.chains)
+	const sourcChain = useChainStore(state => state.sourceChain)
+	const selectSourceChain = useChainStore(state => state.selectSourceChain)
 
 	const handleChainClick = (chain: ILancaChain) => {
-		selectChain(chain)
+		selectSourceChain(chain)
 	}
 
 	return (
@@ -22,7 +24,7 @@ export const ChainMenu: FC = () => {
 							name={chain.name}
 							logoURL={chain.logoURI}
 							onClick={() => handleChainClick(chain)}
-							isActive={selectedChain?.id === chain.id}
+							isActive={sourcChain?.id === chain.id}
 						/>
 					))}
 				</div>

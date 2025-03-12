@@ -1,16 +1,18 @@
 import type { ILancaChain } from '@lanca/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
-import { useChainsStore } from '../../store/chains/useChainsStore'
+import { useChainStore } from '../../store/chains/ChainsStore'
 import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 
 export const useLoadChains = () => {
-	const { setChains, setLoading, setError } = useChainsStore()
-	const sdkClient = useLancaSDK()
+	const setChains = useChainStore(state => state.setChains)
+	const setLoading = useChainStore(state => state.setLoading)
+	const setError = useChainStore(state => state.setError)
+	const client = useLancaSDK()
 
 	const queryFn = useMemo(
 		() => async () => {
-			const supportedChains = await sdkClient.getSupportedChains()
+			const supportedChains = await client.getSupportedChains()
 			return supportedChains?.map(
 				(chain: ILancaChain): Partial<ILancaChain> => ({
 					id: chain.id,
@@ -20,7 +22,7 @@ export const useLoadChains = () => {
 				}),
 			)
 		},
-		[sdkClient],
+		[client],
 	)
 
 	const {
