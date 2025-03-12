@@ -19,20 +19,16 @@ export async function handleFetchBalances(chainId: string | undefined, address: 
 	}
 }
 
-export const handleFetchTokens = async (
-	chainId?: string,
-	offset?: number,
-	limit?: number,
-	search?: string,
-	address?: string,
-) => {
+export const handleFetchTokens = async (chainId?: string, offset?: number, limit?: number, search?: string) => {
 	const params = new URLSearchParams({
 		chain_id: chainId || '',
 		offset: offset?.toString() || '0',
 		limit: limit?.toString() || '15',
-		search: search || '',
-		address: address || '',
 	})
+
+	if (search) {
+		params.append('search', search)
+	}
 
 	const url = `${process.env.CONCERO_API_URL}/tokens/?${params.toString()}`
 
@@ -41,6 +37,7 @@ export const handleFetchTokens = async (
 		if (response.status !== 200) throw new Error(response.statusText)
 		return response.data.data
 	} catch (error) {
-		console.error('Error fetching tokens:', error)
+		console.warn('Error fetching tokens:', error)
+		return []
 	}
 }

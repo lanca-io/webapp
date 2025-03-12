@@ -19,17 +19,13 @@ export type Token = {
 	balance?: string
 }
 
-export interface ExtendedToken extends Token {
-	balance: string
-}
-
 export type TokensState = {
-	tokens: ExtendedToken[]
+	tokens: Token[]
 	isLoading: boolean
 	error: string | null
 	offset: number
 	searchValue: string
-	setTokens: (tokens: ExtendedToken[]) => void
+	setTokens: (tokens: Token[]) => void
 	setLoading: (isLoading: boolean) => void
 	setError: (error: string) => void
 	setOffset: (offset: number) => void

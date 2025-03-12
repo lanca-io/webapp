@@ -1,6 +1,8 @@
-import { ILancaChain } from '@lanca/sdk'
+import type { ILancaChain } from '@lanca/sdk'
+import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
+import type { StoreApi } from 'zustand'
 
-export interface ChainsState {
+export type ChainsState = {
 	chains: ILancaChain[]
 	isLoading: boolean
 	error: string | null
@@ -13,3 +15,5 @@ export interface ChainsState {
 	selectChain: (chain: ILancaChain) => void
 	clearSelectedChain: () => void
 }
+
+export type ChainStore = UseBoundStoreWithEqualityFn<StoreApi<ChainsState>>

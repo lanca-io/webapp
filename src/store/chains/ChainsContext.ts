@@ -1,4 +1,4 @@
-import type { ChainsState } from './types'
+import type { ChainStore } from './types'
 import { createContext } from 'react'
 
-export const ChainsContext = createContext<ChainsState | null>(null)
+export const ChainsContext = createContext<ChainStore | null>(null)

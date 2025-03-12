@@ -3,7 +3,7 @@ import { SplitSubvariantStoreProvider } from './config/SplitSubvariantStore'
 import { SettingsStoreProvider } from './settings/SettingsStore'
 import { FormStoreProvider } from './form/FormStore'
 import { RoutesStoreProvider } from './route/RouteStore'
-import { ChainStoreProvider } from './chains/ChainsStore'
+import { ChainsStoreProvider } from './chains/ChainsStore'
 import { TokensStoreProvider } from './tokens/TokensStore'
 
 interface StoreProviderProps {
@@ -14,13 +14,13 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children }) => {
 	return (
 		<SplitSubvariantStoreProvider>
 			<SettingsStoreProvider>
-				<ChainStoreProvider>
+				<ChainsStoreProvider>
 					<TokensStoreProvider>
 						<FormStoreProvider>
 							<RoutesStoreProvider>{children}</RoutesStoreProvider>
 						</FormStoreProvider>
 					</TokensStoreProvider>
-				</ChainStoreProvider>
+				</ChainsStoreProvider>
 			</SettingsStoreProvider>
 		</SplitSubvariantStoreProvider>
 	)

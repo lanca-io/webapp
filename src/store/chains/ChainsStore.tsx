@@ -1,34 +1,30 @@
 import type { PropsWithChildren } from 'react'
 import type { ChainsState } from './types'
-import type { StoreApi } from 'zustand'
-import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
-import { createContext, useContext, useRef } from 'react'
+import type { ChainStore } from './types'
+import { ChainsContext } from './ChainsContext'
+import { useContext, useRef } from 'react'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-export type ChainStore = UseBoundStoreWithEqualityFn<StoreApi<ChainsState>>
-
-export const ChainStoreContext = createContext<ChainStore | null>(null)
-
-export function ChainStoreProvider({ children }: PropsWithChildren<{}>) {
+export function ChainsStoreProvider({ children }: PropsWithChildren<{}>) {
 	const storeRef = useRef<ChainStore>()
 	if (!storeRef.current) {
 		storeRef.current = createChainStore()
 	}
-	return <ChainStoreContext.Provider value={storeRef.current}>{children}</ChainStoreContext.Provider>
+	return <ChainsContext.Provider value={storeRef.current}>{children}</ChainsContext.Provider>
 }
 
 export function useChainStore<T>(selector: (state: ChainsState) => T, equalityFn?: (left: T, right: T) => boolean): T {
-	const useStore = useContext(ChainStoreContext)
+	const useStore = useContext(ChainsContext)
 	if (!useStore) {
-		throw new Error(`You forgot to wrap your component in <${ChainStoreProvider.name}>.`)
+		throw new Error(`You forgot to wrap your component in <${ChainsStoreProvider.name}>.`)
 	}
 	return useStore(selector, equalityFn)
 }
 
 export function useChainStoreContext() {
-	const useStore = useContext(ChainStoreContext)
+	const useStore = useContext(ChainsContext)
 	if (!useStore) {
-		throw new Error(`You forgot to wrap your component in <${ChainStoreProvider.name}>.`)
+		throw new Error(`You forgot to wrap your component in <${ChainsStoreProvider.name}>.`)
 	}
 	return useStore
 }
