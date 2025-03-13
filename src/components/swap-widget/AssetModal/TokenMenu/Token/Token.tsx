@@ -27,7 +27,7 @@ export const Token: FC<TokenProps> = ({ token, chain, showBalance = false, onCli
 	return (
 		<div className={classNames['token']} onClick={onClick}>
 			<div className={classNames['token-content']}>
-				<Badge tokenLogoSrc={tokenLogo} chainLogoSrc={logoURI} size="l" />
+				<Badge tokenLogoSrc={tokenLogo} chainLogoSrc={logoURI || ''} size="l" />
 				<div className={classNames['token-description']}>
 					<h4 className={classNames['token-symbol']}>{truncate(symbol, 20)}</h4>
 					<div className={classNames['token-information']}>

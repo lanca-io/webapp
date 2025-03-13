@@ -1,17 +1,16 @@
 import type { FormState } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
-import { initialSrcChain, initialSrcToken, initialDstChain, initialDstToken } from './initialState'
 
 export const CreateFormStore = () =>
 	createWithEqualityFn<FormState>(
 		set => ({
-			srcChain: initialSrcChain,
-			dstChain: initialDstChain,
+			srcChain: null,
+			dstChain: null,
 			setSrcChain: chain => set({ srcChain: chain }),
 			setDstChain: chain => set({ dstChain: chain }),
 
-			srcToken: initialSrcToken,
-			dstToken: initialDstToken,
+			srcToken: null,
+			dstToken: null,
 			setSrcToken: token => set({ srcToken: token }),
 			setDstToken: token => set({ dstToken: token }),
 

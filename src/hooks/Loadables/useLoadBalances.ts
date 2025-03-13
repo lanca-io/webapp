@@ -2,21 +2,17 @@ import { useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { handleFetchBalances } from '../../handlers/tokens'
 import { useBalancesStore } from '../../store/balances/useBalancesStore'
-import { useFormStore } from '../../store/form/useFormStore'
 import { useAccount } from 'wagmi'
+import { useChainsStore } from '../../store/chains/useChainsStore'
 import type { ExtendedToken } from '../../store/tokens/types'
 
 export const useLoadBalances = () => {
 	const { address } = useAccount()
-	const { srcChain, dstChain } = useFormStore()
-	const { setSrcBalances, setDstBalances, setLoadingSrcBalances, setLoadingDstBalances } = useBalancesStore()
+	const { chains } = useChainsStore()
+	const { setBalances, setLoadingBalances } = useBalancesStore()
 
-	const fetchBalances = async (
-		chainId: string,
-		setLoading: (isLoading: boolean) => void,
-	): Promise<ExtendedToken[]> => {
+	const fetchBalances = async (chainId: string): Promise<ExtendedToken[]> => {
 		if (!address) return []
-		setLoading(true)
 		try {
 			const balances = await handleFetchBalances(chainId, address)
 			if (balances && balances[chainId]) {
@@ -27,43 +23,36 @@ export const useLoadBalances = () => {
 			}
 			return []
 		} catch (error) {
-			console.error(error)
+			console.error('Error fetching balances for chain:', chainId, error)
 			return []
-		} finally {
-			setLoading(false)
 		}
 	}
 
-	const fetchSourceBalances = useMemo(
-		() => () => fetchBalances(srcChain?.id!, setLoadingSrcBalances),
-		[srcChain, address],
-	)
-	const fetchDestinationBalances = useMemo(
-		() => () => fetchBalances(dstChain?.id!, setLoadingDstBalances),
-		[dstChain, address],
+	const queryFn = useMemo(
+		() => async () => {
+			if (!address) return []
+			const allBalances = await Promise.all(chains.map(chain => fetchBalances(chain.id)))
+			const mergedBalances: ExtendedToken[] = allBalances.flat()
+			return mergedBalances
+		},
+		[address, chains],
 	)
 
-	const { data: srcBalancesData } = useQuery({
-		queryKey: ['srcBalances', srcChain?.id, address],
-		queryFn: fetchSourceBalances,
-		enabled: !!srcChain && !!address,
-	})
-
-	const { data: dstBalancesData } = useQuery({
-		queryKey: ['dstBalances', dstChain?.id, address],
-		queryFn: fetchDestinationBalances,
-		enabled: !!dstChain && !!address,
+	const {
+		data: balances,
+		isError,
+		isLoading,
+	} = useQuery({
+		queryKey: ['allBalances', address],
+		queryFn,
+		enabled: !!address && chains.length > 0,
+		refetchInterval: 300000,
 	})
 
 	useEffect(() => {
-		if (srcBalancesData) {
-			setSrcBalances(srcBalancesData)
+		setLoadingBalances(isLoading)
+		if (balances) {
+			setBalances(balances)
 		}
-	}, [srcBalancesData, setSrcBalances])
-
-	useEffect(() => {
-		if (dstBalancesData) {
-			setDstBalances(dstBalancesData)
-		}
-	}, [dstBalancesData, setDstBalances])
+	}, [balances, isLoading, isError, setBalances, setLoadingBalances])
 }

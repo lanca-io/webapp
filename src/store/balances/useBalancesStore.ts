@@ -7,27 +7,17 @@ export const useBalancesStore = () => {
 		throw new Error(`You forgot to wrap your component in <BalancesProvider>.`)
 	}
 
-	const srcBalances = useStore(state => state.srcBalances)
-	const dstBalances = useStore(state => state.dstBalances)
-	const setSrcBalances = useStore(state => state.setSrcBalances)
-	const setDstBalances = useStore(state => state.setDstBalances)
-	const clearSrcBalances = useStore(state => state.clearSrcBalances)
-	const clearDstBalances = useStore(state => state.clearDstBalances)
-	const isLoadingSrcBalances = useStore(state => state.isLoadingSrcBalances)
-	const isLoadingDstBalances = useStore(state => state.isLoadingDstBalances)
-	const setLoadingSrcBalances = useStore(state => state.setLoadingSrcBalances)
-	const setLoadingDstBalances = useStore(state => state.setLoadingDstBalances)
+	const balances = useStore(state => state.balances)
+	const isLoadingBalances = useStore(state => state.isLoadingBalances)
+	const setBalances = useStore(state => state.setBalances)
+	const setLoadingBalances = useStore(state => state.setLoadingBalances)
+	const filterTokensByChain = useStore(state => state.filterTokensByChain)
 
 	return {
-		srcBalances,
-		dstBalances,
-		setSrcBalances,
-		setDstBalances,
-		clearSrcBalances,
-		clearDstBalances,
-		isLoadingSrcBalances,
-		isLoadingDstBalances,
-		setLoadingDstBalances,
-		setLoadingSrcBalances,
+		balances,
+		isLoadingBalances,
+		setBalances,
+		setLoadingBalances,
+		filterTokensByChain,
 	}
 }
