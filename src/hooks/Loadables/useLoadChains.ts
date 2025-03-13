@@ -1,13 +1,11 @@
 import type { ILancaChain } from '@lanca/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
-import { useChainStore } from '../../store/chains/ChainsStore'
+import { useChainsStore } from '../../store/chains/useChainsStore'
 import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 
 export const useLoadChains = () => {
-	const setChains = useChainStore(state => state.setChains)
-	const setLoading = useChainStore(state => state.setLoading)
-	const setError = useChainStore(state => state.setError)
+	const { setChains, setLoading, setError } = useChainsStore()
 	const client = useLancaSDK()
 
 	const queryFn = useMemo(

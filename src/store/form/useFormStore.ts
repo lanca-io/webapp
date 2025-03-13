@@ -1,14 +1,35 @@
-import type { FormValuesState } from './types'
 import { useContext } from 'react'
-import { shallow } from 'zustand/shallow'
-import { FormStoreContext } from './FormContext'
+import { FormContext } from './FormContext'
 
-export function useFormStore<T>(selector: (state: FormValuesState) => T, equalityFn = shallow): T {
-	const useStore = useContext(FormStoreContext)
-
+export const useFormStore = () => {
+	const useStore = useContext(FormContext)
 	if (!useStore) {
-		throw new Error('You forgot to wrap your component in <FormStoreProvider>.')
+		throw new Error(`You forgot to wrap your component in <FormStoreProvider>.`)
 	}
 
-	return useStore(selector, equalityFn)
+	const srcChain = useStore(state => state.srcChain)
+	const dstChain = useStore(state => state.dstChain)
+	const srcToken = useStore(state => state.srcToken)
+	const dstToken = useStore(state => state.dstToken)
+	const amount = useStore(state => state.amount)
+	const setSrcChain = useStore(state => state.setSrcChain)
+	const setDstChain = useStore(state => state.setDstChain)
+	const setSrcToken = useStore(state => state.setSrcToken)
+	const setDstToken = useStore(state => state.setDstToken)
+	const setAmount = useStore(state => state.setAmount)
+	const swapChainsAndTokens = useStore(state => state.swapChainsAndTokens)
+
+	return {
+		srcChain,
+		dstChain,
+		srcToken,
+		dstToken,
+		amount,
+		setSrcChain,
+		setDstChain,
+		setSrcToken,
+		setDstToken,
+		setAmount,
+		swapChainsAndTokens,
+	}
 }

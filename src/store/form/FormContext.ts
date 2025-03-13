@@ -1,4 +1,4 @@
-import type { FormStoreStore } from './types'
+import type { FormStore } from './types'
 import { createContext } from 'react'
 
-export const FormStoreContext = createContext<FormStoreStore | null>(null)
+export const FormContext = createContext<FormStore | null>(null)

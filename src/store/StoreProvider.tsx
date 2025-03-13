@@ -1,24 +1,23 @@
-import type { FC, ReactNode } from 'react'
+import type { FC, PropsWithChildren } from 'react'
 import { SplitSubvariantStoreProvider } from './config/SplitSubvariantStore'
 import { SettingsStoreProvider } from './settings/SettingsStore'
-import { FormStoreProvider } from './form/FormStore'
 import { RoutesStoreProvider } from './route/RouteStore'
 import { ChainsStoreProvider } from './chains/ChainsStore'
 import { TokensStoreProvider } from './tokens/TokensStore'
+import { FormStoreProvider } from './form/FormStore'
+import { BalancesStoreProvider } from './balances/BalancesStore'
 
-interface StoreProviderProps {
-	children: ReactNode
-}
-
-export const StoreProvider: FC<StoreProviderProps> = ({ children }) => {
+export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 	return (
 		<SplitSubvariantStoreProvider>
 			<SettingsStoreProvider>
 				<ChainsStoreProvider>
 					<TokensStoreProvider>
-						<FormStoreProvider>
-							<RoutesStoreProvider>{children}</RoutesStoreProvider>
-						</FormStoreProvider>
+						<BalancesStoreProvider>
+							<FormStoreProvider>
+								<RoutesStoreProvider>{children}</RoutesStoreProvider>
+							</FormStoreProvider>
+						</BalancesStoreProvider>
 					</TokensStoreProvider>
 				</ChainsStoreProvider>
 			</SettingsStoreProvider>

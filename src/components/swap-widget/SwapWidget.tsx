@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import classNames from './SwapWidget.module.pcss'
 import { AssetsModal } from './AssetModal/AssetModal'
-import { useTokensStore } from '../../store/tokens/TokensStore'
+import { useTokensStore } from '../../store/tokens/useTokensStore'
 
 export const SwapWidget: React.FC = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const sourceTokens = useTokensStore(state => state.sourceTokens)
-	const destTokens = useTokensStore(state => state.destinationTokens)
+	const { srcTokens, dstTokens } = useTokensStore()
 
 	const toggleModal = () => {
 		setIsModalOpen(!isModalOpen)
@@ -16,15 +15,15 @@ export const SwapWidget: React.FC = () => {
 		setIsModalOpen(false)
 	}
 
-	console.log(sourceTokens, 'Source tokens')
-	console.log(destTokens, 'Destination tokens')
+	console.log(srcTokens, 'Source tokens')
+	console.log(dstTokens, 'Destination tokens')
 
 	return (
 		<>
 			<button onClick={toggleModal} className={classNames['open-modal-button']}>
 				Open Modal
 			</button>
-			<AssetsModal isOpen={isModalOpen} onClose={handleClose} />
+			<AssetsModal direction="from" isOpen={isModalOpen} onClose={handleClose} />
 		</>
 	)
 }

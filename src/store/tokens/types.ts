@@ -9,7 +9,7 @@ export type Token = {
 	logoURI: string
 	name: string
 	symbol: string
-	coinGeckoId: string
+	coinGeckoId: string | null
 	priceUsd: number | null
 }
 

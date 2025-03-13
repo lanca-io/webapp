@@ -1,84 +1,76 @@
-import { useEffect } from 'react'
-import { useTokensStore } from '../../store/tokens/TokensStore'
-import { useChainStore } from '../../store/chains/ChainsStore'
+import type { ExtendedToken } from '../../store/tokens/types'
+import { useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { handleFetchTokens } from '../../handlers/tokens'
+import { useTokensStore } from '../../store/tokens/useTokensStore'
+import { useFormStore } from '../../store/form/useFormStore'
 
 export const useLoadTokens = () => {
-	const srcChain = useChainStore(state => state.sourceChain)
-	const dstChain = useChainStore(state => state.destinationChain)
-	const chainsLoading = useChainStore(state => state.isLoading)
+	const {
+		srcSearchValue,
+		srcOffset,
+		setSrcTokens,
+		setSrcTokensLoading,
+		dstSearchValue,
+		dstOffset,
+		setDstTokens,
+		setDstTokensLoading,
+	} = useTokensStore()
+	const { srcChain, dstChain } = useFormStore()
 
-	// Destination tokens state
-
-	// Fetch source tokens
-	const fetchSourceTokens = async () => {
-		if (!sourceChain) return []
-		setSourceLoading(true)
-		try {
-			const tokens = await handleFetchTokens(sourceChain.id, sourceOffset, 15, sourceSearchValue)
-			return tokens
-		} catch (error) {
-			if (error instanceof Error) {
-				setSourceError(error.message)
-			} else {
-				setSourceError('An unknown error occurred')
+	const fetchSourceTokens = useMemo(
+		() => async () => {
+			setSrcTokensLoading(true)
+			try {
+				const tokens = await handleFetchTokens(srcChain!.id, srcOffset, 15, srcSearchValue)
+				return tokens.map((token: ExtendedToken) => ({ ...token, balance: 0 }))
+			} catch (error) {
+				console.error(error)
+				return []
+			} finally {
+				setSrcTokensLoading(false)
 			}
-			return []
-		} finally {
-			setSourceLoading(false)
-		}
-	}
+		},
+		[srcChain, srcOffset, srcSearchValue, setSrcTokensLoading],
+	)
 
-	// Fetch destination tokens
-	const fetchDestinationTokens = async () => {
-		if (!destChain) return []
-		setDestinationLoading(true)
-		try {
-			const tokens = await handleFetchTokens(destChain.id, destinationOffset, 15, destinationSearchValue)
-			return tokens
-		} catch (error) {
-			if (error instanceof Error) {
-				setDestinationError(error.message)
-			} else {
-				setDestinationError('An unknown error occurred')
+	const fetchDestinationTokens = useMemo(
+		() => async () => {
+			setDstTokensLoading(true)
+			try {
+				const tokens = await handleFetchTokens(dstChain!.id, dstOffset, 15, dstSearchValue)
+				return tokens.map((token: ExtendedToken) => ({ ...token, balance: 0 }))
+			} catch (error) {
+				console.error(error)
+				return []
+			} finally {
+				setDstTokensLoading(false)
 			}
-			return []
-		} finally {
-			setDestinationLoading(false)
-		}
-	}
+		},
+		[dstChain, dstOffset, dstSearchValue, setDstTokensLoading],
+	)
 
 	const { data: sourceTokensData } = useQuery({
-		queryKey: ['sourceTokens', sourceChain?.id, sourceOffset, sourceSearchValue],
+		queryKey: ['sourceTokens', srcChain?.id, srcOffset, srcSearchValue],
 		queryFn: fetchSourceTokens,
-		enabled: !chainsLoading && !!sourceChain,
+		enabled: !!srcChain,
 	})
 
-	// Destination tokens query
-	const { data: destTokensData } = useQuery({
-		queryKey: ['destinationTokens', destChain?.id, destinationOffset, destinationSearchValue],
+	const { data: destinationTokensData } = useQuery({
+		queryKey: ['destinationTokens', dstChain?.id, dstOffset, dstSearchValue],
 		queryFn: fetchDestinationTokens,
-		enabled: !chainsLoading && !!destChain,
+		enabled: !!dstChain,
 	})
 
 	useEffect(() => {
 		if (sourceTokensData) {
-			setSourceTokens(sourceTokensData)
+			setSrcTokens(sourceTokensData)
 		}
-	}, [sourceTokensData, setSourceTokens])
+	}, [sourceTokensData, setSrcTokens])
 
 	useEffect(() => {
-		if (destTokensData) {
-			setDestinationTokens(destTokensData)
+		if (destinationTokensData) {
+			setDstTokens(destinationTokensData)
 		}
-	}, [destTokensData, setDestinationTokens])
-
-	useEffect(() => {
-		clearSourceTokens()
-	}, [sourceChain, sourceSearchValue, sourceOffset])
-
-	useEffect(() => {
-		clearDestinationTokens()
-	}, [destChain, destinationSearchValue, destinationOffset])
+	}, [destinationTokensData, setDstTokens])
 }
