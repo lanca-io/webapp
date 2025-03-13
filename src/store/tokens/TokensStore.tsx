@@ -1,6 +1,5 @@
+import type { TokensState, TokensStore } from './types'
 import type { PropsWithChildren } from 'react'
-import type { TokensState } from './types'
-import type { TokensStore } from './TokensContext'
 import { useContext, useRef } from 'react'
 import { TokensStoreContext } from './TokensContext'
 import { CreateTokensStore } from './CreateTokenStore'

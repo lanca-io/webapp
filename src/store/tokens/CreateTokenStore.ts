@@ -1,57 +1,28 @@
-import type { TokensState } from './types'
+import type { TokensState, ExtendedToken } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
 export const CreateTokensStore = () =>
 	createWithEqualityFn<TokensState>(
 		set => ({
-			sourceTokens: [],
-			destinationTokens: [],
+			srcTokens: [],
+			srcTokensLoading: false,
+			srcSearchValue: '',
+			srcOffset: 0,
+			setSrcTokens: (tokens: ExtendedToken[] | []) => set({ srcTokens: tokens }),
+			setSrcTokensLoading: (isLoading: boolean) => set({ srcTokensLoading: isLoading }),
+			setSrcSearchValue: (searchValue: string) => set({ srcSearchValue: searchValue }),
+			setSrcOffset: (offset: number) => set({ srcOffset: offset }),
+			clearSrcTokens: () => set({ srcTokens: [] }),
 
-			selectedSourceToken: null,
-			selectedDestinationToken: null,
-
-			isSourceLoading: false,
-			isDestinationLoading: false,
-			sourceError: null,
-			destinationError: null,
-
-			sourceOffset: 0,
-			destinationOffset: 0,
-			sourceSearchValue: '',
-			destinationSearchValue: '',
-
-			setSourceTokens: tokens => set({ sourceTokens: tokens }),
-			setDestinationTokens: tokens => set({ destinationTokens: tokens }),
-
-			selectSourceToken: token => set({ selectedSourceToken: token }),
-			selectDestinationToken: token => set({ selectedDestinationToken: token }),
-
-			clearSourceToken: () => set({ selectedSourceToken: null }),
-			clearDestinationToken: () => set({ selectedDestinationToken: null }),
-
-			setSourceLoading: isLoading => set({ isSourceLoading: isLoading }),
-			setDestinationLoading: isLoading => set({ isDestinationLoading: isLoading }),
-
-			setSourceError: error => set({ sourceError: error }),
-			setDestinationError: error => set({ destinationError: error }),
-
-			setSourceOffset: offset => set({ sourceOffset: offset }),
-			setDestinationOffset: offset => set({ destinationOffset: offset }),
-
-			setSourceSearchValue: searchValue => set({ sourceSearchValue: searchValue }),
-			setDestinationSearchValue: searchValue => set({ destinationSearchValue: searchValue }),
-
-			clearSourceTokens: () => set({ sourceTokens: [] }),
-			clearDestinationTokens: () => set({ destinationTokens: [] }),
+			dstTokens: [],
+			dstTokensLoading: false,
+			dstSearchValue: '',
+			dstOffset: 0,
+			setDstTokens: (tokens: ExtendedToken[] | []) => set({ dstTokens: tokens }),
+			setDstTokensLoading: (isLoading: boolean) => set({ dstTokensLoading: isLoading }),
+			setDstSearchValue: (searchValue: string) => set({ dstSearchValue: searchValue }),
+			setDstOffset: (offset: number) => set({ dstOffset: offset }),
+			clearDstTokens: () => set({ dstTokens: [] }),
 		}),
 		Object.is,
 	)
-
-// HAVE SRC CHAIN TOKENS
-// HAVE DEST CHAIN TOKENS\
-
-// ABLE TO SELECT SRC TOKEN
-// ABLE TO SELECT DEST TOKEN
-
-// HAVE DEFAULT SELECTED SRC TOKEN
-// HAVE DEFAULT SELECTED DEST TOKEN

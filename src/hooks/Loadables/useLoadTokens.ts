@@ -5,25 +5,11 @@ import { useQuery } from '@tanstack/react-query'
 import { handleFetchTokens } from '../../handlers/tokens'
 
 export const useLoadTokens = () => {
-	const sourceChain = useChainStore(state => state.sourceChain)
-	const destChain = useChainStore(state => state.destinationChain)
+	const srcChain = useChainStore(state => state.sourceChain)
+	const dstChain = useChainStore(state => state.destinationChain)
 	const chainsLoading = useChainStore(state => state.isLoading)
 
-	// Source tokens state
-	const setSourceTokens = useTokensStore(state => state.setSourceTokens)
-	const setSourceLoading = useTokensStore(state => state.setSourceLoading)
-	const setSourceError = useTokensStore(state => state.setSourceError)
-	const sourceOffset = useTokensStore(state => state.sourceOffset)
-	const sourceSearchValue = useTokensStore(state => state.sourceSearchValue)
-	const clearSourceTokens = useTokensStore(state => state.clearSourceTokens)
-
 	// Destination tokens state
-	const setDestinationTokens = useTokensStore(state => state.setDestinationTokens)
-	const setDestinationLoading = useTokensStore(state => state.setDestinationLoading)
-	const setDestinationError = useTokensStore(state => state.setDestinationError)
-	const destinationOffset = useTokensStore(state => state.destinationOffset)
-	const destinationSearchValue = useTokensStore(state => state.destinationSearchValue)
-	const clearDestinationTokens = useTokensStore(state => state.clearDestinationTokens)
 
 	// Fetch source tokens
 	const fetchSourceTokens = async () => {
