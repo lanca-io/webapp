@@ -1,5 +1,10 @@
-import type { Direction } from '../types'
+import type { ILancaChain } from '@lanca/sdk'
+import { ExtendedToken } from '../../../../store/tokens/types'
 
 export type TokenMenuProps = {
-	direction: Direction
+	chain: ILancaChain | null
+	tokens: ExtendedToken[]
+	isSearchActive: boolean
+	searchedTokens: ExtendedToken[]
+	isLoading: boolean
 }

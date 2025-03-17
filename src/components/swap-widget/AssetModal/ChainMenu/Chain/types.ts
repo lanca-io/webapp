@@ -1,6 +1,8 @@
+import type { MouseEvent } from 'react'
+
 export type ChainProps = {
 	name: string
 	logoURL: string
-	onClick: () => void
+	onClick: (event: MouseEvent) => void
 	isActive: boolean
 }

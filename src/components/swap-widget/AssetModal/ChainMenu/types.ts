@@ -1,5 +1,7 @@
-import type { Direction } from '../types'
+import type { ILancaChain } from '@lanca/sdk'
 
 export type ChainMenuProps = {
-	direction: Direction
+	chains: ILancaChain[]
+	activeChain: ILancaChain | null
+	onChainClick: (chain: ILancaChain) => void
 }

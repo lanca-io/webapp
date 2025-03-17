@@ -7,8 +7,15 @@ import { useFormStore } from '../../store/form/useFormStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
 export const useLoadSrcTokens = () => {
-	const { srcSearchValue, srcOffset, setSrcTokens, addSrcTokens, setSrcTokensLoading, setSrcOffset } =
-		useTokensStore()
+	const {
+		srcSearchValue,
+		srcOffset,
+		setSrcTokens,
+		addSrcTokens,
+		setSrcTokensLoading,
+		setSrcOffset,
+		setSrcSearchedTokens,
+	} = useTokensStore()
 	const { srcChain } = useFormStore()
 	const { chains } = useChainsStore()
 
@@ -47,8 +54,11 @@ export const useLoadSrcTokens = () => {
 			} else {
 				setSrcTokens(sourceTokensData)
 			}
+			if (srcSearchValue) {
+				setSrcSearchedTokens(sourceTokensData)
+			}
 		}
-	}, [sourceTokensData, srcOffset, setSrcTokens, addSrcTokens])
+	}, [sourceTokensData, srcOffset, srcSearchValue, setSrcTokens, addSrcTokens, setSrcSearchedTokens])
 
 	useEffect(() => {
 		setSrcOffset(0)

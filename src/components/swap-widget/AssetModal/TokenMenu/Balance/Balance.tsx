@@ -1,33 +1,33 @@
-import { type FC, useState } from 'react'
-import { useFormStore } from '../../../../../store/form/useFormStore'
+import type { FC } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { Token, TokenSkeleton } from '../Token/Token'
 import { useAccount } from 'wagmi'
 import { useGetBalances } from '../../../../../hooks/useGetBalances'
-import classNames from './Balance.module.pcss'
 import { BalanceProps } from './types'
 import { View } from '../../View/View'
 
-export const Balance: FC<BalanceProps> = ({ direction }) => {
-	const { address, isConnected } = useAccount()
-	const { srcChain, dstChain } = useFormStore()
-	const activeChain = direction === 'from' ? srcChain : dstChain
-	const { balances, isLoading } = useGetBalances(activeChain?.id)
-	const [visibleCount, setVisibleCount] = useState<number>(4)
-	const increment = 4
+import classNames from './Balance.module.pcss'
 
-	const skeletonCount = 4
-	const skeletons = Array.from({ length: skeletonCount }).map((_, index) => <TokenSkeleton key={index} />)
+export const Balance: FC<BalanceProps> = ({ chain, items }) => {
+	const [visibleCount, setVisibleCount] = useState<number>(items)
+
+	const { address, isConnected } = useAccount()
+	const { balances, isLoading } = useGetBalances(chain?.id)
+
+	const skeletons = useMemo(() => {
+		return Array.from({ length: items }).map((_, index) => <TokenSkeleton key={index} />)
+	}, [items])
+
+	const handleExpand = useCallback(() => {
+		setVisibleCount(prevCount => Math.min(prevCount + items, balances.length))
+	}, [items, balances.length])
+
+	const handleShowLess = useCallback(() => {
+		setVisibleCount(items)
+	}, [items])
 
 	if (!isConnected || !address || (!isLoading && balances.length === 0)) {
 		return null
-	}
-
-	const handleExpand = () => {
-		setVisibleCount(prevCount => Math.min(prevCount + increment, balances.length))
-	}
-
-	const handleShowLess = () => {
-		setVisibleCount(4)
 	}
 
 	return (
@@ -40,7 +40,7 @@ export const Balance: FC<BalanceProps> = ({ direction }) => {
 						.map(token => (
 							<Token key={`${token.address}-${token.chain_id}`} token={token} showBalance={true} />
 						))}
-			{balances.length > 4 && (
+			{balances.length > items && (
 				<View
 					isExpanded={visibleCount >= balances.length}
 					handleExpand={handleExpand}

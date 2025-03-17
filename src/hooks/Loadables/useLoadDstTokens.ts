@@ -7,8 +7,15 @@ import { useFormStore } from '../../store/form/useFormStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
 export const useLoadDstTokens = () => {
-	const { dstSearchValue, dstOffset, setDstTokens, addDstTokens, setDstTokensLoading, setDstOffset } =
-		useTokensStore()
+	const {
+		dstSearchValue,
+		dstOffset,
+		setDstTokens,
+		addDstTokens,
+		setDstTokensLoading,
+		setDstOffset,
+		setDstSearchedTokens,
+	} = useTokensStore()
 	const { dstChain } = useFormStore()
 	const { chains } = useChainsStore()
 
@@ -47,8 +54,11 @@ export const useLoadDstTokens = () => {
 			} else {
 				setDstTokens(destinationTokensData)
 			}
+			if (dstSearchValue) {
+				setDstSearchedTokens(destinationTokensData)
+			}
 		}
-	}, [destinationTokensData, dstOffset, setDstTokens, addDstTokens])
+	}, [destinationTokensData, dstOffset, dstSearchValue, setDstTokens, addDstTokens, setDstSearchedTokens])
 
 	useEffect(() => {
 		setDstOffset(0)

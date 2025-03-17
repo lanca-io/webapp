@@ -1,28 +1,19 @@
-import type { FC } from 'react'
+import type { FC, MouseEvent } from 'react'
 import type { ILancaChain } from '@lanca/sdk'
-import { useMemo, useCallback } from 'react'
-import { useChainsStore } from '../../../../store/chains/useChainsStore'
-import { useFormStore } from '../../../../store/form/useFormStore'
+import { useCallback } from 'react'
 import { Chain } from './Chain/Chain'
 import { ChainMenuProps } from './types'
+
 import classNames from './ChainMenu.module.pcss'
 
-export const ChainMenu: FC<ChainMenuProps> = ({ direction }) => {
-	const { chains } = useChainsStore()
-	const { srcChain, dstChain, setSrcChain, setDstChain } = useFormStore()
-
+export const ChainMenu: FC<ChainMenuProps> = ({ chains, activeChain, onChainClick }) => {
 	const handleChainClick = useCallback(
-		(chain: ILancaChain) => {
-			if (direction === 'from') {
-				setSrcChain(chain)
-			} else {
-				setDstChain(chain)
-			}
+		(chain: ILancaChain) => (event: MouseEvent) => {
+			event.preventDefault()
+			onChainClick(chain)
 		},
-		[direction, setSrcChain, setDstChain],
+		[onChainClick],
 	)
-
-	const activeChain = useMemo(() => (direction === 'from' ? srcChain : dstChain), [direction, srcChain, dstChain])
 
 	return (
 		<div className={classNames['chain-menu']}>
@@ -34,7 +25,7 @@ export const ChainMenu: FC<ChainMenuProps> = ({ direction }) => {
 							key={chain.id}
 							name={chain.name}
 							logoURL={chain.logoURI}
-							onClick={() => handleChainClick(chain)}
+							onClick={handleChainClick(chain)}
 							isActive={activeChain?.id === chain.id}
 						/>
 					))}

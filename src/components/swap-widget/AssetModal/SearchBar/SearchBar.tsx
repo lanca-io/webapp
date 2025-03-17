@@ -1,52 +1,18 @@
 import type { SearchBarProps } from './types'
-import type { FC } from 'react'
-import { useState, useEffect, useCallback } from 'react'
+import { type FC, useState, useEffect, useCallback } from 'react'
 import { TextInput } from '../../../layout/TextInput/TextInput'
 import { SearchIcon } from '../../../../assets/icons/SearchIcon'
-import { useTokensStore } from '../../../../store/tokens/useTokensStore'
 import { useDebounce } from '../../../../hooks/useDebounce'
-import { useFormStore } from '../../../../store/form/useFormStore'
 
-export const SearchBar: FC<SearchBarProps> = ({ direction, onSearchActive, onSearchResults }) => {
+export const SearchBar: FC<SearchBarProps> = ({ tokens, setSearchValue, onSearchActive, onSearchResults }) => {
 	const [input, setInput] = useState<string>('')
-	const debouncedInputValue = useDebounce(input, 800)
-	const { setSrcSearchValue, setDstSearchValue, setAllSearchValue, srcTokens, dstTokens, allTokens } =
-		useTokensStore()
-	const { srcChain, dstChain } = useFormStore()
+	const debouncedInputValue = useDebounce(input, 900)
 
 	useEffect(() => {
-		if (direction === 'from') {
-			if (srcChain) {
-				setSrcSearchValue(debouncedInputValue)
-				onSearchResults(srcTokens.length > 0)
-			} else {
-				setAllSearchValue(debouncedInputValue)
-				onSearchResults(allTokens.length > 0)
-			}
-		} else {
-			if (dstChain) {
-				setDstSearchValue(debouncedInputValue)
-				onSearchResults(dstTokens.length > 0)
-			} else {
-				setAllSearchValue(debouncedInputValue)
-				onSearchResults(allTokens.length > 0)
-			}
-		}
+		setSearchValue(debouncedInputValue)
+		onSearchResults(tokens.length > 0)
 		onSearchActive(debouncedInputValue.length > 0)
-	}, [
-		debouncedInputValue,
-		direction,
-		srcChain,
-		dstChain,
-		setSrcSearchValue,
-		setDstSearchValue,
-		setAllSearchValue,
-		srcTokens,
-		dstTokens,
-		allTokens,
-		onSearchActive,
-		onSearchResults,
-	])
+	}, [debouncedInputValue, setSearchValue, tokens, onSearchResults, onSearchActive])
 
 	const handleChange = useCallback((value: string) => {
 		setInput(value)

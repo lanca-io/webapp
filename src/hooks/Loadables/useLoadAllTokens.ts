@@ -6,15 +6,24 @@ import { useTokensStore } from '../../store/tokens/useTokensStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
 export const useLoadAllTokens = () => {
-	const { allOffset, allSearchValue, setAllTokens, addAllTokens, setAllTokensLoading, setAllOffset } =
-		useTokensStore()
+	const {
+		allOffset,
+		allSearchValue,
+		setAllTokens,
+		addAllTokens,
+		setAllTokensLoading,
+		setAllOffset,
+		setAllSearchedTokens,
+	} = useTokensStore()
 	const { chains } = useChainsStore()
 
 	const fetchAllSupportedTokens = useCallback(
 		async (offset: number, searchValue: string) => {
 			try {
 				const allTokens = await Promise.all(
-					chains.map(chain => handleFetchTokens(chain.id, offset, 3, searchValue)),
+					chains.map(chain =>
+						handleFetchTokens(chain.id, searchValue ? 0 : offset, searchValue ? undefined : 3, searchValue),
+					),
 				)
 				return allTokens.flat().map((token: ExtendedToken) => ({
 					...token,
@@ -46,8 +55,11 @@ export const useLoadAllTokens = () => {
 			} else {
 				setAllTokens(allTokensData)
 			}
+			if (allSearchValue) {
+				setAllSearchedTokens(allTokensData)
+			}
 		}
-	}, [allTokensData, allOffset, addAllTokens, setAllTokens])
+	}, [allTokensData, allOffset, allSearchValue, addAllTokens, setAllTokens, setAllSearchedTokens])
 
 	useEffect(() => {
 		setAllOffset(0)

@@ -1,5 +1,7 @@
-import { Direction } from '../../types'
+import type { ILancaChain } from '@lanca/sdk'
 
 export type BalanceProps = {
-	direction: Direction
+	chain: ILancaChain | null
+	isLoading: boolean
+	items: number
 }
