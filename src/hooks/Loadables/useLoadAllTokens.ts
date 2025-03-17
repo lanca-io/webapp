@@ -14,6 +14,7 @@ export const useLoadAllTokens = () => {
 		setAllTokensLoading,
 		setAllOffset,
 		setAllSearchedTokens,
+		addAllSearchedTokens,
 	} = useTokensStore()
 	const { chains } = useChainsStore()
 
@@ -21,14 +22,15 @@ export const useLoadAllTokens = () => {
 		async (offset: number, searchValue: string) => {
 			try {
 				const allTokens = await Promise.all(
-					chains.map(chain =>
-						handleFetchTokens(chain.id, searchValue ? 0 : offset, searchValue ? undefined : 3, searchValue),
-					),
+					chains.map(async chain => {
+						const tokens = await handleFetchTokens(chain.id, offset, 3, searchValue)
+						return tokens.map((token: ExtendedToken) => ({
+							...token,
+							chainLogoURI: chain.logoURI || null,
+						}))
+					}),
 				)
-				return allTokens.flat().map((token: ExtendedToken) => ({
-					...token,
-					chainLogoURI: chains.find(chain => chain.id === token.chain_id)?.logoURI || null,
-				}))
+				return allTokens.flat()
 			} catch (error) {
 				console.error(error)
 				return []
@@ -52,16 +54,27 @@ export const useLoadAllTokens = () => {
 		if (allTokensData) {
 			if (allOffset > 0) {
 				addAllTokens(allTokensData)
+				if (allSearchValue) {
+					addAllSearchedTokens(allTokensData)
+				}
 			} else {
 				setAllTokens(allTokensData)
-			}
-			if (allSearchValue) {
-				setAllSearchedTokens(allTokensData)
+				if (allSearchValue) {
+					setAllSearchedTokens(allTokensData)
+				}
 			}
 		}
-	}, [allTokensData, allOffset, allSearchValue, addAllTokens, setAllTokens, setAllSearchedTokens])
+	}, [
+		allTokensData,
+		allOffset,
+		allSearchValue,
+		addAllTokens,
+		setAllTokens,
+		setAllSearchedTokens,
+		addAllSearchedTokens,
+	])
 
 	useEffect(() => {
 		setAllOffset(0)
-	}, [setAllOffset])
+	}, [allSearchValue, setAllOffset])
 }

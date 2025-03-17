@@ -17,9 +17,7 @@ export const SearchTokens: FC<SearchTokensProps> = ({ tokens, isLoading }) => {
 			<h4 className={classNames['search-tokens__title']}>Tokens</h4>
 			{isLoading
 				? skeletons
-				: tokens.map(token => (
-						<Token key={`${token.address}-${token.chain_id}`} token={token} showBalance={true} />
-					))}
+				: tokens.map(token => <Token key={`${token.address}-${token.chain_id}`} token={token} />)}
 		</div>
 	)
 }

@@ -19,6 +19,7 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 
 	const { chains } = useChainsStore()
 	const { srcChain, dstChain, setSrcChain, setDstChain } = useFormStore()
+
 	const {
 		srcTokens,
 		srcOffset,
@@ -71,6 +72,7 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 			direction === 'from' ? (srcChain ? setSrcOffset : setAllOffset) : dstChain ? setDstOffset : setAllOffset,
 		[direction, srcChain, dstChain, setSrcOffset, setDstOffset, setAllOffset],
 	)
+
 	const searchedTokens = useMemo(
 		() =>
 			direction === 'from'
@@ -97,7 +99,7 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 
 	const selectChain = useMemo(
 		() => (direction === 'from' ? setSrcChain : setDstChain),
-		[direction, srcChain, dstChain],
+		[direction, setSrcChain, setDstChain],
 	)
 
 	const handleSearchActive = useCallback((isActive: boolean) => {
@@ -117,6 +119,7 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 
 	const handleScroll = useCallback(
 		(e: Event) => {
+			if (isSearchActive) return
 			const target = e.target as HTMLDivElement
 			const { scrollTop, scrollHeight, clientHeight } = target
 			const heightToBottom = clientHeight - (scrollHeight - scrollTop)
@@ -124,16 +127,16 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 				setOffset(offset + 15)
 			}
 		},
-		[offset, setOffset],
+		[isSearchActive, offset, setOffset],
 	)
 
 	useEffect(() => {
-		const container = scrollContainerRef.current
-		if (container) {
+		if (scrollContainerRef.current) {
+			const container = scrollContainerRef.current
 			container.addEventListener('scroll', handleScroll)
 			return () => container.removeEventListener('scroll', handleScroll)
 		}
-	}, [handleScroll])
+	}, [handleScroll, scrollContainerRef.current])
 
 	return (
 		<Modal title="Select a token and chain" isOpen={isOpen} onClose={onClose}>

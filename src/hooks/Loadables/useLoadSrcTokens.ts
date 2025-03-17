@@ -50,7 +50,9 @@ export const useLoadSrcTokens = () => {
 	useEffect(() => {
 		if (sourceTokensData) {
 			if (srcOffset > 0) {
-				addSrcTokens(sourceTokensData)
+				if (sourceTokensData.length > 0) {
+					addSrcTokens(sourceTokensData)
+				}
 			} else {
 				setSrcTokens(sourceTokensData)
 			}
@@ -62,5 +64,5 @@ export const useLoadSrcTokens = () => {
 
 	useEffect(() => {
 		setSrcOffset(0)
-	}, [srcChain, setSrcOffset])
+	}, [srcChain, setSrcOffset, srcSearchValue])
 }

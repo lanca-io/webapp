@@ -50,7 +50,9 @@ export const useLoadDstTokens = () => {
 	useEffect(() => {
 		if (destinationTokensData) {
 			if (dstOffset > 0) {
-				addDstTokens(destinationTokensData)
+				if (destinationTokensData.length > 0) {
+					addDstTokens(destinationTokensData)
+				}
 			} else {
 				setDstTokens(destinationTokensData)
 			}
@@ -62,5 +64,5 @@ export const useLoadDstTokens = () => {
 
 	useEffect(() => {
 		setDstOffset(0)
-	}, [dstChain, setDstOffset])
+	}, [dstChain, setDstOffset, dstSearchValue])
 }
