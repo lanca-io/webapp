@@ -1,0 +1,50 @@
+import type { ILancaChain } from '@lanca/sdk'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useCallback } from 'react'
+import { useChainsStore } from '../../store/chains/useChainsStore'
+import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
+
+export const useLoadChains = () => {
+	const { setChains, setLoading, setError } = useChainsStore()
+	const client = useLancaSDK()
+
+	const queryFn = useCallback(async () => {
+		const supportedChains = await client.getSupportedChains()
+		return supportedChains?.map(
+			(chain: ILancaChain): Partial<ILancaChain> => ({
+				id: chain.id,
+				name: chain.name,
+				logoURI: chain.logoURI,
+				explorerURI: chain.explorerURI,
+			}),
+		)
+	}, [client])
+
+	const {
+		data: chains,
+		isError,
+		isLoading,
+		error,
+	} = useQuery({
+		queryKey: ['chains'] as const,
+		queryFn,
+		refetchInterval: 300_000,
+		staleTime: 300_000,
+	})
+
+	useEffect(() => {
+		setLoading(isLoading)
+	}, [isLoading, setLoading])
+
+	useEffect(() => {
+		if (chains) {
+			setChains(chains as ILancaChain[])
+		}
+	}, [chains, setChains])
+
+	useEffect(() => {
+		if (isError && error instanceof Error) {
+			setError(error.message)
+		}
+	}, [isError, error, setError])
+}
