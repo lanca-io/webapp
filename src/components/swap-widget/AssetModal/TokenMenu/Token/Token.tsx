@@ -20,18 +20,17 @@ const TokenBalances: FC<TokenBalancesProps> = ({ balance, decimals = 18, price }
 	)
 }
 
-export const Token: FC<TokenProps> = ({ token, chain, showBalance = false, onClick }) => {
-	const { name, symbol, address, balance, priceUsd: price, logoURI: tokenLogo, decimals } = token
-	const { logoURI } = chain
+export const Token: FC<TokenProps> = ({ token, showBalance = false, onClick }) => {
+	const { name, symbol, address, balance, priceUsd: price, logoURI: tokenLogo, decimals, chainLogoURI } = token
 
 	return (
 		<div className={classNames['token']} onClick={onClick}>
 			<div className={classNames['token-content']}>
-				<Badge tokenLogoSrc={tokenLogo} chainLogoSrc={logoURI || ''} size="l" />
+				<Badge tokenLogoSrc={tokenLogo} chainLogoSrc={chainLogoURI || ''} size="l" />
 				<div className={classNames['token-description']}>
 					<h4 className={classNames['token-symbol']}>{truncate(symbol, 20)}</h4>
 					<div className={classNames['token-information']}>
-						<p className={classNames['token-name']}>{truncate(name, 20)}</p>
+						<p className={classNames['token-name']}>{truncate(name, 15)}</p>
 						<p className={classNames['token-address']}>{`(${truncateAddress(address)})`}</p>
 					</div>
 				</div>

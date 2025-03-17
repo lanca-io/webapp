@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { handleFetchBalances } from '../../handlers/tokens'
 import { useBalancesStore } from '../../store/balances/useBalancesStore'
@@ -11,48 +11,49 @@ export const useLoadBalances = () => {
 	const { chains } = useChainsStore()
 	const { setBalances, setLoadingBalances } = useBalancesStore()
 
-	const fetchBalances = async (chainId: string): Promise<ExtendedToken[]> => {
-		if (!address) return []
-		try {
-			const balances = await handleFetchBalances(chainId, address)
-			if (balances && balances[chainId]) {
-				return balances[chainId].map(({ _id, ...tokenData }) => ({
-					...tokenData,
-					chain_id: chainId,
-				}))
-			}
-			return []
-		} catch (error) {
-			console.error('Error fetching balances for chain:', chainId, error)
-			return []
-		}
-	}
-
-	const queryFn = useMemo(
-		() => async () => {
+	const fetchBalances = useCallback(
+		async (chainId: string): Promise<ExtendedToken[]> => {
 			if (!address) return []
-			const allBalances = await Promise.all(chains.map(chain => fetchBalances(chain.id)))
-			const mergedBalances: ExtendedToken[] = allBalances.flat()
-			return mergedBalances
+			try {
+				const balances = await handleFetchBalances(chainId, address)
+				const chain = chains.find(chain => chain.id === chainId)
+				if (balances && balances[chainId] && chain) {
+					return balances[chainId].map(({ _id, ...tokenData }) => ({
+						...tokenData,
+						chain_id: chainId,
+						chainLogoURI: chain.logoURI,
+					}))
+				}
+				return []
+			} catch (error) {
+				console.error('Error fetching balances for chain:', chainId, error)
+				return []
+			}
 		},
 		[address, chains],
 	)
 
-	const {
-		data: balances,
-		isError,
-		isLoading,
-	} = useQuery({
+	const queryFn = useCallback(async () => {
+		if (!address) return []
+		const allBalances = await Promise.all(chains.map(chain => fetchBalances(chain.id)))
+		const mergedBalances: ExtendedToken[] = allBalances.flat()
+		return mergedBalances
+	}, [address, chains, fetchBalances])
+
+	const { data: balances, isLoading } = useQuery({
 		queryKey: ['allBalances', address],
 		queryFn,
 		enabled: !!address && chains.length > 0,
-		refetchInterval: 300000,
+		refetchInterval: 300_000,
 	})
 
 	useEffect(() => {
 		setLoadingBalances(isLoading)
+	}, [isLoading, setLoadingBalances])
+
+	useEffect(() => {
 		if (balances) {
 			setBalances(balances)
 		}
-	}, [balances, isLoading, isError, setBalances, setLoadingBalances])
+	}, [balances, setBalances])
 }

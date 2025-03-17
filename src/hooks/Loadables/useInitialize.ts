@@ -1,10 +1,14 @@
 import { useLoadBalances } from './useLoadBalances'
 import { useLoadChains } from './useLoadChains'
-import { useLoadTokens } from './useLoadTokens'
+import { useLoadAllTokens } from './useLoadAllTokens'
+import { useLoadSrcTokens } from './useLoadSrcTokens'
+import { useLoadDstTokens } from './useLoadDstTokens'
 
 export const InitializeLoadables = (): null => {
 	useLoadChains()
-	useLoadTokens()
+	useLoadAllTokens()
+	useLoadSrcTokens()
+	useLoadDstTokens()
 	useLoadBalances()
 	return null
 }

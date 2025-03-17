@@ -1,6 +1,6 @@
 import type { BalancesState } from './types'
-import { createWithEqualityFn } from 'zustand/traditional'
 import type { ExtendedToken } from '../../store/tokens/types'
+import { createWithEqualityFn } from 'zustand/traditional'
 
 export const CreateBalancesStore = () =>
 	createWithEqualityFn<BalancesState>(

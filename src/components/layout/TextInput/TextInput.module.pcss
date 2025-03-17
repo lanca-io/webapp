@@ -4,21 +4,28 @@
 	flex-direction: row;
 	align-items: center;
 	color: var(--color-grey-400);
-	background-color: var(--color-grey-100);
-	padding: var(--sp-sm) var(--sp-lg);
+	padding: var(--sp-md) var(--sp-lg);
+	background-color: var(--color-grey-50);
 	border-radius: var(--sp-md);
 
 	&:focus {
-		border: 1px solid var(--color-primary-600);
+		outline: 1px solid var(--color-primary-500);
+	}
+
+	&:hover {
+		outline: 1px solid var(--color-grey-400);
 	}
 }
 
 input {
+	display: flex;
+	box-sizing: border-box;
 	background: transparent;
 	border: none;
 	font-size: 16px;
 	line-height: 20px;
-	height: 32px;
+	height: 20px;
+	gap: 10px;
 	font-weight: 400;
 	outline: none;
 	width: 100%;
