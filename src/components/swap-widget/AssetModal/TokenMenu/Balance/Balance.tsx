@@ -8,7 +8,7 @@ import { View } from '../../View/View'
 
 import classNames from './Balance.module.pcss'
 
-export const Balance: FC<BalanceProps> = ({ chain, items }) => {
+export const Balance: FC<BalanceProps> = ({ chain, items, onTokenSelect }) => {
 	const [visibleCount, setVisibleCount] = useState<number>(items)
 
 	const { address, isConnected } = useAccount()
@@ -38,7 +38,12 @@ export const Balance: FC<BalanceProps> = ({ chain, items }) => {
 				: balances
 						.slice(0, visibleCount)
 						.map(token => (
-							<Token key={`${token.address}-${token.chain_id}`} token={token} showBalance={true} />
+							<Token
+								key={`${token.address}-${token.chain_id}`}
+								token={token}
+								showBalance={true}
+								onClick={() => onTokenSelect(token)}
+							/>
 						))}
 			{balances.length > items && (
 				<View

@@ -7,4 +7,5 @@ export type TokenMenuProps = {
 	isSearchActive: boolean
 	searchedTokens: ExtendedToken[]
 	isLoading: boolean
+	onTokenSelect: (token: ExtendedToken) => void
 }

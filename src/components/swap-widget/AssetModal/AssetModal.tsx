@@ -6,9 +6,10 @@ import { SearchBar } from './SearchBar/SearchBar'
 import { TokenMenu } from './TokenMenu/TokenMenu'
 import { TokenNotFound } from './TokenNotFound/TokenNotFound'
 import { useTokensStore } from '../../../store/tokens/useTokensStore'
-import { useFormStore } from '../../../store/form/useFormStore'
 import { useChainsStore } from '../../../store/chains/useChainsStore'
+import { useFormStore } from '../../../store/form/useFormStore'
 import type { ILancaChain } from '@lanca/sdk'
+import type { ExtendedToken } from '../../../store/tokens/types'
 
 import classNames from './AssetModal.module.pcss'
 
@@ -17,8 +18,8 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 	const [hasSearchResults, setHasSearchResults] = useState<boolean>(true)
 	const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-	const { chains } = useChainsStore()
-	const { srcChain, dstChain, setSrcChain, setDstChain } = useFormStore()
+	const { chains, selectedSrcChain, selectedDstChain, setSelectedSrcChain, setSelectedDstChain } = useChainsStore()
+	const { setSrcChain, setDstChain, setSrcToken, setDstToken } = useFormStore()
 
 	const {
 		srcTokens,
@@ -43,63 +44,96 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 		setAllSearchValue,
 	} = useTokensStore()
 
-	const chain = useMemo(() => (direction === 'from' ? srcChain : dstChain), [direction, srcChain, dstChain])
+	const chain = useMemo(
+		() => (direction === 'from' ? selectedSrcChain : selectedDstChain),
+		[direction, selectedSrcChain, selectedDstChain],
+	)
 
 	const loading = useMemo(
 		() =>
 			direction === 'from'
-				? srcChain
+				? selectedSrcChain
 					? srcTokensLoading
 					: allTokensLoading
-				: dstChain
+				: selectedDstChain
 					? dstTokensLoading
 					: allTokensLoading,
-		[direction, srcChain, dstChain, srcTokensLoading, dstTokensLoading, allTokensLoading],
+		[direction, selectedSrcChain, selectedDstChain, srcTokensLoading, dstTokensLoading, allTokensLoading],
 	)
 
 	const tokens = useMemo(
-		() => (direction === 'from' ? (srcChain ? srcTokens : allTokens) : dstChain ? dstTokens : allTokens),
-		[direction, srcChain, dstChain, srcTokens, dstTokens, allTokens],
+		() =>
+			direction === 'from'
+				? selectedSrcChain
+					? srcTokens
+					: allTokens
+				: selectedDstChain
+					? dstTokens
+					: allTokens,
+		[direction, selectedSrcChain, selectedDstChain, srcTokens, dstTokens, allTokens],
 	)
 
 	const offset = useMemo(
-		() => (direction === 'from' ? (srcChain ? srcOffset : allOffset) : dstChain ? dstOffset : allOffset),
-		[direction, srcChain, dstChain, srcOffset, dstOffset, allOffset],
+		() =>
+			direction === 'from'
+				? selectedSrcChain
+					? srcOffset
+					: allOffset
+				: selectedDstChain
+					? dstOffset
+					: allOffset,
+		[direction, selectedSrcChain, selectedDstChain, srcOffset, dstOffset, allOffset],
 	)
 
 	const setOffset = useMemo(
 		() =>
-			direction === 'from' ? (srcChain ? setSrcOffset : setAllOffset) : dstChain ? setDstOffset : setAllOffset,
-		[direction, srcChain, dstChain, setSrcOffset, setDstOffset, setAllOffset],
+			direction === 'from'
+				? selectedSrcChain
+					? setSrcOffset
+					: setAllOffset
+				: selectedDstChain
+					? setDstOffset
+					: setAllOffset,
+		[direction, selectedSrcChain, selectedDstChain, setSrcOffset, setDstOffset, setAllOffset],
 	)
 
 	const searchedTokens = useMemo(
 		() =>
 			direction === 'from'
-				? srcChain
+				? selectedSrcChain
 					? srcSearchedTokens
 					: allSearchedTokens
-				: dstChain
+				: selectedDstChain
 					? dstSearchedTokens
 					: allSearchedTokens,
-		[direction, srcChain, dstChain, srcSearchedTokens, dstSearchedTokens, allSearchedTokens],
+		[direction, selectedSrcChain, selectedDstChain, srcSearchedTokens, dstSearchedTokens, allSearchedTokens],
 	)
 
 	const setSearchValue = useMemo(
 		() =>
 			direction === 'from'
-				? srcChain
+				? selectedSrcChain
 					? setSrcSearchValue
 					: setAllSearchValue
-				: dstChain
+				: selectedDstChain
 					? setDstSearchValue
 					: setAllSearchValue,
-		[direction, srcChain, dstChain, setSrcSearchValue, setDstSearchValue, setAllSearchValue],
+		[direction, selectedSrcChain, selectedDstChain, setSrcSearchValue, setDstSearchValue, setAllSearchValue],
+	)
+
+	const setChain = useMemo(
+		() => (direction === 'from' ? setSrcChain : setDstChain),
+		[direction, setSrcChain, setDstChain],
+	)
+
+	const setToken = useMemo(
+		() => (direction === 'from' ? setSrcToken : setDstToken),
+		[direction, setSrcToken, setDstToken],
 	)
 
 	const selectChain = useMemo(
-		() => (direction === 'from' ? setSrcChain : setDstChain),
-		[direction, setSrcChain, setDstChain],
+		() => (direction === 'from' ? setSelectedSrcChain : setSelectedDstChain),
+		[direction, setSelectedSrcChain, setSelectedDstChain],
 	)
 
 	const handleSearchActive = useCallback((isActive: boolean) => {
@@ -115,6 +149,18 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 			selectChain(chain)
 		},
 		[selectChain],
+	)
+
+	const handleTokenSelect = useCallback(
+		(token: ExtendedToken) => {
+			const chainId = token.chain_id
+			const chain = chains.find(chain => chain.id === chainId)
+			if (!chain) return
+			setChain(chain)
+			setToken(token)
+			onClose()
+		},
+		[chain, setChain, setToken, onClose],
 	)
 
 	const handleScroll = useCallback(
@@ -156,6 +202,7 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 					chain={chain}
 					tokens={tokens}
 					isLoading={loading}
+					onTokenSelect={handleTokenSelect}
 				/>
 			</div>
 			<div className={classNames['modal-blur']} />

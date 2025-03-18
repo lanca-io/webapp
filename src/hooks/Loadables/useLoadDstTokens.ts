@@ -3,7 +3,6 @@ import { useEffect, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { handleFetchTokens } from '../../handlers/tokens'
 import { useTokensStore } from '../../store/tokens/useTokensStore'
-import { useFormStore } from '../../store/form/useFormStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
 export const useLoadDstTokens = () => {
@@ -16,8 +15,7 @@ export const useLoadDstTokens = () => {
 		setDstOffset,
 		setDstSearchedTokens,
 	} = useTokensStore()
-	const { dstChain } = useFormStore()
-	const { chains } = useChainsStore()
+	const { chains, selectedDstChain } = useChainsStore()
 
 	const fetchTokens = useCallback(
 		async (chainId: string | undefined, offset: number, searchValue: string) => {
@@ -37,9 +35,9 @@ export const useLoadDstTokens = () => {
 	)
 
 	const { data: destinationTokensData, isFetching: isFetchingDestinationTokens } = useQuery({
-		queryKey: ['destinationTokens', dstChain?.id, dstOffset, dstSearchValue],
-		queryFn: () => fetchTokens(dstChain?.id, dstOffset, dstSearchValue),
-		enabled: !!dstChain,
+		queryKey: ['destinationTokens', selectedDstChain?.id, dstOffset, dstSearchValue],
+		queryFn: () => fetchTokens(selectedDstChain?.id, dstOffset, dstSearchValue),
+		enabled: !!selectedDstChain,
 		staleTime: 5 * 60 * 1000,
 	})
 
@@ -64,5 +62,5 @@ export const useLoadDstTokens = () => {
 
 	useEffect(() => {
 		setDstOffset(0)
-	}, [dstChain, setDstOffset, dstSearchValue])
+	}, [selectedDstChain, setDstOffset, dstSearchValue])
 }

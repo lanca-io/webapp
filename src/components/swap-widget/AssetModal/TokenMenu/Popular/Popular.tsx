@@ -3,7 +3,7 @@ import type { PopularProps } from './types'
 import { Token, TokenSkeleton } from '../Token/Token'
 import classNames from './Popular.module.pcss'
 
-export const Popular: FC<PopularProps> = ({ tokens, isLoading }) => {
+export const Popular: FC<PopularProps> = ({ tokens, isLoading, onTokenSelect }) => {
 	const skeletonCount = 15
 	const skeletons = Array.from({ length: skeletonCount }).map((_, index) => <TokenSkeleton key={index} />)
 
@@ -15,7 +15,12 @@ export const Popular: FC<PopularProps> = ({ tokens, isLoading }) => {
 		<div className={classNames['popular']}>
 			<h4 className={classNames['popular-title']}>Popular Tokens</h4>
 			{tokens.map((token, index) => (
-				<Token key={`${token.address}-${index}`} token={token} showBalance={false} />
+				<Token
+					key={`${token.address}-${index}`}
+					token={token}
+					showBalance={false}
+					onClick={() => onTokenSelect(token)}
+				/>
 			))}
 			{isLoading && skeletons}
 		</div>

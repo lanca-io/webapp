@@ -3,7 +3,6 @@ import { useEffect, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { handleFetchTokens } from '../../handlers/tokens'
 import { useTokensStore } from '../../store/tokens/useTokensStore'
-import { useFormStore } from '../../store/form/useFormStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
 export const useLoadSrcTokens = () => {
@@ -16,8 +15,7 @@ export const useLoadSrcTokens = () => {
 		setSrcOffset,
 		setSrcSearchedTokens,
 	} = useTokensStore()
-	const { srcChain } = useFormStore()
-	const { chains } = useChainsStore()
+	const { chains, selectedSrcChain } = useChainsStore()
 
 	const fetchTokens = useCallback(
 		async (chainId: string | undefined, offset: number, searchValue: string) => {
@@ -37,9 +35,9 @@ export const useLoadSrcTokens = () => {
 	)
 
 	const { data: sourceTokensData, isFetching: isFetchingSourceTokens } = useQuery({
-		queryKey: ['sourceTokens', srcChain?.id, srcOffset, srcSearchValue],
-		queryFn: () => fetchTokens(srcChain?.id, srcOffset, srcSearchValue),
-		enabled: !!srcChain,
+		queryKey: ['sourceTokens', selectedSrcChain?.id, srcOffset, srcSearchValue],
+		queryFn: () => fetchTokens(selectedSrcChain?.id, srcOffset, srcSearchValue),
+		enabled: !!selectedSrcChain,
 		staleTime: 5 * 60 * 1000,
 	})
 
@@ -64,5 +62,5 @@ export const useLoadSrcTokens = () => {
 
 	useEffect(() => {
 		setSrcOffset(0)
-	}, [srcChain, setSrcOffset, srcSearchValue])
+	}, [selectedSrcChain, setSrcOffset, srcSearchValue])
 }
