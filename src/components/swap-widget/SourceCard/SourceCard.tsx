@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useState } from 'react'
 import { AssetSelection } from '../AssetSelection/AssetSelection'
 import { AssetsModal } from '../AssetModal/AssetModal'
+import { AmountPanel } from '../AmountPanel/AmountPanel'
 import classNames from './SourceCard.module.pcss'
 
 export const SourceCard: FC = () => {
@@ -14,6 +15,7 @@ export const SourceCard: FC = () => {
 		<>
 			<div className={classNames['source-card']}>
 				<AssetSelection direction="from" openModal={openModal} />
+				<AmountPanel />
 			</div>
 			{modalOpen && <AssetsModal isOpen={modalOpen} direction="from" onClose={closeModal} />}
 		</>
