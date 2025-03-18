@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from 'react'
-import { SplitSubvariantStoreProvider } from './config/SplitSubvariantStore'
+import { SplitSubvariantStoreProvider } from './subvariant/SplitSubvariantStore'
 import { SettingsStoreProvider } from './settings/SettingsStore'
 import { RoutesStoreProvider } from './route/RouteStore'
 import { ChainsStoreProvider } from './chains/ChainsStore'

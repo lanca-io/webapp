@@ -1,0 +1,58 @@
+.asset-selection {
+	display: flex;
+	flex-direction: row;
+	padding: var(--sp-xs) var(--sp-md);
+	align-items: center;
+	gap: var(--sp-sm);
+	border-radius: var(--sp-md);
+	transtion: 300ms ease-in;
+	cursor: pointer;
+}
+
+.asset-selection:focus {
+	box-shadow:
+		0px 0px 0px 2px var(--color-grey-25),
+		0px 0px 0px 4px var(--color-primary-500);
+}
+
+.asset-selection:hover {
+	background-color: var(--color-grey-100);
+}
+
+.asset-selection:active {
+	background-color: var(--color-grey-200);
+}
+
+.asset-selection__token,
+.asset-selection__chain {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: var(--sp-xs);
+}
+
+.asset-selection__token-logo,
+.asset-selection__chain-logo {
+	width: 24px;
+	height: 24px;
+}
+
+.asset-selection__chain-logo {
+	border-radius: var(--sp-sm);
+}
+
+.asset-selection__token-name,
+.asset-selection__chain-name {
+	font-size: 1rem;
+	font-weight: 500;
+	line-height: 18px;
+	color: var(--color-grey-700);
+	align-items: center;
+}
+
+.asset-selection__pointer {
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 18px;
+}

@@ -1,23 +1,17 @@
-import React, { useState } from 'react'
-import { AssetsModal } from './AssetModal/AssetModal'
+import type { FC } from 'react'
 import classNames from './SwapWidget.module.pcss'
+import { ModeMenu } from './ModeMenu/ModeMenu'
+import { SourceCard } from './SourceCard/SourceCard'
+import { DestinationCard } from './DestinationCard/DestinationCard'
 
-export const SwapWidget: React.FC = () => {
-	const [isModalOpen, setIsModalOpen] = useState(false)
-	const toggleModal = () => {
-		setIsModalOpen(!isModalOpen)
-	}
-
-	const handleClose = () => {
-		setIsModalOpen(false)
-	}
-
+export const SwapWidget: FC = () => {
 	return (
-		<>
-			<button onClick={toggleModal} className={classNames['open-modal-button']}>
-				Open Modal
-			</button>
-			<AssetsModal direction="from" isOpen={isModalOpen} onClose={handleClose} />
-		</>
+		<div className={classNames['widget-container']}>
+			<ModeMenu />
+			<div className={classNames['widget']}>
+				<SourceCard />
+				<DestinationCard />
+			</div>
+		</div>
 	)
 }
