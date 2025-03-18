@@ -13,8 +13,8 @@ export type ChainsState = {
 	setLoading: (isLoading: boolean) => void
 	setError: (error: string) => void
 	clearError: () => void
-	setSelectedSrcChain: (chain: ILancaChain) => void
-	setSelectedDstChain: (chain: ILancaChain) => void
+	setSelectedSrcChain: (chain: ILancaChain | null) => void
+	setSelectedDstChain: (chain: ILancaChain | null) => void
 }
 
 export type ChainsStore = UseBoundStoreWithEqualityFn<StoreApi<ChainsState>>

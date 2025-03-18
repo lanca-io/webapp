@@ -1,5 +1,8 @@
+import type { FC } from 'react'
 import type { AssetModalProps } from './types'
-import { type FC, useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import type { ILancaChain } from '@lanca/sdk'
+import type { ExtendedToken } from '../../../store/tokens/types'
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { Modal } from './Modal/Modal'
 import { ChainMenu } from './ChainMenu/ChainMenu'
 import { SearchBar } from './SearchBar/SearchBar'
@@ -8,8 +11,6 @@ import { TokenNotFound } from './TokenNotFound/TokenNotFound'
 import { useTokensStore } from '../../../store/tokens/useTokensStore'
 import { useChainsStore } from '../../../store/chains/useChainsStore'
 import { useFormStore } from '../../../store/form/useFormStore'
-import type { ILancaChain } from '@lanca/sdk'
-import type { ExtendedToken } from '../../../store/tokens/types'
 
 import classNames from './AssetModal.module.pcss'
 
@@ -183,6 +184,12 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, direction })
 			return () => container.removeEventListener('scroll', handleScroll)
 		}
 	}, [handleScroll, scrollContainerRef.current])
+
+	useEffect(() => {
+		if (isOpen) {
+			selectChain(null)
+		}
+	}, [isOpen, direction, setSelectedSrcChain, setSelectedDstChain])
 
 	return (
 		<Modal title="Select a token and chain" isOpen={isOpen} onClose={onClose}>
