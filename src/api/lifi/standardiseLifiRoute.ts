@@ -131,7 +131,7 @@ export const standardiseLifiRoute = (route: lifiTypes.Route): StandardRoute => (
 		total_usd: roundNumberByDecimals(new BigNumber(route.fromAmountUSD).minus(route.toAmountUSD).toString(), 2),
 		total_gas_usd: route.gasCostUSD,
 		total_fee: getTotalFee(route),
-		total_fee_usd: roundNumberByDecimals(getFeeAmountUsd(route) + parseFloat(route.gasCostUSD!), 2)!,
+		total_fee_usd: roundNumberByDecimals(getFeeAmountUsd(route) + parseFloat(route.gasCostUSD), 2)!,
 	},
 	tags: route.tags,
 	insurance: {
