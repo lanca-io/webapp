@@ -5,10 +5,11 @@ import { useFormStore } from '../../../store/form/useFormStore'
 import { TrailArrowRightIcon } from '../../../assets/icons/TrailArrowRightIcon'
 
 import classNames from './AssetSelection.module.pcss'
+import { Badge } from '../../layout/Badge/Badge'
 
 const TokenDisplay: FC<{ logoURI?: string; symbol?: string }> = ({ logoURI, symbol }) => (
 	<div className={classNames['asset-selection__token']}>
-		<img src={logoURI} alt={symbol} className={classNames['asset-selection__token-logo']} />
+		<Badge tokenLogoSrc={logoURI || ''} size="m" />
 		<p className={classNames['asset-selection__token-name']}>{symbol}</p>
 	</div>
 )

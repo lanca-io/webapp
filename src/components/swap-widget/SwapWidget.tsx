@@ -10,6 +10,7 @@ export const SwapWidget: FC = () => {
 			<ModeMenu />
 			<div className={classNames['widget']}>
 				<SourceCard />
+
 				<DestinationCard />
 			</div>
 		</div>
