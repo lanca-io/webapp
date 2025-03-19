@@ -19,6 +19,9 @@ export const CreateFormStore = () =>
 			setAmount: amount => set({ amount: amount !== null ? amount.toString() : null }),
 			clearAmount: () => set({ amount: null }),
 
+			error: null,
+			setError: error => set({ error: error !== null ? error.toString() : null }),
+
 			swapChainsAndTokens: () =>
 				set(state => ({
 					srcChain: state.dstChain,

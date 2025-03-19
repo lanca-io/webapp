@@ -1,6 +1,6 @@
 import type { Address } from 'viem'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { useFormStore } from '../../store/form/useFormStore'
@@ -12,10 +12,9 @@ export const useLoadRoute = () => {
 	const { setRoutes, setLoading, setError } = useRouteStore()
 	const { srcChain, dstChain, srcToken, dstToken, amount } = useFormStore()
 	const { settings } = useSettings()
+
 	const slippage = settings.slippage
 	const client = useLancaSDK()
-
-	const [refetchCount, setRefetchCount] = useState(0)
 
 	const queryFn = useCallback(async () => {
 		if (!address || !srcChain || !dstChain || !srcToken || !dstToken || !amount) {
@@ -54,7 +53,6 @@ export const useLoadRoute = () => {
 	useEffect(() => {
 		if (route) {
 			setRoutes(route)
-			setRefetchCount(prevCount => prevCount + 1)
 		}
 	}, [route, setRoutes])
 
@@ -63,8 +61,4 @@ export const useLoadRoute = () => {
 			setError(error.message)
 		}
 	}, [isError, error, setError])
-
-	useEffect(() => {
-		console.log('Refetch count:', refetchCount)
-	}, [refetchCount])
 }

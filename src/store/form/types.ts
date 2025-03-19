@@ -18,6 +18,9 @@ export type FormState = {
 	setAmount: (amount: string | null) => void
 	clearAmount: () => void
 
+	error: string | null
+	setError: (error: string | null) => void
+
 	swapChainsAndTokens: () => void
 }
 

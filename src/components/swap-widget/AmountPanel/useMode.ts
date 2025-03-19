@@ -13,7 +13,7 @@ export const useMode = (value: string, tokenData: ExtendedToken | null) => {
 	const decimals = tokenData?.decimals ?? 18
 
 	const textHandler = useTextMode(value, balance)
-	const numberHandler = useNumberMode(value, decimals)
+	const numberHandler = useNumberMode(value, decimals, balance)
 	const percentHandler = usePercentMode(value, balance)
 	const dollarHandler = useDollarMode(value, tokenData?.priceUsd ?? 0, decimals)
 

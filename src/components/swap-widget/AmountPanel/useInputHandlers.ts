@@ -10,7 +10,7 @@ export const useInputHandlers = (
 	setMode: (mode: Mode) => void,
 	determineMode: (input: string) => Mode,
 ) => {
-	const { clearAmount } = useFormStore()
+	const { clearAmount, setError } = useFormStore()
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
@@ -25,8 +25,9 @@ export const useInputHandlers = (
 				setMode(newMode)
 			}
 			setValue(value)
+			setError(null)
 		},
-		[determineMode, mode, setMode, setValue],
+		[determineMode, mode, setMode, setValue, setError],
 	)
 
 	const handleFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
