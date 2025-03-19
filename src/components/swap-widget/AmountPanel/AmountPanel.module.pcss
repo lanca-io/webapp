@@ -5,3 +5,70 @@
 	gap: var(--sp-sm);
 	align-self: stretch;
 }
+
+.balance-container {
+	display: flex;
+	flex-direction: row;
+	height: 24px;
+	gap: var(--sp-xs);
+	align-items: center;
+}
+.max-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	margin: 0;
+	background-color: transparent;
+	color: var(--color-primary-600);
+	font-size: 0.875rem;
+}
+
+.balance-title {
+	font-size: 0.875rem;
+	color: var(--color-grey-500);
+	line-height: 18px;
+	font-weight: 400;
+}
+
+.balance-value,
+.balance-symbol {
+	font-size: 0.875rem;
+	color: var(--color-grey-600);
+	line-height: 18px;
+}
+
+.amount-input {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: var(--sp-md);
+	border-radius: var(--border-radius);
+}
+
+.input {
+	flex: 1 0;
+	overflow: hidden;
+	color: var(--color-grey-700);
+	text-align: center;
+	font-size: 48px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 56px;
+	letter-spacing: -0.96px;
+	border: none;
+	outline: none;
+	background: transparent;
+}
+.enter-amount,
+.error-message {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.error-message {
+	font-size: 0.875rem;
+	color: var(--color-danger-600);
+}
