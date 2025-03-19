@@ -15,8 +15,9 @@ export const CreateFormStore = () =>
 			setSrcToken: token => set({ srcToken: token }),
 			setDstToken: token => set({ dstToken: token }),
 
-			amount: '',
-			setAmount: amount => set({ amount }),
+			amount: null,
+			setAmount: amount => set({ amount: amount !== null ? amount.toString() : null }),
+			clearAmount: () => set({ amount: null }),
 
 			swapChainsAndTokens: () =>
 				set(state => ({

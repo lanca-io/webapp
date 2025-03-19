@@ -1,104 +1,43 @@
-import type { FC, ChangeEvent } from 'react'
-import { useState, useRef, useEffect } from 'react'
-import classNames from './AmountPanel.module.pcss'
-import { ExtendedToken } from '../../../store/tokens/types'
+import type { FC } from 'react'
+import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import { formatTokenAmount } from '../../../utils/new/tokens'
-import { format } from '../../../utils/new/format'
+import { useFormStore } from '../../../store/form/useFormStore'
+import { BalanceDisplay } from './BalanceDisplay/BalanceDisplay'
+import { useMode } from './useMode'
+import { useInputHandlers } from './useInputHandlers'
 
-interface AmountPanelProps {
-	token: ExtendedToken | null
-	disabled?: boolean
-}
+import classNames from './AmountPanel.module.pcss'
+import { useRouteStore } from '../../../store/route/useRouteStore'
 
-export const AmountPanel: FC<AmountPanelProps> = ({ token, disabled }) => {
-	const { address } = useAccount()
+export const AmountPanel: FC = () => {
+	const { isConnected } = useAccount()
+	const { srcToken } = useFormStore()
+	const { routes, loading } = useRouteStore()
 	const [value, setValue] = useState<string>('')
-	const [placeholder, setPlaceholder] = useState<string>('0')
-	const [errorMessage, setErrorMessage] = useState<string>('')
-	const [formattedValue, setFormattedValue] = useState<string>('Enter amount')
-	const ref = useRef<HTMLInputElement>(null)
-	const price = token?.priceUsd
-	const decimals = token?.decimals || 18
-	const balance = parseFloat(formatTokenAmount(token?.balance, decimals) || '0')
 
-	useEffect(() => {
-		const amount = parseFloat(value)
-		if (isNaN(amount) || !price) {
-			setFormattedValue('Enter amount')
-		} else if (amount > balance) {
-			setErrorMessage(`Not enough ${token?.symbol}`)
-			setFormattedValue('')
-		} else {
-			setErrorMessage('')
-			setFormattedValue(`= $${format(amount * price, 3)}`)
-		}
-	}, [value, price, balance, token?.symbol])
+	console.log('routes', routes)
+	console.log('loading', loading)
 
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { value } = event.target
-		const formattedValue = formatInputAmount(value)
-		setValue(formattedValue)
-		setErrorMessage('')
-		if (parseFloat(formattedValue) === 0) {
-			setFormattedValue('Enter amount')
-		} else if (parseFloat(formattedValue) <= balance) {
-			setFormattedValue(`= $${format(parseFloat(formattedValue) * price, 3)}`)
-		}
-	}
-
-	const handleBlur = (event: ChangeEvent<HTMLInputElement>) => {
-		const { value } = event.target
-		const formattedAmount = formatInputAmount(value)
-		setValue(formattedAmount)
-		if (!formattedAmount) {
-			setPlaceholder('0')
-		}
-	}
-
-	const handleFocus = () => {
-		setPlaceholder('')
-	}
-
-	const handleMaxClick = () => {
-		setValue(balance.toString())
-		setErrorMessage('')
-		setFormattedValue(`= $${format(balance * price, 3)}`)
-	}
-
-	const formatInputAmount = (value: string): string => {
-		return value.replace(/[^0-9.]/g, '')
-	}
+	const { mode, setMode, determineMode } = useMode(value, srcToken)
+	const { handleChange, handleFocus, handleBlur } = useInputHandlers(setValue, mode, setMode, determineMode)
 
 	return (
 		<div className={classNames['amount-panel']}>
 			<div className={classNames['amount-input-container']}>
 				<div className={classNames['amount-input']}>
 					<input
-						ref={ref}
 						type="text"
 						className={classNames['input']}
-						placeholder={placeholder}
+						placeholder="0"
 						value={value}
 						onChange={handleChange}
-						onBlur={handleBlur}
 						onFocus={handleFocus}
-						disabled={disabled}
+						onBlur={handleBlur}
 					/>
 				</div>
-				{!errorMessage && <div className={classNames['enter-amount']}>{formattedValue}</div>}
-				{errorMessage && <div className={classNames['error-message']}>{errorMessage}</div>}
+				<div className={classNames['enter-amount']}>{'= $100'}</div>
 			</div>
-			{address && balance > 0 && (
-				<div className={classNames['balance-container']}>
-					<span className={classNames['balance-title']}>Balance</span>
-					<span className={classNames['balance-value']}>{format(balance, 4)}</span>
-					<span className={classNames['balance-symbol']}>{token?.symbol}</span>
-					<button onClick={handleMaxClick} className={classNames['max-button']}>
-						Max
-					</button>
-				</div>
-			)}
+			{isConnected && <BalanceDisplay token={srcToken} />}
 		</div>
 	)
 }

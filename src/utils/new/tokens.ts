@@ -1,4 +1,4 @@
-import { formatUnits } from 'viem'
+import { formatUnits, parseUnits } from 'viem'
 
 /**
  * Formats a token amount to at least 6 decimals.
@@ -38,4 +38,24 @@ export function formatTokenPrice(amount?: string, price?: string, decimals?: num
 		return 0
 	}
 	return Number.parseFloat(formattedAmount) * Number.parseFloat(price)
+}
+
+/**
+ * Parses a token amount to a machine-readable format.
+ * @param amount - The amount to parse.
+ * @param decimals - The number of decimals for the token.
+ * @returns The parsed amount as a string.
+ */
+export function parseTokenAmount(amount: string, decimals: number): string {
+	if (!amount || isNaN(Number(amount))) {
+		return '0'
+	}
+
+	try {
+		const parsedAmount = parseUnits(amount, decimals)
+		return parsedAmount.toString()
+	} catch (error) {
+		console.error('Error parsing token amount:', error)
+		return '0'
+	}
 }

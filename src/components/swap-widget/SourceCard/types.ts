@@ -1,5 +1,1 @@
-import { ExtendedToken } from '../../../store/tokens/types'
-
-export type SourceCardProps = {
-	token: ExtendedToken | null
-}
+export type SourceCardProps = {}

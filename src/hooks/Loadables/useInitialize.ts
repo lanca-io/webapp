@@ -3,6 +3,7 @@ import { useLoadChains } from './useLoadChains'
 import { useLoadAllTokens } from './useLoadAllTokens'
 import { useLoadSrcTokens } from './useLoadSrcTokens'
 import { useLoadDstTokens } from './useLoadDstTokens'
+import { useLoadRoute } from './useLoadRoute'
 
 export const InitializeLoadables = (): null => {
 	useLoadChains()
@@ -10,5 +11,6 @@ export const InitializeLoadables = (): null => {
 	useLoadSrcTokens()
 	useLoadDstTokens()
 	useLoadBalances()
+	useLoadRoute()
 	return null
 }

@@ -17,6 +17,7 @@ export const useFormStore = () => {
 	const setSrcToken = useStore(state => state.setSrcToken)
 	const setDstToken = useStore(state => state.setDstToken)
 	const setAmount = useStore(state => state.setAmount)
+	const clearAmount = useStore(state => state.clearAmount)
 	const swapChainsAndTokens = useStore(state => state.swapChainsAndTokens)
 
 	return {
@@ -30,6 +31,7 @@ export const useFormStore = () => {
 		setSrcToken,
 		setDstToken,
 		setAmount,
+		clearAmount,
 		swapChainsAndTokens,
 	}
 }

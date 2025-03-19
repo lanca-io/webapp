@@ -14,8 +14,9 @@ export type FormState = {
 	setSrcToken: (token: ExtendedToken) => void
 	setDstToken: (token: ExtendedToken) => void
 
-	amount: string
-	setAmount: (amount: string) => void
+	amount: string | null
+	setAmount: (amount: string | null) => void
+	clearAmount: () => void
 
 	swapChainsAndTokens: () => void
 }

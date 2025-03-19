@@ -6,7 +6,7 @@ import { AssetsModal } from '../AssetModal/AssetModal'
 import { AmountPanel } from '../AmountPanel/AmountPanel'
 import classNames from './SourceCard.module.pcss'
 
-export const SourceCard: FC<SourceCardProps> = ({ token }) => {
+export const SourceCard: FC<SourceCardProps> = () => {
 	const [modalOpen, setModalOpen] = useState<boolean>(false)
 
 	const openModal = () => setModalOpen(true)
@@ -16,7 +16,7 @@ export const SourceCard: FC<SourceCardProps> = ({ token }) => {
 		<>
 			<div className={classNames['source-card']}>
 				<AssetSelection direction="from" openModal={openModal} />
-				<AmountPanel token={token} />
+				<AmountPanel />
 			</div>
 			{modalOpen && <AssetsModal isOpen={modalOpen} direction="from" onClose={closeModal} />}
 		</>
