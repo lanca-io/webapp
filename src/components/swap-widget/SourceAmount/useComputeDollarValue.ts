@@ -1,7 +1,6 @@
 import type { ExtendedToken } from '../../../store/tokens/types'
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { Mode } from './types'
-import { format } from '../../../utils/new/format'
 import { formatTokenAmount } from '../../../utils/new/tokens'
 import { calculateAmountFromText } from '../../../utils/new/input'
 
@@ -19,7 +18,7 @@ export const useComputeDollarValue = (value: string, mode: Mode, tokenData: Exte
 
 	const computeDollarAmount = useCallback(
 		(amount: number): string => {
-			return `$${format(amount * tokenInfo.priceUsd, 2)}`
+			return `$${amount}`
 		},
 		[tokenInfo.priceUsd],
 	)
@@ -27,6 +26,7 @@ export const useComputeDollarValue = (value: string, mode: Mode, tokenData: Exte
 	const computePercentageAmount = useCallback(
 		(percentStr: string): string | null => {
 			const percentage = parseFloat(percentStr.replace('%', ''))
+			console.log(percentage)
 			const amount = (percentage / 100) * tokenInfo.balance
 			return computeDollarAmount(amount)
 		},
@@ -52,8 +52,10 @@ export const useComputeDollarValue = (value: string, mode: Mode, tokenData: Exte
 		}
 
 		let parsedValue = value
+
 		if (mode !== Mode.Dollar) {
 			parsedValue = formatTokenAmount(value, tokenInfo.decimals)
+			console.log(parsedValue)
 		}
 
 		const computations = {

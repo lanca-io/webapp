@@ -20,7 +20,6 @@ export const useLoadRoute = () => {
 		if (!address || !srcChain || !dstChain || !srcToken || !dstToken || !amount) {
 			return null
 		}
-
 		const route = await client.getRoute({
 			fromChainId: srcChain.id,
 			toChainId: dstChain.id,
