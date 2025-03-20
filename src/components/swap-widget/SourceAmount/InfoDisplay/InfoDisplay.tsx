@@ -11,7 +11,9 @@ export const InfoDisplay: FC<InfoDisplayProps> = ({ value, token, mode }) => {
 
 	return (
 		<div className={classNames['info-display']}>
-			{!error && <span className={classNames['info']}>{mode === Mode.Dollar ? '-' : `= ${dollarValue}`}</span>}
+			{!error && dollarValue !== null && (
+				<span className={classNames['info']}>{mode === Mode.Dollar ? '-' : `= ${dollarValue}`}</span>
+			)}
 			{error && <span className={classNames['error']}>{error}</span>}
 		</div>
 	)

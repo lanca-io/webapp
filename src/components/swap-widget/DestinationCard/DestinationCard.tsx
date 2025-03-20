@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { AssetSelection } from '../AssetSelection/AssetSelection'
 import { AssetsModal } from '../AssetModal/AssetModal'
 import classNames from './DestinationCard.module.pcss'
-import { AmountPanel } from '../AmountPanel/AmountPanel'
+import { DestinationAmount } from '../DestinationAmount.tsx/DestinationAmount'
 
 export const DestinationCard: FC = () => {
 	const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -15,7 +15,7 @@ export const DestinationCard: FC = () => {
 		<>
 			<div className={classNames['destination-card']}>
 				<AssetSelection direction="to" openModal={openModal} />
-				<AmountPanel />
+				<DestinationAmount />
 			</div>
 			{modalOpen && <AssetsModal isOpen={modalOpen} direction="to" onClose={closeModal} />}
 		</>

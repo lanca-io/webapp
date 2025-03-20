@@ -3,7 +3,7 @@ import type { SourceCardProps } from './types'
 import { useState } from 'react'
 import { AssetSelection } from '../AssetSelection/AssetSelection'
 import { AssetsModal } from '../AssetModal/AssetModal'
-import { AmountPanel } from '../AmountPanel/AmountPanel'
+import { SourceAmount } from '../SourceAmount/SourceAmount'
 import classNames from './SourceCard.module.pcss'
 
 export const SourceCard: FC<SourceCardProps> = () => {
@@ -16,7 +16,7 @@ export const SourceCard: FC<SourceCardProps> = () => {
 		<>
 			<div className={classNames['source-card']}>
 				<AssetSelection direction="from" openModal={openModal} />
-				<AmountPanel />
+				<SourceAmount />
 			</div>
 			{modalOpen && <AssetsModal isOpen={modalOpen} direction="from" onClose={closeModal} />}
 		</>

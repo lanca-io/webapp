@@ -3,6 +3,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react'
 import { Mode } from './types'
 import { format } from '../../../utils/new/format'
 import { formatTokenAmount } from '../../../utils/new/tokens'
+import { calculateAmountFromText } from '../../../utils/new/input'
 
 export const useComputeDollarValue = (value: string, mode: Mode, tokenData: ExtendedToken | null) => {
 	const [dollarValue, setDollarValue] = useState<string | null>(null)
@@ -26,8 +27,20 @@ export const useComputeDollarValue = (value: string, mode: Mode, tokenData: Exte
 	const computePercentageAmount = useCallback(
 		(percentStr: string): string | null => {
 			const percentage = parseFloat(percentStr.replace('%', ''))
-			const amount = (percentage / 100) * Number(formatTokenAmount(String(tokenInfo.balance), tokenInfo.decimals))
+			const amount = (percentage / 100) * tokenInfo.balance
 			return computeDollarAmount(amount)
+		},
+		[tokenInfo.balance, computeDollarAmount],
+	)
+
+	const computeTextAmount = useCallback(
+		(text: string): string | null => {
+			const amountStr = calculateAmountFromText(text, tokenInfo.balance)
+			if (amountStr !== null) {
+				const amount = parseFloat(amountStr)
+				return !isNaN(amount) ? computeDollarAmount(amount) : null
+			}
+			return null
 		},
 		[tokenInfo.balance, computeDollarAmount],
 	)
@@ -38,19 +51,25 @@ export const useComputeDollarValue = (value: string, mode: Mode, tokenData: Exte
 			return
 		}
 
+		let parsedValue = value
+		if (mode !== Mode.Dollar) {
+			parsedValue = formatTokenAmount(value, tokenInfo.decimals)
+		}
+
 		const computations = {
-			[Mode.Dollar]: () => (value.startsWith('$') ? value : `$${value}`),
+			[Mode.Dollar]: () => (parsedValue.startsWith('$') ? parsedValue : `$${parsedValue}`),
 			[Mode.Number]: () => {
-				const amount = parseFloat(value)
+				const amount = parseFloat(parsedValue)
 				return !isNaN(amount) ? computeDollarAmount(amount) : null
 			},
-			[Mode.Percent]: () => computePercentageAmount(value),
-			[Mode.Text]: () => null,
+			[Mode.Percent]: () => computePercentageAmount(parsedValue),
+			[Mode.Text]: () => computeTextAmount(parsedValue),
 		}
 
 		const compute = computations[mode] || (() => null)
-		setDollarValue(compute())
-	}, [value, mode, computeDollarAmount, computePercentageAmount])
+		const result = compute()
+		setDollarValue(result)
+	}, [value, mode, computeDollarAmount, computePercentageAmount, computeTextAmount, tokenInfo.decimals])
 
 	return {
 		dollarValue,
