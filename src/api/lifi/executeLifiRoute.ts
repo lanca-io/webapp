@@ -4,5 +4,5 @@ import { type Route } from '@lifi/types'
 import { type Signer } from 'ethers'
 
 export const executeLifiRoute = async (signer: Signer, route: Route, settings?: ExecutionSettings): Promise<Route> => {
-	return lifi.executeRoute(signer, route, settings)
+	return await lifi.executeRoute(signer, route, settings)
 }
