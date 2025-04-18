@@ -11,6 +11,7 @@ import { fetchUserByAddress } from '../../../api/concero/user/fetchUserByAddress
 import type { Address } from 'viem'
 import { format } from '../../../utils/numberFormatting'
 import { TokenAmounts } from '../../../utils/TokenAmounts'
+import { V2Banner } from '../../layout/V2Banner/V2Banner'
 
 export interface Props {
 	swapState: SwapState
@@ -23,6 +24,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 	const typingTimeoutRef = useRef<number>()
 	const isInputStages = swapState.stage === SwapCardStage.input || swapState.stage === SwapCardStage.review
 	const isSuccess = swapState.stage === SwapCardStage.success
+	const isInput = swapState.stage === SwapCardStage.input
 
 	const getUser = async () => {
 		try {
@@ -89,6 +91,7 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 					</a>
 				</Card>
 			)}
+			{isInput && <V2Banner />}
 		</div>
 	)
 }
