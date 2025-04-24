@@ -1,15 +1,13 @@
-import type { SplitSubvariantProps } from './types'
-import type { SplitSubvariantState } from './types'
+import type { SubvariantState } from './types'
+import { SplitSubvariantType } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-export const CreateSplitSubvariantStore = ({ state = 'swap' }: SplitSubvariantProps) =>
-	createWithEqualityFn<SplitSubvariantState>(
+export const CreateSubvariantStore = () =>
+	createWithEqualityFn<SubvariantState>(
 		set => ({
-			state,
-			setState(state) {
-				set(() => ({
-					state,
-				}))
+			state: SplitSubvariantType.SWAP,
+			setState: (state: SplitSubvariantType) => {
+				set({ state })
 			},
 		}),
 		Object.is,

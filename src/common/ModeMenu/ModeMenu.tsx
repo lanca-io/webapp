@@ -1,5 +1,5 @@
 import { FC, useCallback, memo, useMemo } from 'react'
-import { useSplitSubvariantStore } from '../../store/subvariant/useSplitSubvariantStore'
+import { useSplitSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { ModeButton } from './ModeButton/ModeButton'
 import './ModeMenu.pcss'
 
