@@ -1,12 +1,14 @@
-export type ValueSetter<S> = <K extends keyof S>(key: K, value: S[Extract<K, string>]) => void
-export type ValuesSetter<S> = <K extends keyof S>(values: Record<K, S[Extract<K, string>]>) => void
-export type ValueGetter<S> = <K extends keyof S>(key: K) => S[K]
+import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
+import type { StoreApi } from 'zustand'
 
-export interface SettingsProps {
-	slippage?: string
+export type SettingsStateSlice = {
+	slippage: string
 }
 
-export type SettingsActions = SettingsProps & {
-	setValue: ValueSetter<SettingsProps>
-	setValues: ValuesSetter<SettingsProps>
+export type SettingsActions = {
+	setSlippage: (slippage: string) => void
+	resetSettings: () => void
 }
+
+export type SettingsState = SettingsStateSlice & SettingsActions
+export type SettingsStore = UseBoundStoreWithEqualityFn<StoreApi<SettingsState>>

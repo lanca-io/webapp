@@ -1,13 +1,19 @@
-import { useSettingsStore } from './SettingsStore'
+import { useContext } from 'react'
+import { SettingsContext } from './SettingsContext'
 
-export const useSettings = () => {
-	const settings = useSettingsStore(state => state)
-	const setValue = useSettingsStore(state => state.setValue)
-	const setValues = useSettingsStore(state => state.setValues)
+export const useSettingsStore = () => {
+	const useStore = useContext(SettingsContext)
+	if (!useStore) {
+		throw new Error(`You forgot to wrap your component in <SettingsStoreProvider>.`)
+	}
+
+	const slippage = useStore(state => state.slippage)
+	const setSlippage = useStore(state => state.setSlippage)
+	const resetSettings = useStore(state => state.resetSettings)
 
 	return {
-		settings,
-		setValue,
-		setValues,
+		slippage,
+		setSlippage,
+		resetSettings,
 	}
 }
