@@ -1,19 +1,20 @@
 import { FC, useCallback, memo, useMemo } from 'react'
-import { useSplitSubvariantStore } from '../../store/subvariant/useSubvariantStore'
+import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
+import { SplitSubvariantType } from '../../store/subvariant/types'
 import { ModeButton } from './ModeButton/ModeButton'
 import './ModeMenu.pcss'
 
 export const ModeMenu: FC = memo(() => {
-	const { state, setState } = useSplitSubvariantStore()
+	const { state, setState } = useSubvariantStore()
 
-	const handleSwapClick = useCallback(() => setState('swap'), [setState])
-	const handleSendClick = useCallback(() => setState('send'), [setState])
+	const handleSwapClick = useCallback(() => setState(SplitSubvariantType.SWAP), [setState])
+	const handleSendClick = useCallback(() => setState(SplitSubvariantType.SEND), [setState])
 
 	const buttons = useMemo(
 		() => (
 			<>
-				<ModeButton isActive={state === 'swap'} onClick={handleSwapClick} text="Swap" />
-				<ModeButton isActive={state === 'send'} onClick={handleSendClick} text="Send" />
+				<ModeButton isActive={state === SplitSubvariantType.SWAP} onClick={handleSwapClick} text="Swap" />
+				<ModeButton isActive={state === SplitSubvariantType.SEND} onClick={handleSendClick} text="Send" />
 			</>
 		),
 		[state, handleSwapClick, handleSendClick],
