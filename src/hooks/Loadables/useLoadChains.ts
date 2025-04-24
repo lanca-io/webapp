@@ -5,10 +5,10 @@ import { useChainsStore } from '../../store/chains/useChainsStore'
 import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 
 export const useLoadChains = () => {
-	const { setChains, setLoading, setError } = useChainsStore()
+	const { setChains, setLoading } = useChainsStore()
 	const client = useLancaSDK()
 
-	const queryFn = useCallback(async () => {
+	const fetchChains = useCallback(async () => {
 		const supportedChains = await client.getSupportedChains()
 		return supportedChains?.map(
 			(chain: ILancaChain): Partial<ILancaChain> => ({
@@ -22,14 +22,14 @@ export const useLoadChains = () => {
 
 	const {
 		data: chains,
-		isError,
 		isLoading,
-		error,
+		refetch,
 	} = useQuery({
-		queryKey: ['chains'] as const,
-		queryFn,
-		refetchInterval: 300_000,
-		staleTime: 300_000,
+		queryKey: ['chains'],
+		queryFn: fetchChains,
+		refetchInterval: 3_600_000, // 1 hour
+		staleTime: 3_600_000, // 1 hour
+		gcTime: 7_200_000, // 2 hours
 	})
 
 	useEffect(() => {
@@ -42,9 +42,8 @@ export const useLoadChains = () => {
 		}
 	}, [chains, setChains])
 
-	useEffect(() => {
-		if (isError && error instanceof Error) {
-			setError(error.message)
-		}
-	}, [isError, error, setError])
+	return {
+		isLoading,
+		refetch,
+	}
 }

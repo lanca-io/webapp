@@ -4,19 +4,16 @@ import { createWithEqualityFn } from 'zustand/traditional'
 
 export const CreateChainsStore = () =>
 	createWithEqualityFn<ChainsState>(
-		set => ({
+		(set, get) => ({
 			chains: [],
 			isLoading: false,
-			error: null,
-			selectedSrcChain: null,
-			selectedDstChain: null,
 			setChains: (chains: ILancaChain[]) => set({ chains }),
 			clearChains: () => set({ chains: [] }),
 			setLoading: (isLoading: boolean) => set({ isLoading }),
-			setError: (error: string) => set({ error }),
-			clearError: () => set({ error: null }),
-			setSelectedSrcChain: (chain: ILancaChain | null) => set({ selectedSrcChain: chain }),
-			setSelectedDstChain: (chain: ILancaChain | null) => set({ selectedDstChain: chain }),
+			getChainById: (id: string) => {
+				const { chains } = get()
+				return chains.find(chain => chain.id === id)
+			},
 		}),
 		Object.is,
 	)

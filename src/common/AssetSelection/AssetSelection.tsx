@@ -13,10 +13,10 @@ type AssetSelectionProps = {
 }
 
 export const AssetSelection: FC<AssetSelectionProps> = memo(({ direction, openModal }) => {
-	const { srcToken, dstToken, srcChain, dstChain } = useFormStore()
+	const { sourceChain, destinationChain, sourceToken, destinationToken } = useFormStore()
 
-	const token = direction === 'from' ? srcToken : dstToken
-	const chain = direction === 'from' ? srcChain : dstChain
+	const token = direction === 'from' ? sourceToken : destinationToken
+	const chain = direction === 'from' ? sourceChain : destinationChain
 
 	const handleClick = useCallback(() => {
 		openModal()
