@@ -1,28 +1,42 @@
-import type { RoutesProviderProps, RoutesState } from './types'
-import { RouteStepsValidation } from './RouteStepsValidation'
+import type { RoutesState } from './types'
+import type { IRouteType } from '@lanca/sdk'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-export const CreateRoutesStore = ({ route }: RoutesProviderProps) =>
+export const CreateRoutesStore = () =>
 	createWithEqualityFn<RoutesState>(
 		set => ({
-			route: route || null,
-			error: null,
-			loading: false,
-			setRoute: route => {
-				const validatedRoute = RouteStepsValidation(route)
-				set({ route: validatedRoute })
+			route: null,
+			isLoading: false,
+			setRoute: (route: IRouteType) => {
+				const validatedSteps = route.steps.map(step => {
+					if ('from' in step && 'to' in step) {
+						return {
+							...step,
+							from: {
+								...step.from,
+								chain: step.from.chain,
+							},
+							to: {
+								...step.to,
+								chain: step.to.chain,
+							},
+						}
+					}
+					return step
+				})
+
+				set({
+					route: {
+						...route,
+						steps: validatedSteps,
+					},
+				})
 			},
 			clearRoute: () => {
 				set({ route: null })
 			},
-			setError: error => {
-				set({ error })
-			},
-			clearError: () => {
-				set({ error: null })
-			},
-			setLoading: loading => {
-				set({ loading })
+			setIsLoading: (isLoading: boolean) => {
+				set({ isLoading })
 			},
 		}),
 		Object.is,

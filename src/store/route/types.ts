@@ -2,19 +2,16 @@ import type { IRouteType } from '@lanca/sdk'
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 import type { StoreApi } from 'zustand'
 
-export interface RoutesState {
+export type RoutesStateSlice = {
 	route: IRouteType | null
-	error?: string | null
-	loading: boolean
+	isLoading: boolean
+}
+
+export type RoutesActions = {
 	setRoute: (route: IRouteType) => void
 	clearRoute: () => void
-	setError: (error: string) => void
-	clearError: () => void
-	setLoading: (loading: boolean) => void
+	setIsLoading: (isLoading: boolean) => void
 }
 
+export type RoutesState = RoutesStateSlice & RoutesActions
 export type RoutesStore = UseBoundStoreWithEqualityFn<StoreApi<RoutesState>>
-
-export interface RoutesProviderProps {
-	route?: IRouteType
-}

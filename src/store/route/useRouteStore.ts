@@ -1,23 +1,23 @@
-import { useRoute } from './RouteStore'
+import { useContext } from 'react'
+import { RoutesContext } from './RouteContext'
 
 export const useRouteStore = () => {
-	const routes = useRoute(state => state.route)
-	const error = useRoute(state => state.error)
-	const loading = useRoute(state => state.loading)
-	const setRoutes = useRoute(state => state.setRoute)
-	const clearRoutes = useRoute(state => state.clearRoute)
-	const setError = useRoute(state => state.setError)
-	const clearError = useRoute(state => state.clearError)
-	const setLoading = useRoute(state => state.setLoading)
+	const useStore = useContext(RoutesContext)
+	if (!useStore) {
+		throw new Error(`You forgot to wrap your component in <RoutesStoreProvider>.`)
+	}
+
+	const route = useStore(state => state.route)
+	const isLoading = useStore(state => state.isLoading)
+	const setRoute = useStore(state => state.setRoute)
+	const clearRoute = useStore(state => state.clearRoute)
+	const setIsLoading = useStore(state => state.setIsLoading)
 
 	return {
-		routes,
-		error,
-		loading,
-		setRoutes,
-		clearRoutes,
-		setError,
-		clearError,
-		setLoading,
+		route,
+		isLoading,
+		setRoute,
+		clearRoute,
+		setIsLoading,
 	}
 }
