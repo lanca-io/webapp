@@ -8,16 +8,16 @@ export const useBalancesStore = () => {
 	}
 
 	const balances = useStore(state => state.balances)
-	const isLoadingBalances = useStore(state => state.isLoadingBalances)
+	const isLoading = useStore(state => state.isLoading)
 	const setBalances = useStore(state => state.setBalances)
-	const setLoadingBalances = useStore(state => state.setLoadingBalances)
-	const filterTokensByChain = useStore(state => state.filterTokensByChain)
+	const setIsLoading = useStore(state => state.setIsLoading)
+	const getBalancesByChainId = useStore(state => state.getBalancesByChainId)
 
 	return {
 		balances,
-		isLoadingBalances,
+		isLoading,
 		setBalances,
-		setLoadingBalances,
-		filterTokensByChain,
+		setIsLoading,
+		getBalancesByChainId,
 	}
 }

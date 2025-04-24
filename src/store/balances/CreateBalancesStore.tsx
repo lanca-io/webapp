@@ -1,15 +1,18 @@
 import type { BalancesState } from './types'
-import type { ExtendedToken } from '../../store/tokens/types'
+import type { ExtendedToken } from '../tokens/types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
 export const CreateBalancesStore = () =>
 	createWithEqualityFn<BalancesState>(
 		(set, get) => ({
 			balances: [],
-			isLoadingBalances: false,
+			isLoading: false,
+
 			setBalances: (tokens: ExtendedToken[]) => set({ balances: tokens }),
-			setLoadingBalances: (isLoading: boolean) => set({ isLoadingBalances: isLoading }),
-			filterTokensByChain: (chainId: string) => {
+
+			setIsLoading: (isLoading: boolean) => set({ isLoading }),
+
+			getBalancesByChainId: (chainId: string) => {
 				const { balances } = get()
 				return balances.filter(token => token.chain_id === chainId)
 			},
