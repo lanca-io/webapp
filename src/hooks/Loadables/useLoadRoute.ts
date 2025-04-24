@@ -4,60 +4,65 @@ import { useEffect, useCallback } from 'react'
 import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { useFormStore } from '../../store/form/useFormStore'
-import { useSettings } from '../../store/settings/useSettings'
+import { useSettingsStore } from '../../store/settings/useSettings'
 import { useAccount } from 'wagmi'
 
 export const useLoadRoute = () => {
 	const { address } = useAccount()
-	const { setRoutes, setLoading, setError } = useRouteStore()
-	const { srcChain, dstChain, srcToken, dstToken, amount } = useFormStore()
-	const { settings } = useSettings()
+	const { setRoute, setIsLoading } = useRouteStore()
+	const { sourceChain, destinationChain, sourceToken, destinationToken, amount } = useFormStore()
+	const { slippage } = useSettingsStore()
 
-	const slippage = settings.slippage
 	const client = useLancaSDK()
 
 	const queryFn = useCallback(async () => {
-		if (!address || !srcChain || !dstChain || !srcToken || !dstToken || !amount) {
+		if (!address || !sourceChain || !destinationChain || !sourceToken || !destinationToken || !amount) {
 			return null
 		}
-		const route = await client.getRoute({
-			fromChainId: srcChain.id,
-			toChainId: dstChain.id,
-			fromToken: srcToken.address as Address,
-			toToken: dstToken.address as Address,
-			amount: amount!,
-			fromAddress: address,
-			toAddress: address,
-			slippageTolerance: slippage!,
-		})
-		return route
-	}, [client, address, srcChain, dstChain, srcToken, dstToken, amount, slippage])
 
-	const {
-		data: route,
-		isError,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ['route', { address, srcChain, dstChain, srcToken, dstToken, amount, slippage }],
+		try {
+			const route = await client.getRoute({
+				fromChainId: sourceChain.id,
+				toChainId: destinationChain.id,
+				fromToken: sourceToken.address as Address,
+				toToken: destinationToken.address as Address,
+				amount: amount,
+				fromAddress: address,
+				toAddress: address,
+				slippageTolerance: slippage,
+			})
+			return route
+		} catch (error) {
+			console.error('Error fetching route:', error)
+			throw error
+		}
+	}, [client, address, sourceChain, destinationChain, sourceToken, destinationToken, amount, slippage])
+
+	const { data: route, isLoading } = useQuery({
+		queryKey: [
+			'route',
+			{
+				address,
+				sourceChain,
+				destinationChain,
+				sourceToken,
+				destinationToken,
+				amount,
+				slippage,
+			},
+		],
 		queryFn,
 		refetchInterval: 60_000,
-		enabled: !!address && !!srcChain && !!dstChain && !!srcToken && !!dstToken && !!amount,
+		enabled: !!address && !!sourceChain && !!destinationChain && !!sourceToken && !!destinationToken && !!amount,
 	})
 
 	useEffect(() => {
-		setLoading(isLoading)
-	}, [isLoading, setLoading])
+		setIsLoading(isLoading)
+	}, [isLoading, setIsLoading])
 
 	useEffect(() => {
 		if (route) {
-			setRoutes(route)
+			setRoute(route)
 		}
-	}, [route, setRoutes])
-
-	useEffect(() => {
-		if (isError && error instanceof Error) {
-			setError(error.message)
-		}
-	}, [isError, error, setError])
+	}, [route, setRoute])
 }

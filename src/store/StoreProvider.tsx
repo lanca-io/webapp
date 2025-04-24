@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from 'react'
-import { SplitSubvariantStoreProvider } from './subvariant/SubvariantStore'
+import { SubvariantStoreProvider } from './subvariant/SubvariantStore'
 import { SettingsStoreProvider } from './settings/SettingsStore'
 import { RoutesStoreProvider } from './route/RouteStore'
 import { ChainsStoreProvider } from './chains/ChainsStore'
@@ -9,7 +9,7 @@ import { BalancesStoreProvider } from './balances/BalancesStore'
 
 export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 	return (
-		<SplitSubvariantStoreProvider>
+		<SubvariantStoreProvider>
 			<SettingsStoreProvider>
 				<ChainsStoreProvider>
 					<TokensStoreProvider>
@@ -21,6 +21,6 @@ export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 					</TokensStoreProvider>
 				</ChainsStoreProvider>
 			</SettingsStoreProvider>
-		</SplitSubvariantStoreProvider>
+		</SubvariantStoreProvider>
 	)
 }

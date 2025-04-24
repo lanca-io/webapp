@@ -46,33 +46,32 @@ export const useLoadAllTokens = () => {
 		staleTime: 5 * 60 * 1000,
 	})
 
+	const processAllTokensData = useCallback(
+		(data: ExtendedToken[] | undefined) => {
+			if (!data) return
+
+			if (allOffset > 0) {
+				addAllTokens(data)
+				if (allSearchValue) {
+					addAllSearchedTokens(data)
+				}
+			} else {
+				setAllTokens(data)
+				if (allSearchValue) {
+					setAllSearchedTokens(data)
+				}
+			}
+		},
+		[allOffset, allSearchValue, addAllTokens, setAllTokens, setAllSearchedTokens, addAllSearchedTokens],
+	)
+
 	useEffect(() => {
 		setAllTokensLoading(isFetchingAllTokens)
 	}, [isFetchingAllTokens, setAllTokensLoading])
 
 	useEffect(() => {
-		if (allTokensData) {
-			if (allOffset > 0) {
-				addAllTokens(allTokensData)
-				if (allSearchValue) {
-					addAllSearchedTokens(allTokensData)
-				}
-			} else {
-				setAllTokens(allTokensData)
-				if (allSearchValue) {
-					setAllSearchedTokens(allTokensData)
-				}
-			}
-		}
-	}, [
-		allTokensData,
-		allOffset,
-		allSearchValue,
-		addAllTokens,
-		setAllTokens,
-		setAllSearchedTokens,
-		addAllSearchedTokens,
-	])
+		processAllTokensData(allTokensData)
+	}, [allTokensData, processAllTokensData])
 
 	useEffect(() => {
 		setAllOffset(0)

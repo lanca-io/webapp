@@ -18,42 +18,31 @@ export type ExtendedToken = Token & {
 	balance?: string
 }
 
-export type TokensState = {
-	srcTokens: ExtendedToken[]
-	srcSearchedTokens: ExtendedToken[]
-	srcTokensLoading: boolean
-	srcSearchValue: string
-	srcOffset: number
-	setSrcTokens: (tokens: ExtendedToken[] | []) => void
-	addSrcTokens: (tokens: ExtendedToken[] | []) => void
-	setSrcTokensLoading: (isLoading: boolean) => void
-	setSrcSearchValue: (searchValue: string) => void
-	setSrcOffset: (offset: number) => void
-	clearSrcTokens: () => void
-	setSrcSearchedTokens: (tokens: ExtendedToken[] | []) => void
-	addSrcSearchedTokens: (tokens: ExtendedToken[] | []) => void
-	clearSrcSearchedTokens: () => void
-
-	dstTokens: ExtendedToken[]
-	dstSearchedTokens: ExtendedToken[]
-	dstTokensLoading: boolean
-	dstSearchValue: string
-	dstOffset: number
-	setDstTokens: (tokens: ExtendedToken[] | []) => void
-	addDstTokens: (tokens: ExtendedToken[] | []) => void
-	setDstTokensLoading: (isLoading: boolean) => void
-	setDstSearchValue: (searchValue: string) => void
-	setDstOffset: (offset: number) => void
-	clearDstTokens: () => void
-	setDstSearchedTokens: (tokens: ExtendedToken[] | []) => void
-	addDstSearchedTokens: (tokens: ExtendedToken[] | []) => void
-	clearDstSearchedTokens: () => void
+export interface TokensStateData {
+	tokens: ExtendedToken[]
+	searchedTokens: ExtendedToken[]
+	isLoading: boolean
+	searchValue: string
+	offset: number
 
 	allTokens: ExtendedToken[]
 	allSearchedTokens: ExtendedToken[]
 	allTokensLoading: boolean
 	allSearchValue: string
 	allOffset: number
+}
+
+export interface TokensStateActions {
+	setTokens: (tokens: ExtendedToken[] | []) => void
+	addTokens: (tokens: ExtendedToken[] | []) => void
+	setLoading: (isLoading: boolean) => void
+	setSearchValue: (searchValue: string) => void
+	setOffset: (offset: number) => void
+	clearTokens: () => void
+	setSearchedTokens: (tokens: ExtendedToken[] | []) => void
+	addSearchedTokens: (tokens: ExtendedToken[] | []) => void
+	clearSearchedTokens: () => void
+
 	setAllTokens: (tokens: ExtendedToken[] | []) => void
 	addAllTokens: (tokens: ExtendedToken[] | []) => void
 	setAllTokensLoading: (isLoading: boolean) => void
@@ -65,4 +54,5 @@ export type TokensState = {
 	clearAllSearchedTokens: () => void
 }
 
+export type TokensState = TokensStateData & TokensStateActions
 export type TokensStore = UseBoundStoreWithEqualityFn<StoreApi<TokensState>>

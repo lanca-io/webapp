@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import type { Direction } from '../../components/swap-widget/AssetModal/types'
+import type { Direction } from '../AssetModal/types'
 import { memo, useCallback } from 'react'
 import { TokenSelection } from './TokenSelection/TokenSelection'
 import { ChainSelection } from './ChainSelection/ChainSelection'
