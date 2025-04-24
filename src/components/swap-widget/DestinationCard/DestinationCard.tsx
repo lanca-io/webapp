@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { AssetSelection } from '../AssetSelection/AssetSelection'
+import { AssetSelection } from '../../../common/AssetSelection/AssetSelection'
 import { AssetsModal } from '../AssetModal/AssetModal'
 import classNames from './DestinationCard.module.pcss'
 import { DestinationAmount } from '../DestinationAmount.tsx/DestinationAmount'

@@ -4,7 +4,7 @@ import { Token, TokenSkeleton } from '../Token/Token'
 import { useAccount } from 'wagmi'
 import { useGetBalances } from '../../../../../hooks/useGetBalances'
 import { BalanceProps } from './types'
-import { View } from '../../View/View'
+import { ExpandButton } from '../../../../../common/ExpandButton/ExpandButton'
 
 import classNames from './Balance.module.pcss'
 
@@ -18,13 +18,12 @@ export const Balance: FC<BalanceProps> = ({ chain, items, onTokenSelect }) => {
 		return Array.from({ length: items }).map((_, index) => <TokenSkeleton key={index} />)
 	}, [items])
 
-	const handleExpand = useCallback(() => {
-		setVisibleCount(prevCount => Math.min(prevCount + items, balances.length))
-	}, [items, balances.length])
-
-	const handleShowLess = useCallback(() => {
-		setVisibleCount(items)
-	}, [items])
+	const handleToggleExpand = useCallback(
+		(expanded: boolean) => {
+			setVisibleCount(expanded ? balances.length : items)
+		},
+		[items, balances.length],
+	)
 
 	if (!isConnected || !address || (!isLoading && balances.length === 0)) {
 		return null
@@ -46,11 +45,7 @@ export const Balance: FC<BalanceProps> = ({ chain, items, onTokenSelect }) => {
 							/>
 						))}
 			{balances.length > items && (
-				<View
-					isExpanded={visibleCount >= balances.length}
-					handleExpand={handleExpand}
-					handleShowLess={handleShowLess}
-				/>
+				<ExpandButton isExpanded={visibleCount >= balances.length} onToggle={handleToggleExpand} />
 			)}
 		</div>
 	)

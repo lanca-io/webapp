@@ -1,0 +1,65 @@
+.chain {
+	display: flex;
+	flex-direction: column;
+	width: 96px;
+	padding: var(--sp-sm);
+	align-items: center;
+	gap: var(--sp-xs);
+	border-radius: var(--sp-lg);
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		box-shadow 0.2s ease;
+	will-change: background-color, box-shadow;
+}
+
+.chain.active {
+	background-color: var(--color-grey-50);
+	outline: none;
+	box-shadow:
+		0px 0px 0px 2px var(--color-grey-25),
+		0px 0px 0px 4px var(--color-primary-500);
+}
+
+.chain:hover {
+	background-color: var(--color-grey-100);
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chain:focus {
+	background-color: var(--color-grey-100);
+	box-shadow:
+		0px 0px 0px 2px var(--color-grey-25),
+		0px 0px 0px 4px var(--color-primary-500);
+	outline: none;
+}
+
+.chain:active {
+	background-color: var(--color-grey-200);
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.chain__logo {
+	display: flex;
+	width: 40px;
+	height: 40px;
+	align-items: center;
+	gap: 10px;
+	border-radius: var(--sp-md);
+	transition: transform 0.2s ease;
+}
+
+.chain__name {
+	font-size: 0.875rem;
+	font-weight: 500;
+	line-height: 1.25rem;
+	color: var(--color-grey-600);
+	transition: color 0.3s ease;
+}
+
+.chain:hover .chain__name,
+.chain:focus .chain__name,
+.chain:active .chain__name,
+.chain.active .chain__name {
+	color: var(--color-grey-700);
+}

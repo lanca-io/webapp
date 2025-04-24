@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { SourceCardProps } from './types'
 import { useState } from 'react'
-import { AssetSelection } from '../AssetSelection/AssetSelection'
+import { AssetSelection } from '../../../common/AssetSelection/AssetSelection'
 import { AssetsModal } from '../AssetModal/AssetModal'
 import { SourceAmount } from '../SourceAmount/SourceAmount'
 import classNames from './SourceCard.module.pcss'

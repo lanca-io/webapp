@@ -1,0 +1,35 @@
+.chain_selection {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: var(--sp-xs);
+	cursor: pointer;
+}
+
+.chain_selection:hover {
+	background-color: var(--color-grey-100);
+}
+
+.chain_selection:active {
+	background-color: var(--color-grey-200);
+}
+
+.chain_selection:focus {
+	box-shadow:
+		0px 0px 0px 2px var(--color-grey-25),
+		0px 0px 0px 4px var(--color-primary-500);
+}
+
+.chain_selection_logo {
+	width: 24px;
+	height: 24px;
+	border-radius: var(--sp-sm);
+}
+
+.chain-selection_name {
+	font-size: 1rem;
+	font-weight: 500;
+	line-height: 18px;
+	color: var(--color-grey-700);
+}
