@@ -1,7 +1,8 @@
 import type { FC } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { Token } from '../Token/Token'
+import { TokenSkeleton } from '../Token/TokenSkeleton'
 import './SearchedTokens.pcss'
 
 export type SearchedTokensProps = {
@@ -11,20 +12,25 @@ export type SearchedTokensProps = {
 }
 
 export const SearchedTokens: FC<SearchedTokensProps> = ({ tokens, isLoading, onTokenSelect }) => {
-	const loadingTokens = useMemo(
+	const skeletons = useMemo(() => {
+		const count = 4
+		return Array.from({ length: count }).map((_, i) => <TokenSkeleton key={i} showBalance={false} />)
+	}, [])
+
+	const handleSelect = useCallback((token: ExtendedToken) => () => onTokenSelect(token), [onTokenSelect])
+
+	const tokenList = useMemo(
 		() =>
-			Array.from({ length: 4 }).map((_, index) => ({
-				address: `loading-${index}`,
-				chain_id: '',
-				symbol: '',
-				name: '',
-				decimals: 18,
-				logoURI: '',
-				is_popular: false,
-				coinGeckoId: '',
-				priceUsd: 0,
-			})),
-		[],
+			tokens.map(token => (
+				<Token
+					key={`${token.address}-${token.chain_id}`}
+					token={token}
+					showBalance={false}
+					onClick={handleSelect(token)}
+					isLoading={false}
+				/>
+			)),
+		[tokens, handleSelect],
 	)
 
 	if (!isLoading && tokens.length === 0) {
@@ -34,20 +40,7 @@ export const SearchedTokens: FC<SearchedTokensProps> = ({ tokens, isLoading, onT
 	return (
 		<div className="searched_tokens">
 			<h4 className="searched_tokens_title">Tokens</h4>
-
-			{isLoading
-				? loadingTokens.map((token, index) => (
-						<Token key={`loading-${index}`} token={token} showBalance={false} isLoading={true} />
-					))
-				: tokens.map(token => (
-						<Token
-							key={`${token.address}-${token.chain_id}`}
-							token={token}
-							showBalance={false}
-							onClick={() => onTokenSelect(token)}
-							isLoading={false}
-						/>
-					))}
+			{isLoading ? skeletons : tokenList}
 		</div>
 	)
 }

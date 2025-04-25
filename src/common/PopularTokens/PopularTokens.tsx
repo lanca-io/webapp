@@ -1,5 +1,7 @@
-import { type FC, useMemo } from 'react'
+import type { FC } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
+import { useMemo, useCallback } from 'react'
+import { TokenSkeleton } from '../Token/TokenSkeleton'
 import { Token } from '../Token/Token'
 import './PopularTokens.pcss'
 
@@ -10,20 +12,19 @@ export type PopularTokensProps = {
 }
 
 export const PopularTokens: FC<PopularTokensProps> = ({ tokens, isLoading, onTokenSelect }) => {
-	const loadingTokens = useMemo(
+	const skeletons = useMemo(() => {
+		const count = 15
+		return Array.from({ length: count }).map((_, i) => <TokenSkeleton key={i} showBalance={false} />)
+	}, [])
+
+	const handleSelect = useCallback((token: ExtendedToken) => () => onTokenSelect(token), [onTokenSelect])
+
+	const tokenList = useMemo(
 		() =>
-			Array.from({ length: 15 }).map(
-				(_, index) =>
-					({
-						address: `loading-${index}`,
-						chain_id: '',
-						symbol: '',
-						name: '',
-						decimals: 18,
-						logoURI: '',
-					}) as ExtendedToken,
-			),
-		[],
+			tokens.map((token, i) => (
+				<Token key={`${token.address}-${i}`} token={token} showBalance={false} onClick={handleSelect(token)} />
+			)),
+		[tokens, handleSelect],
 	)
 
 	if (!isLoading && tokens.length === 0) {
@@ -31,21 +32,10 @@ export const PopularTokens: FC<PopularTokensProps> = ({ tokens, isLoading, onTok
 	}
 
 	return (
-		<div className="popular_tokens_container">
+		<div className="popular_tokens">
 			<h4 className="popular_tokens_title">Popular Tokens</h4>
-			{isLoading
-				? loadingTokens.map((token, index) => (
-						<Token key={`loading-${index}`} token={token} showBalance={false} isLoading={true} />
-					))
-				: tokens.map((token, index) => (
-						<Token
-							key={`${token.address}-${index}`}
-							token={token}
-							showBalance={false}
-							onClick={() => onTokenSelect(token)}
-							isLoading={false}
-						/>
-					))}
+			{tokenList}
+			{isLoading && skeletons}
 		</div>
 	)
 }
