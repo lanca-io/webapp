@@ -23,52 +23,47 @@ export type AssetModalProps = {
 
 export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, onSelect, onChainSelect, selectedChain }) => {
 	const { isActive, hasResults, setActive, setResults, updateSearch } = useAssetSearch(selectedChain)
-	const {
-		tokens,
-		searchedTokens,
-		isLoading,
-		offset,
-		setOffset,
-		allTokens,
-		allSearchedTokens,
-		allTokensLoading,
-		allOffset,
-		setAllOffset,
-	} = useTokensStore()
+
+	const store = useTokensStore()
+
 	useLoadTokens(selectedChain?.id)
 
-	const displayTokens = useMemo(() => (selectedChain ? tokens : allTokens), [selectedChain, tokens, allTokens])
-
-	const displaySearchedTokens = useMemo(
-		() => (selectedChain ? searchedTokens : allSearchedTokens),
-		[selectedChain, searchedTokens, allSearchedTokens],
+	const tokens = useMemo(
+		() => (selectedChain ? store.tokens : store.allTokens),
+		[selectedChain, store.tokens, store.allTokens],
 	)
 
-	const loading = useMemo(
-		() => (selectedChain ? isLoading : allTokensLoading),
-		[selectedChain, isLoading, allTokensLoading],
+	const searchTokens = useMemo(
+		() => (selectedChain ? store.searchedTokens : store.allSearchedTokens),
+		[selectedChain, store.searchedTokens, store.allSearchedTokens],
 	)
 
-	const currentOffset = useMemo(() => (selectedChain ? offset : allOffset), [selectedChain, offset, allOffset])
+	const isLoading = useMemo(
+		() => (selectedChain ? store.isLoading : store.allTokensLoading),
+		[selectedChain, store.isLoading, store.allTokensLoading],
+	)
 
-	const updateOffset = useCallback(
+	const offset = useMemo(
+		() => (selectedChain ? store.offset : store.allOffset),
+		[selectedChain, store.offset, store.allOffset],
+	)
+
+	const setNewOffset = useCallback(
 		(newOffset: number) => {
 			if (selectedChain) {
-				setOffset(newOffset)
+				store.setOffset(newOffset)
 			} else {
-				setAllOffset(newOffset)
+				store.setAllOffset(newOffset)
 			}
 		},
-		[selectedChain, setOffset, setAllOffset],
+		[selectedChain, store.setOffset, store.setAllOffset],
 	)
 
-	const loadMoreTokens = useCallback(() => {
-		updateOffset(currentOffset + 15)
-	}, [currentOffset, updateOffset])
+	const loadMore = useCallback(() => setNewOffset(offset + 15), [offset, setNewOffset])
 
 	const { ref } = useInfiniteScroll({
 		disabled: isActive,
-		onLoadMore: loadMoreTokens,
+		onLoadMore: loadMore,
 	})
 
 	return (
@@ -78,20 +73,20 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, onSelect, on
 				setSearchValue={updateSearch}
 				onSearchActive={setActive}
 				onSearchResults={setResults}
-				tokens={displaySearchedTokens}
+				tokens={searchTokens}
 			/>
 
-			{!hasResults && isActive && !loading && <TokenNotFound />}
+			{!hasResults && isActive && !isLoading && <TokenNotFound />}
 
 			<div className={classNames['scroll-content']} ref={ref}>
 				{!isActive && <ChainMenu activeChain={selectedChain} onChainClick={onChainSelect} />}
 
 				<TokenMenu
 					isSearchActive={isActive}
-					searchedTokens={displaySearchedTokens}
+					searchedTokens={searchTokens}
 					chain={selectedChain}
-					tokens={displayTokens}
-					isLoading={loading}
+					tokens={tokens}
+					isLoading={isLoading}
 					onTokenSelect={onSelect}
 				/>
 			</div>
