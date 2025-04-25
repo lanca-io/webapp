@@ -9,29 +9,6 @@
 	border-radius: var(--sp-lg);
 	cursor: pointer;
 	align-self: stretch;
-	transition: 300ms ease-in;
-	opacity: 0;
-	transform: translateY(-5px);
-	animation: reveal 0.4s ease-out forwards;
-}
-
-@keyframes reveal {
-	0% {
-		opacity: 0;
-		transform: translateY(-5px);
-	}
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-.token:nth-child(2n) {
-	animation-delay: 0.1s;
-}
-
-.token:nth-child(3n) {
-	animation-delay: 0.2s;
 }
 
 .token:focus,
@@ -109,17 +86,10 @@
 
 .token_address {
 	display: none;
-	opacity: 0;
-	transform: translateX(-5px);
-	transition:
-		opacity 0.3s ease,
-		transform 0.3s ease;
 }
 
 .token:hover .token_address,
 .token:focus .token_address,
 .token:active .token_address {
 	display: inline;
-	opacity: 1;
-	transform: translateX(0);
 }

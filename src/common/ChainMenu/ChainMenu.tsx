@@ -2,10 +2,16 @@ import type { FC, MouseEvent } from 'react'
 import type { ILancaChain } from '@lanca/sdk'
 import { useCallback, memo, useMemo } from 'react'
 import { Chain } from './Chain/Chain'
-import { ChainMenuProps } from './types'
+import { useChainsStore } from '../../store/chains/useChainsStore'
 import './ChainMenu.pcss'
 
-export const ChainMenu: FC<ChainMenuProps> = memo(({ chains, activeChain, onChainClick }) => {
+type ChainMenuProps = {
+	activeChain: ILancaChain | null
+	onChainClick: (chain: ILancaChain) => void
+}
+
+export const ChainMenu: FC<ChainMenuProps> = memo(({ activeChain, onChainClick }) => {
+	const { chains } = useChainsStore()
 	const handleChainClick = useCallback(
 		(chain: ILancaChain) => (event: MouseEvent) => {
 			event.preventDefault()

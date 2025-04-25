@@ -6,6 +6,7 @@ import { ChainsStoreProvider } from './chains/ChainsStore'
 import { TokensStoreProvider } from './tokens/TokensStore'
 import { FormStoreProvider } from './form/FormStore'
 import { BalancesStoreProvider } from './balances/BalancesStore'
+import { ModalsStoreProvider } from './modals/ModalsStore'
 
 export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 	return (
@@ -15,7 +16,9 @@ export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 					<TokensStoreProvider>
 						<BalancesStoreProvider>
 							<FormStoreProvider>
-								<RoutesStoreProvider>{children}</RoutesStoreProvider>
+								<ModalsStoreProvider>
+									<RoutesStoreProvider>{children}</RoutesStoreProvider>
+								</ModalsStoreProvider>
 							</FormStoreProvider>
 						</BalancesStoreProvider>
 					</TokensStoreProvider>

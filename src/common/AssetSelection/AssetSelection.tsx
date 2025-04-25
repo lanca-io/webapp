@@ -1,23 +1,19 @@
 import type { FC } from 'react'
-import type { Direction } from '../AssetModal/types'
+import type { ExtendedToken } from '../../store/tokens/types'
+import type { ILancaChain } from '@lanca/sdk'
 import { memo, useCallback } from 'react'
 import { TokenSelection } from './TokenSelection/TokenSelection'
 import { ChainSelection } from './ChainSelection/ChainSelection'
-import { useFormStore } from '../../store/form/useFormStore'
 import { TrailArrowRightIcon } from '../../assets/icons/TrailArrowRightIcon'
 import './AssetSelection.pcss'
 
 type AssetSelectionProps = {
-	direction: Direction
+	token: ExtendedToken | null
+	chain: ILancaChain | null
 	openModal: () => void
 }
 
-export const AssetSelection: FC<AssetSelectionProps> = memo(({ direction, openModal }) => {
-	const { sourceChain, destinationChain, sourceToken, destinationToken } = useFormStore()
-
-	const token = direction === 'from' ? sourceToken : destinationToken
-	const chain = direction === 'from' ? sourceChain : destinationChain
-
+export const AssetSelection: FC<AssetSelectionProps> = memo(({ token, chain, openModal }) => {
 	const handleClick = useCallback(() => {
 		openModal()
 	}, [openModal])
