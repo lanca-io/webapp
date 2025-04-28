@@ -9,7 +9,7 @@ import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
 import { config } from '../../../constants/config'
 import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
 import { Footer } from '../../layout/Footer/Footer'
-import { Swap as SwapWidget } from '../../swap/Swap'
+import { SwapWidget } from '../../../common/SwapWidget/SwapWidget'
 
 const Swap = memo(withErrorBoundary(SwapWidget))
 
