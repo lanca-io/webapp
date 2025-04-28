@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { memo, useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { IconButton } from '@concero/ui-kit'
 import { TrailArrowLeftIcon } from '../../../assets/icons/TrailArrowLeftIcon'
 import './ModalHeader.pcss'
@@ -9,17 +9,28 @@ export type ModalHeaderProps = {
 	onClose: () => void
 }
 
-export const ModalHeader: FC<ModalHeaderProps> = memo(({ title, onClose }) => {
+export const ModalHeader: FC<ModalHeaderProps> = ({ title, onClose }) => {
 	const handleClose = useCallback(() => {
 		onClose()
 	}, [onClose])
 
+	const icon = useMemo(() => <TrailArrowLeftIcon />, [])
+
+	const closeButton = useMemo(
+		() => (
+			<IconButton onClick={handleClose} variant="secondary" size="m">
+				{icon}
+			</IconButton>
+		),
+		[handleClose, icon],
+	)
+
 	return (
 		<div className="modal_header">
-			<IconButton onClick={handleClose} variant="secondary" size="m">
-				<TrailArrowLeftIcon />
-			</IconButton>
+			{closeButton}
 			<h4 className="modal_header_title">{title}</h4>
 		</div>
 	)
-})
+}
+
+ModalHeader.displayName = 'ModalHeader'

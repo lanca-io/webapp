@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useState, useEffect, useCallback, memo } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { TextInput } from '../../components/layout/input/TextInput'
 import { useDebounce } from '../../hooks/useDebounce'
 import { SearchIcon } from '../../assets/icons/SearchIcon'
@@ -14,7 +14,7 @@ type SearchProps = {
 	onSearchActive: (isActive: boolean) => void
 }
 
-export const TokenSearch: FC<SearchProps> = memo(({ tokens, setSearchValue, onSearchActive, onSearchResults }) => {
+export const TokenSearch: FC<SearchProps> = ({ tokens, setSearchValue, onSearchActive, onSearchResults }) => {
 	const [input, setInput] = useState<string>('')
 	const debouncedInputValue = useDebounce(input, 500)
 
@@ -31,13 +31,20 @@ export const TokenSearch: FC<SearchProps> = memo(({ tokens, setSearchValue, onSe
 		setInput(value)
 	}, [])
 
-	return (
-		<TextInput
-			placeholder="Search by name or paste address"
-			value={input}
-			onChangeText={handleChange}
-			icon={<SearchIcon />}
-			aria-label="Search tokens"
-		/>
+	const searchIcon = useMemo(() => <SearchIcon />, [])
+
+	const searchInput = useMemo(
+		() => (
+			<TextInput
+				placeholder="Search by name or paste address"
+				value={input}
+				onChangeText={handleChange}
+				icon={searchIcon}
+				aria-label="Search tokens"
+			/>
+		),
+		[input, handleChange, searchIcon],
 	)
-})
+
+	return searchInput
+}

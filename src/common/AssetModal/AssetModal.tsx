@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useCallback, memo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Modal } from '../Modal/Modal'
 import { ChainMenu } from '../ChainMenu/ChainMenu'
 import { TokenSearch } from '../TokenSearch/TokenSearch'
@@ -12,7 +12,7 @@ import { useTokenSelection } from '../../hooks/useTokenSelection'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 import './AssetModal.pcss'
 
-type AssetModalProps = {
+type ModalProps = {
 	isOpen: boolean
 	onClose: () => void
 	onSelect: (token: ExtendedToken) => void
@@ -20,7 +20,7 @@ type AssetModalProps = {
 	selectedChain: ILancaChain | null
 }
 
-export const AssetsModal: FC<AssetModalProps> = memo(({ isOpen, onClose, onSelect, onChainSelect, selectedChain }) => {
+export const AssetsModal: FC<ModalProps> = ({ isOpen, onClose, onSelect, onChainSelect, selectedChain }) => {
 	const { isActive, hasResults, setActive, setResults, updateSearch } = useAssetSearch(selectedChain)
 	const { tokens, searchTokens, isLoading, offset, setOffset } = useTokenSelection(selectedChain)
 
@@ -28,13 +28,18 @@ export const AssetsModal: FC<AssetModalProps> = memo(({ isOpen, onClose, onSelec
 		setOffset(offset + 15)
 	}, [offset, setOffset])
 
-	const { ref } = useInfiniteScroll({
-		disabled: isActive,
-		onLoadMore: loadMore,
-	})
+	const config = useMemo(
+		() => ({
+			disabled: isActive,
+			onLoadMore: loadMore,
+		}),
+		[isActive, loadMore],
+	)
 
-	return (
-		<Modal title="Select a token and chain" isOpen={isOpen} onClose={onClose}>
+	const { ref } = useInfiniteScroll(config)
+
+	const search = useMemo(
+		() => (
 			<TokenSearch
 				chain={selectedChain}
 				setSearchValue={updateSearch}
@@ -42,23 +47,45 @@ export const AssetsModal: FC<AssetModalProps> = memo(({ isOpen, onClose, onSelec
 				onSearchResults={setResults}
 				tokens={searchTokens}
 			/>
+		),
+		[selectedChain, updateSearch, setActive, setResults, searchTokens],
+	)
 
-			{!hasResults && isActive && !isLoading && <TokenNotFound />}
+	const notFound = useMemo(
+		() => (!hasResults && isActive && !isLoading ? <TokenNotFound /> : null),
+		[hasResults, isActive, isLoading],
+	)
+
+	const chains = useMemo(
+		() => (!isActive ? <ChainMenu activeChain={selectedChain} onChainClick={onChainSelect} /> : null),
+		[isActive, selectedChain, onChainSelect],
+	)
+
+	const menu = useMemo(
+		() => (
+			<TokenMenu
+				isSearchActive={isActive}
+				searchedTokens={searchTokens}
+				chain={selectedChain}
+				tokens={tokens}
+				isLoading={isLoading}
+				onTokenSelect={onSelect}
+			/>
+		),
+		[isActive, searchTokens, selectedChain, tokens, isLoading, onSelect],
+	)
+
+	return (
+		<Modal title="Select a token and chain" isOpen={isOpen} onClose={onClose}>
+			{search}
+			{notFound}
 
 			<div className="scroll_content" ref={ref}>
-				{!isActive && <ChainMenu activeChain={selectedChain} onChainClick={onChainSelect} />}
-
-				<TokenMenu
-					isSearchActive={isActive}
-					searchedTokens={searchTokens}
-					chain={selectedChain}
-					tokens={tokens}
-					isLoading={isLoading}
-					onTokenSelect={onSelect}
-				/>
+				{chains}
+				{menu}
 			</div>
 
 			<div className="modal_blur" />
 		</Modal>
 	)
-})
+}

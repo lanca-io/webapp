@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
 import type { ILancaChain } from '@lanca/sdk'
-import { useState, useCallback, useMemo, memo } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { Token } from '../Token/Token'
 import { useAccount } from 'wagmi'
 import { useGetBalances } from '../../hooks/useGetBalances'
@@ -16,7 +16,7 @@ type BalanceProps = {
 	onTokenSelect: (token: ExtendedToken) => void
 }
 
-export const TokenBalances: FC<BalanceProps> = memo(({ chain, items, onTokenSelect }) => {
+export const TokenBalances: FC<BalanceProps> = ({ chain, items, onTokenSelect }) => {
 	const { address, isConnected } = useAccount()
 	const { balances, isLoading } = useGetBalances(chain?.id)
 	const [shown, setShown] = useState<number>(items)
@@ -34,6 +34,25 @@ export const TokenBalances: FC<BalanceProps> = memo(({ chain, items, onTokenSele
 
 	const handleSelect = useCallback((token: ExtendedToken) => () => onTokenSelect(token), [onTokenSelect])
 
+	const expandButton = useMemo(
+		() => (canExpand ? <ExpandButton isExpanded={expanded} onToggle={toggleExpand} /> : null),
+		[canExpand, expanded, toggleExpand],
+	)
+
+	const tokenList = useMemo(
+		() =>
+			tokens.map(token => (
+				<Token
+					key={`${token.address}-${token.chain_id}`}
+					token={token}
+					showBalance={true}
+					onClick={handleSelect(token)}
+					isLoading={false}
+				/>
+			)),
+		[tokens, handleSelect],
+	)
+
 	if (!isConnected || !address || (!isLoading && balances.length === 0)) {
 		return null
 	}
@@ -41,20 +60,8 @@ export const TokenBalances: FC<BalanceProps> = memo(({ chain, items, onTokenSele
 	return (
 		<div className="token_balances">
 			<h4 className="token_balances_title">Your Tokens</h4>
-
-			{isLoading
-				? skeletons
-				: tokens.map(token => (
-						<Token
-							key={`${token.address}-${token.chain_id}`}
-							token={token}
-							showBalance={true}
-							onClick={handleSelect(token)}
-							isLoading={false}
-						/>
-					))}
-
-			{canExpand && <ExpandButton isExpanded={expanded} onToggle={toggleExpand} />}
+			{isLoading ? skeletons : tokenList}
+			{expandButton}
 		</div>
 	)
-})
+}

@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { memo } from 'react'
+import { useMemo } from 'react'
 import { SkeletonLoader } from '../../components/layout/SkeletonLoader/SkeletonLoader'
 import './Token.pcss'
 
@@ -7,21 +7,33 @@ type SkeletonProps = {
 	showBalance?: boolean
 }
 
-export const TokenSkeleton: FC<SkeletonProps> = memo(({ showBalance = true }) => (
-	<div className="token">
-		<div className="token_content">
-			<SkeletonLoader width={32} height={32} />
-			<div className="token_description">
-				<SkeletonLoader width={29} height={17} />
-				<div className="token_information">
-					<SkeletonLoader width={25} height={17} />
+export const TokenSkeleton: FC<SkeletonProps> = ({ showBalance = true }) => {
+	const tokenBadgeSkeleton = useMemo(() => <SkeletonLoader width={32} height={32} />, [])
+
+	const symbolSkeleton = useMemo(() => <SkeletonLoader width={29} height={17} />, [])
+
+	const nameSkeleton = useMemo(() => <SkeletonLoader width={25} height={17} />, [])
+
+	const balanceSkeleton = useMemo(
+		() =>
+			showBalance ? (
+				<div className="token_price_container">
+					<SkeletonLoader width={30} height={16} />
+				</div>
+			) : null,
+		[showBalance],
+	)
+
+	return (
+		<div className="token">
+			<div className="token_content">
+				{tokenBadgeSkeleton}
+				<div className="token_description">
+					{symbolSkeleton}
+					<div className="token_information">{nameSkeleton}</div>
 				</div>
 			</div>
+			{balanceSkeleton}
 		</div>
-		{showBalance && (
-			<div className="token_price_container">
-				<SkeletonLoader width={30} height={16} />
-			</div>
-		)}
-	</div>
-))
+	)
+}

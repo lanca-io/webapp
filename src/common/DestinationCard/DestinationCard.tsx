@@ -1,16 +1,20 @@
-import { FC, memo } from 'react'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 import { AssetSelection } from '../AssetSelection/AssetSelection'
 import { useFormStore } from '../../store/form/useFormStore'
 import { useModalsStore } from '../../store/modals/useModalsStore'
 import './DestinationCard.pcss'
 
-export const DestinationCard: FC = memo(() => {
+export const DestinationCard: FC = () => {
 	const { destinationToken, destinationChain } = useFormStore()
 	const { openToAssetModal } = useModalsStore()
 
-	return (
-		<div className="destination_card">
-			<AssetSelection token={destinationToken} chain={destinationChain} openModal={openToAssetModal} />
-		</div>
+	const assetSelection = useMemo(
+		() => <AssetSelection token={destinationToken} chain={destinationChain} openModal={openToAssetModal} />,
+		[destinationToken, destinationChain, openToAssetModal],
 	)
-})
+
+	return <div className="destination_card">{assetSelection}</div>
+}
+
+DestinationCard.displayName = 'DestinationCard'
