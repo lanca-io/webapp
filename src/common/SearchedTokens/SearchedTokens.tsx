@@ -1,17 +1,17 @@
 import type { FC } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, memo } from 'react'
 import { Token } from '../Token/Token'
 import { TokenSkeleton } from '../Token/TokenSkeleton'
 import './SearchedTokens.pcss'
 
-export type SearchedTokensProps = {
+type TokensProps = {
 	tokens: ExtendedToken[]
 	isLoading: boolean
 	onTokenSelect: (token: ExtendedToken) => void
 }
 
-export const SearchedTokens: FC<SearchedTokensProps> = ({ tokens, isLoading, onTokenSelect }) => {
+export const SearchedTokens: FC<TokensProps> = memo(({ tokens, isLoading, onTokenSelect }) => {
 	const skeletons = useMemo(() => {
 		const count = 4
 		return Array.from({ length: count }).map((_, i) => <TokenSkeleton key={i} showBalance={false} />)
@@ -43,4 +43,4 @@ export const SearchedTokens: FC<SearchedTokensProps> = ({ tokens, isLoading, onT
 			{isLoading ? skeletons : tokenList}
 		</div>
 	)
-}
+})

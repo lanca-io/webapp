@@ -3,11 +3,12 @@ import { memo, useCallback } from 'react'
 import { Button } from '@concero/ui-kit'
 import './ExpandButton.pcss'
 
-export type ExpandButtonProps = {
+type ExpandProps = {
 	isExpanded: boolean
 	onToggle: (expanded: boolean) => void
 }
-export const ExpandButton: FC<ExpandButtonProps> = memo(({ isExpanded, onToggle }) => {
+
+export const ExpandButton: FC<ExpandProps> = memo(({ isExpanded, onToggle }) => {
 	const handleToggle = useCallback(() => {
 		onToggle(!isExpanded)
 	}, [isExpanded, onToggle])

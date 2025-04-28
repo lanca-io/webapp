@@ -8,9 +8,7 @@ import './CardSwitcher.pcss'
 export const CardSwitcher: FC = memo(() => {
 	const { swapChainsAndTokens } = useFormStore()
 
-	const handleSwap = useCallback(() => {
-		swapChainsAndTokens()
-	}, [swapChainsAndTokens])
+	const handleSwap = useCallback(() => swapChainsAndTokens(), [swapChainsAndTokens])
 
 	return (
 		<div className="card_switcher">

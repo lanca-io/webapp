@@ -3,13 +3,13 @@ import { format } from '../../utils/new/format'
 import { formatTokenAmount } from '../../utils/new/tokens'
 import './Balance.pcss'
 
-type BalanceProps = {
+type BalanceData = {
 	balance: string
 	decimals?: number
 	price?: number | null
 }
 
-export const Balance: FC<BalanceProps> = memo(({ balance, decimals = 18, price }) => {
+export const Balance: FC<BalanceData> = memo(({ balance, decimals = 18, price }) => {
 	const { formattedBalance, usdValue } = useMemo(() => {
 		const tokenBalance = formatTokenAmount(balance, decimals)
 		const formattedBalance = format(Number(tokenBalance), 3)

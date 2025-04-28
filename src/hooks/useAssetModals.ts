@@ -1,9 +1,9 @@
-import type { ExtendedToken } from '../../store/tokens/types'
+import type { ExtendedToken } from '../store/tokens/types'
 import type { ILancaChain } from '@lanca/sdk'
 import { useCallback } from 'react'
-import { useFormStore } from '../../store/form/useFormStore'
-import { useModalsStore } from '../../store/modals/useModalsStore'
-import { useChainsStore } from '../../store/chains/useChainsStore'
+import { useFormStore } from '../store/form/useFormStore'
+import { useModalsStore } from '../store/modals/useModalsStore'
+import { useChainsStore } from '../store/chains/useChainsStore'
 
 export const useAssetModals = () => {
 	const { chains } = useChainsStore()

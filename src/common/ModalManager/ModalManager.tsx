@@ -2,11 +2,10 @@ import type { FC } from 'react'
 import { memo } from 'react'
 import { AssetsModal } from '../AssetModal/AssetModal'
 import { useModalsStore } from '../../store/modals/useModalsStore'
-import { useAssetModals } from './useAssetModals'
+import { useAssetModals } from '../../hooks/useAssetModals'
 
 export const ModalManager: FC = memo(() => {
 	const { isFromAssetModalOpen, isToAssetModalOpen, closeFromAssetModal, closeToAssetModal } = useModalsStore()
-
 	const { fromChain, toChain, selectFromChain, selectToChain, selectFromAsset, selectToAsset } = useAssetModals()
 
 	return (

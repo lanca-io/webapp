@@ -1,17 +1,17 @@
 import type { FC } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, memo } from 'react'
 import { TokenSkeleton } from '../Token/TokenSkeleton'
 import { Token } from '../Token/Token'
 import './PopularTokens.pcss'
 
-export type PopularTokensProps = {
+type TokensProps = {
 	tokens: ExtendedToken[]
 	isLoading: boolean
 	onTokenSelect: (token: ExtendedToken) => void
 }
 
-export const PopularTokens: FC<PopularTokensProps> = ({ tokens, isLoading, onTokenSelect }) => {
+export const PopularTokens: FC<TokensProps> = memo(({ tokens, isLoading, onTokenSelect }) => {
 	const skeletons = useMemo(() => {
 		const count = 15
 		return Array.from({ length: count }).map((_, i) => <TokenSkeleton key={i} showBalance={false} />)
@@ -38,4 +38,4 @@ export const PopularTokens: FC<PopularTokensProps> = ({ tokens, isLoading, onTok
 			{isLoading && skeletons}
 		</div>
 	)
-}
+})

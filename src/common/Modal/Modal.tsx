@@ -11,9 +11,7 @@ type ModalProps = {
 }
 
 export const Modal: FC<PropsWithChildren<ModalProps>> = memo(({ isOpen, title, onClose, children }) => {
-	const handleClose = useCallback(() => {
-		onClose()
-	}, [onClose])
+	const handleClose = useCallback(() => onClose(), [onClose])
 
 	if (!isOpen) return null
 

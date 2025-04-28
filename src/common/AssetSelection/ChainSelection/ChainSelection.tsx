@@ -16,5 +16,3 @@ export const ChainSelection: FC<ChainSelectionProps> = memo(({ logoURI, name, on
 		</div>
 	)
 })
-
-ChainSelection.displayName = 'ChainSelection'

@@ -6,7 +6,7 @@ import { TextInput } from '../../components/layout/input/TextInput'
 import { useDebounce } from '../../hooks/useDebounce'
 import { SearchIcon } from '../../assets/icons/SearchIcon'
 
-export type SearchBarProps = {
+type SearchProps = {
 	chain: ILancaChain | null
 	tokens: ExtendedToken[]
 	setSearchValue: (value: string) => void
@@ -14,7 +14,7 @@ export type SearchBarProps = {
 	onSearchActive: (isActive: boolean) => void
 }
 
-export const TokenSearch: FC<SearchBarProps> = memo(({ tokens, setSearchValue, onSearchActive, onSearchResults }) => {
+export const TokenSearch: FC<SearchProps> = memo(({ tokens, setSearchValue, onSearchActive, onSearchResults }) => {
 	const [input, setInput] = useState<string>('')
 	const debouncedInputValue = useDebounce(input, 500)
 

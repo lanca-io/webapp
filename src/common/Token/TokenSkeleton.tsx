@@ -3,11 +3,11 @@ import { memo } from 'react'
 import { SkeletonLoader } from '../../components/layout/SkeletonLoader/SkeletonLoader'
 import './Token.pcss'
 
-type TokenSkeletonProps = {
+type SkeletonProps = {
 	showBalance?: boolean
 }
 
-export const TokenSkeleton: FC<TokenSkeletonProps> = memo(({ showBalance = true }) => (
+export const TokenSkeleton: FC<SkeletonProps> = memo(({ showBalance = true }) => (
 	<div className="token">
 		<div className="token_content">
 			<SkeletonLoader width={32} height={32} />

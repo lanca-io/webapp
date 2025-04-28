@@ -5,32 +5,35 @@ import { handleFetchTokens } from '../../handlers/tokens'
 import { useTokensStore } from '../../store/tokens/useTokensStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
+const FIVE_MINUTES_MS = 5 * 60 * 1000
+const TOKENS_PER_CHAIN = 3
+
 export const useLoadAllTokens = () => {
 	const {
-		allOffset,
-		allSearchValue,
-		setAllTokens,
-		addAllTokens,
-		setAllTokensLoading,
-		setAllOffset,
-		setAllSearchedTokens,
-		addAllSearchedTokens,
+		allOffset: offset,
+		allSearchValue: search,
+		setAllTokens: setTokens,
+		addAllTokens: addTokens,
+		setAllTokensLoading: setLoading,
+		setAllOffset: setOffset,
+		setAllSearchedTokens: setSearched,
+		addAllSearchedTokens: addSearched,
 	} = useTokensStore()
 	const { chains } = useChainsStore()
 
-	const fetchAllSupportedTokens = useCallback(
-		async (offset: number, searchValue: string) => {
+	const fetchTokens = useCallback(
+		async (offset: number, search: string): Promise<ExtendedToken[]> => {
 			try {
-				const allTokens = await Promise.all(
+				const results = await Promise.all(
 					chains.map(async chain => {
-						const tokens = await handleFetchTokens(chain.id, offset, 3, searchValue)
+						const tokens = await handleFetchTokens(chain.id, offset, TOKENS_PER_CHAIN, search)
 						return tokens.map((token: ExtendedToken) => ({
 							...token,
 							chainLogoURI: chain.logoURI || null,
 						}))
 					}),
 				)
-				return allTokens.flat()
+				return results.flat()
 			} catch (error) {
 				console.error(error)
 				return []
@@ -39,41 +42,44 @@ export const useLoadAllTokens = () => {
 		[chains],
 	)
 
-	const { data: allTokensData, isFetching: isFetchingAllTokens } = useQuery({
-		queryKey: ['allTokens', allOffset, allSearchValue],
-		queryFn: () => fetchAllSupportedTokens(allOffset, allSearchValue),
+	const { data: tokens, isFetching: isLoading } = useQuery({
+		queryKey: ['allTokens', offset, search],
+		queryFn: () => fetchTokens(offset, search),
 		enabled: chains.length > 0,
-		staleTime: 5 * 60 * 1000,
+		staleTime: FIVE_MINUTES_MS,
 	})
 
-	const processAllTokensData = useCallback(
+	const processTokens = useCallback(
 		(data: ExtendedToken[] | undefined) => {
 			if (!data) return
 
-			if (allOffset > 0) {
-				addAllTokens(data)
-				if (allSearchValue) {
-					addAllSearchedTokens(data)
+			const isPagination = offset > 0
+			const isSearching = Boolean(search)
+
+			if (isPagination) {
+				addTokens(data)
+				if (isSearching) {
+					addSearched(data)
 				}
 			} else {
-				setAllTokens(data)
-				if (allSearchValue) {
-					setAllSearchedTokens(data)
+				setTokens(data)
+				if (isSearching) {
+					setSearched(data)
 				}
 			}
 		},
-		[allOffset, allSearchValue, addAllTokens, setAllTokens, setAllSearchedTokens, addAllSearchedTokens],
+		[offset, search, addTokens, setTokens, setSearched, addSearched],
 	)
 
 	useEffect(() => {
-		setAllTokensLoading(isFetchingAllTokens)
-	}, [isFetchingAllTokens, setAllTokensLoading])
+		setLoading(isLoading)
+	}, [isLoading, setLoading])
 
 	useEffect(() => {
-		processAllTokensData(allTokensData)
-	}, [allTokensData, processAllTokensData])
+		processTokens(tokens)
+	}, [tokens, processTokens])
 
 	useEffect(() => {
-		setAllOffset(0)
-	}, [allSearchValue, setAllOffset])
+		setOffset(0)
+	}, [search, setOffset])
 }

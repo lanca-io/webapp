@@ -6,14 +6,17 @@ import { useBalancesStore } from '../../store/balances/useBalancesStore'
 import { useAccount } from 'wagmi'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
+const FIVE_MINUTES_MS = 300_000
+const MAX_RETRIES = 2
+
 export const useLoadBalances = () => {
 	const { address } = useAccount()
 	const { chains } = useChainsStore()
-	const { setBalances, setIsLoading } = useBalancesStore()
+	const { setBalances, setIsLoading: setLoading } = useBalancesStore()
 
 	const chainList = useMemo(() => chains, [chains])
 
-	const fetchChainBalances = useCallback(
+	const fetchChain = useCallback(
 		async (chainId: string): Promise<ExtendedToken[]> => {
 			if (!address) return []
 
@@ -36,39 +39,31 @@ export const useLoadBalances = () => {
 		[address, chains],
 	)
 
-	const fetchAllBalances = useCallback(async () => {
+	const fetchBalances = useCallback(async () => {
 		if (!address || chainList.length === 0) return []
 
-		const results = await Promise.allSettled(chainList.map(chain => fetchChainBalances(chain.id)))
+		const results = await Promise.allSettled(chainList.map(chain => fetchChain(chain.id)))
 
 		return results
 			.filter((result): result is PromiseFulfilledResult<ExtendedToken[]> => result.status === 'fulfilled')
 			.flatMap(result => result.value)
-	}, [address, chainList, fetchChainBalances])
+	}, [address, chainList, fetchChain])
 
-	const {
-		data: balances,
-		isLoading,
-		refetch,
-	} = useQuery({
+	const { data: balances, isLoading } = useQuery({
 		queryKey: ['balances', address, chainList.map(c => c.id).join()],
-		queryFn: fetchAllBalances,
-		enabled: !!address && chainList.length > 0,
-		refetchInterval: 300_000,
-		retry: 2,
+		queryFn: fetchBalances,
+		enabled: Boolean(address) && chainList.length > 0,
+		refetchInterval: FIVE_MINUTES_MS,
+		retry: MAX_RETRIES,
 	})
 
 	useEffect(() => {
-		setIsLoading(isLoading)
-	}, [isLoading, setIsLoading])
+		setLoading(isLoading)
+	}, [isLoading, setLoading])
 
 	useEffect(() => {
 		if (balances) {
 			setBalances(balances)
 		}
 	}, [balances, setBalances])
-
-	return {
-		refetch,
-	}
 }

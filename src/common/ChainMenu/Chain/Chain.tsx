@@ -30,5 +30,3 @@ export const Chain: FC<ChainProps> = memo(({ name, logoURL, onClick, isActive })
 		</div>
 	)
 })
-
-Chain.displayName = 'Chain'

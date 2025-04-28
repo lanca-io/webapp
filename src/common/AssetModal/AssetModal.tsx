@@ -1,19 +1,18 @@
 import type { FC } from 'react'
 import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useMemo, useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import { Modal } from '../Modal/Modal'
 import { ChainMenu } from '../ChainMenu/ChainMenu'
 import { TokenSearch } from '../TokenSearch/TokenSearch'
 import { TokenMenu } from '../TokenMenu/TokenMenu'
 import { TokenNotFound } from '../TokenNotFound/TokenNotFound'
-import { useTokensStore } from '../../store/tokens/useTokensStore'
-import { useLoadTokens } from '../../hooks/Loadables/useLoadTokens'
 import { useAssetSearch } from '../../hooks/useAssetSearch'
+import { useTokenSelection } from '../../hooks/useTokenSelection'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
-import classNames from './AssetModal.module.pcss'
+import './AssetModal.pcss'
 
-export type AssetModalProps = {
+type AssetModalProps = {
 	isOpen: boolean
 	onClose: () => void
 	onSelect: (token: ExtendedToken) => void
@@ -21,45 +20,13 @@ export type AssetModalProps = {
 	selectedChain: ILancaChain | null
 }
 
-export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, onSelect, onChainSelect, selectedChain }) => {
+export const AssetsModal: FC<AssetModalProps> = memo(({ isOpen, onClose, onSelect, onChainSelect, selectedChain }) => {
 	const { isActive, hasResults, setActive, setResults, updateSearch } = useAssetSearch(selectedChain)
+	const { tokens, searchTokens, isLoading, offset, setOffset } = useTokenSelection(selectedChain)
 
-	const store = useTokensStore()
-
-	useLoadTokens(selectedChain?.id)
-
-	const tokens = useMemo(
-		() => (selectedChain ? store.tokens : store.allTokens),
-		[selectedChain, store.tokens, store.allTokens],
-	)
-
-	const searchTokens = useMemo(
-		() => (selectedChain ? store.searchedTokens : store.allSearchedTokens),
-		[selectedChain, store.searchedTokens, store.allSearchedTokens],
-	)
-
-	const isLoading = useMemo(
-		() => (selectedChain ? store.isLoading : store.allTokensLoading),
-		[selectedChain, store.isLoading, store.allTokensLoading],
-	)
-
-	const offset = useMemo(
-		() => (selectedChain ? store.offset : store.allOffset),
-		[selectedChain, store.offset, store.allOffset],
-	)
-
-	const setNewOffset = useCallback(
-		(newOffset: number) => {
-			if (selectedChain) {
-				store.setOffset(newOffset)
-			} else {
-				store.setAllOffset(newOffset)
-			}
-		},
-		[selectedChain, store.setOffset, store.setAllOffset],
-	)
-
-	const loadMore = useCallback(() => setNewOffset(offset + 15), [offset, setNewOffset])
+	const loadMore = useCallback(() => {
+		setOffset(offset + 15)
+	}, [offset, setOffset])
 
 	const { ref } = useInfiniteScroll({
 		disabled: isActive,
@@ -78,7 +45,7 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, onSelect, on
 
 			{!hasResults && isActive && !isLoading && <TokenNotFound />}
 
-			<div className={classNames['scroll-content']} ref={ref}>
+			<div className="scroll_content" ref={ref}>
 				{!isActive && <ChainMenu activeChain={selectedChain} onChainClick={onChainSelect} />}
 
 				<TokenMenu
@@ -91,7 +58,7 @@ export const AssetsModal: FC<AssetModalProps> = ({ isOpen, onClose, onSelect, on
 				/>
 			</div>
 
-			<div className={classNames['modal-blur']} />
+			<div className="modal_blur" />
 		</Modal>
 	)
-}
+})

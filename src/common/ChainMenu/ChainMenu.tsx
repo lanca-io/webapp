@@ -5,13 +5,14 @@ import { Chain } from './Chain/Chain'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 import './ChainMenu.pcss'
 
-type ChainMenuProps = {
+type MenuProps = {
 	activeChain: ILancaChain | null
 	onChainClick: (chain: ILancaChain) => void
 }
 
-export const ChainMenu: FC<ChainMenuProps> = memo(({ activeChain, onChainClick }) => {
+export const ChainMenu: FC<MenuProps> = memo(({ activeChain, onChainClick }) => {
 	const { chains } = useChainsStore()
+
 	const handleChainClick = useCallback(
 		(chain: ILancaChain) => (event: MouseEvent) => {
 			event.preventDefault()
@@ -20,17 +21,19 @@ export const ChainMenu: FC<ChainMenuProps> = memo(({ activeChain, onChainClick }
 		[onChainClick],
 	)
 
-	const chainsList = useMemo(() => {
-		return chains.map(chain => (
-			<Chain
-				key={chain.id}
-				name={chain.name}
-				logoURL={chain.logoURI}
-				onClick={handleChainClick(chain)}
-				isActive={activeChain?.id === chain.id}
-			/>
-		))
-	}, [chains, activeChain?.id, handleChainClick])
+	const chainsList = useMemo(
+		() =>
+			chains.map(chain => (
+				<Chain
+					key={chain.id}
+					name={chain.name}
+					logoURL={chain.logoURI}
+					onClick={handleChainClick(chain)}
+					isActive={activeChain?.id === chain.id}
+				/>
+			)),
+		[chains, activeChain?.id, handleChainClick],
+	)
 
 	return (
 		<div className="chain_menu">

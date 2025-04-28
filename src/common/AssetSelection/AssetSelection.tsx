@@ -7,16 +7,14 @@ import { ChainSelection } from './ChainSelection/ChainSelection'
 import { TrailArrowRightIcon } from '../../assets/icons/TrailArrowRightIcon'
 import './AssetSelection.pcss'
 
-type AssetSelectionProps = {
+type AssetProps = {
 	token: ExtendedToken | null
 	chain: ILancaChain | null
 	openModal: () => void
 }
 
-export const AssetSelection: FC<AssetSelectionProps> = memo(({ token, chain, openModal }) => {
-	const handleClick = useCallback(() => {
-		openModal()
-	}, [openModal])
+export const AssetSelection: FC<AssetProps> = memo(({ token, chain, openModal }) => {
+	const handleClick = useCallback(() => openModal(), [openModal])
 
 	return (
 		<div className="asset_selection" onClick={handleClick}>

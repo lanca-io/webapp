@@ -21,9 +21,7 @@ export const TokenBalances: FC<BalanceProps> = memo(({ chain, items, onTokenSele
 	const { balances, isLoading } = useGetBalances(chain?.id)
 	const [shown, setShown] = useState<number>(items)
 
-	const skeletons = useMemo(() => {
-		return Array.from({ length: items }).map((_, i) => <TokenSkeleton key={i} />)
-	}, [items])
+	const skeletons = useMemo(() => Array.from({ length: items }).map((_, i) => <TokenSkeleton key={i} />), [items])
 
 	const tokens = useMemo(() => balances.slice(0, shown), [balances, shown])
 
