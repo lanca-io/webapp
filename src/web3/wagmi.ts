@@ -194,21 +194,20 @@ export const viemChains: Record<number, { chain: any; transport: any }> = {
 	[base.id]: {
 		chain: base,
 		transport: fallback([
-			http('https://1rpc.io/base'),
+			http('https://base-pokt.nodies.app'),
 			http('https://base-rpc.publicnode.com'),
 			http('https://base.blockpi.network/v1/rpc/public'),
 			http('https://public.stackup.sh/api/v1/node/base-mainnet'),
-			http('https://base.drpc.org'),
 			http(),
 		]),
 	},
 	[optimism.id]: {
 		chain: optimism,
 		transport: fallback([
-			http('https://1rpc.io/op'),
+			http('https://op-pokt.nodies.app'),
 			http('https://optimism-rpc.publicnode.com'),
-			http('https://optimism.drpc.org'),
 			http('https://endpoints.omniatech.io/v1/op/mainnet/public'),
+			http('https://0xrpc.io/op'),
 			http(),
 		]),
 	},
