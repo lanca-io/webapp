@@ -61,24 +61,19 @@ export const sanitizeText = (value: string): string => {
 }
 
 /**
- * Calculates the amount based on text input.
- * @param text - The text input.
- * @param balance - The balance to use for calculations.
- * @returns The calculated amount as a string or null if invalid.
+ * Converts text keywords to numerical amounts
+ * @param text - Input text (min, max, half, etc.)
+ * @param balance - Available balance
+ * @returns Amount as string or null if invalid
  */
-export const calculateAmountFromText = (text: string, balance: number): string | null => {
-	switch (text.toLowerCase()) {
-		case 'min':
-			return '0'
-		case 'max':
-			return balance.toString()
-		case 'quarter':
-			return (balance / 4).toString()
-		case 'half':
-			return (balance / 2).toString()
-		case 'third':
-			return (balance / 3).toString()
-		default:
-			return null
-	}
+export const textToAmount = (text: string, balance: number): string | null => {
+	const t = text.toLowerCase()
+
+	if (t === 'min') return '0'
+	if (t === 'max') return balance.toString()
+	if (t === 'quarter') return (balance / 4).toString()
+	if (t === 'half') return (balance / 2).toString()
+	if (t === 'third') return (balance / 3).toString()
+
+	return null
 }

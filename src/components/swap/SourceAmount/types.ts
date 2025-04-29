@@ -9,14 +9,6 @@ export type BalanceDisplayProps = {
 	symbol: string
 }
 
-export enum Mode {
-	Text = 'text',
-	Number = 'number',
-	Percent = 'percent',
-	Dollar = 'dollar',
-	None = 'none',
-}
-
 export type NumericalModeResult = () => void
 export type TextModeResult = () => void
 export type PercentageModeResult = () => void

@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { ChangeEvent, FocusEvent } from 'react'
-import { sanitizeNumbers, sanitizeText } from '../../../utils/new/input'
-import { Mode } from './types'
-import { useFormStore } from '../../../store/form/useFormStore'
+import { sanitizeNumbers, sanitizeText } from '../utils/new/input'
+import { Mode } from './useInputMode'
+import { useFormStore } from '../store/form/useFormStore'
 
 export const useInputHandlers = (
 	setValue: (value: string) => void,
@@ -14,17 +14,16 @@ export const useInputHandlers = (
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
-			let value = event.target.value
-			const newMode = determineMode(value)
-			if (newMode === Mode.Text) {
-				value = sanitizeText(value)
-			} else {
-				value = sanitizeNumbers(value)
-			}
+			const inputValue = event.target.value
+			const newMode = determineMode(inputValue)
+
+			const sanitizedValue = newMode === Mode.Text ? sanitizeText(inputValue) : sanitizeNumbers(inputValue)
+
 			if (newMode !== mode) {
 				setMode(newMode)
 			}
-			setValue(value)
+
+			setValue(sanitizedValue)
 		},
 		[determineMode, mode, setMode, setValue],
 	)

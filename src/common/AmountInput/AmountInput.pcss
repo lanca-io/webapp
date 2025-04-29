@@ -1,0 +1,39 @@
+.input_container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: var(--sp-md);
+}
+
+.input {
+	flex: 1 0;
+	overflow: hidden;
+	color: var(--color-grey-500);
+	text-align: center;
+	font-size: 48px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 56px;
+	letter-spacing: -0.96px;
+	border: none;
+	outline: none;
+	background: transparent;
+	transition: color 0.2s ease;
+}
+
+.has_value {
+	color: var(--color-grey-700) !important;
+}
+
+.input::placeholder {
+	color: var(--color-grey-500);
+}
+
+.input:hover {
+	color: var(--color-grey-600);
+}
+
+.input:hover::placeholder {
+	color: var(--color-grey-600);
+}

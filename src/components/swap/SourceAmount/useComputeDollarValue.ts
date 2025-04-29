@@ -26,7 +26,6 @@ export const useComputeDollarValue = (value: string, mode: Mode, tokenData: Exte
 	const computePercentageAmount = useCallback(
 		(percentStr: string): string | null => {
 			const percentage = parseFloat(percentStr.replace('%', ''))
-			console.log(percentage)
 			const amount = (percentage / 100) * tokenInfo.balance
 			return computeDollarAmount(amount)
 		},
