@@ -19,6 +19,7 @@ export type FormStateSlice = {
 	error: string | null
 	inputValue: string
 	inputMode: Mode
+	amount: string | null // Machine-readable amount
 }
 
 export type FormActions = {
@@ -30,6 +31,7 @@ export type FormActions = {
 	setError: (error: string | null) => void
 	setInputValue: (value: string) => void
 	setInputMode: (mode: Mode) => void
+	setAmount: (amount: string | null) => void
 	clearInput: () => void
 }
 

@@ -53,6 +53,7 @@ export const CreateFormStore = () =>
 			error: null,
 			inputValue: '',
 			inputMode: Mode.None,
+			amount: null,
 			setSourceChain: chain => set({ sourceChain: chain }),
 			setDestinationChain: chain => set({ destinationChain: chain }),
 			setSourceToken: token => set({ sourceToken: token }),
@@ -67,11 +68,13 @@ export const CreateFormStore = () =>
 				})),
 			setInputValue: value => set({ inputValue: value }),
 			setInputMode: mode => set({ inputMode: mode }),
+			setAmount: amount => set({ amount }),
 			clearInput: () =>
 				set({
 					inputValue: '',
 					inputMode: Mode.None,
 					error: null,
+					amount: null,
 				}),
 		}),
 		Object.is,
