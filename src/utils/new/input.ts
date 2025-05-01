@@ -66,10 +66,10 @@ export const sanitizeText = (value: string): string => {
  * @param balance - Available balance
  * @returns Amount as string or null if invalid
  */
+
 export const textToAmount = (text: string, balance: number): string | null => {
 	const t = text.toLowerCase()
 
-	if (t === 'min') return '0'
 	if (t === 'max') return balance.toString()
 	if (t === 'quarter') return (balance / 4).toString()
 	if (t === 'half') return (balance / 2).toString()

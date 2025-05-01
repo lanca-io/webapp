@@ -10,7 +10,7 @@ export const useTextInputMode = (text: string, token: ExtendedToken | null) => {
 	const result = useMemo(() => {
 		const amt = textToAmount(text, Number(balance))
 		return {
-			val: amt ? Math.round(Number(amt)).toString() : null,
+			val: amt ? amt.toString() : null,
 			valid: Boolean(text && /^[a-z]+$/.test(text)),
 		}
 	}, [text, balance])

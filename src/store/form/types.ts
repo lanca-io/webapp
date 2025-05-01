@@ -9,6 +9,7 @@ export type FormStateSlice = {
 	sourceToken: ExtendedToken | null
 	destinationToken: ExtendedToken | null
 	amount: string | null
+	error: string | null
 }
 
 export type FormActions = {
@@ -19,6 +20,7 @@ export type FormActions = {
 	setAmount: (amount: string | null) => void
 	clearAmount: () => void
 	swapChainsAndTokens: () => void
+	setError: (error: string | null) => void
 }
 
 export type FormState = FormStateSlice & FormActions

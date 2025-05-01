@@ -50,13 +50,14 @@ export const CreateFormStore = () =>
 			sourceToken: initialSourceToken,
 			destinationToken: initialDestinationToken,
 			amount: null,
+			error: null,
 			setSourceChain: chain => set({ sourceChain: chain }),
 			setDestinationChain: chain => set({ destinationChain: chain }),
 			setSourceToken: token => set({ sourceToken: token }),
 			setDestinationToken: token => set({ destinationToken: token }),
 			setAmount: amount => set({ amount: amount !== null ? amount.toString() : null }),
 			clearAmount: () => set({ amount: null }),
-
+			setError: error => set({ error }),
 			swapChainsAndTokens: () =>
 				set(state => ({
 					sourceChain: state.destinationChain,

@@ -12,7 +12,7 @@ export const useInputHandlers = (
 ) => {
 	const { clearAmount } = useFormStore()
 
-	const handleChange = useCallback(
+	const onChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			const inputValue = event.target.value
 			const newMode = determineMode(inputValue)
@@ -28,13 +28,13 @@ export const useInputHandlers = (
 		[determineMode, mode, setMode, setValue],
 	)
 
-	const handleFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
+	const onFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
 		if (e.target.placeholder === '0') {
 			e.target.placeholder = ''
 		}
 	}, [])
 
-	const handleBlur = useCallback(
+	const onBlur = useCallback(
 		(e: FocusEvent<HTMLInputElement>) => {
 			if (!e.target.value) {
 				e.target.placeholder = '0'
@@ -46,8 +46,8 @@ export const useInputHandlers = (
 	)
 
 	return {
-		handleChange,
-		handleFocus,
-		handleBlur,
+		onChange,
+		onFocus,
+		onBlur,
 	}
 }
