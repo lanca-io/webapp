@@ -4,7 +4,7 @@ import './AmountInput.pcss'
 
 type AmountInputProps = {
 	value: string
-	onChange: (e: ChangeEvent<HTMLInputElement>) => void
+	onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 	onFocus?: (e: FocusEvent<HTMLInputElement>) => void
 	onBlur?: (e: FocusEvent<HTMLInputElement>) => void
 	placeholder?: string

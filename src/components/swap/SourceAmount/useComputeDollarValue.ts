@@ -54,7 +54,6 @@ export const useComputeDollarValue = (value: string, mode: Mode, tokenData: Exte
 
 		if (mode !== Mode.Dollar) {
 			parsedValue = formatTokenAmount(value, tokenInfo.decimals)
-			console.log(parsedValue)
 		}
 
 		const computations = {

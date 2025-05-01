@@ -6,30 +6,22 @@ import { useDollarEquivalent } from '../../hooks/useDollarEquivalent'
 import './ValueInfo.pcss'
 
 export const ValueInfo: FC = () => {
-	const { error, inputValue, inputMode } = useFormStore()
 	const { dollarValue } = useDollarEquivalent()
+	const { error, inputValue, inputMode, amount } = useFormStore()
 
-	const displayText = useMemo(() => {
-		if (error) {
-			return error
-		}
-
-		if (inputMode === Mode.Dollar) {
-			return '-'
-		}
-
-		if (inputMode === Mode.None || !inputValue.trim()) {
-			return 'Enter amount'
-		}
-
-		return dollarValue !== null ? `≈ ${dollarValue}` : 'Calculating...'
-	}, [dollarValue, error, inputMode, inputValue])
-
+	const isDollarMode = useMemo(() => inputMode === Mode.Dollar, [inputMode])
+	const isNoneMode = useMemo(() => inputMode === Mode.None || !inputValue.trim(), [inputMode, inputValue])
 	const isError = useMemo(() => Boolean(error), [error])
+	const hasAmount = useMemo(() => Boolean(amount), [amount])
 
 	return (
 		<div className="value_info_container">
-			<span className={isError ? 'value_info_error' : 'value_info'}>{displayText}</span>
+			{isError && <span className="value_info_title value_info_error">{error}</span>}
+			{isNoneMode && <span className="value_info_title">Enter amount</span>}
+			{isDollarMode && <span className="value_info_title">-</span>}
+			{!isError && !isNoneMode && !isDollarMode && hasAmount && dollarValue && (
+				<span className="value_info_title">{`≈ ${dollarValue}`}</span>
+			)}
 		</div>
 	)
 }

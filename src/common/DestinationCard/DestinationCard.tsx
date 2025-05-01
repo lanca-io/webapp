@@ -3,9 +3,12 @@ import { useMemo } from 'react'
 import { AssetSelection } from '../AssetSelection/AssetSelection'
 import { useFormStore } from '../../store/form/useFormStore'
 import { useModalsStore } from '../../store/modals/useModalsStore'
+import { DestinationPanel } from '../DestinationPanel/DestinationPanel'
+import { useRouteStore } from '../../store/route/useRouteStore'
 import './DestinationCard.pcss'
 
 export const DestinationCard: FC = () => {
+	const { route, isLoading } = useRouteStore()
 	const { destinationToken, destinationChain } = useFormStore()
 	const { openToAssetModal } = useModalsStore()
 
@@ -14,7 +17,15 @@ export const DestinationCard: FC = () => {
 		[destinationToken, destinationChain, openToAssetModal],
 	)
 
-	return <div className="destination_card">{assetSelection}</div>
-}
+	const destinationPanel = useMemo(
+		() => <DestinationPanel amount={route?.to?.amount || ''} isLoading={isLoading} />,
+		[route?.to?.amount, isLoading],
+	)
 
-DestinationCard.displayName = 'DestinationCard'
+	return (
+		<div className="destination_card">
+			{assetSelection}
+			{destinationPanel}
+		</div>
+	)
+}

@@ -28,6 +28,14 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 
 		const machineAmount = parseTokenAmount(humanAmount.toString(), decimals)
 
+		if (Number(machineAmount) > Number(balance) || Number(balance) === 0) {
+			return {
+				valid: false,
+				errorMessage: 'Insufficient balance',
+				machineAmount: null,
+			}
+		}
+
 		return {
 			valid: true,
 			errorMessage: null,
