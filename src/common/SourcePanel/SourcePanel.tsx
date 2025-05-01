@@ -10,11 +10,7 @@ import { useInputHandlers } from '../../hooks/useInputHandlers'
 export const SourcePanel: FC = () => {
 	const { isConnected } = useAccount()
 	const { onChange, onFocus, onBlur } = useInputHandlers()
-	const { sourceToken, inputValue, inputMode, amount } = useFormStore()
-
-	console.log('inputValue', inputValue)
-	console.log('inputMode', inputMode)
-	console.log('amount', amount)
+	const { sourceToken, inputValue, inputMode } = useFormStore()
 
 	const amountInput = useMemo(
 		() => <AmountInput value={inputValue} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />,
@@ -26,10 +22,7 @@ export const SourcePanel: FC = () => {
 		[sourceToken, isConnected],
 	)
 
-	const valueInfo = useMemo(
-		() => <ValueInfo mode={inputMode} value={inputValue} token={sourceToken} />,
-		[inputMode, inputValue, sourceToken],
-	)
+	const valueInfo = useMemo(() => <ValueInfo />, [inputMode, inputValue, sourceToken])
 
 	return (
 		<>

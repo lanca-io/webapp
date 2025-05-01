@@ -1,19 +1,20 @@
-import type { ExtendedToken } from '../store/tokens/types'
 import { tokenAmountToUsd, percentOfBalanceToUsd, textCommandToUsd } from '../utils/new/input'
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { formatTokenAmount } from '../utils/new/tokens'
 import { Mode } from '../store/form/types'
+import { useFormStore } from '../store/form/useFormStore'
 
-export const useDollarEquivalent = (value: string, mode: Mode, token: ExtendedToken | null) => {
+export const useDollarEquivalent = () => {
 	const [usdValue, setUsdValue] = useState<string | null>(null)
+	const { inputValue, inputMode, sourceToken } = useFormStore()
 
 	const tokenInfo = useMemo(
 		() => ({
-			balance: formatTokenAmount(token?.balance ?? '0', token?.decimals ?? 18),
-			price: token?.priceUsd ?? 0,
-			decimals: token?.decimals ?? 18,
+			balance: formatTokenAmount(sourceToken?.balance ?? '0', sourceToken?.decimals ?? 18),
+			price: sourceToken?.priceUsd ?? 0,
+			decimals: sourceToken?.decimals ?? 18,
 		}),
-		[token],
+		[sourceToken],
 	)
 
 	const calculateUsd = useCallback(
@@ -45,9 +46,9 @@ export const useDollarEquivalent = (value: string, mode: Mode, token: ExtendedTo
 	)
 
 	useEffect(() => {
-		const result = calculateUsd(value, mode)
+		const result = calculateUsd(inputValue, inputMode)
 		setUsdValue(result)
-	}, [value, mode, calculateUsd])
+	}, [inputValue, inputMode, calculateUsd])
 
 	return {
 		dollarValue: usdValue,

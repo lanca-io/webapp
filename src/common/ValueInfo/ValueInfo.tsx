@@ -5,31 +5,25 @@ import { useMemo } from 'react'
 import { useDollarEquivalent } from '../../hooks/useDollarEquivalent'
 import './ValueInfo.pcss'
 
-type ValueInfoProps = {
-	mode: Mode
-	value?: string
-	token?: any
-}
-
-export const ValueInfo: FC<ValueInfoProps> = ({ mode, value = '', token = null }) => {
-	const { error } = useFormStore()
-	const { dollarValue } = useDollarEquivalent(value, mode, token)
+export const ValueInfo: FC = () => {
+	const { error, inputValue, inputMode } = useFormStore()
+	const { dollarValue } = useDollarEquivalent()
 
 	const displayText = useMemo(() => {
 		if (error) {
 			return error
 		}
 
-		if (mode === Mode.Dollar) {
+		if (inputMode === Mode.Dollar) {
 			return '-'
 		}
 
-		if (mode === Mode.None || !value.trim()) {
+		if (inputMode === Mode.None || !inputValue.trim()) {
 			return 'Enter amount'
 		}
 
 		return dollarValue !== null ? `≈ ${dollarValue}` : 'Calculating...'
-	}, [dollarValue, error, mode, value])
+	}, [dollarValue, error, inputMode, inputValue])
 
 	const isError = useMemo(() => Boolean(error), [error])
 
