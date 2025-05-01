@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useFormStore } from '../../store/form/useFormStore'
-import { Mode } from '../../hooks/useInputMode'
+import { Mode } from '../../store/form/types'
 import { useMemo } from 'react'
 import { useDollarEquivalent } from '../../hooks/useDollarEquivalent'
 import './ValueInfo.pcss'

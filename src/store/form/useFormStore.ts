@@ -11,31 +11,35 @@ export const useFormStore = () => {
 	const destinationChain = useStore(state => state.destinationChain)
 	const sourceToken = useStore(state => state.sourceToken)
 	const destinationToken = useStore(state => state.destinationToken)
-	const amount = useStore(state => state.amount)
 	const error = useStore(state => state.error)
+	const inputValue = useStore(state => state.inputValue)
+	const inputMode = useStore(state => state.inputMode)
 	const setSourceChain = useStore(state => state.setSourceChain)
 	const setDestinationChain = useStore(state => state.setDestinationChain)
 	const setSourceToken = useStore(state => state.setSourceToken)
 	const setDestinationToken = useStore(state => state.setDestinationToken)
-	const setAmount = useStore(state => state.setAmount)
-	const clearAmount = useStore(state => state.clearAmount)
 	const swapChainsAndTokens = useStore(state => state.swapChainsAndTokens)
 	const setError = useStore(state => state.setError)
+	const setInputValue = useStore(state => state.setInputValue)
+	const setInputMode = useStore(state => state.setInputMode)
+	const clearInput = useStore(state => state.clearInput)
 
 	return {
 		sourceChain,
 		destinationChain,
 		sourceToken,
 		destinationToken,
-		amount,
 		error,
+		inputValue,
+		inputMode,
 		setSourceChain,
 		setDestinationChain,
 		setSourceToken,
 		setDestinationToken,
-		setAmount,
-		clearAmount,
 		swapChainsAndTokens,
 		setError,
+		setInputValue,
+		setInputMode,
+		clearInput,
 	}
 }

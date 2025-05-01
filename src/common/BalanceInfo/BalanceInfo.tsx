@@ -3,14 +3,16 @@ import type { ExtendedToken } from '../../store/tokens/types'
 import { memo, useMemo, useCallback } from 'react'
 import { format } from '../../utils/new/format'
 import { formatTokenAmount } from '../../utils/new/tokens'
+import { useFormStore } from '../../store/form/useFormStore'
 import './BalanceInfo.pcss'
 
 type BalanceInfoProps = {
 	token: ExtendedToken | null
-	setInputValue: (value: string) => void
 }
 
-export const BalanceInfo: FC<BalanceInfoProps> = memo(({ token, setInputValue }) => {
+export const BalanceInfo: FC<BalanceInfoProps> = memo(({ token }) => {
+	const { setInputValue } = useFormStore()
+
 	const data = useMemo(() => {
 		if (!token) return { value: '0', symbol: '', hasBalance: false }
 

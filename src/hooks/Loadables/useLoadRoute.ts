@@ -10,13 +10,13 @@ import { useAccount } from 'wagmi'
 export const useLoadRoute = () => {
 	const { address } = useAccount()
 	const { setRoute, setIsLoading } = useRouteStore()
-	const { sourceChain, destinationChain, sourceToken, destinationToken, amount } = useFormStore()
+	const { sourceChain, destinationChain, sourceToken, destinationToken, inputValue } = useFormStore()
 	const { slippage } = useSettingsStore()
 
 	const client = useLancaSDK()
 
 	const queryFn = useCallback(async () => {
-		if (!address || !sourceChain || !destinationChain || !sourceToken || !destinationToken || !amount) {
+		if (!address || !sourceChain || !destinationChain || !sourceToken || !destinationToken || !inputValue) {
 			return null
 		}
 
@@ -26,7 +26,7 @@ export const useLoadRoute = () => {
 				toChainId: destinationChain.id,
 				fromToken: sourceToken.address as Address,
 				toToken: destinationToken.address as Address,
-				amount: amount,
+				amount: inputValue,
 				fromAddress: address,
 				toAddress: address,
 				slippageTolerance: slippage,
@@ -36,7 +36,7 @@ export const useLoadRoute = () => {
 			console.error('Error fetching route:', error)
 			throw error
 		}
-	}, [client, address, sourceChain, destinationChain, sourceToken, destinationToken, amount, slippage])
+	}, [client, address, sourceChain, destinationChain, sourceToken, destinationToken, inputValue, slippage])
 
 	const { data: route, isLoading } = useQuery({
 		queryKey: [
@@ -47,13 +47,14 @@ export const useLoadRoute = () => {
 				destinationChain,
 				sourceToken,
 				destinationToken,
-				amount,
+				inputValue,
 				slippage,
 			},
 		],
 		queryFn,
 		refetchInterval: 60_000,
-		enabled: !!address && !!sourceChain && !!destinationChain && !!sourceToken && !!destinationToken && !!amount,
+		enabled:
+			!!address && !!sourceChain && !!destinationChain && !!sourceToken && !!destinationToken && !!inputValue,
 	})
 
 	useEffect(() => {

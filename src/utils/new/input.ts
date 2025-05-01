@@ -1,3 +1,5 @@
+import { format } from './format'
+
 /**
  * Formats a value based on numerical input.
  * Ensures that only valid numerical characters, percentage signs, and dollar signs are allowed.
@@ -76,4 +78,69 @@ export const textToAmount = (text: string, balance: number): string | null => {
 	if (t === 'third') return (balance / 3).toString()
 
 	return null
+}
+
+/**
+ * Converts a token amount to its USD representation
+ *
+ * @param tokenAmount - The amount of tokens
+ * @param tokenPrice - The USD price per token
+ * @returns Formatted dollar string or null if invalid
+ */
+export const tokenAmountToUsd = (tokenAmount: number, tokenPrice: number): string | null => {
+	if (isNaN(tokenAmount) || tokenAmount < 0) {
+		return null
+	}
+
+	const usdValue = tokenAmount * tokenPrice
+	if (isNaN(usdValue) || !isFinite(usdValue)) {
+		return null
+	}
+
+	return `$${format(usdValue)}`
+}
+
+/**
+ * Converts a percentage of balance to its USD representation
+ *
+ * @param percentString - Percentage string, can include % sign
+ * @param balanceString - Token balance as string
+ * @param tokenPrice - USD price of the token
+ * @returns Formatted dollar string or null if invalid
+ */
+export const percentOfBalanceToUsd = (
+	percentString: string,
+	balanceString: string,
+	tokenPrice: number,
+): string | null => {
+	const percent = parseFloat(percentString.replace('%', ''))
+
+	if (isNaN(percent)) {
+		return null
+	}
+
+	const tokenAmount = (percent / 100) * Number(balanceString)
+	return tokenAmountToUsd(tokenAmount, tokenPrice)
+}
+
+/**
+ * Converts a text command to its USD representation
+ *
+ * @param textCommand - The text command (max, half, etc.)
+ * @param balanceValue - Token balance as string or number
+ * @param tokenPrice - USD price of the token
+ * @returns Formatted dollar string or null if invalid
+ */
+export const textCommandToUsd = (
+	textCommand: string,
+	balanceValue: string | number,
+	tokenPrice: number,
+): string | null => {
+	const tokenAmount = textToAmount(textCommand, Number(balanceValue))
+
+	if (!tokenAmount) {
+		return null
+	}
+
+	return tokenAmountToUsd(parseFloat(tokenAmount), tokenPrice)
 }

@@ -1,6 +1,7 @@
 import type { FormState } from './types'
 import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../tokens/types'
+import { Mode } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
 const initialSourceToken: ExtendedToken = {
@@ -49,14 +50,13 @@ export const CreateFormStore = () =>
 			destinationChain: initialDestinationChain,
 			sourceToken: initialSourceToken,
 			destinationToken: initialDestinationToken,
-			amount: null,
 			error: null,
+			inputValue: '',
+			inputMode: Mode.None,
 			setSourceChain: chain => set({ sourceChain: chain }),
 			setDestinationChain: chain => set({ destinationChain: chain }),
 			setSourceToken: token => set({ sourceToken: token }),
 			setDestinationToken: token => set({ destinationToken: token }),
-			setAmount: amount => set({ amount: amount !== null ? amount.toString() : null }),
-			clearAmount: () => set({ amount: null }),
 			setError: error => set({ error }),
 			swapChainsAndTokens: () =>
 				set(state => ({
@@ -65,6 +65,14 @@ export const CreateFormStore = () =>
 					sourceToken: state.destinationToken,
 					destinationToken: state.sourceToken,
 				})),
+			setInputValue: value => set({ inputValue: value }),
+			setInputMode: mode => set({ inputMode: mode }),
+			clearInput: () =>
+				set({
+					inputValue: '',
+					inputMode: Mode.None,
+					error: null,
+				}),
 		}),
 		Object.is,
 	)
