@@ -1,43 +1,51 @@
 import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
+import { parseTokenAmount } from '../utils/new/tokens'
 
 export const useNumberInputValidator = (value: string, token: ExtendedToken | null) => {
-	const { setError } = useFormStore()
+	const { setError, setAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
+	const decimals = token?.decimals ?? 18
 
 	const validation = useMemo(() => {
 		if (!value.trim()) {
-			return { valid: false, errorMessage: null }
+			return { valid: false, errorMessage: null, machineAmount: null }
 		}
 
 		if (!/^\d*\.?\d*$/.test(value)) {
 			return {
 				valid: false,
 				errorMessage: 'Please enter a valid number',
+				machineAmount: null,
 			}
 		}
 
-		if (parseFloat(balance) === 0) {
+		const machineAmount = parseTokenAmount(value, decimals)
+
+		if (BigInt(machineAmount) > BigInt(balance)) {
 			return {
 				valid: false,
-				errorMessage: `You don't have any ${symbol}`,
+				errorMessage: 'Insufficient balance',
+				machineAmount: null,
 			}
 		}
 
-		const amount = parseFloat(value)
-		if (amount <= 0) {
-			return {
-				valid: false,
-				errorMessage: 'Amount must be greater than 0',
-			}
+		return {
+			valid: true,
+			errorMessage: null,
+			machineAmount,
 		}
-
-		return { valid: true, errorMessage: null }
-	}, [value, balance, symbol])
+	}, [value, balance, symbol, decimals])
 
 	return useCallback(() => {
 		setError(validation.errorMessage)
-	}, [validation.errorMessage, setError])
+
+		if (validation.valid && validation.machineAmount) {
+			setAmount(validation.machineAmount)
+		} else {
+			setAmount(null)
+		}
+	}, [validation, setError, setAmount])
 }

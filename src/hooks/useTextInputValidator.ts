@@ -2,43 +2,46 @@ import { useCallback, useMemo } from 'react'
 import { textToAmount } from '../utils/new/input'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
+import { parseTokenAmount } from '../utils/new/tokens'
 
 export const useTextInputValidator = (text: string, token: ExtendedToken | null) => {
-	const { setError } = useFormStore()
+	const { setError, setAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
+	const decimals = token?.decimals ?? 18
 
 	const validation = useMemo(() => {
 		if (!text.trim()) {
-			return { valid: false, errorMessage: null }
+			return { valid: false, errorMessage: null, machineAmount: null }
 		}
 
-		if (!/^[a-z]+$/i.test(text)) {
+		const bal = parseFloat(balance) / Math.pow(10, decimals)
+		const humanAmount = textToAmount(text, bal)
+
+		if (!humanAmount) {
 			return {
 				valid: false,
-				errorMessage: 'Text commands must contain only letters',
+				errorMessage: 'Unsupported command',
+				machineAmount: null,
 			}
 		}
 
-		if (parseFloat(balance) === 0) {
-			return {
-				valid: false,
-				errorMessage: `You don't have any ${symbol}`,
-			}
-		}
+		const machineAmount = parseTokenAmount(humanAmount.toString(), decimals)
 
-		const amount = textToAmount(text, Number(balance))
-		if (!amount) {
-			return {
-				valid: false,
-				errorMessage: `Unknown command: "${text}"`,
-			}
+		return {
+			valid: true,
+			errorMessage: null,
+			machineAmount,
 		}
-
-		return { valid: true, amount, errorMessage: null }
-	}, [text, balance, symbol])
+	}, [text, balance, decimals, symbol])
 
 	return useCallback(() => {
 		setError(validation.errorMessage)
-	}, [validation.errorMessage, setError])
+
+		if (validation.valid && validation.machineAmount) {
+			setAmount(validation.machineAmount)
+		} else {
+			setAmount(null)
+		}
+	}, [validation, setError, setAmount])
 }

@@ -13,7 +13,7 @@ export const useInputHandlers = () => {
 
 	const textValidator = useTextInputValidator(inputValue, sourceToken)
 	const numberValidator = useNumberInputValidator(inputValue, sourceToken)
-	const percentValidator = usePercentInputValidator(inputValue)
+	const percentValidator = usePercentInputValidator(inputValue, sourceToken)
 	const dollarValidator = useDollarInputValidator(inputValue, sourceToken)
 
 	const determineMode = useCallback((input: string): Mode => {
