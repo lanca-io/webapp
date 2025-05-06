@@ -6,6 +6,7 @@ import { Notifications } from './components/overlays/Notifications/Notifications
 import { NotificationsProvider } from './hooks/notificationsContext'
 import { DataProvider } from './hooks/DataContext/DataContext'
 import { AppProviders } from './providers/AppProviders'
+import '@concero/ui-kit/styles/lanca/index.css'
 
 function App() {
 	return (

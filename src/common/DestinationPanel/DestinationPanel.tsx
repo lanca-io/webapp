@@ -13,7 +13,7 @@ type DestinationPanelProps = {
 
 export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading }) => {
 	const { destinationToken } = useFormStore()
-	const skeleton = useMemo(() => <SkeletonLoader height={56} width={160} />, [])
+	const skeleton = useMemo(() => <SkeletonLoader height={60} width={160} />, [])
 
 	const amountInput = useMemo(
 		() => <AmountInput value={amount || '0'} onChange={() => {}} disabled={true} />,
