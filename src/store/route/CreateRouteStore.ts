@@ -7,7 +7,12 @@ export const CreateRoutesStore = () =>
 		set => ({
 			route: null,
 			isLoading: false,
-			setRoute: (route: IRouteType) => {
+			setRoute: (route: IRouteType | null) => {
+				if (!route) {
+					set({ route: null })
+					return
+				}
+
 				const validatedSteps = route.steps.map(step => {
 					if ('from' in step && 'to' in step) {
 						return {

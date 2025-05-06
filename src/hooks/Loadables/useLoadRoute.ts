@@ -10,7 +10,7 @@ import { useAccount } from 'wagmi'
 export const useLoadRoute = () => {
 	const { address } = useAccount()
 	const { setRoute, setIsLoading } = useRouteStore()
-	const { sourceChain, destinationChain, sourceToken, destinationToken, amount } = useFormStore()
+	const { sourceChain, destinationChain, sourceToken, destinationToken, amount, error } = useFormStore()
 	const { slippage } = useSettingsStore()
 
 	const client = useLancaSDK()
@@ -38,6 +38,9 @@ export const useLoadRoute = () => {
 		}
 	}, [client, address, sourceChain, destinationChain, sourceToken, destinationToken, amount, slippage])
 
+	const queryEnabled =
+		!!address && !!sourceChain && !!destinationChain && !!sourceToken && !!destinationToken && !!amount && !error
+
 	const { data: route, isLoading } = useQuery({
 		queryKey: [
 			'route',
@@ -49,20 +52,23 @@ export const useLoadRoute = () => {
 				destinationToken,
 				amount,
 				slippage,
+				error,
 			},
 		],
 		queryFn,
 		refetchInterval: 60_000,
-		enabled: !!address && !!sourceChain && !!destinationChain && !!sourceToken && !!destinationToken && !!amount,
+		enabled: queryEnabled,
 	})
 
 	useEffect(() => {
-		setIsLoading(isLoading)
-	}, [isLoading, setIsLoading])
+		setIsLoading(isLoading && queryEnabled)
+	}, [isLoading, queryEnabled, setIsLoading])
 
 	useEffect(() => {
 		if (route) {
 			setRoute(route)
+		} else if (error) {
+			setRoute(null)
 		}
-	}, [route, setRoute])
+	}, [route, error, setRoute])
 }

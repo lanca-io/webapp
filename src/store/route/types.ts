@@ -8,7 +8,7 @@ export type RoutesStateSlice = {
 }
 
 export type RoutesActions = {
-	setRoute: (route: IRouteType) => void
+	setRoute: (route: IRouteType | null) => void
 	clearRoute: () => void
 	setIsLoading: (isLoading: boolean) => void
 }
