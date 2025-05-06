@@ -8,9 +8,10 @@ import './BalanceInfo.pcss'
 
 type BalanceInfoProps = {
 	token: ExtendedToken | null
+	showMax?: boolean
 }
 
-export const BalanceInfo: FC<BalanceInfoProps> = memo(({ token }) => {
+export const BalanceInfo: FC<BalanceInfoProps> = memo(({ token, showMax = true }) => {
 	const { setInputValue } = useFormStore()
 
 	const data = useMemo(() => {
@@ -43,7 +44,7 @@ export const BalanceInfo: FC<BalanceInfoProps> = memo(({ token }) => {
 			<span className="balance_info_title">Balance</span>
 			<span className="balance_info_value">{data.value}</span>
 			<span className="balance_info_symbol">{data.symbol}</span>
-			{data.hasBalance && (
+			{data.hasBalance && showMax && (
 				<button onClick={handleMaxClick} className="balance_info_max_button">
 					Max
 				</button>
