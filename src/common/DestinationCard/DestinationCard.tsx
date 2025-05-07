@@ -6,7 +6,6 @@ import { useModalsStore } from '../../store/modals/useModalsStore'
 import { DestinationPanel } from '../DestinationPanel/DestinationPanel'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { formatTokenAmount } from '../../utils/new/tokens'
-import { SlippageInfo } from '../SlippageInfo/SlippageInfo'
 import './DestinationCard.pcss'
 
 export const DestinationCard: FC = () => {
@@ -34,13 +33,10 @@ export const DestinationCard: FC = () => {
 		[route?.to?.amount, isLoading],
 	)
 
-	const slippageInfo = useMemo(() => <SlippageInfo />, [])
-
 	return (
 		<div className="destination_card">
 			{assetSelection}
 			{destinationPanel}
-			{slippageInfo}
 		</div>
 	)
 }
