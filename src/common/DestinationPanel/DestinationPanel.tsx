@@ -6,6 +6,7 @@ import { BalanceInfo } from '../BalanceInfo/BalanceInfo'
 import { useFormStore } from '../../store/form/useFormStore'
 import { ETAInfo } from '../ETAInfo/ETAInfo'
 import { GasInfo } from '../GasInfo/GasInfo'
+import { SlippageInfo } from '../SlippageInfo/SlippageInfo'
 import './DestinationPanel.pcss'
 
 type DestinationPanelProps = {
@@ -29,11 +30,13 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 	)
 	const etaInfo = useMemo(() => <ETAInfo />, [])
 	const gasInfo = useMemo(() => <GasInfo />, [])
+	const slippageInfo = useMemo(() => <SlippageInfo />, [])
 
 	return (
 		<div className="destination_panel">
 			{isLoading ? skeleton : amountInput}
 			{balanceInfo}
+			{slippageInfo}
 			{gasInfo}
 			{etaInfo}
 		</div>

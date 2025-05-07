@@ -18,9 +18,14 @@ export const SourcePanel: FC = () => {
 		[inputValue, onChange, onFocus, onBlur],
 	)
 
+	const hasBalance = useMemo(
+		() => sourceToken?.balance !== undefined && sourceToken?.balance !== null && sourceToken?.balance !== '0',
+		[sourceToken],
+	)
+
 	const balanceInfo = useMemo(
-		() => (isConnected ? <BalanceInfo token={sourceToken} /> : null),
-		[sourceToken, isConnected],
+		() => (isConnected && hasBalance ? <BalanceInfo token={sourceToken} /> : null),
+		[sourceToken, isConnected, hasBalance],
 	)
 
 	const valueInfo = useMemo(() => <ValueInfo />, [inputMode, inputValue, sourceToken])

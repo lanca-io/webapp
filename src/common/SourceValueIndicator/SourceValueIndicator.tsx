@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { useValueConversion } from '../../hooks/useValueConversion'
 import { useFormStore } from '../../store/form/useFormStore'
 import { SwapIcon } from '../../assets/icons/SwapIcon'
@@ -11,43 +11,37 @@ export const SourceValueIndicator: FC = () => {
 	const { usd, token, isUsdMode } = useValueConversion()
 	const { setInputValue, setInputMode, sourceToken } = useFormStore()
 
-	const value = useMemo(() => {
-		const raw = isUsdMode ? token : usd
-		if (!raw || isNaN(Number(raw))) return null
-		const symbol = isUsdMode ? '' : '$'
-		return format(Number(raw), 2, symbol)
-	}, [usd, token, isUsdMode, sourceToken])
+	const [displayValue, inputValue, symbolElement] = useMemo(() => {
+		const rawValue = isUsdMode ? token : usd
+		const numericValue = Number(rawValue)
+		const isValid = !isNaN(numericValue)
 
-	const inputValue = useMemo(() => {
-		const raw = isUsdMode ? token : usd
-		return raw && !isNaN(Number(raw)) ? raw : ''
-	}, [usd, token, isUsdMode])
+		return [
+			isValid ? format(numericValue, 2, isUsdMode ? '' : '$') : null,
+			isValid ? rawValue : '',
+			isUsdMode ? sourceToken?.symbol : '',
+		]
+	}, [usd, token, isUsdMode, sourceToken?.symbol])
 
-	const handleClick = () => {
+	const handleClick = useCallback(() => {
 		if (!inputValue) return
 		setInputValue(isUsdMode ? inputValue : `${inputValue}$`)
 		setInputMode(isUsdMode ? Mode.Number : Mode.Dollar)
-	}
+	}, [inputValue, isUsdMode, setInputValue, setInputMode])
 
-	if (!value) {
+	if (!displayValue) {
 		return (
-			<div className="value_indicator">
-				<span className="value_indicator_equal">-</span>
+			<div className="src_value_indicator">
+				<span className="src_value_indicator_equal">-</span>
 			</div>
 		)
 	}
 
 	return (
-		<div
-			className="src_value_indicator"
-			onClick={handleClick}
-			role="button"
-			tabIndex={0}
-			aria-label={`Switch to ${isUsdMode ? sourceToken?.symbol || 'token' : 'USD'} input`}
-		>
+		<div className="src_value_indicator" onClick={handleClick} role="button" tabIndex={0}>
 			<span className="src_value_indicator_equal">=</span>
-			<span className="src_value_indicator_value">{value}</span>
-			<span className="src_value_indicator_value">{isUsdMode ? sourceToken?.symbol : ''}</span>
+			<span className="src_value_indicator_value">{displayValue}</span>
+			<span className="src_value_indicator_value">{symbolElement}</span>
 			<span className="src_value_indicator_icon">
 				<SwapIcon />
 			</span>
