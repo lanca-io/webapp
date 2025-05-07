@@ -1,23 +1,26 @@
-import type { FC, ChangeEvent } from 'react'
-import { Button, Tag } from '@concero/ui-kit'
+import type { FC } from 'react'
+import { Tag } from '@concero/ui-kit'
 import { useMemo, useState } from 'react'
 import { SlippageIcon } from '../../assets/icons/SlippageIcon'
 import { IconButton } from '@concero/ui-kit'
-import { Input } from '@concero/ui-kit'
+import { SlippageMenu } from '../SlippageMenu/SlippageMenu'
 import { useSettingsStore } from '../../store/settings/useSettings'
 import { defaultSlippage } from '../../store/settings/CreateSettingsStore'
 import { SettingsIcon } from '../../assets/icons/SettingsIcon'
 import './SlippageInfo.pcss'
 
 export const SlippageInfo: FC = () => {
-	const { slippage, setSlippage } = useSettingsStore()
+	const { slippage } = useSettingsStore()
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
-	const [inputValue, setInputValue] = useState(slippage)
 
 	const slippageIcon = useMemo(() => <SlippageIcon />, [])
 	const settingsIcon = useMemo(() => <SettingsIcon />, [])
 
 	const isAuto = useMemo(() => slippage === defaultSlippage, [slippage])
+
+	const toggleMenu = () => {
+		setIsMenuOpen(prev => !prev)
+	}
 
 	const slippageTag = useMemo(
 		() => (
@@ -30,20 +33,6 @@ export const SlippageInfo: FC = () => {
 
 	const slippageValue = useMemo(() => `${slippage}%`, [slippage])
 
-	const toggleMenu = () => {
-		setIsMenuOpen(prev => !prev)
-		setInputValue(slippage)
-	}
-
-	const handleSave = () => {
-		setSlippage(inputValue)
-		setIsMenuOpen(false)
-	}
-
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setInputValue(e.target.value)
-	}
-
 	const settingsButton = useMemo(
 		() => (
 			<IconButton variant="tetrary" size="s" className="slippage_info_button" onClick={toggleMenu}>
@@ -52,6 +41,8 @@ export const SlippageInfo: FC = () => {
 		),
 		[settingsIcon, toggleMenu],
 	)
+
+	const slippageMenu = useMemo(() => <SlippageMenu isOpen={isMenuOpen} />, [isMenuOpen])
 
 	return (
 		<div className="slippage_info_wrapper">
@@ -66,21 +57,7 @@ export const SlippageInfo: FC = () => {
 					{settingsButton}
 				</div>
 			</div>
-
-			{isMenuOpen && (
-				<div className="slippage_info_menu">
-					<Button variant="secondary_color" onClick={handleSave} size="m" isFull>
-						Save
-					</Button>
-					<Input
-						size="m"
-						value={inputValue}
-						onChange={handleInputChange}
-						placeholder="Enter slippage %"
-						className="slippage_input"
-					/>
-				</div>
-			)}
+			{slippageMenu}
 		</div>
 	)
 }
