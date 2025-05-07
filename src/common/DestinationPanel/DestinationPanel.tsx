@@ -4,6 +4,7 @@ import { AmountInput } from '../AmountInput/AmountInput'
 import { SkeletonLoader } from '../../components/layout/SkeletonLoader/SkeletonLoader'
 import { BalanceInfo } from '../BalanceInfo/BalanceInfo'
 import { useFormStore } from '../../store/form/useFormStore'
+import { ETAInfo } from '../ETAInfo/ETAInfo'
 import './DestinationPanel.pcss'
 
 type DestinationPanelProps = {
@@ -20,11 +21,13 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 		[amount],
 	)
 	const balanceInfo = useMemo(() => <BalanceInfo token={destinationToken} showMax={false} />, [])
+	const etaInfo = useMemo(() => <ETAInfo />, [])
 
 	return (
 		<div className="destination_panel">
 			{isLoading ? skeleton : amountInput}
 			{balanceInfo}
+			{etaInfo}
 		</div>
 	)
 }
