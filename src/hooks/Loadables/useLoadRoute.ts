@@ -20,14 +20,6 @@ export const useLoadRoute = () => {
 			return null
 		}
 
-		console.log(amount, 'This is the amount')
-		console.log(sourceChain, 'This is the source chain')
-		console.log(destinationChain, 'This is the destination chain')
-		console.log(sourceToken, 'This is the source token')
-		console.log(destinationToken, 'This is the destination token')
-		console.log(address, 'This is the address')
-		console.log(slippage, 'This is the slippage')
-
 		try {
 			const route = await client.getRoute({
 				fromChainId: sourceChain.id,

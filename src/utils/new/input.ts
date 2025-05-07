@@ -144,3 +144,30 @@ export const textCommandToUsd = (
 
 	return tokenAmountToUsd(parseFloat(tokenAmount), tokenPrice)
 }
+
+/**
+ * Converts a USD amount to its token representation
+ *
+ * @param usdAmount - The amount in USD (with or without $ sign)
+ * @param tokenPrice - The USD price per token
+ * @param tokenSymbol - Optional token symbol to include in result
+ * @returns Formatted token amount string or null if invalid
+ */
+export const usdToTokenAmount = (
+	usdAmount: string | number,
+	tokenPrice: number,
+	tokenSymbol?: string,
+): string | null => {
+	const amount = typeof usdAmount === 'string' ? parseFloat(usdAmount.replace('$', '')) : usdAmount
+
+	if (isNaN(amount) || amount < 0 || tokenPrice <= 0) {
+		return null
+	}
+
+	const tokenAmount = amount / tokenPrice
+
+	if (isNaN(tokenAmount) || !isFinite(tokenAmount)) {
+		return null
+	}
+	return tokenSymbol ? `${tokenAmount} ${tokenSymbol}` : tokenAmount.toString()
+}

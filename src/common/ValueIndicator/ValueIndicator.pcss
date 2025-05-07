@@ -1,0 +1,64 @@
+.value_indicator {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--sp-sm);
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	position: relative;
+}
+
+.value_indicator span {
+	font-size: 0.875rem;
+	line-height: 18px;
+	font-style: normal;
+}
+
+.value_indicator_equal {
+	font-weight: 400;
+	color: var(--color-grey-500);
+}
+
+.value_indicator_value {
+	font-weight: 400;
+	color: var(--color-grey-500);
+	transition:
+		color 0.2s ease,
+		font-weight 0.1s ease;
+}
+
+.value_indicator:hover .value_indicator_value {
+	color: var(--color-grey-700);
+	font-weight: 500;
+}
+
+.value_indicator_icon {
+	position: absolute;
+	left: calc(100% + var(--sp-sm));
+	top: 50%;
+	transform: translateY(-50%);
+	width: 0;
+	overflow: hidden;
+	opacity: 0;
+	transition:
+		opacity 0.3s ease,
+		width 0.3s ease;
+	display: flex;
+	align-items: center;
+}
+
+.value_indicator:hover .value_indicator_icon {
+	opacity: 1;
+	width: 16px;
+}
+
+.value_indicator:active {
+	transform: scale(0.98);
+	transition: transform 0.1s ease;
+}
+
+.value_indicator:focus-visible {
+	outline: 2px solid var(--color-primary-300);
+	outline-offset: 1px;
+}
