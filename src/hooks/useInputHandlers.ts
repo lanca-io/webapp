@@ -7,8 +7,10 @@ import { useTextInputValidator } from './useTextInputValidator'
 import { useNumberInputValidator } from './useNumberInputValidator'
 import { usePercentInputValidator } from './usePercentInputValidator'
 import { useDollarInputValidator } from './useDollarInputValidator'
+import { useAccount } from 'wagmi'
 
 export const useInputHandlers = () => {
+	const { isConnected } = useAccount()
 	const { sourceToken, inputValue, inputMode, setInputValue, setInputMode, clearInput } = useFormStore()
 
 	const textValidator = useTextInputValidator(inputValue, sourceToken)
@@ -25,6 +27,7 @@ export const useInputHandlers = () => {
 	}, [])
 
 	const validateInput = useCallback(() => {
+		if (!isConnected) return
 		if (inputMode === Mode.None) return
 
 		const validator = {
@@ -42,14 +45,15 @@ export const useInputHandlers = () => {
 		if (mode !== inputMode) {
 			setInputMode(mode)
 		}
-		validateInput()
+		if (isConnected) {
+			validateInput()
+		}
 	}, [inputValue, inputMode, determineMode, setInputMode, validateInput])
 
 	const onChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			const value = event.target.value
 			const sanitizedValue = /^[a-zA-Z]+$/.test(value) ? sanitizeText(value) : sanitizeNumbers(value)
-
 			setInputValue(sanitizedValue)
 		},
 		[setInputValue],
