@@ -1,4 +1,4 @@
-.value_indicator {
+.src_value_indicator {
 	display: inline-flex;
 	flex-direction: row;
 	justify-content: center;
@@ -9,18 +9,18 @@
 	position: relative;
 }
 
-.value_indicator span {
+.src_value_indicator span {
 	font-size: 0.875rem;
 	line-height: 18px;
 	font-style: normal;
 }
 
-.value_indicator_equal {
+.src_value_indicator_equal {
 	font-weight: 400;
 	color: var(--color-grey-500);
 }
 
-.value_indicator_value {
+.src_value_indicator_value {
 	font-weight: 400;
 	color: var(--color-grey-500);
 	transition:
@@ -28,12 +28,12 @@
 		font-weight 0.1s ease;
 }
 
-.value_indicator:hover .value_indicator_value {
+.src_value_indicator:hover .src_value_indicator_value {
 	color: var(--color-grey-700);
 	font-weight: 500;
 }
 
-.value_indicator_icon {
+.src_value_indicator_icon {
 	position: absolute;
 	left: calc(100% + var(--sp-xs));
 	top: 50%;
@@ -48,17 +48,17 @@
 	align-items: center;
 }
 
-.value_indicator:hover .value_indicator_icon {
+.src_value_indicator:hover .src_value_indicator_icon {
 	opacity: 1;
 	width: 16px;
 }
 
-.value_indicator:active {
+.src_value_indicator:active {
 	transform: scale(0.98);
 	transition: transform 0.1s ease;
 }
 
-.value_indicator:focus-visible {
+.src_value_indicator:focus-visible {
 	outline: 2px solid var(--color-primary-300);
 	outline-offset: 1px;
 }
