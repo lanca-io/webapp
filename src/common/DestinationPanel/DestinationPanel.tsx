@@ -34,11 +34,15 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 
 	return (
 		<div className="destination_panel">
-			{isLoading ? skeleton : amountInput}
-			{balanceInfo}
-			{slippageInfo}
-			{gasInfo}
-			{etaInfo}
+			<div className="destination_panel_input">
+				{isLoading ? skeleton : amountInput}
+				{balanceInfo}
+			</div>
+			<div className="destination_panel_info">
+				{slippageInfo}
+				{gasInfo}
+				{etaInfo}
+			</div>
 		</div>
 	)
 }

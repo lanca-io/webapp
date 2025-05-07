@@ -69,7 +69,7 @@ export const SlippageInfo: FC = () => {
 
 			{isMenuOpen && (
 				<div className="slippage_info_menu">
-					<Button variant="secondary" onClick={handleSave} size="m" isFull>
+					<Button variant="secondary_color" onClick={handleSave} size="m" isFull>
 						Save
 					</Button>
 					<Input
