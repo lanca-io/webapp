@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { textToAmount } from '../utils/new/input'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
-import { parseTokenAmount } from '../utils/new/tokens'
+import { preciseDivide, preciseMultiply } from '../utils/new/operations'
 
 export const useTextInputValidator = (text: string, token: ExtendedToken | null) => {
 	const { setError, setAmount } = useFormStore()
@@ -15,41 +15,46 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 			return { valid: false, errorMessage: null, machineAmount: null }
 		}
 
-		const bal = parseFloat(balance) / Math.pow(10, decimals)
-		const humanAmount = textToAmount(text, bal)
+		try {
+			const decimalsFactor = Math.pow(10, decimals)
+			const bal = preciseDivide(balance, decimalsFactor.toString())
+			const humanAmount = textToAmount(text, Number(bal))
 
-		if (!humanAmount) {
+			if (!humanAmount) {
+				return {
+					valid: false,
+					errorMessage: 'Unsupported command',
+					machineAmount: null,
+				}
+			}
+
+			const machineAmount = preciseMultiply(humanAmount.toString(), decimalsFactor.toString())
+			const machineAmountStr = machineAmount.toFixed(0)
+
+			if (BigInt(machineAmountStr) > BigInt(balance)) {
+				return {
+					valid: false,
+					errorMessage: `Not enough ${symbol}`,
+					machineAmount: null,
+				}
+			}
+
+			return {
+				valid: true,
+				errorMessage: null,
+				machineAmount: machineAmountStr,
+			}
+		} catch (error) {
 			return {
 				valid: false,
-				errorMessage: 'Unsupported command',
+				errorMessage: 'Invalid input',
 				machineAmount: null,
 			}
 		}
-
-		const machineAmount = parseTokenAmount(humanAmount.toString(), decimals)
-
-		if (Number(machineAmount) > Number(balance) || Number(balance) === 0) {
-			return {
-				valid: false,
-				errorMessage: 'Insufficient balance',
-				machineAmount: null,
-			}
-		}
-
-		return {
-			valid: true,
-			errorMessage: null,
-			machineAmount,
-		}
-	}, [text, balance, decimals, symbol])
+	}, [text, balance, decimals])
 
 	return useCallback(() => {
 		setError(validation.errorMessage)
-
-		if (validation.valid && validation.machineAmount) {
-			setAmount(validation.machineAmount)
-		} else {
-			setAmount(null)
-		}
+		setAmount(validation.valid ? validation.machineAmount : null)
 	}, [validation, setError, setAmount])
 }

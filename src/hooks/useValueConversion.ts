@@ -15,11 +15,10 @@ type ConversionResult = {
 export const useValueConversion = (): ConversionResult => {
 	const { inputValue, inputMode, sourceToken } = useFormStore()
 
-	const { balance, price, sym } = useMemo(
+	const { balance, price } = useMemo(
 		() => ({
 			balance: formatTokenAmount(sourceToken?.balance ?? '0', sourceToken?.decimals ?? 18),
 			price: sourceToken?.priceUsd ?? 0,
-			sym: sourceToken?.symbol ?? '',
 			decimals: sourceToken?.decimals ?? 18,
 		}),
 		[sourceToken],
@@ -32,9 +31,7 @@ export const useValueConversion = (): ConversionResult => {
 			const value = inputValue.replace(/^\$/, '')
 			const num = parseFloat(value)
 
-			return isNaN(num)
-				? { usd: null, token: null }
-				: { usd: `${num}$`, token: usdToTokenAmount(num, price, sym) }
+			return isNaN(num) ? { usd: null, token: null } : { usd: `${num}$`, token: usdToTokenAmount(num, price) }
 		}
 
 		let usd: string | null = null
@@ -53,7 +50,7 @@ export const useValueConversion = (): ConversionResult => {
 		}
 
 		return { usd, token: null }
-	}, [inputValue, inputMode, balance, price, sym])
+	}, [inputValue, inputMode, balance, price])
 
 	return {
 		usd,

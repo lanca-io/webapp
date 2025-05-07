@@ -1,33 +1,41 @@
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
+import { toPreciseNumber, preciseMultiply } from '../utils/new/operations'
 
 export const usePercentInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setError, setAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
-	const symbol = token?.symbol ?? ''
 
 	const validation = useMemo(() => {
 		if (!value.trim()) {
 			return { valid: false, errorMessage: null, machineAmount: null }
 		}
 
-		const cleanValue = value.replace('%', '')
-		const percentage = parseFloat(cleanValue)
-
-		if (percentage > 100) {
-			return {
-				valid: false,
-				errorMessage: 'Percentage cannot exceed 100%',
-				machineAmount: null,
-			}
-		}
-
 		try {
+			const cleanValue = value.replace(/[^\d.]/g, '')
+			const percentage = toPreciseNumber(cleanValue)
+
+			if (percentage > 100) {
+				return {
+					valid: false,
+					errorMessage: 'Percentage cannot exceed 100%',
+					machineAmount: null,
+				}
+			}
+
+			const basisPoints = Math.round(preciseMultiply(percentage, 100))
 			const balanceBigInt = BigInt(balance)
-			const percentMultiplier = BigInt(Math.round(percentage * 100))
-			const amountBigInt = (balanceBigInt * percentMultiplier) / BigInt(10000)
+			const amountBigInt = (balanceBigInt * BigInt(basisPoints)) / BigInt(10000)
 			const machineAmount = amountBigInt.toString()
+
+			if (amountBigInt === 0n && percentage > 0) {
+				return {
+					valid: false,
+					errorMessage: 'Amount too small',
+					machineAmount: null,
+				}
+			}
 
 			return {
 				valid: true,
@@ -37,19 +45,14 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 		} catch (error) {
 			return {
 				valid: false,
-				errorMessage: 'Error calculating amount',
+				errorMessage: 'Invalid percentage input',
 				machineAmount: null,
 			}
 		}
-	}, [value, balance, symbol])
+	}, [value, balance])
 
 	return useCallback(() => {
 		setError(validation.errorMessage)
-
-		if (validation.valid && validation.machineAmount) {
-			setAmount(validation.machineAmount)
-		} else {
-			setAmount(null)
-		}
+		setAmount(validation.valid ? validation.machineAmount : null)
 	}, [validation, setError, setAmount])
 }

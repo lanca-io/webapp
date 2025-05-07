@@ -1,11 +1,11 @@
 import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
-import { parseTokenAmount } from '../utils/new/tokens'
+import { toPreciseNumber, preciseMultiply, preciseDivide } from '../utils/new/operations'
 
 export const useDollarInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setError, setAmount } = useFormStore()
-	const priceUsd = token?.priceUsd ?? 0
+	const price = token?.priceUsd ?? 0
 	const symbol = token?.symbol ?? ''
 	const balance = token?.balance ?? '0'
 	const decimals = token?.decimals ?? 18
@@ -23,50 +23,47 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 			}
 		}
 
-		if (priceUsd <= 0) {
+		try {
+			const cleanValue = value.replace(/[^\d.]/g, '')
+			const usdAmount = toPreciseNumber(cleanValue)
+
+			if (usdAmount <= 0) {
+				return {
+					valid: false,
+					errorMessage: 'Amount must be greater than $0',
+					machineAmount: null,
+				}
+			}
+
+			const tokenAmount = preciseDivide(usdAmount, price)
+			const decimalsFactor = Math.pow(10, decimals)
+			const machineAmount = preciseMultiply(tokenAmount, decimalsFactor).toFixed(0)
+
+			const balanceBigInt = BigInt(balance)
+			if (BigInt(machineAmount) > balanceBigInt) {
+				return {
+					valid: false,
+					errorMessage: `Insufficient ${symbol} balance`,
+					machineAmount: null,
+				}
+			}
+
+			return {
+				valid: true,
+				errorMessage: null,
+				machineAmount,
+			}
+		} catch (error) {
 			return {
 				valid: false,
-				errorMessage: `Price data unavailable for ${symbol}`,
+				errorMessage: 'Invalid dollar amount',
 				machineAmount: null,
 			}
 		}
-
-		if (parseFloat(balance) === 0) {
-			return {
-				valid: false,
-				errorMessage: `Not enough ${symbol}`,
-				machineAmount: null,
-			}
-		}
-
-		const amountValue = value.replace('$', '')
-		const usdAmount = parseFloat(amountValue)
-
-		if (usdAmount <= 0) {
-			return {
-				valid: false,
-				errorMessage: 'Amount must be greater than 0',
-				machineAmount: null,
-			}
-		}
-
-		const tokenAmount = usdAmount / priceUsd
-		const machineAmount = parseTokenAmount(tokenAmount.toString(), decimals)
-
-		return {
-			valid: true,
-			errorMessage: null,
-			machineAmount,
-		}
-	}, [value, priceUsd, symbol, balance, decimals])
+	}, [value, price, symbol, balance, decimals])
 
 	return useCallback(() => {
 		setError(validation.errorMessage)
-
-		if (validation.valid && validation.machineAmount) {
-			setAmount(validation.machineAmount)
-		} else {
-			setAmount(null)
-		}
+		setAmount(validation.valid ? validation.machineAmount : null)
 	}, [validation, setError, setAmount])
 }

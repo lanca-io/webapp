@@ -1,4 +1,4 @@
-import { format } from './format'
+import { toPreciseNumber, preciseMultiply, preciseDivide } from './operations'
 
 /**
  * Formats a value based on numerical input.
@@ -8,51 +8,21 @@ import { format } from './format'
  * @returns The formatted value.
  */
 export const sanitizeNumbers = (value: string): string => {
-	// Remove all invalid characters except numbers, percent sign, dollar sign, and decimal point
-	let formattedValue = value.replace(/[^0-9.%$]/g, '')
+	let v = value.replace(/[^0-9.%$]/g, '')
+	v = v.replace(/\.(?=.*\.)/g, '')
+	v = v.replace(/[%$](?=.)/g, '')
 
-	// Ensure only one percent sign or dollar sign is present
-	const percentIndex = formattedValue.indexOf('%')
-	const dollarIndex = formattedValue.indexOf('$')
-
-	// If both symbols are present, remove the second one
-	if (percentIndex > -1 && dollarIndex > -1) {
-		if (percentIndex > dollarIndex) {
-			formattedValue = formattedValue.replace('%', '')
-		} else {
-			formattedValue = formattedValue.replace('$', '')
-		}
+	if (v.endsWith('%$') || v.endsWith('$%')) {
+		v = v.slice(0, -2) + v.slice(-1)
 	}
 
-	// Ensure percent sign is at the end
-	if (percentIndex > -1) {
-		formattedValue = formattedValue.replace(/%/g, '') + '%'
+	if (v.includes('%') && v.includes('$')) {
+		v = v.replace(/[%$]/g, '') + v.slice(-1)
 	}
 
-	// Ensure dollar sign is at the end
-	if (dollarIndex > -1) {
-		formattedValue = formattedValue.replace(/\$/g, '') + '$'
-	}
-
-	// Ensure only one decimal point is present
-	const decimalIndex = formattedValue.indexOf('.')
-	if (decimalIndex > -1) {
-		formattedValue = formattedValue.replace(/\./g, (_match, offset) => (offset === decimalIndex ? '.' : ''))
-	}
-
-	// Remove any additional percent or dollar signs
-	formattedValue = formattedValue.replace(/[%$]/g, (match, offset) => {
-		if (match === '%' && offset !== formattedValue.length - 1) {
-			return ''
-		}
-		if (match === '$' && offset !== formattedValue.length - 1) {
-			return ''
-		}
-		return match
-	})
-
-	return formattedValue
+	return v
 }
+
 /**
  * Formats a value based on alphabetical input.
  * @param value - The value to format.
@@ -63,111 +33,88 @@ export const sanitizeText = (value: string): string => {
 }
 
 /**
- * Converts text keywords to numerical amounts
- * @param text - Input text (min, max, half, etc.)
- * @param balance - Available balance
- * @returns Amount as string or null if invalid
- */
-
-export const textToAmount = (text: string, balance: number): string | null => {
-	const t = text.toLowerCase()
-
-	if (t === 'max') return balance.toString()
-	if (t === 'quarter') return (balance / 4).toString()
-	if (t === 'half') return (balance / 2).toString()
-	if (t === 'third') return (balance / 3).toString()
-
-	return null
-}
-
-/**
- * Converts a token amount to its USD representation
- *
- * @param tokenAmount - The amount of tokens
- * @param tokenPrice - The USD price per token
- * @returns Formatted dollar string or null if invalid
+ * Converts a token amount to its equivalent USD value.
+ * @param tokenAmount - The amount of tokens to convert.
+ * @param tokenPrice - The USD price per token.
+ * @returns The equivalent USD value as a string, or null if conversion fails.
  */
 export const tokenAmountToUsd = (tokenAmount: number, tokenPrice: number): string | null => {
-	if (isNaN(tokenAmount) || tokenAmount < 0) {
-		return null
-	}
-
-	const usdValue = tokenAmount * tokenPrice
-	if (isNaN(usdValue) || !isFinite(usdValue)) {
-		return null
-	}
-
-	return `$${format(usdValue)}`
+	if (isNaN(tokenAmount) || isNaN(tokenPrice)) return null
+	const usdValue = preciseMultiply(toPreciseNumber(tokenAmount), toPreciseNumber(tokenPrice))
+	return usdValue.toString()
 }
 
 /**
- * Converts a percentage of balance to its USD representation
- *
- * @param percentString - Percentage string, can include % sign
- * @param balanceString - Token balance as string
- * @param tokenPrice - USD price of the token
- * @returns Formatted dollar string or null if invalid
+ * Converts a USD amount to its equivalent token value.
+ * @param usdAmount - The USD amount to convert (with or without $ symbol).
+ * @param tokenPrice - The USD price per token.
+ * @returns The equivalent token amount as a string, or null if conversion fails.
+ */
+export const usdToTokenAmount = (usdAmount: string | number, tokenPrice: number): string | null => {
+	const amount =
+		typeof usdAmount === 'string' ? toPreciseNumber(usdAmount.replace('$', '')) : toPreciseNumber(usdAmount)
+	const price = toPreciseNumber(tokenPrice)
+	if (isNaN(amount) || isNaN(price) || price <= 0) return null
+	return preciseDivide(amount, price).toString()
+}
+
+/**
+ * Converts a percentage of a token balance to its equivalent USD value.
+ * @param percentString - The percentage to convert (with or without % symbol).
+ * @param balanceString - The token balance as a string.
+ * @param tokenPrice - The USD price per token.
+ * @returns The equivalent USD value as a string, or null if conversion fails.
  */
 export const percentOfBalanceToUsd = (
 	percentString: string,
 	balanceString: string,
 	tokenPrice: number,
 ): string | null => {
-	const percent = parseFloat(percentString.replace('%', ''))
-
-	if (isNaN(percent)) {
-		return null
-	}
-
-	const tokenAmount = (percent / 100) * Number(balanceString)
-	return tokenAmountToUsd(tokenAmount, tokenPrice)
+	const percent = toPreciseNumber(percentString.replace('%', ''))
+	const balance = toPreciseNumber(balanceString)
+	const price = toPreciseNumber(tokenPrice)
+	if (isNaN(percent) || isNaN(balance) || isNaN(price)) return null
+	const tokenAmount = preciseMultiply(balance, percent / 100)
+	return preciseMultiply(tokenAmount, price).toString()
 }
 
 /**
- * Converts a text command to its USD representation
- *
- * @param textCommand - The text command (max, half, etc.)
- * @param balanceValue - Token balance as string or number
- * @param tokenPrice - USD price of the token
- * @returns Formatted dollar string or null if invalid
+ * Converts a text command (like 'max', 'half') to its equivalent USD value.
+ * @param textCommand - The text command to interpret.
+ * @param balanceValue - The token balance as a string or number.
+ * @param tokenPrice - The USD price per token.
+ * @returns The equivalent USD value as a string, or null if conversion fails.
  */
 export const textCommandToUsd = (
 	textCommand: string,
 	balanceValue: string | number,
 	tokenPrice: number,
 ): string | null => {
-	const tokenAmount = textToAmount(textCommand, Number(balanceValue))
-
-	if (!tokenAmount) {
-		return null
-	}
-
-	return tokenAmountToUsd(parseFloat(tokenAmount), tokenPrice)
+	const balance = typeof balanceValue === 'string' ? toPreciseNumber(balanceValue) : toPreciseNumber(balanceValue)
+	const tokenAmount = textToAmount(textCommand, balance)
+	if (tokenAmount === null) return null
+	return preciseMultiply(tokenAmount, tokenPrice).toString()
 }
 
 /**
- * Converts a USD amount to its token representation
- *
- * @param usdAmount - The amount in USD (with or without $ sign)
- * @param tokenPrice - The USD price per token
- * @param tokenSymbol - Optional token symbol to include in result
- * @returns Formatted token amount string or null if invalid
+ * Converts a text keyword to a token amount based on the balance.
+ * @param text - The text keyword (max, half, third, quarter).
+ * @param balance - The token balance.
+ * @returns The calculated token amount, or null if the keyword is not recognized.
  */
-export const usdToTokenAmount = (
-	usdAmount: string | number,
-	tokenPrice: number,
-	tokenSymbol?: string,
-): string | null => {
-	const amount = typeof usdAmount === 'string' ? parseFloat(usdAmount.replace('$', '')) : usdAmount
-
-	if (isNaN(amount) || amount < 0 || tokenPrice <= 0) {
-		return null
+export const textToAmount = (text: string, balance: number): number | null => {
+	const t = text.toLowerCase()
+	const b = toPreciseNumber(balance)
+	switch (t) {
+		case 'max':
+			return b
+		case 'half':
+			return preciseDivide(b, 2)
+		case 'third':
+			return preciseDivide(b, 3)
+		case 'quarter':
+			return preciseDivide(b, 4)
+		default:
+			return null
 	}
-
-	const tokenAmount = amount / tokenPrice
-
-	if (isNaN(tokenAmount) || !isFinite(tokenAmount)) {
-		return null
-	}
-	return tokenSymbol ? `${tokenAmount} ${tokenSymbol}` : tokenAmount.toString()
 }
