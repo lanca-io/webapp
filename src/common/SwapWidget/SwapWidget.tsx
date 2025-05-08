@@ -6,6 +6,7 @@ import { CardSwitcher } from '../../common/CardSwitcher/CardSwitcher'
 import { DestinationCard } from '../../common/DestinationCard/DestinationCard'
 import { ModalManager } from '../../common/ModalManager/ModalManager'
 import './SwapWidget.pcss'
+import { SwapAction } from '../SwapAction/SwapAction'
 
 export const SwapWidget: FC = () => {
 	const modeMenu = useMemo(() => <ModeMenu />, [])
@@ -13,6 +14,7 @@ export const SwapWidget: FC = () => {
 	const cardSwitcher = useMemo(() => <CardSwitcher />, [])
 	const destinationCard = useMemo(() => <DestinationCard />, [])
 	const modalManager = useMemo(() => <ModalManager />, [])
+	const swapAction = useMemo(() => <SwapAction />, [])
 
 	return (
 		<>
@@ -22,6 +24,7 @@ export const SwapWidget: FC = () => {
 					{sourceCard}
 					{cardSwitcher}
 					{destinationCard}
+					{swapAction}
 				</div>
 			</div>
 			{modalManager}
