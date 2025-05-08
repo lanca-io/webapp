@@ -6,6 +6,7 @@ import { useModalsStore } from '../../store/modals/useModalsStore'
 import { DestinationPanel } from '../DestinationPanel/DestinationPanel'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { formatTokenAmount } from '../../utils/new/tokens'
+import { RouteTimer } from '../RouteTimer/RouteTimer'
 import './DestinationCard.pcss'
 
 export const DestinationCard: FC = () => {
@@ -23,6 +24,8 @@ export const DestinationCard: FC = () => {
 		return route.to.amount
 	}, [route?.to?.amount, destinationToken?.decimals])
 
+	const routeTimer = useMemo(() => <RouteTimer />, [])
+
 	const assetSelection = useMemo(
 		() => <AssetSelection token={destinationToken} chain={destinationChain} openModal={openToAssetModal} />,
 		[destinationToken, destinationChain, openToAssetModal],
@@ -35,6 +38,7 @@ export const DestinationCard: FC = () => {
 
 	return (
 		<div className="destination_card">
+			{routeTimer}
 			{assetSelection}
 			{destinationPanel}
 		</div>
