@@ -11,25 +11,28 @@ export const SourceValueIndicator: FC = () => {
 	const { usd, token, isUsdMode } = useValueConversion()
 	const { setInputValue, setInputMode, sourceToken } = useFormStore()
 
-	const [displayValue, inputValue, symbolElement] = useMemo(() => {
-		const rawValue = isUsdMode ? token : usd
-		const numericValue = Number(rawValue)
-		const isValid = !isNaN(numericValue)
+	const { display, value, symbol } = useMemo(() => {
+		const raw = isUsdMode ? token : usd
+		const num = Number(raw)
 
-		return [
-			isValid ? format(numericValue, 2, isUsdMode ? '' : '$') : null,
-			isValid ? rawValue : '',
-			isUsdMode ? sourceToken?.symbol : '',
-		]
+		if (!raw || isNaN(num) || num <= 0) {
+			return { display: null, value: '', symbol: '' }
+		}
+
+		return {
+			display: format(num, 2, isUsdMode ? '' : '$'),
+			value: raw,
+			symbol: isUsdMode && sourceToken?.symbol ? sourceToken.symbol : '',
+		}
 	}, [usd, token, isUsdMode, sourceToken?.symbol])
 
 	const handleClick = useCallback(() => {
-		if (!inputValue) return
-		setInputValue(isUsdMode ? inputValue : `${inputValue}$`)
+		if (!value) return
+		setInputValue(isUsdMode ? value : `${value}$`)
 		setInputMode(isUsdMode ? Mode.Number : Mode.Dollar)
-	}, [inputValue, isUsdMode, setInputValue, setInputMode])
+	}, [value, isUsdMode, setInputValue, setInputMode])
 
-	if (!displayValue) {
+	if (!display) {
 		return (
 			<div className="src_value_indicator">
 				<span className="src_value_indicator_equal">-</span>
@@ -40,8 +43,8 @@ export const SourceValueIndicator: FC = () => {
 	return (
 		<div className="src_value_indicator" onClick={handleClick} role="button" tabIndex={0}>
 			<span className="src_value_indicator_equal">=</span>
-			<span className="src_value_indicator_value">{displayValue}</span>
-			<span className="src_value_indicator_value">{symbolElement}</span>
+			<span className="src_value_indicator_value">{display}</span>
+			{symbol && <span className="src_value_indicator_value">{symbol}</span>}
 			<span className="src_value_indicator_icon">
 				<SwapIcon />
 			</span>
