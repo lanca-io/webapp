@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { Modal } from '../Modal/Modal'
+import './ReviewModal.pcss'
 
 type ReviewModalProps = {
 	isOpen: boolean
@@ -7,5 +8,5 @@ type ReviewModalProps = {
 }
 
 export const ReviewModal: FC<ReviewModalProps> = ({ isOpen, onClose }) => {
-	return <Modal isOpen={isOpen} title="Review" onClose={onClose}></Modal>
+	return <Modal isOpen={isOpen} title="Review Transaction" onClose={onClose}></Modal>
 }

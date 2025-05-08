@@ -52,14 +52,18 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 				{isLoading ? skeleton : amountInput}
 				{balanceInfo}
 			</div>
-			{route && !routeLoading && (
-				<div className="destination_panel_info">
-					{slippageInfo}
-					{gasInfo}
-					{etaInfo}
-					{reviewButton}
-				</div>
-			)}
+
+			<div className="destination_panel_info">
+				{slippageInfo}
+				{route && !routeLoading && (
+					<>
+						{gasInfo}
+						{etaInfo}
+						{reviewButton}
+					</>
+				)}
+			</div>
+
 			{routeLoading && (
 				<div className="destination_panel_loader">
 					<Spinner type="gray" />

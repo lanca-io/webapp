@@ -27,14 +27,7 @@ export const SwapAction: FC = () => {
 	return (
 		<div className="swap_action_wrapper">
 			<div className="swap_action">
-				<Button
-					variant="primary"
-					size="l"
-					isDisabled={isDisabled}
-					isLoading={isLoading}
-					isFull
-					onClick={handleClick}
-				>
+				<Button variant="primary" size="l" isDisabled={isDisabled || isLoading} isFull onClick={handleClick}>
 					{!isConnected ? 'Connect Wallet' : 'Begin Swap'}
 				</Button>
 			</div>
