@@ -1,11 +1,11 @@
 import type { Address } from 'viem'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useCallback, useState, useMemo } from 'react'
-import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
-import { useRouteStore } from '../../store/route/useRouteStore'
-import { useFormStore } from '../../store/form/useFormStore'
-import { useSettingsStore } from '../../store/settings/useSettings'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccount } from 'wagmi'
+import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
+import { useFormStore } from '../../store/form/useFormStore'
+import { useRouteStore } from '../../store/route/useRouteStore'
+import { useSettingsStore } from '../../store/settings/useSettings'
 
 const REFRESH_INTERVAL = 90_000
 
@@ -14,83 +14,71 @@ export const useLoadRoute = () => {
 	const { setRoute, setIsLoading } = useRouteStore()
 	const { sourceChain, destinationChain, sourceToken, destinationToken, amount, error } = useFormStore()
 	const { slippage } = useSettingsStore()
-	const [timeToRefresh, setTimeToRefresh] = useState(0)
+	const [timeToRefresh, setTimeToRefresh] = useState<number>(0)
 	const sdk = useLancaSDK()
-
-	const queryParams = useMemo(
-		() => ({
-			address,
-			sourceChainId: sourceChain?.id,
-			destinationChainId: destinationChain?.id,
-			sourceTokenAddress: sourceToken?.address,
-			destinationTokenAddress: destinationToken?.address,
-			amount,
-			slippage,
-			error,
-		}),
-		[
-			address,
-			sourceChain?.id,
-			destinationChain?.id,
-			sourceToken?.address,
-			destinationToken?.address,
-			amount,
-			slippage,
-			error,
-		],
-	)
-
-	const fetchRoute = useCallback(async () => {
-		if (
-			!queryParams.sourceChainId ||
-			!queryParams.destinationChainId ||
-			!queryParams.sourceTokenAddress ||
-			!queryParams.destinationTokenAddress ||
-			!queryParams.amount
-		) {
-			return null
-		}
-
-		try {
-			return await sdk.getRoute({
-				fromChainId: queryParams.sourceChainId,
-				toChainId: queryParams.destinationChainId,
-				fromToken: queryParams.sourceTokenAddress as Address,
-				toToken: queryParams.destinationTokenAddress as Address,
-				amount: queryParams.amount,
-				fromAddress: queryParams.address!,
-				toAddress: queryParams.address!,
-				slippageTolerance: queryParams.slippage,
-			})
-		} catch (error) {
-			console.error('Route fetch error:', error)
-			throw error
-		}
-	}, [sdk, queryParams])
 
 	const canFetch = useMemo(
 		() =>
-			!!queryParams.address &&
-			!!queryParams.sourceChainId &&
-			!!queryParams.destinationChainId &&
-			!!queryParams.sourceTokenAddress &&
-			!!queryParams.destinationTokenAddress &&
-			!!queryParams.amount &&
-			!queryParams.error,
-		[queryParams],
+			!!address &&
+			!!sourceChain?.id &&
+			!!destinationChain?.id &&
+			!!sourceToken?.address &&
+			!!destinationToken?.address &&
+			!!amount &&
+			!error,
+		[address, sourceChain, destinationChain, sourceToken, destinationToken, amount, error],
+	)
+
+	const fetchRoute = useCallback(async () => {
+		if (!canFetch) return null
+
+		try {
+			return await sdk.getRoute({
+				fromChainId: sourceChain!.id,
+				toChainId: destinationChain!.id,
+				fromToken: sourceToken!.address as Address,
+				toToken: destinationToken!.address as Address,
+				amount: amount!,
+				fromAddress: address!,
+				toAddress: address!,
+				slippageTolerance: slippage,
+			})
+		} catch (error) {
+			throw error
+		}
+	}, [sdk, canFetch, sourceChain, destinationChain, sourceToken, destinationToken, amount, address, slippage])
+
+	const queryKey = useMemo(
+		() => [
+			'route',
+			{
+				fromChain: sourceChain?.id,
+				toChain: destinationChain?.id,
+				fromToken: sourceToken?.address,
+				toToken: destinationToken?.address,
+				amount,
+				slippage,
+			},
+		],
+		[sourceChain?.id, destinationChain?.id, sourceToken?.address, destinationToken?.address, amount, slippage],
 	)
 
 	const {
 		data: route,
 		isLoading,
+		isFetching,
 		dataUpdatedAt,
+		refetch,
+		error: queryError,
 	} = useQuery({
-		queryKey: ['route', queryParams],
+		queryKey,
 		queryFn: fetchRoute,
 		refetchInterval: REFRESH_INTERVAL,
 		enabled: canFetch,
 		staleTime: REFRESH_INTERVAL,
 	})
+
+	const isRouteLoading = useMemo(() => canFetch && (isLoading || isFetching), [canFetch, isLoading, isFetching])
 
 	useEffect(() => {
 		if (!canFetch || !dataUpdatedAt) {
@@ -98,33 +86,38 @@ export const useLoadRoute = () => {
 			return
 		}
 
-		const calculateRemaining = () => {
-			const nextRefresh = dataUpdatedAt + REFRESH_INTERVAL
-			return Math.max(0, Math.floor((nextRefresh - Date.now()) / 1000))
+		const calculateTime = () => {
+			const nextUpdate = dataUpdatedAt + REFRESH_INTERVAL
+			return Math.max(0, Math.floor((nextUpdate - Date.now()) / 1000))
 		}
 
-		setTimeToRefresh(calculateRemaining())
+		setTimeToRefresh(calculateTime())
 
 		const interval = setInterval(() => {
-			setTimeToRefresh(prev => {
-				const newValue = calculateRemaining()
-				return newValue !== prev ? newValue : prev
-			})
+			const newTime = calculateTime()
+			setTimeToRefresh(newTime)
+
+			if (newTime === 0) {
+				refetch()
+			}
 		}, 1000)
 
 		return () => clearInterval(interval)
-	}, [dataUpdatedAt, canFetch])
+	}, [dataUpdatedAt, canFetch, refetch])
 
 	useEffect(() => {
-		setIsLoading(isLoading && canFetch)
-	}, [isLoading, canFetch, setIsLoading])
-
-	useEffect(() => {
-		route ? setRoute(route) : setRoute(null)
+		setRoute(route ?? null)
 	}, [route, setRoute])
+
+	useEffect(() => {
+		setIsLoading(isRouteLoading)
+	}, [isRouteLoading, setIsLoading])
 
 	return {
 		timeToRefresh,
-		isRouteLoading: isLoading && canFetch,
+		isRouteLoading,
+		error: queryError,
+		manualRefetch: refetch,
+		route,
 	}
 }
