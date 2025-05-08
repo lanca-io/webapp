@@ -17,22 +17,19 @@ export const RouteTimer: FC = memo(() => {
 
 	if (!route || (!isLoading && (!timeToRefresh || timeToRefresh > 60))) return null
 
-	if (isLoading) {
-		return (
-			<Tag variant="branded" size="m" className="route_timer_tag">
-				<div className="route_timer">
-					<TimeIcon aria-hidden="true" />
-					<span className="route_time">Updating route info...</span>
-				</div>
-			</Tag>
-		)
-	}
+	const content = isLoading ? (
+		<span className="route_info">Updating route info...</span>
+	) : (
+		<span className="route_info">{timeToRefresh}s</span>
+	)
+
+	const variant = isLoading ? 'branded' : getVariant(timeToRefresh)
 
 	return (
-		<Tag variant={getVariant(timeToRefresh)} size="m" className="route_timer_tag">
+		<Tag variant={variant} size="s" className="route_timer_tag">
 			<div className="route_timer">
 				<TimeIcon aria-hidden="true" />
-				<span className="route_time">{timeToRefresh}s</span>
+				{content}
 			</div>
 		</Tag>
 	)
