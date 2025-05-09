@@ -29,8 +29,21 @@
 	line-height: 18px;
 }
 
-.asset-selection_arrow {
+.asset_selection_arrow {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.asset_selection--disabled {
+	color: var(--color-grey-400, #bbbbbb);
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.asset_selection--disabled:hover,
+.asset_selection--disabled:focus,
+.asset_selection--disabled:active {
+	background: var(--color-grey-50, #f7f7f7);
+	box-shadow: none;
 }

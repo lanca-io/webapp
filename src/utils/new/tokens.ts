@@ -9,7 +9,7 @@ import { toPreciseNumber, preciseMultiply } from './operations'
  * @param decimals - Number of decimal places the token uses
  * @returns Human-readable amount as string (e.g. "1.234568")
  */
-export function formatTokenAmount(amount: string | undefined, decimals: number): string {
+export function formatTokenAmount(amount: string | undefined | null, decimals: number): string {
 	if (!amount || isNaN(Number(amount))) return '0'
 
 	try {
