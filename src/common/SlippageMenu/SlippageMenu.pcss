@@ -4,4 +4,30 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--sp-md);
+	animation: fadeIn 0.3s ease forwards;
+	transition: all 0.3s ease;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-2.5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(2.5px);
+	}
 }

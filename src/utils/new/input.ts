@@ -118,3 +118,21 @@ export const textToAmount = (text: string, balance: number): number | null => {
 			return null
 	}
 }
+
+/**
+ * Cleans and normalizes a slippage input string.
+ *
+ * - Removes all characters except digits, dot, and percent sign.
+ * - Allows at most one percent sign, keeping only the first if multiple are present.
+ *
+ * @param input - The raw input string from the user.
+ * @returns The sanitized input string, suitable for further validation or parsing.
+ */
+export function normalizeSlippageInput(input: string): string {
+	let cleaned = input.replace(/[^0-9.%]/g, '')
+	const firstPercent = cleaned.indexOf('%')
+	if (firstPercent !== -1) {
+		cleaned = cleaned.slice(0, firstPercent + 1) + cleaned.slice(firstPercent + 1).replace(/%/g, '')
+	}
+	return cleaned
+}
