@@ -12,6 +12,7 @@ import { TrailArrowRightIcon } from '../../assets/icons/TrailArrowRightIcon'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { ReviewModal } from '../ReviewModal/ReviewModal'
 import { Spinner } from '@concero/ui-kit'
+import { DestinationValueIndicator } from '../DestinationValueIndicator/DestinationValueIndicator'
 import './DestinationPanel.pcss'
 
 type DestinationPanelProps = {
@@ -43,6 +44,8 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 		() => (hasBalance ? <BalanceInfo token={destinationToken} showMax={false} /> : null),
 		[destinationToken, hasBalance],
 	)
+
+	const valueInfo = useMemo(() => <DestinationValueIndicator />, [route, destinationToken])
 	const etaInfo = useMemo(() => <ETAInfo />, [])
 	const gasInfo = useMemo(() => <GasInfo />, [])
 	const slippageInfo = useMemo(() => <SlippageInfo />, [])
@@ -60,6 +63,7 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 		<div className="destination_panel">
 			<div className="destination_panel_input">
 				{isLoading ? skeleton : amountInput}
+				{valueInfo}
 				{balanceInfo}
 			</div>
 

@@ -1,0 +1,27 @@
+.dest_value_indicator {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--sp-xs);
+	position: relative;
+}
+
+.dest_value_indicator span {
+	font-size: 0.875rem;
+	line-height: 18px;
+	font-style: normal;
+}
+
+.dest_value_indicator_equal {
+	font-weight: 400;
+	color: var(--color-grey-500);
+}
+
+.dest_value_indicator_value {
+	font-weight: 400;
+	color: var(--color-grey-500);
+	transition:
+		color 0.2s ease,
+		font-weight 0.1s ease;
+}
