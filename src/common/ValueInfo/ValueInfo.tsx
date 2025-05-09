@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useFormStore } from '../../store/form/useFormStore'
 import { useValueConversion } from '../../hooks/useValueConversion'
-import { SourceValueIndicator } from '../SourceValueIndicator/SourceValueIndicator'
+import { SourceValue } from '../SourceValue/SourceValue'
 import { Mode } from '../../store/form/types'
 import './ValueInfo.pcss'
 
@@ -15,7 +15,7 @@ export const ValueInfo = () => {
 
 	const valueIndicator = useMemo(() => {
 		if (showIndicator) {
-			return <SourceValueIndicator />
+			return <SourceValue />
 		}
 		return null
 	}, [showIndicator])

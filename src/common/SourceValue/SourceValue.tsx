@@ -5,9 +5,9 @@ import { useFormStore } from '../../store/form/useFormStore'
 import { SwapIcon } from '../../assets/icons/SwapIcon'
 import { Mode } from '../../store/form/types'
 import { format } from '../../utils/new/format'
-import './SourceValueIndicator.pcss'
+import './SourceValue.pcss'
 
-export const SourceValueIndicator: FC = () => {
+export const SourceValue: FC = () => {
 	const { usd, token, isUsdMode } = useValueConversion()
 	const { setInputValue, setInputMode, sourceToken } = useFormStore()
 

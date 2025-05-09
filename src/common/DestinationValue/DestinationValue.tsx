@@ -5,9 +5,9 @@ import { useFormStore } from '../../store/form/useFormStore'
 import { format } from '../../utils/new/format'
 import { formatTokenAmount } from '../../utils/new/tokens'
 import { tokenAmountToUsd } from '../../utils/new/input'
-import './DestinationValueIndicator.pcss'
+import './DestinationValue.pcss'
 
-export const DestinationValueIndicator: FC = () => {
+export const DestinationValue: FC = () => {
 	const { route, isLoading } = useRouteStore()
 	const { destinationToken } = useFormStore()
 
