@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { AmountInput } from '../AmountInput/AmountInput'
 import { SkeletonLoader } from '../../components/layout/SkeletonLoader/SkeletonLoader'
 import { BalanceInfo } from '../BalanceInfo/BalanceInfo'
@@ -10,6 +10,7 @@ import { SlippageInfo } from '../SlippageInfo/SlippageInfo'
 import { Button } from '@concero/ui-kit'
 import { TrailArrowRightIcon } from '../../assets/icons/TrailArrowRightIcon'
 import { useRouteStore } from '../../store/route/useRouteStore'
+import { ReviewModal } from '../ReviewModal/ReviewModal'
 import { Spinner } from '@concero/ui-kit'
 import './DestinationPanel.pcss'
 
@@ -21,6 +22,15 @@ type DestinationPanelProps = {
 export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading }) => {
 	const { route, isLoading: routeLoading } = useRouteStore()
 	const { destinationToken } = useFormStore()
+	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
+
+	const handleOpenReviewModal = () => {
+		setIsReviewModalOpen(true)
+	}
+
+	const handleCloseReviewModal = () => {
+		setIsReviewModalOpen(false)
+	}
 
 	const skeleton = useMemo(() => <SkeletonLoader height={60} width={160} />, [])
 	const hasBalance = useMemo(
@@ -39,11 +49,11 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 
 	const reviewButton = useMemo(
 		() => (
-			<Button isFull variant="secondary" rightIcon={<TrailArrowRightIcon />}>
+			<Button isFull variant="secondary" rightIcon={<TrailArrowRightIcon />} onClick={handleOpenReviewModal}>
 				Review
 			</Button>
 		),
-		[],
+		[handleOpenReviewModal],
 	)
 
 	return (
@@ -69,6 +79,7 @@ export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading 
 					<Spinner type="gray" />
 				</div>
 			)}
+			<ReviewModal isOpen={isReviewModalOpen} onClose={handleCloseReviewModal} />
 		</div>
 	)
 }

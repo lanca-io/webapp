@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren } from 'react'
+import type { FC, PropsWithChildren, ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { ModalHeader } from './ModalHeader/ModalHeader'
@@ -8,9 +8,10 @@ type ModalProps = {
 	isOpen: boolean
 	title: string
 	onClose: () => void
+	modalExtension?: ReactNode
 }
 
-export const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, title, onClose, children }) => {
+export const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, title, onClose, modalExtension, children }) => {
 	const handleClose = useCallback(() => onClose(), [onClose])
 
 	const header = useMemo(() => <ModalHeader title={title} onClose={handleClose} />, [title, handleClose])
@@ -23,9 +24,8 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, title, onClos
 				{header}
 				{children}
 			</div>
+			{modalExtension && <div className="modal modal_secondary">{modalExtension}</div>}
 		</div>,
 		document.body,
 	)
 }
-
-Modal.displayName = 'Modal'
