@@ -1,20 +1,15 @@
-import type { FC } from 'react'
-import { useMemo } from 'react'
+import { memo } from 'react'
 import { PointerIcon } from '../../../assets/icons/PointerIcon'
 import { SourceInfo } from './SourceInfo/SourceInfo'
 import { DestinationInfo } from './DestinationInfo/DestinationInfo'
 import './RouteInfo.pcss'
 
-export const RouteInfo: FC = () => {
-	const sourceInfo = useMemo(() => <SourceInfo />, [])
-	const destinationInfo = useMemo(() => <DestinationInfo />, [])
-	const pointerIcon = useMemo(() => <PointerIcon />, [])
-
-	return (
-		<div className="route_info">
-			{sourceInfo}
-			{pointerIcon}
-			{destinationInfo}
+export const RouteInfo = memo(
+	(): JSX.Element => (
+		<div className="route_info" role="region" aria-label="Transaction route details">
+			<SourceInfo />
+			<PointerIcon aria-hidden="true" />
+			<DestinationInfo />
 		</div>
-	)
-}
+	),
+)

@@ -1,19 +1,28 @@
-import type { FC, MouseEvent } from 'react'
 import { memo, useCallback } from 'react'
 import './Chain.pcss'
 
-export type ChainProps = {
+type ChainProps = {
 	name: string
 	logoURL: string
-	onClick: (event: MouseEvent) => void
+	onClick: (event: React.MouseEvent) => void
 	isActive: boolean
 }
 
-export const Chain: FC<ChainProps> = memo(({ name, logoURL, onClick, isActive }) => {
+export const Chain = memo(({ name, logoURL, onClick, isActive }: ChainProps): JSX.Element => {
 	const handleClick = useCallback(
-		(event: MouseEvent) => {
-			event.preventDefault()
-			onClick(event)
+		(e: React.MouseEvent) => {
+			e.preventDefault()
+			onClick(e)
+		},
+		[onClick],
+	)
+
+	const handleKeyPress = useCallback(
+		(e: React.KeyboardEvent) => {
+			if (['Enter', ' '].includes(e.key)) {
+				e.preventDefault()
+				onClick(e as unknown as React.MouseEvent)
+			}
 		},
 		[onClick],
 	)
@@ -22,10 +31,13 @@ export const Chain: FC<ChainProps> = memo(({ name, logoURL, onClick, isActive })
 		<div
 			className={`chain ${isActive ? 'active' : ''}`}
 			onClick={handleClick}
+			onKeyDown={handleKeyPress}
 			role="button"
 			aria-selected={isActive}
+			tabIndex={0}
+			aria-label={`Select ${name} network`}
 		>
-			<img className="chain__logo" src={logoURL} alt={name} />
+			<img className="chain__logo" src={logoURL} alt={name} loading="lazy" draggable={false} />
 			<h4 className="chain__name">{name}</h4>
 		</div>
 	)

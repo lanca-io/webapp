@@ -1,5 +1,4 @@
-import type { FC } from 'react'
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { AssetSelection } from '../../../AssetSelection/AssetSelection'
 import { formatTokenAmount } from '../../../../utils/new/tokens'
 import { format } from '../../../../utils/new/format'
@@ -7,34 +6,29 @@ import { tokenAmountToUsd } from '../../../../utils/new/input'
 import { useFormStore } from '../../../../store/form/useFormStore'
 import './SourceInfo.pcss'
 
-export const SourceInfo: FC = () => {
+export const SourceInfo = memo((): JSX.Element => {
 	const { sourceToken, sourceChain, amount } = useFormStore()
 
 	const tokenAmount = useMemo(() => {
 		if (!amount) return '0'
-		if (sourceToken?.decimals) {
-			return formatTokenAmount(amount, sourceToken.decimals)
-		}
-		return amount
+		return sourceToken?.decimals ? formatTokenAmount(amount, sourceToken.decimals) : amount
 	}, [amount, sourceToken?.decimals])
 
-	const usd = useMemo(() => {
+	const formattedUsd = useMemo(() => {
 		if (!sourceToken?.priceUsd) return '-'
-		const usd = tokenAmountToUsd(Number(tokenAmount), sourceToken.priceUsd)
-		if (!usd) return '-'
-		return `= $${format(Number(usd), 4)}`
+		const usdValue = tokenAmountToUsd(Number(tokenAmount), sourceToken.priceUsd)
+		return usdValue ? `= $${format(Number(usdValue), 4)}` : '-'
 	}, [tokenAmount, sourceToken?.priceUsd])
 
-	const assetSelection = useMemo(
-		() => <AssetSelection token={sourceToken} chain={sourceChain} />,
-		[sourceToken, sourceChain],
-	)
-
 	return (
-		<div className="route_info_source">
-			{assetSelection}
-			<span className="route_info_amount">{format(Number(tokenAmount), 4)}</span>
-			<span className="route_info_dollar_value">{usd}</span>
+		<div className="route_info_source" role="region" aria-label="Source information">
+			<AssetSelection token={sourceToken} chain={sourceChain} aria-label="Source asset selection" />
+			<span className="route_info_amount" aria-label="Token amount">
+				{format(Number(tokenAmount), 4)}
+			</span>
+			<span className="route_info_dollar_value" aria-label="USD value">
+				{formattedUsd}
+			</span>
 		</div>
 	)
-}
+})

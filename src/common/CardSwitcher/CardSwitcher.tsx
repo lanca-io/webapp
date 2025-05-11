@@ -1,62 +1,57 @@
-import type { FC } from 'react'
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
 import { SwapIcon } from '../../assets/icons/SwapIcon'
 import { useFormStore } from '../../store/form/useFormStore'
 import './CardSwitcher.pcss'
 
-export const CardSwitcher: FC = () => {
+export const CardSwitcher = (): JSX.Element => {
 	const { swapChainsAndTokens } = useFormStore()
-	const [top, setTop] = useState<number | null>(null)
+	const [top, setTop] = useState<number>(0)
 	const cardRef = useRef<HTMLElement | null>(null)
-	const observer = useRef<ResizeObserver | null>(null)
+	const observerRef = useRef<ResizeObserver | null>(null)
 
-	const setupObserver = useCallback((onChange: (pos: number) => void) => {
+	const handleSwap = useCallback(() => {
+		swapChainsAndTokens()
+	}, [swapChainsAndTokens])
+
+	const setupObserver = useCallback(() => {
 		const card = document.querySelector('.source_card') as HTMLElement
-		if (!card) return () => {}
+		if (!card) return
 
 		cardRef.current = card
 
 		const updatePosition = () => {
-			if (cardRef.current) {
-				const position = cardRef.current.offsetHeight - 15
-				onChange(position)
-			}
+			const position = card.offsetHeight - 15
+			setTop(position)
 		}
 
 		updatePosition()
-		const resizeObserver = new ResizeObserver(updatePosition)
-		observer.current = resizeObserver
-
-		resizeObserver.observe(card)
+		const observer = new ResizeObserver(updatePosition)
+		observerRef.current = observer
+		observer.observe(card)
 
 		return () => {
-			if (cardRef.current) resizeObserver.unobserve(cardRef.current)
-			resizeObserver.disconnect()
-			observer.current = null
+			observer.unobserve(card)
+			observer.disconnect()
 		}
 	}, [])
 
 	useEffect(() => {
-		const cleanup = setupObserver(setTop)
+		const cleanup = setupObserver()
 		return cleanup
 	}, [setupObserver])
 
-	const handleSwap = useCallback(() => swapChainsAndTokens(), [swapChainsAndTokens])
-	const icon = useMemo(() => <SwapIcon />, [])
-
-	const button = useMemo(
-		() => (
-			<IconButton size="s" variant="secondary" className="card_switcher_icon" onClick={handleSwap}>
-				{icon}
-			</IconButton>
-		),
-		[handleSwap, icon],
-	)
-
 	return (
-		<div className="card_switcher" style={top !== null ? { top: `${top}px` } : undefined}>
-			{button}
+		<div className="card_switcher" style={{ top: `${top}px` }} role="presentation">
+			<IconButton
+				size="s"
+				variant="secondary"
+				className="card_switcher_icon"
+				onClick={handleSwap}
+				aria-label="Swap chains and tokens"
+			>
+				<SwapIcon aria-hidden="true" />
+			</IconButton>
 		</div>
 	)
 }

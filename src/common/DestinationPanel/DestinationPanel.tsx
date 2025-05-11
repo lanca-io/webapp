@@ -1,5 +1,4 @@
-import type { FC } from 'react'
-import { useMemo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { AmountInput } from '../AmountInput/AmountInput'
 import { SkeletonLoader } from '../../components/layout/SkeletonLoader/SkeletonLoader'
 import { BalanceInfo } from '../BalanceInfo/BalanceInfo'
@@ -20,70 +19,59 @@ type DestinationPanelProps = {
 	isLoading: boolean
 }
 
-export const DestinationPanel: FC<DestinationPanelProps> = ({ amount, isLoading }) => {
+export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelProps): JSX.Element => {
 	const { route, isLoading: routeLoading } = useRouteStore()
 	const { destinationToken } = useFormStore()
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
 
-	const handleOpenReviewModal = () => {
+	const handleOpenReviewModal = useCallback(() => {
 		setIsReviewModalOpen(true)
-	}
+	}, [])
 
-	const handleCloseReviewModal = () => {
+	const handleCloseReviewModal = useCallback(() => {
 		setIsReviewModalOpen(false)
-	}
+	}, [])
 
-	const skeleton = useMemo(() => <SkeletonLoader height={60} width={160} />, [])
-	const hasBalance = useMemo(
-		() => destinationToken && destinationToken.balance !== undefined && destinationToken.balance !== null,
-		[destinationToken],
-	)
-	const amountInput = useMemo(() => <AmountInput value={amount || '0'} disabled={true} />, [amount])
-
-	const balanceInfo = useMemo(
-		() => (hasBalance ? <BalanceInfo token={destinationToken} showMax={false} /> : null),
-		[destinationToken, hasBalance],
-	)
-
-	const valueInfo = useMemo(() => <DestinationValue />, [route, destinationToken])
-	const etaInfo = useMemo(() => <ETAInfo />, [])
-	const gasInfo = useMemo(() => <GasInfo />, [])
-	const slippageInfo = useMemo(() => <SlippageInfo />, [])
-
-	const reviewButton = useMemo(
-		() => (
-			<Button isFull variant="secondary" rightIcon={<TrailArrowRightIcon />} onClick={handleOpenReviewModal}>
-				Review
-			</Button>
-		),
-		[handleOpenReviewModal],
-	)
+	const hasBalance = Boolean(destinationToken?.balance !== undefined && destinationToken?.balance !== null)
 
 	return (
-		<div className="destination_panel">
+		<div className="destination_panel" role="region" aria-label="Destination details">
 			<div className="destination_panel_input">
-				{isLoading ? skeleton : amountInput}
-				{valueInfo}
-				{balanceInfo}
+				{isLoading ? (
+					<SkeletonLoader height={60} width={160} />
+				) : (
+					<AmountInput value={amount || '0'} disabled />
+				)}
+				<DestinationValue />
+				{hasBalance && <BalanceInfo token={destinationToken} showMax={false} />}
 			</div>
 
 			<div className="destination_panel_info">
-				{slippageInfo}
+				<SlippageInfo />
 				{route && !routeLoading && (
 					<>
-						{gasInfo}
-						{etaInfo}
-						{reviewButton}
+						<GasInfo />
+						<ETAInfo />
+						<Button
+							isFull
+							variant="secondary"
+							rightIcon={<TrailArrowRightIcon aria-hidden="true" />}
+							onClick={handleOpenReviewModal}
+							aria-label="Review transaction details"
+						>
+							Review
+						</Button>
 					</>
 				)}
 			</div>
 
 			{routeLoading && (
-				<div className="destination_panel_loader">
-					<Spinner type="gray" />
+				<div className="destination_panel_loader" aria-live="polite">
+					<Spinner type="gray" aria-label="Loading route details" />
 				</div>
 			)}
+
 			<ReviewModal isOpen={isReviewModalOpen} onClose={handleCloseReviewModal} />
 		</div>
 	)
-}
+})

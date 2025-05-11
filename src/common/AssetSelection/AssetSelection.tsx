@@ -1,45 +1,43 @@
-import type { FC } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
 import type { ILancaChain } from '@lanca/sdk'
-import { useMemo } from 'react'
+import { memo } from 'react'
 import { TokenSelection } from './TokenSelection/TokenSelection'
 import { ChainSelection } from './ChainSelection/ChainSelection'
 import { TrailArrowRightIcon } from '../../assets/icons/TrailArrowRightIcon'
 import './AssetSelection.pcss'
 
-type AssetProps = {
+type AssetSelectionProps = {
 	token: ExtendedToken | null
 	chain: ILancaChain | null
 	openModal?: () => void
 	disabled?: boolean
 }
 
-export const AssetSelection: FC<AssetProps> = ({ token, chain, openModal, disabled }) => {
-	const isDisabled = disabled || !openModal
+export const AssetSelection = memo(
+	({ token, chain, openModal, disabled = false }: AssetSelectionProps): JSX.Element => {
+		const isDisabled = disabled || !openModal
+		const hasInteractiveElement = !isDisabled
 
-	const tokenSelection = useMemo(
-		() => <TokenSelection logoURI={token?.logoURI} symbol={token?.symbol} />,
-		[token?.logoURI, token?.symbol],
-	)
+		return (
+			<div
+				className={`asset_selection${isDisabled ? ' asset_selection--disabled' : ''}`}
+				onClick={hasInteractiveElement ? openModal : undefined}
+				role={hasInteractiveElement ? 'button' : undefined}
+				tabIndex={hasInteractiveElement ? 0 : -1}
+				aria-disabled={isDisabled}
+			>
+				<TokenSelection logoURI={token?.logoURI} symbol={token?.symbol} />
 
-	const chainSelection = useMemo(
-		() => <ChainSelection logoURI={chain?.logoURI} name={chain?.name} />,
-		[chain?.logoURI, chain?.name],
-	)
+				<p className="asset_selection_pointer">on</p>
 
-	const icon = useMemo(() => <TrailArrowRightIcon />, [])
+				<ChainSelection logoURI={chain?.logoURI} name={chain?.name} />
 
-	return (
-		<div
-			className={`asset_selection${isDisabled ? ' asset_selection--disabled' : ''}`}
-			onClick={isDisabled ? undefined : openModal}
-			tabIndex={isDisabled ? -1 : 0}
-			aria-disabled={isDisabled}
-		>
-			{tokenSelection}
-			<p className="asset_selection_pointer">on</p>
-			{chainSelection}
-			{!isDisabled && <div className="asset_selection_arrow">{icon}</div>}
-		</div>
-	)
-}
+				{hasInteractiveElement && (
+					<div className="asset_selection_arrow">
+						<TrailArrowRightIcon aria-hidden="true" />
+					</div>
+				)}
+			</div>
+		)
+	},
+)

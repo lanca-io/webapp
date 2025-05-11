@@ -1,6 +1,5 @@
-import type { FC } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Badge } from '../../components/layout/Badge/Badge'
 import { Balance } from '../Balance/Balance'
 import { truncate, truncateAddress } from '../../utils/new/truncate'
@@ -13,7 +12,7 @@ type TokenProps = {
 	isLoading?: boolean
 }
 
-export const Token: FC<TokenProps> = ({ token, showBalance = false, onClick }) => {
+export const Token = memo(({ token, showBalance = false, onClick }: TokenProps): JSX.Element => {
 	const symbol = truncate(token.symbol, 20)
 	const name = truncate(token.name, 15)
 	const address = truncateAddress(token.address)
@@ -50,4 +49,4 @@ export const Token: FC<TokenProps> = ({ token, showBalance = false, onClick }) =
 			{balance}
 		</div>
 	)
-}
+})

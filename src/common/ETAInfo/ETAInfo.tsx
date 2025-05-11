@@ -1,18 +1,17 @@
-import type { FC } from 'react'
-import { useMemo } from 'react'
+import { memo } from 'react'
 import { TimeIcon } from '../../assets/icons/TimeIcon'
 import './ETAInfo.pcss'
 
-export const ETAInfo: FC = () => {
-	const timeIcon = useMemo(() => <TimeIcon color="#84949B" />, [])
-
-	return (
-		<div className="eta_info">
+export const ETAInfo = memo(
+	(): JSX.Element => (
+		<div className="eta_info" role="status" aria-live="polite">
 			<div className="eta_info_description">
-				{timeIcon}
+				<TimeIcon color="#84949B" aria-hidden="true" />
 				<span className="eta_info_text">ETA</span>
 			</div>
-			<span className="eta_info_value">20 sec.</span>
+			<span className="eta_info_value" aria-label="Estimated time to arrival">
+				20 sec.
+			</span>
 		</div>
-	)
-}
+	),
+)

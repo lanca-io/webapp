@@ -1,10 +1,18 @@
-import type { FC } from 'react'
 import { memo } from 'react'
 import './TokenNotFound.pcss'
 
-export const TokenNotFound: FC = memo(() => (
-	<div className="token_not_found">
-		<img src="/NotFound.png" alt="Not Found" className="token_not_found_img" />
-		<p className="token_not_found_text">No results found</p>
-	</div>
-))
+export const TokenNotFound = memo(
+	(): JSX.Element => (
+		<div className="token_not_found" role="status" aria-live="polite" aria-label="No tokens found">
+			<img
+				src="/NotFound.png"
+				alt=""
+				className="token_not_found_img"
+				aria-hidden="true"
+				loading="lazy"
+				draggable={false}
+			/>
+			<p className="token_not_found_text">No results found</p>
+		</div>
+	),
+)

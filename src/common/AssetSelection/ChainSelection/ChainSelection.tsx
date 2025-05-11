@@ -1,5 +1,4 @@
-import type { FC } from 'react'
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import './ChainSelection.pcss'
 
 type ChainSelectionProps = {
@@ -8,9 +7,9 @@ type ChainSelectionProps = {
 	onClick?: () => void
 }
 
-export const ChainSelection: FC<ChainSelectionProps> = ({ logoURI, name, onClick }) => {
+export const ChainSelection = memo(({ logoURI, name, onClick }: ChainSelectionProps): JSX.Element => {
 	const handleClick = useCallback(() => {
-		if (onClick) onClick()
+		onClick?.()
 	}, [onClick])
 
 	return (
@@ -19,4 +18,4 @@ export const ChainSelection: FC<ChainSelectionProps> = ({ logoURI, name, onClick
 			<p className="chain_selection_name">{name}</p>
 		</div>
 	)
-}
+})

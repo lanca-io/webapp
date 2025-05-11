@@ -24,5 +24,3 @@ export const ExpandButton: FC<ExpandProps> = ({ isExpanded, onToggle }) => {
 
 	return <div className="expand_button_container">{button}</div>
 }
-
-ExpandButton.displayName = 'ExpandButton'

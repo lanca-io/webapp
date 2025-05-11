@@ -1,5 +1,4 @@
-import type { FC } from 'react'
-import { useMemo } from 'react'
+import { memo } from 'react'
 import { Button, Input } from '@concero/ui-kit'
 import { useSettingsStore } from '../../store/settings/useSettings'
 import { useHandleSlippageInput } from '../../hooks/useHandleSlippageInput'
@@ -11,7 +10,7 @@ type SlippageMenuProps = {
 	isOpen: boolean
 }
 
-export const SlippageMenu: FC<SlippageMenuProps> = ({ isOpen }) => {
+export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | null => {
 	const { slippage, setSlippage } = useSettingsStore()
 	const { isCustom, displayValue, toggleMode, onChange, onBlur } = useHandleSlippageInput(
 		slippage,
@@ -19,17 +18,20 @@ export const SlippageMenu: FC<SlippageMenuProps> = ({ isOpen }) => {
 		MAX_SLIPPAGE,
 	)
 
-	const actionButton = useMemo(
-		() => (
-			<Button variant={isCustom ? 'secondary' : 'secondary_color'} onClick={toggleMode} size="m" isFull>
+	if (!isOpen) return null
+
+	return (
+		<div className="slippage_menu" role="dialog" aria-modal="true" aria-label="Slippage settings">
+			<Button
+				variant={isCustom ? 'secondary' : 'secondary_color'}
+				onClick={toggleMode}
+				size="m"
+				isFull
+				aria-pressed={isCustom}
+				aria-label={isCustom ? 'Switch to auto slippage' : 'Switch to custom slippage'}
+			>
 				Auto
 			</Button>
-		),
-		[isCustom, toggleMode],
-	)
-
-	const input = useMemo(
-		() => (
 			<Input
 				className="slippage_input"
 				size="m"
@@ -39,19 +41,10 @@ export const SlippageMenu: FC<SlippageMenuProps> = ({ isOpen }) => {
 				inputProps={{
 					inputMode: 'decimal',
 					onBlur,
+					'aria-label': 'Custom slippage value',
 				}}
 				placeholder="0.5%"
 			/>
-		),
-		[displayValue, onChange, isCustom, onBlur],
-	)
-
-	if (!isOpen) return null
-
-	return (
-		<div className="slippage_menu">
-			{actionButton}
-			{input}
 		</div>
 	)
-}
+})

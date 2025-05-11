@@ -1,16 +1,16 @@
-import type { FC } from 'react'
-import { useMemo } from 'react'
+import { memo } from 'react'
 import { AssetsModal } from '../AssetModal/AssetModal'
 import { useModalsStore } from '../../store/modals/useModalsStore'
 import { useAssetModals } from '../../hooks/useAssetModals'
 
-export const ModalManager: FC = () => {
+export const ModalManager = memo((): JSX.Element | null => {
 	const { isFromAssetModalOpen, isToAssetModalOpen, closeFromAssetModal, closeToAssetModal } = useModalsStore()
+
 	const { fromChain, toChain, selectFromChain, selectToChain, selectFromAsset, selectToAsset } = useAssetModals()
 
-	const fromAssetModal = useMemo(
-		() =>
-			isFromAssetModalOpen ? (
+	return (
+		<>
+			{isFromAssetModalOpen && (
 				<AssetsModal
 					isOpen={isFromAssetModalOpen}
 					onClose={closeFromAssetModal}
@@ -18,13 +18,9 @@ export const ModalManager: FC = () => {
 					onChainSelect={selectFromChain}
 					selectedChain={fromChain}
 				/>
-			) : null,
-		[isFromAssetModalOpen, closeFromAssetModal, selectFromAsset, selectFromChain, fromChain],
-	)
+			)}
 
-	const toAssetModal = useMemo(
-		() =>
-			isToAssetModalOpen ? (
+			{isToAssetModalOpen && (
 				<AssetsModal
 					isOpen={isToAssetModalOpen}
 					onClose={closeToAssetModal}
@@ -32,14 +28,7 @@ export const ModalManager: FC = () => {
 					onChainSelect={selectToChain}
 					selectedChain={toChain}
 				/>
-			) : null,
-		[isToAssetModalOpen, closeToAssetModal, selectToAsset, selectToChain, toChain],
-	)
-
-	return (
-		<>
-			{fromAssetModal}
-			{toAssetModal}
+			)}
 		</>
 	)
-}
+})

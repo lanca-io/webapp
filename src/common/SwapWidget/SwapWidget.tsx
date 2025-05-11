@@ -1,5 +1,4 @@
-import type { FC } from 'react'
-import { useMemo } from 'react'
+import { memo } from 'react'
 import { ModeMenu } from '../../common/ModeMenu/ModeMenu'
 import { SourceCard } from '../../common/SourceCard/SourceCard'
 import { CardSwitcher } from '../../common/CardSwitcher/CardSwitcher'
@@ -8,26 +7,19 @@ import { ModalManager } from '../../common/ModalManager/ModalManager'
 import { SwapAction } from '../SwapAction/SwapAction'
 import './SwapWidget.pcss'
 
-export const SwapWidget: FC = () => {
-	const modeMenu = useMemo(() => <ModeMenu />, [])
-	const sourceCard = useMemo(() => <SourceCard />, [])
-	const cardSwitcher = useMemo(() => <CardSwitcher />, [])
-	const destinationCard = useMemo(() => <DestinationCard />, [])
-	const modalManager = useMemo(() => <ModalManager />, [])
-	const swapAction = useMemo(() => <SwapAction />, [])
-
-	return (
+export const SwapWidget = memo(
+	(): JSX.Element => (
 		<>
-			<div className="swap_container">
-				{modeMenu}
+			<div className="swap_container" role="main" aria-label="Swap interface">
+				<ModeMenu />
 				<div className="swap">
-					{sourceCard}
-					{cardSwitcher}
-					{destinationCard}
-					{swapAction}
+					<SourceCard />
+					<CardSwitcher />
+					<DestinationCard />
+					<SwapAction />
 				</div>
 			</div>
-			{modalManager}
+			<ModalManager />
 		</>
-	)
-}
+	),
+)

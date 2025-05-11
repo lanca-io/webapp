@@ -1,6 +1,5 @@
-import type { FC, MouseEvent } from 'react'
 import type { ExtendedToken } from '../../store/tokens/types'
-import { memo, useMemo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { format } from '../../utils/new/format'
 import { formatTokenAmount } from '../../utils/new/tokens'
 import { useFormStore } from '../../store/form/useFormStore'
@@ -11,41 +10,45 @@ type BalanceInfoProps = {
 	showMax?: boolean
 }
 
-export const BalanceInfo: FC<BalanceInfoProps> = memo(({ token, showMax = true }) => {
+export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): JSX.Element => {
 	const { setInputValue } = useFormStore()
 
-	const data = useMemo(() => {
-		if (!token) return { value: '0', symbol: '', hasBalance: false }
+	const { displayValue, symbol, hasBalance } = useMemo(() => {
+		if (!token?.balance) return { displayValue: '0', symbol: '', hasBalance: false }
 
 		const balance = Number(formatTokenAmount(token.balance, token.decimals))
-		const hasBalance = balance > 0
-
 		return {
-			value: format(balance, 4),
+			displayValue: format(balance, 4),
 			symbol: token.symbol,
-			hasBalance,
-			rawBalance: token.balance,
-			decimals: token.decimals,
+			hasBalance: balance > 0,
 		}
 	}, [token])
 
 	const handleMaxClick = useCallback(
-		(e: MouseEvent<HTMLButtonElement>) => {
+		(e: React.MouseEvent<HTMLButtonElement>) => {
 			e.preventDefault()
 			if (!token?.balance) return
-			const formattedBalance = formatTokenAmount(token.balance, token.decimals)
-			setInputValue(formattedBalance)
+			setInputValue(formatTokenAmount(token.balance, token.decimals))
 		},
 		[token, setInputValue],
 	)
 
 	return (
-		<div className="balance_info_container">
+		<div className="balance_info_container" role="group" aria-label="Balance information">
 			<span className="balance_info_title">Balance</span>
-			<span className="balance_info_value">{data.value}</span>
-			<span className="balance_info_symbol">{data.symbol}</span>
-			{data.hasBalance && showMax && (
-				<button onClick={handleMaxClick} className="balance_info_max_button">
+			<span className="balance_info_value" aria-label={`Current balance: ${displayValue}`}>
+				{displayValue}
+			</span>
+			<span className="balance_info_symbol" aria-label="Token symbol">
+				{symbol}
+			</span>
+			{hasBalance && showMax && (
+				<button
+					onClick={handleMaxClick}
+					className="balance_info_max_button"
+					type="button"
+					aria-label="Set maximum amount"
+				>
 					Max
 				</button>
 			)}

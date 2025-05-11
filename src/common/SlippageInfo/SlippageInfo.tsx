@@ -1,5 +1,4 @@
-import type { FC } from 'react'
-import { useState, useCallback, useMemo } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Tag, IconButton } from '@concero/ui-kit'
 import { SlippageIcon } from '../../assets/icons/SlippageIcon'
 import { SettingsIcon } from '../../assets/icons/SettingsIcon'
@@ -13,60 +12,49 @@ const VARIANT_MAPPING = {
 	custom: 'branded',
 } as const
 
-export const SlippageInfo: FC = () => {
+export const SlippageInfo = memo((): JSX.Element => {
 	const { slippage } = useSettingsStore()
-	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
 	const isAuto = slippage === defaultSlippage
-	const tagVariant = isAuto ? VARIANT_MAPPING.auto : VARIANT_MAPPING.custom
-	const tagLabel = isAuto ? 'Auto' : 'Custom'
-
 	const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), [])
 
-	const tag = useMemo(
-		() => (
-			<Tag size="s" variant={tagVariant}>
-				{tagLabel}
-			</Tag>
-		),
-		[tagVariant, tagLabel],
-	)
-
-	const slippageValue = useMemo(() => <p className="slippage_info_value">{slippage}%</p>, [slippage])
-
-	const iconButton = useMemo(
-		() => (
-			<IconButton
-				variant="tetrary"
-				size="s"
-				className="slippage_info_button"
-				onClick={toggleMenu}
-				aria-label="Slippage settings"
-			>
-				<SettingsIcon />
-			</IconButton>
-		),
-		[toggleMenu],
-	)
-
-	const slippageIcon = useMemo(() => <SlippageIcon aria-hidden="true" />, [])
-
-	const slippageMenu = useMemo(() => <SlippageMenu isOpen={isMenuOpen} />, [isMenuOpen])
-
 	return (
-		<div className="slippage_info_wrapper">
+		<div className="slippage_info_wrapper" role="group" aria-label="Slippage settings">
 			<div className="slippage_info_container">
 				<div className="slippage_info_description">
-					{slippageIcon}
+					<SlippageIcon aria-hidden="true" />
 					<p className="slippage_info_text">Slippage</p>
 				</div>
+
 				<div className="slippage_info_actions">
-					{tag}
-					{slippageValue}
-					{iconButton}
+					<Tag
+						size="s"
+						variant={isAuto ? VARIANT_MAPPING.auto : VARIANT_MAPPING.custom}
+						aria-label={`Slippage type: ${isAuto ? 'auto' : 'custom'}`}
+					>
+						{isAuto ? 'Auto' : 'Custom'}
+					</Tag>
+
+					<p className="slippage_info_value" aria-label={`Current slippage: ${slippage}%`}>
+						{slippage}%
+					</p>
+
+					<IconButton
+						variant="tetrary"
+						size="s"
+						className="slippage_info_button"
+						onClick={toggleMenu}
+						aria-label="Adjust slippage settings"
+						aria-haspopup="dialog"
+						aria-expanded={isMenuOpen}
+					>
+						<SettingsIcon aria-hidden="true" />
+					</IconButton>
 				</div>
 			</div>
-			{slippageMenu}
+
+			<SlippageMenu isOpen={isMenuOpen} />
 		</div>
 	)
-}
+})

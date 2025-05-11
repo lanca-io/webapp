@@ -1,15 +1,14 @@
-import type { FC } from 'react'
-import { useMemo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Badge } from '../../../components/layout/Badge/Badge'
 import './TokenSelection.pcss'
 
-type TokenSelectionProps = {
+interface TokenSelectionProps {
 	logoURI?: string
 	symbol?: string
 	onClick?: () => void
 }
 
-export const TokenSelection: FC<TokenSelectionProps> = ({ logoURI, symbol, onClick }) => {
+export const TokenSelection = memo(({ logoURI, symbol, onClick }: TokenSelectionProps): JSX.Element => {
 	const handleClick = useCallback(() => {
 		if (onClick) onClick()
 	}, [onClick])
@@ -22,4 +21,4 @@ export const TokenSelection: FC<TokenSelectionProps> = ({ logoURI, symbol, onCli
 			<p className="token_selection_name">{symbol}</p>
 		</div>
 	)
-}
+})

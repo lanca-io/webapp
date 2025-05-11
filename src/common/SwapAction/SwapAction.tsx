@@ -1,36 +1,39 @@
-import { useCallback, useMemo, type FC } from 'react'
-import { useFormStore } from '../../store/form/useFormStore'
+import { memo, useCallback } from 'react'
 import { useAccount } from 'wagmi'
-import { useRouteStore } from '../../store/route/useRouteStore'
-import { Button } from '@concero/ui-kit'
 import { useAppKit } from '@reown/appkit/react'
+import { Button } from '@concero/ui-kit'
+import { useFormStore } from '../../store/form/useFormStore'
+import { useRouteStore } from '../../store/route/useRouteStore'
 import './SwapAction.pcss'
 
-export const SwapAction: FC = () => {
+export const SwapAction = memo((): JSX.Element => {
 	const { open } = useAppKit()
 	const { isConnected, isConnecting } = useAccount()
 	const { route, isLoading: routeLoading } = useRouteStore()
 	const { error } = useFormStore()
 
-	const isDisabled = useMemo(() => isConnected && (!!error || !route), [isConnected, error, route])
-
-	const isLoading = useMemo(() => isConnecting || routeLoading, [isConnecting, routeLoading])
+	const isLoading = isConnecting || routeLoading
+	const isDisabled = isConnected && (!!error || !route)
+	const buttonText = isConnected ? 'Begin Swap' : 'Connect Wallet'
 
 	const handleClick = useCallback(() => {
-		if (!isConnected) {
-			open()
-		} else {
-			return
-		}
+		if (!isConnected) open?.()
 	}, [isConnected, open])
 
 	return (
-		<div className="swap_action_wrapper">
+		<div className="swap_action_wrapper" role="region" aria-label="Swap actions">
 			<div className="swap_action">
-				<Button variant="primary" size="l" isDisabled={isDisabled || isLoading} isFull onClick={handleClick}>
-					{!isConnected ? 'Connect Wallet' : 'Begin Swap'}
+				<Button
+					variant="primary"
+					size="l"
+					isDisabled={isDisabled || isLoading}
+					isFull
+					onClick={handleClick}
+					aria-label={isConnected ? 'Initiate swap' : 'Connect wallet'}
+				>
+					{buttonText}
 				</Button>
 			</div>
 		</div>
 	)
-}
+})
