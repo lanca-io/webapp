@@ -30,7 +30,7 @@ export const handleFetchTokens = async (chainId?: string, offset?: number, limit
 		params.append('search', search)
 	}
 
-	const url = `${process.env.CONCERO_API_URL}/tokens/?${params.toString()}`
+	const url = `${config.baseURL}/tokens/?${params.toString()}`
 
 	try {
 		const response = await get(url)
