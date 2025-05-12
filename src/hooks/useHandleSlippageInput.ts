@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { defaultSlippage } from '../store/settings/CreateSettingsStore'
 import { normalizeSlippageInput } from '../utils/new/input'
+import { useDebounce } from './useDebounce'
 
 export function useHandleSlippageInput(
 	slippage: string,
@@ -9,6 +10,24 @@ export function useHandleSlippageInput(
 ) {
 	const [isCustom, setIsCustom] = useState(slippage !== defaultSlippage)
 	const [input, setInput] = useState(slippage !== defaultSlippage ? String(slippage) + '%' : '')
+	const debouncedInput = useDebounce(input, 700)
+
+	useEffect(() => {
+		if (!isCustom || !debouncedInput) return
+
+		const numeric = debouncedInput.replace('%', '')
+		if (!numeric) return
+
+		if (/^\d{0,3}(\.\d{0,3})?$/.test(numeric)) {
+			let num = parseFloat(numeric)
+			if (!isNaN(num) && num >= 0.1 && num <= maxSlippage) {
+				setSlippage(String(num))
+			} else if (num > maxSlippage) {
+				setInput(String(maxSlippage) + '%')
+				setSlippage(String(maxSlippage))
+			}
+		}
+	}, [debouncedInput, isCustom, setSlippage, maxSlippage])
 
 	useEffect(() => {
 		if (slippage === defaultSlippage) {
@@ -31,26 +50,11 @@ export function useHandleSlippageInput(
 		}
 	}, [isCustom, setSlippage])
 
-	const onChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const rawInput = e.target.value
-			const sanitized = normalizeSlippageInput(rawInput)
-			setInput(sanitized)
-
-			const numeric = sanitized.replace('%', '')
-			if (!numeric) return
-			if (/^\d{0,3}(\.\d{0,3})?$/.test(numeric)) {
-				let num = parseFloat(numeric)
-				if (num > maxSlippage) {
-					setInput(String(maxSlippage) + '%')
-				}
-				if (!isNaN(num) && num >= 0.1 && num <= maxSlippage) {
-					setSlippage(String(num))
-				}
-			}
-		},
-		[setSlippage, maxSlippage],
-	)
+	const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		const rawInput = e.target.value
+		const sanitized = normalizeSlippageInput(rawInput)
+		setInput(sanitized)
+	}, [])
 
 	const onBlur = useCallback(() => {
 		const numeric = input.replace('%', '')

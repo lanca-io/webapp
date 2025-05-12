@@ -19,7 +19,7 @@ export type FormStateSlice = {
 	error: string | null
 	inputValue: string
 	inputMode: Mode
-	amount: string | null // Machine-readable amount
+	amount: string | null
 }
 
 export type FormActions = {
