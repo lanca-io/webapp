@@ -1,18 +1,21 @@
-.swap_container {
+.swap {
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	max-width: 394px;
-	height: auto;
-	margin: 0 auto;
+	padding: var(--sp-xxl) var(--sp-xxl) 0 var(--sp-xxl);
+	align-items: center;
+	flex: 1 0 0;
+	align-self: stretch;
+}
+
+.swap_widgets {
+	display: flex;
+	align-items: center;
+	margin-bottom: var(--sp-lg);
 	gap: var(--sp-md);
 }
 
-.swap {
-	display: flex;
-	position: relative;
-	overflow: hidden;
-	flex-direction: column;
-	height: auto;
-	box-shadow: 0px 20px 150px 0px var(--color-primary-100);
+@media only screen and (max-width: 744px) {
+	.swap {
+		padding: var(--sp-xxl) var(--sp-lg) 0 var(--sp-lg);
+	}
 }

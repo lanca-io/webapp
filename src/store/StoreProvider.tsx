@@ -7,6 +7,7 @@ import { TokensStoreProvider } from './tokens/TokensStore'
 import { FormStoreProvider } from './form/FormStore'
 import { BalancesStoreProvider } from './balances/BalancesStore'
 import { ModalsStoreProvider } from './modals/ModalsStore'
+import { TxExecutionStoreProvider } from './tx-execution/TxExecutionStore'
 
 export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 	return (
@@ -17,7 +18,9 @@ export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 						<BalancesStoreProvider>
 							<FormStoreProvider>
 								<ModalsStoreProvider>
-									<RoutesStoreProvider>{children}</RoutesStoreProvider>
+									<RoutesStoreProvider>
+										<TxExecutionStoreProvider>{children}</TxExecutionStoreProvider>
+									</RoutesStoreProvider>
 								</ModalsStoreProvider>
 							</FormStoreProvider>
 						</BalancesStoreProvider>

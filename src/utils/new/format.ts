@@ -19,3 +19,16 @@ export function format(value: number, decimalPlaces: number = 2, symbol?: string
 
 	return value < 0 ? `-${formattedValue}` : formattedValue
 }
+
+/**
+ * Capitalizes the first letter of a given string and converts the rest to lowercase.
+ *
+ * @param {string} str - The string to format.
+ * @returns {string} - The formatted string with the first letter capitalized and the rest in lowercase.
+ */
+export const capitalizeFirstLetter = (str: string): string => {
+	if (!str) {
+		return ''
+	}
+	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}

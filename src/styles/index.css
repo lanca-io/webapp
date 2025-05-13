@@ -229,6 +229,14 @@ div::-webkit-scrollbar {
 	display: none;
 }
 
+main {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	flex-grow: 1;
+	background-color: var(--color-primary-100);
+}
+
 h1,
 h2,
 h3,
