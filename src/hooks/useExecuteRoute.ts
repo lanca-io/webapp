@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 import { getWalletClient } from '@wagmi/core'
-import { config } from '../web3/wagmi'
+import { adapter } from '../configuration/wagmi'
 import { IExecutionConfig, IRouteType } from '@lanca/sdk'
 import { useLancaSDK } from '../providers/SDKProvider/useLancaSDK'
 import { useExecutionListener } from './useExecutionListener'
@@ -19,7 +19,7 @@ export const useExecuteRoute = (route: IRouteType | null) => {
 
 		try {
 			const chainId = Number(route.from.chain.id)
-			const client = await getWalletClient(config, { chainId })
+			const client = await getWalletClient(adapter.wagmiConfig, { chainId })
 
 			// @ts-ignore
 			return await sdk.executeRoute(route, client, configRef.current)

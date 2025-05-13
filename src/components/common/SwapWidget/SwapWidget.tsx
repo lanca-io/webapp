@@ -4,14 +4,14 @@ import { DestinationCard } from '../DestinationCard/DestinationCard'
 import { CardSwitcher } from '../CardSwitcher/CardSwitcher'
 import { SwapAction } from '../SwapAction/SwapAction'
 import { ProcessCard } from '../ProcessCard/ProcessCard'
-import { useTxExecutionStore } from '../../../store/tx-execution/useTxExecutionStore'
+import { useTxProcess } from '../../../hooks/useTxProcess'
 import './SwapWidget.pcss'
 
 export const SwapWidget: FC = memo(() => {
-	const { overallStatus } = useTxExecutionStore()
+	const { txStatus } = useTxProcess()
 
 	const Card = useMemo(() => {
-		switch (overallStatus) {
+		switch (txStatus) {
 			case 'PENDING':
 			case 'SUCCESS':
 			case 'REJECTED':
@@ -27,7 +27,7 @@ export const SwapWidget: FC = memo(() => {
 					</>
 				)
 		}
-	}, [overallStatus])
+	}, [txStatus])
 
 	return (
 		<div className="swap_container" data-testid="swap-widget">
