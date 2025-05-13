@@ -10,9 +10,11 @@ export const SourceCard = memo((): JSX.Element => {
 	const { openFromAssetModal } = useModalsStore()
 
 	return (
-		<div className="source_card" role="region" aria-label="Source asset selection">
-			<AssetSelection token={sourceToken} chain={sourceChain} openModal={openFromAssetModal} />
-			<SourcePanel />
+		<div className="source_card_wrapper">
+			<div className="source_card">
+				<AssetSelection token={sourceToken} chain={sourceChain} openModal={openFromAssetModal} />
+				<SourcePanel />
+			</div>
 		</div>
 	)
 })

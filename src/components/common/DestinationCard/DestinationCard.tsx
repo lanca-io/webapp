@@ -13,9 +13,6 @@ export const DestinationCard = memo(() => {
 	const { destinationToken, destinationChain } = useFormStore()
 	const { openToAssetModal } = useModalsStore()
 
-	console.log('DestinationChain', destinationChain)
-	console.log('DestinationToken', destinationToken)
-
 	const amount = useMemo(() => {
 		if (!route?.to?.amount) return ''
 		return destinationToken?.decimals
@@ -24,10 +21,12 @@ export const DestinationCard = memo(() => {
 	}, [route?.to?.amount, destinationToken?.decimals])
 
 	return (
-		<div className="destination_card">
-			<RouteTimer />
-			<AssetSelection token={destinationToken} chain={destinationChain} openModal={openToAssetModal} />
-			<DestinationPanel amount={amount || '0'} isLoading={isLoading} />
+		<div className="destination_card_wrapper">
+			<div className="destination_card">
+				<RouteTimer />
+				<AssetSelection token={destinationToken} chain={destinationChain} openModal={openToAssetModal} />
+				<DestinationPanel amount={amount || '0'} isLoading={isLoading} />
+			</div>
 		</div>
 	)
 })

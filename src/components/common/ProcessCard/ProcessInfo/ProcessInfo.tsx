@@ -34,8 +34,8 @@ const FailureInfo: FC<FailureInfoProps> = memo(({ step, reason }) => {
 	const stepLabels: Record<FailureStep, string> = {
 		[StepType.ALLOWANCE]: 'Approval',
 		[StepType.BRIDGE]: 'Bridge',
-		[StepType.SRC_SWAP]: 'Source Swap',
-		[StepType.DST_SWAP]: 'Destination Swap',
+		[StepType.SRC_SWAP]: 'Swap',
+		[StepType.DST_SWAP]: 'Swap',
 	}
 
 	const reasonLabels: Record<FailureReason, string> = {

@@ -27,7 +27,7 @@ export const SwapAction = memo((): JSX.Element => {
 	}, [executeRoute, isConnected, open])
 
 	return (
-		<div className="swap_action_wrapper" role="region" aria-label="Swap actions">
+		<div className="swap_action_wrapper">
 			<div className="swap_action">
 				<Button
 					variant="primary"
