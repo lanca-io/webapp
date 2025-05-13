@@ -14,29 +14,24 @@ function hasHashes(execution: Partial<ITxStep> | undefined): execution is Partia
 }
 
 export const useExecutionListener = () => {
-	const { setSrcHash, setDstHash, setStepStatus, steps: storeSteps } = useTxExecutionStore()
+	const { setSrcHash, setDstHash, setStepStatus } = useTxExecutionStore()
 
 	return useCallback(
 		(state: IRouteType) => {
 			if (!state?.steps?.length) return
+			state.steps.forEach(step => {
+				if (step.execution && step.execution.status) {
+					setStepStatus(step.type, step.execution.status)
 
-			state.steps.forEach((apiStep, index) => {
-				const storeStep = storeSteps[index]
-
-				if (storeStep?.type === apiStep.type) {
-					if (apiStep.execution?.status) {
-						setStepStatus(index, apiStep.execution.status)
-
-						if (apiStep.execution.status === Status.SUCCESS && hasHashes(apiStep.execution)) {
-							if (apiStep.execution.srcTxHash && apiStep.execution.dstTxHash) {
-								setSrcHash(apiStep.execution.srcTxHash)
-								setDstHash(apiStep.execution.dstTxHash)
-							}
+					if (step.execution.status === Status.SUCCESS && hasHashes(step.execution)) {
+						if (step.execution.srcTxHash && step.execution.dstTxHash) {
+							setSrcHash(step.execution.srcTxHash)
+							setDstHash(step.execution.dstTxHash)
 						}
 					}
 				}
 			})
 		},
-		[setStepStatus, setSrcHash, setDstHash, storeSteps],
+		[setStepStatus, setSrcHash, setDstHash],
 	)
 }

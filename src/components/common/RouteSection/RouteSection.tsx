@@ -7,8 +7,6 @@ import './RouteSection.pcss'
 export const RouteSection: FC = () => {
 	const { route, isLoading } = useRouteStore()
 
-	console.log('RouteSection', route, isLoading)
-
 	return (
 		<div className="route_section">
 			<p className="route_section_heading">Route</p>

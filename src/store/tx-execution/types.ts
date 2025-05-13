@@ -1,6 +1,6 @@
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 import type { StoreApi } from 'zustand/vanilla'
-import type { StepType } from '@lanca/sdk'
+import type { StepType, IRouteType } from '@lanca/sdk'
 import type { Hash } from 'viem'
 import { Status } from '@lanca/sdk'
 
@@ -16,16 +16,18 @@ export interface TxExecutionState {
 	executionTime: string
 	srcHash: Hash | null
 	dstHash: Hash | null
+	currentRouteId?: string
 }
 
 export interface TxExecutionActions {
 	setSteps: (steps: StepType[]) => void
-	setStepStatus: (index: number, status: Status) => void
+	setStepStatus: (type: StepType, status: Status) => void
 	setStepHash: (index: number, hash: Hash) => void
 	setExecutionTime: (time: string) => void
 	setSrcHash: (hash: Hash) => void
 	setDstHash: (hash: Hash) => void
 	reset: () => void
+	deriveStepsFromRoute: (route: IRouteType | null) => void
 }
 
 export type TxExecutionStateAndActions = TxExecutionState & TxExecutionActions
