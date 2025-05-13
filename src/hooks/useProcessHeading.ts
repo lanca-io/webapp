@@ -15,6 +15,8 @@ export const useProcessHeading = () => {
 			[Status.PENDING]: {
 				[StepType.ALLOWANCE]: 'Approval...',
 				[StepType.BRIDGE]: 'Transaction...',
+				[StepType.SRC_SWAP]: 'Transaction...',
+				[StepType.DST_SWAP]: 'Transaction...',
 			},
 			[Status.SUCCESS]: 'Success!',
 			[Status.FAILED]: 'Transaction',

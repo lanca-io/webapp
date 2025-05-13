@@ -8,6 +8,7 @@ import { ClockIcon } from '../../../../../assets/icons/ClockIcon'
 import { useLoadTxExecutionTime } from '../../../../../hooks/useLoadTxExecutionTime'
 import { SkeletonLoader } from '../../../../layout/SkeletonLoader/SkeletonLoader'
 import { useRouteStore } from '../../../../../store/route/useRouteStore'
+import { format } from '../../../../../utils/new/format'
 import './Success.pcss'
 
 export const Success: FC = memo((): JSX.Element => {
@@ -38,16 +39,16 @@ export const Success: FC = memo((): JSX.Element => {
 					<div className="success_info_details">
 						<div className="success_info_token">
 							<Badge logoURL={destinationToken?.logoURI} size="m" />
-							<p className="success_info_name">{destinationToken?.name}</p>
+							<p className="success_info_name">{destinationToken?.symbol}</p>
 						</div>
 						<p className="success_info_pointer">on</p>
 						<div className="success_info_chain">
-							<Badge logoURL={destinationChain?.logoURI} size="m" />
+							<Badge logoURL={destinationToken?.chainLogoURI || ''} size="m" />
 							<p className="success_info_name">{destinationChain?.name}</p>
 						</div>
 					</div>
 					<p className="success_info_number" data-testid="success-amount">
-						{formattedAmount}
+						{format(Number(formattedAmount), 3)}
 					</p>
 					<div className="success_info_timer">
 						<ClockIcon />

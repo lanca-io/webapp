@@ -20,8 +20,18 @@ const statusIcons = {
 	[Status.SUCCESS]: <SuccessIcon />,
 }
 
-export const TxStep: FC<TxStepProps> = memo(({ step, status }): JSX.Element => {
-	const stepTitle = useMemo(() => capitalizeFirstLetter(step), [step])
+const stepTitles = {
+	[StepType.SWITCH_CHAIN]: '',
+	[StepType.ALLOWANCE]: 'Allowance',
+	[StepType.SRC_SWAP]: 'Swap',
+	[StepType.BRIDGE]: 'Bridge',
+	[StepType.DST_SWAP]: 'Swap',
+}
+
+export const TxStep: FC<TxStepProps> = memo(({ step, status }) => {
+	const stepTitle = useMemo(() => {
+		return stepTitles[step] || capitalizeFirstLetter(step)
+	}, [step])
 
 	return (
 		<div className="tx_step">

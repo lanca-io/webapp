@@ -5,10 +5,10 @@ import { RightIcon } from '../../../../../assets/icons/RightIcon'
 import './Transaction.pcss'
 
 export const Transaction: FC = memo((): JSX.Element => {
-	const { sourceChain, destinationChain } = useFormStore()
+	const { sourceToken, destinationToken } = useFormStore()
 
-	const sourceLogo = useMemo(() => sourceChain?.logoURL || '', [sourceChain])
-	const destinationLogo = useMemo(() => destinationChain?.logoURL || '', [destinationChain])
+	const sourceLogo = useMemo(() => sourceToken?.logoURI || '', [sourceToken])
+	const destinationLogo = useMemo(() => destinationToken?.logoURI || '', [destinationToken])
 
 	return (
 		<div className="transaction_content">

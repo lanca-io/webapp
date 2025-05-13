@@ -1,13 +1,14 @@
 import type { FC } from 'react'
 import { memo, useMemo } from 'react'
-import { useTxProcess } from '../../../../hooks/useTxProcess'
+import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'
 import { Status, StepType } from '@lanca/sdk'
 import { Alert } from '../../Alert/Alert'
 import { SignIcon } from '../../../../assets/icons/SignIcon'
 import { InfoIcon } from '../../../../assets/icons/InfoIcon'
 import './ProcessInfo.pcss'
 
-export type FailureStep = 'approval' | 'bridge'
+export type FailureStep = StepType.ALLOWANCE | StepType.BRIDGE | StepType.SRC_SWAP | StepType.DST_SWAP
+
 export type FailureReason = 'rejected' | 'failed'
 
 export interface FailureInfoProps {
@@ -15,26 +16,26 @@ export interface FailureInfoProps {
 	reason: FailureReason
 }
 
-const ApprovalInfo: FC = memo(
-	(): JSX.Element => (
-		<div className="approval_info">
-			<div className="approval_info_icon">
-				<SignIcon />
-			</div>
-			<div className="approval_info_text">
-				<p className="approval_info_heading">Open your wallet</p>
-				<p className="approval_info_subheading">
-					Signature required. Please, open your wallet and sign the transaction.
-				</p>
-			</div>
+const ApprovalInfo: FC = memo(() => (
+	<div className="approval_info">
+		<div className="approval_info_icon">
+			<SignIcon />
 		</div>
-	),
-)
+		<div className="approval_info_text">
+			<p className="approval_info_heading">Open your wallet</p>
+			<p className="approval_info_subheading">
+				Signature required. Please, open your wallet and sign the transaction.
+			</p>
+		</div>
+	</div>
+))
 
-const FailureInfo: FC<FailureInfoProps> = memo(({ step, reason }): JSX.Element => {
+const FailureInfo: FC<FailureInfoProps> = memo(({ step, reason }) => {
 	const stepLabels: Record<FailureStep, string> = {
-		approval: 'Approval',
-		bridge: 'Bridge',
+		[StepType.ALLOWANCE]: 'Approval',
+		[StepType.BRIDGE]: 'Bridge',
+		[StepType.SRC_SWAP]: 'Source Swap',
+		[StepType.DST_SWAP]: 'Destination Swap',
 	}
 
 	const reasonLabels: Record<FailureReason, string> = {
@@ -52,24 +53,35 @@ const FailureInfo: FC<FailureInfoProps> = memo(({ step, reason }): JSX.Element =
 	)
 })
 
-export const ProcessInfo: FC = memo((): JSX.Element | null => {
-	const { currentStep, txStatus } = useTxProcess()
+export const ProcessInfo: FC = memo(() => {
+	const { steps, overallStatus } = useTxExecutionStore()
 
-	const isApprovalPending = currentStep === StepType.ALLOWANCE && txStatus === Status.PENDING
+	const currentStep = useMemo(() => {
+		return steps.find(
+			step => step.status === Status.PENDING || step.status === Status.REJECTED || step.status === Status.FAILED,
+		)?.type
+	}, [steps])
+
+	const isFailureStep = (step?: StepType): step is FailureStep => {
+		return !!step && [StepType.ALLOWANCE, StepType.BRIDGE, StepType.SRC_SWAP, StepType.DST_SWAP].includes(step)
+	}
 
 	const failureDetails = useMemo<FailureInfoProps | null>(() => {
-		if (txStatus === Status.REJECTED || txStatus === Status.FAILED) {
-			const reason: FailureReason = txStatus === Status.REJECTED ? 'rejected' : 'failed'
-			if (currentStep === StepType.ALLOWANCE) return { step: 'approval', reason }
-			if (currentStep === StepType.BRIDGE) return { step: 'bridge', reason }
+		if ([Status.REJECTED, Status.FAILED].includes(overallStatus)) {
+			const reason: FailureReason = overallStatus === Status.REJECTED ? 'rejected' : 'failed'
+			if (isFailureStep(currentStep)) {
+				return { step: currentStep, reason }
+			}
 		}
 		return null
-	}, [txStatus, currentStep])
+	}, [overallStatus, currentStep])
+
+	const isApprovalPending = steps.some(s => s.type === StepType.ALLOWANCE && s.status === Status.PENDING)
 
 	return (
 		<>
 			{isApprovalPending && <ApprovalInfo />}
-			{failureDetails && <FailureInfo step={failureDetails.step} reason={failureDetails.reason} />}
+			{failureDetails && <FailureInfo {...failureDetails} />}
 		</>
 	)
 })

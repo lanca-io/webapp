@@ -25,6 +25,8 @@ export const ProcessContent: FC = memo((): JSX.Element | null => {
 			case Status.PENDING:
 				if (currentStep === StepType.ALLOWANCE) return <Approval />
 				if (currentStep === StepType.BRIDGE) return <Transaction />
+				if (currentStep === StepType.SRC_SWAP) return <Transaction />
+				if (currentStep === StepType.DST_SWAP) return <Transaction />
 				return null
 
 			default:
