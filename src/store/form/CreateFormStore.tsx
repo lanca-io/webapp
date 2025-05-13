@@ -32,14 +32,14 @@ const initialDestinationToken: ExtendedToken = {
 const initialSourceChain: ILancaChain = {
 	id: '10',
 	name: 'Optimism',
-	logoURI: 'https://api.concero.io/static/icons/chains/10.svg',
+	logoURL: 'https://api.concero.io/static/icons/chains/10.svg',
 	explorerURI: 'https://optimistic.etherscan.io',
 }
 
 const initialDestinationChain: ILancaChain = {
 	id: '137',
 	name: 'Polygon',
-	logoURI: 'https://api.concero.io/static/icons/chains/filled/137.svg',
+	logoURL: 'https://api.concero.io/static/icons/chains/filled/137.svg',
 	explorerURI: 'https://polygonscan.com',
 }
 

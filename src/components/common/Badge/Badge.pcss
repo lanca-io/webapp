@@ -3,6 +3,7 @@
 	align-items: center;
 	height: fit-content;
 	width: fit-content;
+	position: relative;
 }
 
 .badge_img {
@@ -34,4 +35,15 @@
 .badge_xl {
 	width: var(--sp-xxxl);
 	height: var(--sp-xxxl);
+}
+
+.badge_secondary_img {
+	background-color: var(--color-grey-25);
+	border-radius: var(--sp-xs);
+	box-shadow:
+		0 0 6px 0 rgba(52, 64, 84, 0.3),
+		0 2px 3px 0 rgba(52, 64, 84, 0.15);
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }

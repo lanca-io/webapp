@@ -29,7 +29,7 @@ export const useLoadAllTokens = () => {
 						const tokens = await handleFetchTokens(chain.id, offset, TOKENS_PER_CHAIN, search)
 						return tokens.map((token: ExtendedToken) => ({
 							...token,
-							chainLogoURI: chain.logoURI || null,
+							chainLogoURI: chain.logoURL || null,
 						}))
 					}),
 				)

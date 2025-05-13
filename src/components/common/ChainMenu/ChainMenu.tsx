@@ -31,7 +31,7 @@ export const ChainMenu = memo(({ activeChain, onChainClick }: MenuProps): JSX.El
 						<Chain
 							key={chain.id}
 							name={chain.name}
-							logoURL={chain.logoURI}
+							logoURL={chain.logoURL || ''}
 							onClick={handleChainClick(chain)}
 							isActive={activeChain?.id === chain.id}
 						/>

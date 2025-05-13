@@ -5,7 +5,7 @@ import { useFormStore } from '../../../../../store/form/useFormStore'
 import { formatTokenAmount } from '../../../../../utils/new/tokens'
 import { useTxExecutionStore } from '../../../../../store/tx-execution/useTxExecutionStore'
 import { ClockIcon } from '../../../../../assets/icons/ClockIcon'
-import { useLoadTxExecutionTime } from '../../../../../hooks/useLoadTxExecutionTime'
+import { useLoadTxExecutionTime } from '../../../../../hooks/Loadables/useLoadTxExecutionTime'
 import { SkeletonLoader } from '../../../../layout/SkeletonLoader/SkeletonLoader'
 import { useRouteStore } from '../../../../../store/route/useRouteStore'
 import { format } from '../../../../../utils/new/format'
@@ -43,7 +43,7 @@ export const Success: FC = memo((): JSX.Element => {
 						</div>
 						<p className="success_info_pointer">on</p>
 						<div className="success_info_chain">
-							<Badge logoURL={destinationToken?.chainLogoURI || ''} size="m" />
+							<Badge logoURL={destinationChain?.logoURL || ''} size="m" />
 							<p className="success_info_name">{destinationChain?.name}</p>
 						</div>
 					</div>

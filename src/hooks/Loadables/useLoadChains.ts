@@ -7,7 +7,7 @@ import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 const ONE_HOUR_MS = 3_600_000
 const TWO_HOURS_MS = 7_200_000
 
-type SimplifiedChain = Pick<ILancaChain, 'id' | 'name' | 'logoURI' | 'explorerURI'>
+type SimplifiedChain = Pick<ILancaChain, 'id' | 'name' | 'logoURL' | 'explorerURI'>
 
 export const useLoadChains = () => {
 	const { setChains, setLoading } = useChainsStore()
@@ -16,11 +16,13 @@ export const useLoadChains = () => {
 	const fetchChains = useCallback(async (): Promise<SimplifiedChain[]> => {
 		try {
 			const supportedChains = await client.getSupportedChains()
+
 			return (
 				supportedChains?.map((chain: ILancaChain) => ({
 					id: chain.id,
 					name: chain.name,
-					logoURI: chain.logoURI,
+					// @ts-ignore
+					logoURL: chain.logoURI,
 					explorerURI: chain.explorerURI,
 				})) || []
 			)

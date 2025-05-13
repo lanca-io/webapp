@@ -13,6 +13,9 @@ export const DestinationCard = memo(() => {
 	const { destinationToken, destinationChain } = useFormStore()
 	const { openToAssetModal } = useModalsStore()
 
+	console.log('DestinationChain', destinationChain)
+	console.log('DestinationToken', destinationToken)
+
 	const amount = useMemo(() => {
 		if (!route?.to?.amount) return ''
 		return destinationToken?.decimals

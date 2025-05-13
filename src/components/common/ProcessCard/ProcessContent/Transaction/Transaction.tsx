@@ -4,8 +4,8 @@ import { useFormStore } from '../../../../../store/form/useFormStore'
 import { RightIcon } from '../../../../../assets/icons/RightIcon'
 import './Transaction.pcss'
 
-export const Transaction: FC = memo((): JSX.Element => {
-	const { sourceToken, destinationToken } = useFormStore()
+export const Transaction: FC = memo(() => {
+	const { sourceToken, sourceChain, destinationChain, destinationToken } = useFormStore()
 
 	const sourceLogo = useMemo(() => sourceToken?.logoURI || '', [sourceToken])
 	const destinationLogo = useMemo(() => destinationToken?.logoURI || '', [destinationToken])
@@ -13,23 +13,28 @@ export const Transaction: FC = memo((): JSX.Element => {
 	return (
 		<div className="transaction_content">
 			<div className="transaction_content_from">
-				<img
-					src={sourceLogo}
-					alt="Source Token"
-					className="transaction_content_image"
-					data-testid="source-chain-logo"
-				/>
+				<div className="token_with_chain">
+					<img
+						src={sourceLogo}
+						alt="Source Token"
+						className="transaction_content_image"
+						data-testid="source-token-logo"
+					/>
+					<img src={sourceChain?.logoURL || ''} alt="Source Chain" className="transaction_chain_image" />
+				</div>
 			</div>
 			<div className="transaction_content_arrow">
 				<RightIcon />
 			</div>
 			<div className="transaction_content_to">
-				<img
-					src={destinationLogo}
-					alt="Destination Token"
-					className="transaction_content_image"
-					data-testid="destination-chain-logo"
-				/>
+				<div className="token_with_chain">
+					<img src={destinationLogo} alt="Destination Token" className="transaction_content_image" />
+					<img
+						src={destinationChain?.logoURL || ''}
+						alt="Destination Chain"
+						className="transaction_chain_image"
+					/>
+				</div>
 			</div>
 		</div>
 	)
