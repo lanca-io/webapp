@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react'
-import { AmountInput } from '../AmountInput/AmountInput'
+import { WidgetInput } from '../WidgetInput/WidgetInput'
 import { SkeletonLoader } from '../../layout/SkeletonLoader/SkeletonLoader'
 import { BalanceInfo } from '../BalanceInfo/BalanceInfo'
 import { useFormStore } from '../../../store/form/useFormStore'
@@ -35,12 +35,12 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 	const hasBalance = Boolean(destinationToken?.balance !== undefined && destinationToken?.balance !== null)
 
 	return (
-		<div className="destination_panel" role="region" aria-label="Destination details">
+		<div className="destination_panel">
 			<div className="destination_panel_input">
 				{isLoading ? (
 					<SkeletonLoader height={60} width={160} />
 				) : (
-					<AmountInput value={amount || '0'} disabled />
+					<WidgetInput value={amount || '0'} disabled />
 				)}
 				<DestinationValue />
 				{hasBalance && <BalanceInfo token={destinationToken} showMax={false} />}

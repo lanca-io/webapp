@@ -1,23 +1,32 @@
 import { memo, ChangeEvent, FocusEvent } from 'react'
-import './AmountInput.pcss'
+import './WidgetInput.pcss'
 
-type AmountInputProps = {
+type WidgetInputProps = {
 	value: string
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 	onFocus?: (e: FocusEvent<HTMLInputElement>) => void
 	onBlur?: (e: FocusEvent<HTMLInputElement>) => void
 	placeholder?: string
 	disabled?: boolean
+	type?: string
 }
 
-export const AmountInput = memo(
-	({ value, onChange, onFocus, onBlur, placeholder = '0', disabled = false }: AmountInputProps): JSX.Element => {
+export const WidgetInput = memo(
+	({
+		value,
+		onChange,
+		onFocus,
+		onBlur,
+		placeholder = '0',
+		disabled = false,
+		type = 'text',
+	}: WidgetInputProps): JSX.Element => {
 		const inputClass = value && value !== '0' ? 'input has_value' : 'input'
 
 		return (
-			<div className="input_container">
+			<div className="widget_input_container">
 				<input
-					type="text"
+					type={type}
 					className={inputClass}
 					placeholder={placeholder}
 					value={value}
@@ -25,7 +34,6 @@ export const AmountInput = memo(
 					onFocus={onFocus}
 					onBlur={onBlur}
 					disabled={disabled}
-					aria-label="Amount input"
 					autoComplete="off"
 				/>
 			</div>

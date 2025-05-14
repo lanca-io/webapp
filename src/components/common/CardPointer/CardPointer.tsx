@@ -5,27 +5,35 @@ import './CardPointer.pcss'
 
 export const CardPointer = (): JSX.Element => {
 	const [top, setTop] = useState<number>(0)
-	const cardRef = useRef<HTMLElement | null>(null)
+	const srcRef = useRef<HTMLElement | null>(null)
+	const dstRef = useRef<HTMLElement | null>(null)
 	const observerRef = useRef<ResizeObserver | null>(null)
 
 	const setupObserver = useCallback(() => {
-		const card = document.querySelector('.destination_card') as HTMLElement
-		if (!card) return
+		const src_card = document.querySelector('.source_card') as HTMLElement
+		const dst_card = document.querySelector('.destination_card') as HTMLElement
+		if (!src_card || !dst_card) return
 
-		cardRef.current = card
+		srcRef.current = src_card
+		dstRef.current = dst_card
 
 		const updatePosition = () => {
-			const position = card.offsetHeight + 235
+			const srcBottom = src_card.offsetHeight + 60
+			const dstTop = dst_card.offsetHeight + 5
+			const position = srcBottom + dstTop
 			setTop(position)
 		}
 
 		updatePosition()
+
 		const observer = new ResizeObserver(updatePosition)
 		observerRef.current = observer
-		observer.observe(card)
+		observer.observe(src_card)
+		observer.observe(dst_card)
 
 		return () => {
-			observer.unobserve(card)
+			observer.unobserve(src_card)
+			observer.unobserve(dst_card)
 			observer.disconnect()
 		}
 	}, [])

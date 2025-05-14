@@ -8,6 +8,7 @@ import { CardPointer } from '../CardPointer/CardPointer'
 import { ProcessCard } from '../ProcessCard/ProcessCard'
 import { useTxProcess } from '../../../hooks/useTxProcess'
 import { ModeMenu } from '../ModeMenu/ModeMenu'
+import { AddressCard } from '../AddressCard/AddressCard'
 import { useSubvariantStore } from '../../../store/subvariant/useSubvariantStore'
 import './SwapWidget.pcss'
 
@@ -29,7 +30,12 @@ export const SwapWidget: FC = memo(() => {
 						<SourceCard />
 						<CardSwitcher />
 						<DestinationCard />
-						{state === SplitSubvariantType.SEND && <CardPointer />}
+						{state === SplitSubvariantType.SEND && (
+							<>
+								<CardPointer />
+								<AddressCard />
+							</>
+						)}
 						<SwapAction />
 					</>
 				)
