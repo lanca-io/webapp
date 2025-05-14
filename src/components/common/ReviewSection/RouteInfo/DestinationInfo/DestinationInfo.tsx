@@ -8,7 +8,7 @@ import { useRouteStore } from '../../../../../store/route/useRouteStore'
 import './DestinationInfo.pcss'
 
 export const DestinationInfo = memo((): JSX.Element => {
-	const { destinationToken, destinationChain } = useFormStore()
+	const { toToken, toChain } = useFormStore()
 	const { route, isLoading } = useRouteStore()
 
 	const tokenAmount = useMemo(() => {
@@ -24,11 +24,7 @@ export const DestinationInfo = memo((): JSX.Element => {
 
 	return (
 		<div className="route_info_destination" role="region" aria-label="Destination information">
-			<AssetSelection
-				token={destinationToken}
-				chain={destinationChain}
-				aria-label="Destination asset selection"
-			/>
+			<AssetSelection token={toToken} chain={toChain} aria-label="Destination asset selection" />
 			<span className="route_info_amount" aria-label="Token amount">
 				{format(Number(tokenAmount), 4)}
 			</span>

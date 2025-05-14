@@ -7,44 +7,67 @@ export const useFormStore = () => {
 		throw new Error(`You forgot to wrap your component in <FormStoreProvider>.`)
 	}
 
-	const sourceChain = useStore(state => state.sourceChain)
-	const destinationChain = useStore(state => state.destinationChain)
-	const sourceToken = useStore(state => state.sourceToken)
-	const destinationToken = useStore(state => state.destinationToken)
-	const error = useStore(state => state.error)
-	const inputValue = useStore(state => state.inputValue)
-	const inputMode = useStore(state => state.inputMode)
-	const amount = useStore(state => state.amount)
-
-	const setSourceChain = useStore(state => state.setSourceChain)
-	const setDestinationChain = useStore(state => state.setDestinationChain)
-	const setSourceToken = useStore(state => state.setSourceToken)
-	const setDestinationToken = useStore(state => state.setDestinationToken)
-	const swapChainsAndTokens = useStore(state => state.swapChainsAndTokens)
-	const setError = useStore(state => state.setError)
-	const setInputValue = useStore(state => state.setInputValue)
-	const setInputMode = useStore(state => state.setInputMode)
-	const setAmount = useStore(state => state.setAmount)
-	const clearInput = useStore(state => state.clearInput)
+	const fromChain = useStore(state => state.fromChain)
+	const toChain = useStore(state => state.toChain)
+	const fromToken = useStore(state => state.fromToken)
+	const toToken = useStore(state => state.toToken)
+	const fromAmount = useStore(state => state.fromAmount)
+	const toAddress = useStore(state => state.toAddress)
+	const amountInput = useStore(state => state.amountInput)
+	const amountInputError = useStore(state => state.amountInputError)
+	const amountInputMode = useStore(state => state.amountInputMode)
+	const amountInputFocused = useStore(state => state.amountInputFocused)
+	const addressInput = useStore(state => state.addressInput)
+	const addressInputError = useStore(state => state.addressInputError)
+	const addressInputMode = useStore(state => state.addressInputMode)
+	const addressInputFocused = useStore(state => state.addressInputFocused)
+	const setFromChain = useStore(state => state.setFromChain)
+	const setToChain = useStore(state => state.setToChain)
+	const setFromToken = useStore(state => state.setFromToken)
+	const setToToken = useStore(state => state.setToToken)
+	const setFromAmount = useStore(state => state.setFromAmount)
+	const setToAddress = useStore(state => state.setToAddress)
+	const setAmountInput = useStore(state => state.setAmountInput)
+	const setAmountInputError = useStore(state => state.setAmountInputError)
+	const setAmountInputMode = useStore(state => state.setAmountInputMode)
+	const setAmountInputFocused = useStore(state => state.setAmountInputFocused)
+	const setAddressInput = useStore(state => state.setAddressInput)
+	const setAddressInputError = useStore(state => state.setAddressInputError)
+	const setAddressInputMode = useStore(state => state.setAddressInputMode)
+	const setAddressInputFocused = useStore(state => state.setAddressInputFocused)
+	const clearInputs = useStore(state => state.clearInputs)
+	const swap = useStore(state => state.swap)
 
 	return {
-		sourceChain,
-		destinationChain,
-		sourceToken,
-		destinationToken,
-		error,
-		inputValue,
-		inputMode,
-		amount,
-		setSourceChain,
-		setDestinationChain,
-		setSourceToken,
-		setDestinationToken,
-		swapChainsAndTokens,
-		setError,
-		setInputValue,
-		setInputMode,
-		setAmount,
-		clearInput,
+		fromChain,
+		toChain,
+		fromToken,
+		toToken,
+		fromAmount,
+		toAddress,
+		amountInput,
+		amountInputError,
+		amountInputMode,
+		amountInputFocused,
+		addressInput,
+		addressInputError,
+		addressInputMode,
+		addressInputFocused,
+		setFromChain,
+		setToChain,
+		setFromToken,
+		setToToken,
+		setFromAmount,
+		setToAddress,
+		setAmountInput,
+		setAmountInputError,
+		setAmountInputMode,
+		setAmountInputFocused,
+		setAddressInput,
+		setAddressInputError,
+		setAddressInputMode,
+		setAddressInputFocused,
+		clearInputs,
+		swap,
 	}
 }

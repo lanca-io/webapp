@@ -9,14 +9,14 @@ import { useChainsStore } from '../../store/chains/useChainsStore'
 import { useTxProcess } from '../useTxProcess'
 import { Status } from '@lanca/sdk'
 
-const REFRESH_INTERVAL_MS = 300_000 // 5 minutes
+const REFRESH_INTERVAL_MS = 300_000
 const MAX_RETRIES = 2
 
 export const useLoadBalances = () => {
 	const { address } = useAccount()
 	const { chains } = useChainsStore()
 	const { setBalances, setIsLoading } = useBalancesStore()
-	const { sourceToken, destinationToken, setSourceToken, setDestinationToken } = useFormStore()
+	const { fromToken, toToken, setFromToken, setToToken } = useFormStore()
 	const { txStatus } = useTxProcess()
 
 	const fetchBalancesForChain = useCallback(
@@ -66,17 +66,17 @@ export const useLoadBalances = () => {
 
 	const updateTokensInFormStore = useCallback(
 		(balances: ExtendedToken[]) => {
-			const updatedSource = balances.find(
-				token => token.address === sourceToken?.address && token.chain_id === sourceToken?.chain_id,
+			const updatedFromToken = balances.find(
+				token => token.address === fromToken?.address && token.chain_id === fromToken?.chain_id,
 			)
-			const updatedDestination = balances.find(
-				token => token.address === destinationToken?.address && token.chain_id === destinationToken?.chain_id,
+			const updatedToToken = balances.find(
+				token => token.address === toToken?.address && token.chain_id === toToken?.chain_id,
 			)
 
-			if (updatedSource) setSourceToken(updatedSource)
-			if (updatedDestination) setDestinationToken(updatedDestination)
+			if (updatedFromToken) setFromToken(updatedFromToken)
+			if (updatedToToken) setToToken(updatedToToken)
 		},
-		[sourceToken, destinationToken, setSourceToken, setDestinationToken],
+		[fromToken, toToken, setFromToken, setToToken],
 	)
 
 	useEffect(() => {

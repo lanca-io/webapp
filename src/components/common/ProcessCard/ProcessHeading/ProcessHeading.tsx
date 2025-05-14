@@ -9,15 +9,15 @@ import { useFormStore } from '../../../../store/form/useFormStore'
 import './ProcessHeading.pcss'
 
 export const ProcessHeading: FC = memo(() => {
-	const { clearInput } = useFormStore()
+	const { clearInputs } = useFormStore()
 	const { reset } = useTxExecutionStore()
 	const { isTerminalStage } = useTxProcess()
 	const heading = useProcessHeading()
 
 	const handleReset = useCallback(() => {
 		reset()
-		clearInput()
-	}, [reset])
+		clearInputs()
+	}, [reset, clearInputs])
 
 	return (
 		<div className={`process_card_heading ${!isTerminalStage ? 'process_card_heading_no_button' : ''}`}>

@@ -7,22 +7,22 @@ import { useFormStore } from '../../../../../store/form/useFormStore'
 import './SourceInfo.pcss'
 
 export const SourceInfo = memo((): JSX.Element => {
-	const { sourceToken, sourceChain, amount } = useFormStore()
+	const { fromToken, fromChain, fromAmount } = useFormStore()
 
 	const tokenAmount = useMemo(() => {
-		if (!amount) return '0'
-		return sourceToken?.decimals ? formatTokenAmount(amount, sourceToken.decimals) : amount
-	}, [amount, sourceToken?.decimals])
+		if (!fromAmount) return '0'
+		return fromToken?.decimals ? formatTokenAmount(fromAmount, fromToken.decimals) : fromAmount
+	}, [fromAmount, fromToken?.decimals])
 
 	const formattedUsd = useMemo(() => {
-		if (!sourceToken?.priceUsd) return '-'
-		const usdValue = tokenAmountToUsd(Number(tokenAmount), sourceToken.priceUsd)
+		if (!fromToken?.priceUsd) return '-'
+		const usdValue = tokenAmountToUsd(Number(tokenAmount), fromToken.priceUsd)
 		return usdValue ? `= $${format(Number(usdValue), 4)}` : '-'
-	}, [tokenAmount, sourceToken?.priceUsd])
+	}, [tokenAmount, fromToken?.priceUsd])
 
 	return (
 		<div className="route_info_source" role="region" aria-label="Source information">
-			<AssetSelection token={sourceToken} chain={sourceChain} aria-label="Source asset selection" />
+			<AssetSelection token={fromToken} chain={fromChain} aria-label="Source asset selection" />
 			<span className="route_info_amount" aria-label="Token amount">
 				{format(Number(tokenAmount), 4)}
 			</span>

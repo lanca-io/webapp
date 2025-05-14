@@ -8,20 +8,20 @@ import './SourceValue.pcss'
 
 export const SourceValue = memo((): JSX.Element => {
 	const { usd, token, isUsdMode } = useValueConversion()
-	const { setInputValue, setInputMode, sourceToken } = useFormStore()
+	const { setAmountInput, setAmountInputMode, fromToken } = useFormStore()
 
 	const raw = isUsdMode ? token : usd
 	const num = Number(raw)
 	const isValid = raw && !isNaN(num) && num > 0
 
 	const display = isValid ? format(num, 2, isUsdMode ? '' : '$') : null
-	const symbol = isUsdMode && sourceToken?.symbol ? sourceToken.symbol : ''
+	const symbol = isUsdMode && fromToken?.symbol ? fromToken.symbol : ''
 
 	const handleClick = useCallback(() => {
 		if (!raw) return
-		setInputValue(isUsdMode ? raw : `${raw}$`)
-		setInputMode(isUsdMode ? Mode.Number : Mode.Dollar)
-	}, [raw, isUsdMode, setInputValue, setInputMode])
+		setAmountInput(isUsdMode ? raw : `${raw}$`)
+		setAmountInputMode(isUsdMode ? Mode.Number : Mode.Dollar)
+	}, [raw, isUsdMode, setAmountInput, setAmountInputMode])
 
 	const handleKeyPress = useCallback(
 		(e: React.KeyboardEvent) => {

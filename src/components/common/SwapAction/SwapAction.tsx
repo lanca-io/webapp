@@ -11,11 +11,11 @@ export const SwapAction = memo((): JSX.Element => {
 	const { open } = useAppKit()
 	const { isConnected, isConnecting } = useAccount()
 	const { route, isLoading: routeLoading } = useRouteStore()
-	const { error } = useFormStore()
+	const { amountInputError } = useFormStore()
 	const executeRoute = useExecuteRoute(route)
 
 	const isLoading = isConnecting || routeLoading
-	const isDisabled = isConnected && (!!error || !route)
+	const isDisabled = isConnected && (!!amountInputError || !route)
 	const buttonText = isConnected ? 'Begin Swap' : 'Connect Wallet'
 
 	const handleClick = useCallback(() => {

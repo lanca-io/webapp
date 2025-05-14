@@ -10,15 +10,15 @@ import './SourcePanel.pcss'
 export const SourcePanel = memo((): JSX.Element => {
 	const { isConnected } = useAccount()
 	const { onChange, onFocus, onBlur } = useInputHandlers()
-	const { sourceToken, inputValue } = useFormStore()
+	const { fromToken, amountInput } = useFormStore()
 
-	const hasBalance = Boolean(sourceToken?.balance && sourceToken.balance !== '0')
+	const hasBalance = Boolean(fromToken?.balance && fromToken.balance !== '0')
 
 	return (
 		<div className="source_panel" role="region" aria-label="Source input panel">
-			<WidgetInput value={inputValue} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
+			<WidgetInput value={amountInput} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
 			<ValueInfo />
-			{isConnected && hasBalance && <BalanceInfo token={sourceToken} />}
+			{isConnected && hasBalance && <BalanceInfo token={fromToken} />}
 		</div>
 	)
 })

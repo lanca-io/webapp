@@ -4,7 +4,7 @@ import { useFormStore } from '../store/form/useFormStore'
 import { toPreciseNumber, preciseMultiply, preciseDivide } from '../utils/new/operations'
 
 export const useDollarInputValidator = (value: string, token: ExtendedToken | null) => {
-	const { setError, setAmount } = useFormStore()
+	const { setAmountInputError, setFromAmount } = useFormStore()
 	const price = token?.priceUsd ?? 0
 	const symbol = token?.symbol ?? ''
 	const balance = token?.balance ?? '0'
@@ -63,7 +63,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 	}, [value, price, symbol, balance, decimals])
 
 	return useCallback(() => {
-		setError(validation.errorMessage)
-		setAmount(validation.valid ? validation.machineAmount : null)
-	}, [validation, setError, setAmount])
+		setAmountInputError(validation.errorMessage)
+		setFromAmount(validation.valid ? validation.machineAmount : null)
+	}, [validation, setAmountInputError, setFromAmount])
 }

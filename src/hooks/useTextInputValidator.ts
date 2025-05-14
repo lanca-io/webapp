@@ -5,7 +5,7 @@ import { ExtendedToken } from '../store/tokens/types'
 import { preciseDivide, preciseMultiply } from '../utils/new/operations'
 
 export const useTextInputValidator = (text: string, token: ExtendedToken | null) => {
-	const { setError, setAmount } = useFormStore()
+	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
@@ -54,7 +54,7 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 	}, [text, balance, decimals])
 
 	return useCallback(() => {
-		setError(validation.errorMessage)
-		setAmount(validation.valid ? validation.machineAmount : null)
-	}, [validation, setError, setAmount])
+		setAmountInputError(validation.errorMessage)
+		setFromAmount(validation.machineAmount ?? '0')
+	}, [validation, setAmountInputError, setFromAmount])
 }

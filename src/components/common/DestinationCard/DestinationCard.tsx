@@ -13,15 +13,13 @@ import './DestinationCard.pcss'
 export const DestinationCard = memo(() => {
 	const { route, isLoading } = useRouteStore()
 	const { state } = useSubvariantStore()
-	const { destinationToken, destinationChain } = useFormStore()
+	const { toToken, toChain } = useFormStore()
 	const { openToAssetModal } = useModalsStore()
 
 	const amount = useMemo(() => {
 		if (!route?.to?.amount) return ''
-		return destinationToken?.decimals
-			? formatTokenAmount(route.to.amount, destinationToken.decimals)
-			: route.to.amount
-	}, [route?.to?.amount, destinationToken?.decimals])
+		return toToken?.decimals ? formatTokenAmount(route.to.amount, toToken.decimals) : route.to.amount
+	}, [route?.to?.amount, toToken?.decimals])
 
 	return (
 		<div className="destination_card_wrapper">
@@ -30,7 +28,7 @@ export const DestinationCard = memo(() => {
 				style={{ paddingBottom: state === SplitSubvariantType.SEND && route ? '32px' : '16px' }}
 			>
 				<RouteTimer />
-				<AssetSelection token={destinationToken} chain={destinationChain} openModal={openToAssetModal} />
+				<AssetSelection token={toToken} chain={toChain} openModal={openToAssetModal} />
 				<DestinationPanel amount={amount || '0'} isLoading={isLoading} />
 			</div>
 		</div>

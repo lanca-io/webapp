@@ -12,7 +12,7 @@ const REFRESH_INTERVAL = 90_000
 export const useLoadRoute = () => {
 	const { address } = useAccount()
 	const { setRoute, setIsLoading } = useRouteStore()
-	const { sourceChain, destinationChain, sourceToken, destinationToken, amount, error } = useFormStore()
+	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError } = useFormStore()
 	const { slippage } = useSettingsStore()
 	const [timeToRefresh, setTimeToRefresh] = useState<number>(0)
 	const sdk = useLancaSDK()
@@ -20,13 +20,13 @@ export const useLoadRoute = () => {
 	const canFetch = useMemo(
 		() =>
 			!!address &&
-			!!sourceChain?.id &&
-			!!destinationChain?.id &&
-			!!sourceToken?.address &&
-			!!destinationToken?.address &&
-			!!amount &&
-			!error,
-		[address, sourceChain, destinationChain, sourceToken, destinationToken, amount, error],
+			!!fromChain?.id &&
+			!!toChain?.id &&
+			!!fromToken?.address &&
+			!!toToken?.address &&
+			!!fromAmount &&
+			!amountInputError,
+		[address, fromChain, toChain, fromToken, toToken, fromAmount, amountInputError],
 	)
 
 	const fetchRoute = useCallback(async () => {
@@ -34,11 +34,11 @@ export const useLoadRoute = () => {
 
 		try {
 			return await sdk.getRoute({
-				fromChainId: sourceChain!.id,
-				toChainId: destinationChain!.id,
-				fromToken: sourceToken!.address as Address,
-				toToken: destinationToken!.address as Address,
-				amount: amount!,
+				fromChainId: fromChain!.id,
+				toChainId: toChain!.id,
+				fromToken: fromToken!.address as Address,
+				toToken: toToken!.address as Address,
+				amount: fromAmount!,
 				fromAddress: address!,
 				toAddress: address!,
 				slippageTolerance: slippage,
@@ -46,21 +46,21 @@ export const useLoadRoute = () => {
 		} catch (error) {
 			throw error
 		}
-	}, [sdk, canFetch, sourceChain, destinationChain, sourceToken, destinationToken, amount, address, slippage])
+	}, [sdk, canFetch, fromChain, toChain, fromToken, toToken, fromAmount, address, slippage])
 
 	const queryKey = useMemo(
 		() => [
 			'route',
 			{
-				fromChain: sourceChain?.id,
-				toChain: destinationChain?.id,
-				fromToken: sourceToken?.address,
-				toToken: destinationToken?.address,
-				amount,
+				fromChain: fromChain?.id,
+				toChain: toChain?.id,
+				fromToken: fromToken?.address,
+				toToken: toToken?.address,
+				amount: fromAmount,
 				slippage,
 			},
 		],
-		[sourceChain?.id, destinationChain?.id, sourceToken?.address, destinationToken?.address, amount, slippage],
+		[fromChain?.id, toChain?.id, fromToken?.address, toToken?.address, fromAmount, slippage],
 	)
 
 	const {

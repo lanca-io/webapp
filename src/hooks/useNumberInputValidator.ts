@@ -4,7 +4,7 @@ import { useFormStore } from '../store/form/useFormStore'
 import { toPreciseNumber, preciseMultiply } from '../utils/new/operations'
 
 export const useNumberInputValidator = (value: string, token: ExtendedToken | null) => {
-	const { setError, setAmount } = useFormStore()
+	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
@@ -68,7 +68,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 	}, [value, balance, decimals])
 
 	return useCallback(() => {
-		setError(validation.errorMessage)
-		setAmount(validation.valid ? validation.machineAmount : null)
-	}, [validation, setError, setAmount])
+		setAmountInputError(validation.errorMessage)
+		setFromAmount(validation.valid ? validation.machineAmount : null)
+	}, [validation, setAmountInputError, setFromAmount])
 }

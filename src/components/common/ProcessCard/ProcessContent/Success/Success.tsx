@@ -13,14 +13,14 @@ import './Success.pcss'
 
 export const Success: FC = memo((): JSX.Element => {
 	const { executionTime } = useTxExecutionStore()
-	const { destinationToken, destinationChain, amount } = useFormStore()
+	const { toToken, toChain, fromAmount } = useFormStore()
 	const { isLoading } = useLoadTxExecutionTime()
 	const { route } = useRouteStore()
 
 	const formattedAmount = useMemo(() => {
-		if (!amount || amount === '0') return '0'
-		return formatTokenAmount(route?.to.amount, destinationToken?.decimals || 0)
-	}, [amount])
+		if (!fromAmount || fromAmount === '0') return '0'
+		return formatTokenAmount(route?.to.amount, toToken?.decimals || 0)
+	}, [fromAmount, route?.to.amount, toToken?.decimals])
 
 	const imageSrc = '/Swap/Success.webp'
 	const altText = 'Success Process'
@@ -38,13 +38,13 @@ export const Success: FC = memo((): JSX.Element => {
 				<div className="success_info_stats">
 					<div className="success_info_details">
 						<div className="success_info_token">
-							<Badge logoURL={destinationToken?.logoURI} size="m" />
-							<p className="success_info_name">{destinationToken?.symbol}</p>
+							<Badge logoURL={toToken?.logoURI} size="m" />
+							<p className="success_info_name">{toToken?.symbol}</p>
 						</div>
 						<p className="success_info_pointer">on</p>
 						<div className="success_info_chain">
-							<Badge logoURL={destinationChain?.logoURI || ''} size="m" />
-							<p className="success_info_name">{destinationChain?.name}</p>
+							<Badge logoURL={toChain?.logoURI || ''} size="m" />
+							<p className="success_info_name">{toChain?.name}</p>
 						</div>
 					</div>
 					<p className="success_info_number" data-testid="success-amount">

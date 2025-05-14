@@ -11,12 +11,12 @@ import { useAccount } from 'wagmi'
 
 export const useInputHandlers = () => {
 	const { isConnected } = useAccount()
-	const { sourceToken, inputValue, inputMode, setInputValue, setInputMode, clearInput } = useFormStore()
+	const { fromToken, amountInput, amountInputMode, setAmountInput, setAmountInputMode, clearInputs } = useFormStore()
 
-	const textValidator = useTextInputValidator(inputValue, sourceToken)
-	const numberValidator = useNumberInputValidator(inputValue, sourceToken)
-	const percentValidator = usePercentInputValidator(inputValue, sourceToken)
-	const dollarValidator = useDollarInputValidator(inputValue, sourceToken)
+	const textValidator = useTextInputValidator(amountInput, fromToken)
+	const numberValidator = useNumberInputValidator(amountInput, fromToken)
+	const percentValidator = usePercentInputValidator(amountInput, fromToken)
+	const dollarValidator = useDollarInputValidator(amountInput, fromToken)
 
 	const determineMode = useCallback((input: string): Mode => {
 		if (!input) return Mode.None
@@ -28,35 +28,35 @@ export const useInputHandlers = () => {
 
 	const validateInput = useCallback(() => {
 		if (!isConnected) return
-		if (inputMode === Mode.None) return
+		if (amountInputMode === Mode.None) return
 
 		const validator = {
 			[Mode.Text]: textValidator,
 			[Mode.Number]: numberValidator,
 			[Mode.Percent]: percentValidator,
 			[Mode.Dollar]: dollarValidator,
-		}[inputMode]
+		}[amountInputMode]
 
 		validator()
-	}, [inputMode, textValidator, numberValidator, percentValidator, dollarValidator])
+	}, [amountInputMode, textValidator, numberValidator, percentValidator, dollarValidator, isConnected])
 
 	useEffect(() => {
-		const mode = determineMode(inputValue)
-		if (mode !== inputMode) {
-			setInputMode(mode)
+		const mode = determineMode(amountInput)
+		if (mode !== amountInputMode) {
+			setAmountInputMode(mode)
 		}
 		if (isConnected) {
 			validateInput()
 		}
-	}, [inputValue, inputMode, determineMode, setInputMode, validateInput])
+	}, [amountInput, amountInputMode, determineMode, setAmountInputMode, validateInput, isConnected])
 
 	const onChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			const value = event.target.value
 			const sanitizedValue = /^[a-zA-Z]+$/.test(value) ? sanitizeText(value) : sanitizeNumbers(value)
-			setInputValue(sanitizedValue)
+			setAmountInput(sanitizedValue)
 		},
-		[setInputValue],
+		[setAmountInput],
 	)
 
 	const onFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
@@ -69,10 +69,10 @@ export const useInputHandlers = () => {
 		(e: FocusEvent<HTMLInputElement>) => {
 			if (!e.target.value) {
 				e.target.placeholder = '0'
-				clearInput()
+				clearInputs()
 			}
 		},
-		[clearInput],
+		[clearInputs],
 	)
 
 	return {

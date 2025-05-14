@@ -5,14 +5,14 @@ import { useFormStore } from '../../../store/form/useFormStore'
 import './CardSwitcher.pcss'
 
 export const CardSwitcher = (): JSX.Element => {
-	const { swapChainsAndTokens } = useFormStore()
+	const { swap } = useFormStore()
 	const [top, setTop] = useState<number>(0)
 	const cardRef = useRef<HTMLElement | null>(null)
 	const observerRef = useRef<ResizeObserver | null>(null)
 
 	const handleSwap = useCallback(() => {
-		swapChainsAndTokens()
-	}, [swapChainsAndTokens])
+		swap()
+	}, [swap])
 
 	const setupObserver = useCallback(() => {
 		const card = document.querySelector('.source_card') as HTMLElement

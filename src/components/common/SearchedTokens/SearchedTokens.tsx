@@ -12,12 +12,12 @@ type SearchedTokensProps = {
 }
 
 export const SearchedTokens = memo(({ tokens, isLoading, onTokenSelect }: SearchedTokensProps): JSX.Element | null => {
-	const { sourceToken, destinationToken } = useFormStore()
+	const { fromToken, toToken } = useFormStore()
 
 	const filteredTokens = tokens.filter(
 		token =>
-			!(token.address === sourceToken?.address && token.chain_id === sourceToken?.chain_id) &&
-			!(token.address === destinationToken?.address && token.chain_id === destinationToken?.chain_id),
+			!(token.address === fromToken?.address && token.chain_id === fromToken?.chain_id) &&
+			!(token.address === toToken?.address && token.chain_id === toToken?.chain_id),
 	)
 
 	const handleSelect = useCallback(

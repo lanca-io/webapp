@@ -7,7 +7,7 @@ import { Hash, PublicClient } from 'viem'
 const DEFAULT_ESTIMATE = '~15'
 
 export const useLoadTxExecutionTime = () => {
-	const { sourceChain, destinationChain } = useFormStore()
+	const { fromChain, toChain } = useFormStore()
 	const { srcHash, dstHash, setExecutionTime } = useTxExecutionStore()
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -64,13 +64,13 @@ export const useLoadTxExecutionTime = () => {
 	}
 
 	const fetchTxExecutionTime = useCallback(async () => {
-		if (!srcHash || !dstHash || !sourceChain?.id || !destinationChain?.id) return
+		if (!srcHash || !dstHash || !fromChain?.id || !toChain?.id) return
 
 		setIsLoading(true)
 
 		try {
-			const srcClient = getPublicClient(Number(sourceChain.id))
-			const dstClient = getPublicClient(Number(destinationChain.id))
+			const srcClient = getPublicClient(Number(fromChain.id))
+			const dstClient = getPublicClient(Number(toChain.id))
 
 			// @ts-ignore
 			const txData = await fetchTransactions(srcClient, dstClient)
@@ -112,7 +112,7 @@ export const useLoadTxExecutionTime = () => {
 			setIsLoading(false)
 			return DEFAULT_ESTIMATE
 		}
-	}, [srcHash, dstHash, sourceChain?.id, destinationChain?.id, setExecutionTime])
+	}, [srcHash, dstHash, fromChain?.id, toChain?.id, setExecutionTime])
 
 	useEffect(() => {
 		fetchTxExecutionTime()

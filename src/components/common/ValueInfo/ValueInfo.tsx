@@ -6,18 +6,18 @@ import { Mode } from '../../../store/form/types'
 import './ValueInfo.pcss'
 
 export const ValueInfo = memo((): JSX.Element => {
-	const { error, inputValue, inputMode } = useFormStore()
+	const { amountInputError, amountInput, amountInputMode } = useFormStore()
 	const { usd } = useValueConversion()
 
-	const showError = !!error
-	const showPrompt = inputMode === Mode.None || !inputValue.trim()
+	const showError = !!amountInputError
+	const showPrompt = amountInputMode === Mode.None || !amountInput.trim()
 	const showIndicator = !showError && !showPrompt && usd
 
 	return (
 		<div className="value_info_container" role="status" aria-live="polite">
 			{showError && (
 				<span className="value_info_title value_info_error" aria-live="assertive" role="alert">
-					{error}
+					{amountInputError}
 				</span>
 			)}
 			{showPrompt && (

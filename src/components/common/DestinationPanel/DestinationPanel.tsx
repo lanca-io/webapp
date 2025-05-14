@@ -23,7 +23,7 @@ type DestinationPanelProps = {
 export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelProps): JSX.Element => {
 	const { address } = useAccount()
 	const { route, isLoading: routeLoading } = useRouteStore()
-	const { destinationToken } = useFormStore()
+	const { toToken } = useFormStore()
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
 
 	const handleOpenReviewModal = useCallback(() => {
@@ -34,7 +34,7 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 		setIsReviewModalOpen(false)
 	}, [])
 
-	const hasBalance = Boolean(destinationToken?.balance !== undefined && destinationToken?.balance !== null)
+	const hasBalance = Boolean(toToken?.balance !== undefined && toToken?.balance !== null)
 
 	return (
 		<div className="destination_panel">
@@ -45,7 +45,7 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 					<WidgetInput type="text" value={amount || '0'} disabled />
 				)}
 				<DestinationValue />
-				{address && hasBalance && <BalanceInfo token={destinationToken} showMax={false} />}
+				{address && hasBalance && <BalanceInfo token={toToken} showMax={false} />}
 			</div>
 
 			<div className="destination_panel_info">

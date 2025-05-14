@@ -6,13 +6,13 @@ import { SourcePanel } from '../SourcePanel/SourcePanel'
 import './SourceCard.pcss'
 
 export const SourceCard = memo((): JSX.Element => {
-	const { sourceToken, sourceChain } = useFormStore()
+	const { fromToken, fromChain } = useFormStore()
 	const { openFromAssetModal } = useModalsStore()
 
 	return (
 		<div className="source_card_wrapper">
 			<div className="source_card">
-				<AssetSelection token={sourceToken} chain={sourceChain} openModal={openFromAssetModal} />
+				<AssetSelection token={fromToken} chain={fromChain} openModal={openFromAssetModal} />
 				<SourcePanel />
 			</div>
 		</div>

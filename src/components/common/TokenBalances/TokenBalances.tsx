@@ -18,13 +18,13 @@ type BalanceProps = {
 export const TokenBalances = memo(({ chain, items, onTokenSelect }: BalanceProps): JSX.Element | null => {
 	const { address, isConnected } = useAccount()
 	const { balances, isLoading } = useGetBalances(chain?.id)
-	const { sourceToken, destinationToken } = useFormStore()
+	const { fromToken, toToken } = useFormStore()
 	const [shown, setShown] = useState(items)
 
 	const filteredBalances = balances.filter(
 		token =>
-			!(token.address === sourceToken?.address && token.chain_id === sourceToken?.chain_id) &&
-			!(token.address === destinationToken?.address && token.chain_id === destinationToken?.chain_id),
+			!(token.address === fromToken?.address && token.chain_id === fromToken?.chain_id) &&
+			!(token.address === toToken?.address && token.chain_id === toToken?.chain_id),
 	)
 
 	const handleSelect = useCallback(

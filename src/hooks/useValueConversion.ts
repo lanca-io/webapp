@@ -13,22 +13,22 @@ type ConversionResult = {
 }
 
 export const useValueConversion = (): ConversionResult => {
-	const { inputValue, inputMode, sourceToken } = useFormStore()
+	const { amountInput, amountInputMode, fromToken } = useFormStore()
 
 	const { balance, price } = useMemo(
 		() => ({
-			balance: formatTokenAmount(sourceToken?.balance ?? '0', sourceToken?.decimals ?? 18),
-			price: sourceToken?.priceUsd ?? 0,
-			decimals: sourceToken?.decimals ?? 18,
+			balance: formatTokenAmount(fromToken?.balance ?? '0', fromToken?.decimals ?? 18),
+			price: fromToken?.priceUsd ?? 0,
+			decimals: fromToken?.decimals ?? 18,
 		}),
-		[sourceToken],
+		[fromToken],
 	)
 
 	const { usd, token } = useMemo(() => {
-		if (!inputValue.trim() || inputMode === Mode.None) return { usd: null, token: null }
+		if (!amountInput.trim() || amountInputMode === Mode.None) return { usd: null, token: null }
 
-		if (inputMode === Mode.Dollar) {
-			const value = inputValue.replace(/^\$/, '')
+		if (amountInputMode === Mode.Dollar) {
+			const value = amountInput.replace(/^\$/, '')
 			const num = parseFloat(value)
 
 			return isNaN(num) ? { usd: null, token: null } : { usd: `${num}$`, token: usdToTokenAmount(num, price) }
@@ -36,27 +36,27 @@ export const useValueConversion = (): ConversionResult => {
 
 		let usd: string | null = null
 
-		switch (inputMode) {
+		switch (amountInputMode) {
 			case Mode.Number:
-				const amount = parseFloat(inputValue)
+				const amount = parseFloat(amountInput)
 				usd = isNaN(amount) ? null : tokenAmountToUsd(amount, price)
 				break
 			case Mode.Percent:
-				usd = percentOfBalanceToUsd(inputValue, balance, price)
+				usd = percentOfBalanceToUsd(amountInput, balance, price)
 				break
 			case Mode.Text:
-				usd = textCommandToUsd(inputValue, balance, price)
+				usd = textCommandToUsd(amountInput, balance, price)
 				break
 		}
 
 		return { usd, token: null }
-	}, [inputValue, inputMode, balance, price])
+	}, [amountInput, amountInputMode, balance, price])
 
 	return {
 		usd,
 		token,
 		isValid: usd !== null && price > 0,
 		rawUsd: usd?.replace('$', '') || null,
-		isUsdMode: inputMode === Mode.Dollar,
+		isUsdMode: amountInputMode === Mode.Dollar,
 	}
 }

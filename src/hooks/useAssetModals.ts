@@ -8,7 +8,7 @@ import { useChainsStore } from '../store/chains/useChainsStore'
 export const useAssetModals = () => {
 	const { chains } = useChainsStore()
 	const { fromChain, toChain, closeFromAssetModal, closeToAssetModal, setFromChain, setToChain } = useModalsStore()
-	const { setSourceChain, setDestinationChain, setSourceToken, setDestinationToken } = useFormStore()
+	const { setFromChain: setFormFromChain, setToChain: setFormToChain, setFromToken, setToToken } = useFormStore()
 
 	const selectFromChain = useCallback((chain: ILancaChain) => setFromChain(chain), [setFromChain])
 	const selectToChain = useCallback((chain: ILancaChain) => setToChain(chain), [setToChain])
@@ -20,11 +20,11 @@ export const useAssetModals = () => {
 
 			if (!chain) return
 
-			setSourceToken(token)
-			setSourceChain(chain)
+			setFromToken(token)
+			setFormFromChain(chain)
 			closeFromAssetModal()
 		},
-		[chains, fromChain, setSourceToken, setSourceChain, closeFromAssetModal],
+		[chains, fromChain, setFromToken, setFormFromChain, closeFromAssetModal],
 	)
 
 	const selectToAsset = useCallback(
@@ -34,11 +34,11 @@ export const useAssetModals = () => {
 
 			if (!chain) return
 
-			setDestinationToken(token)
-			setDestinationChain(chain)
+			setToToken(token)
+			setFormToChain(chain)
 			closeToAssetModal()
 		},
-		[chains, toChain, setDestinationToken, setDestinationChain, closeToAssetModal],
+		[chains, toChain, setToToken, setFormToChain, closeToAssetModal],
 	)
 
 	return {

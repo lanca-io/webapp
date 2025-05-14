@@ -17,30 +17,26 @@ const chainsTwitterMap: Record<string, string> = {
 
 export const ProcessAction: FC = memo((): JSX.Element | null => {
 	const { reset, executionTime } = useTxExecutionStore()
-	const { sourceChain, destinationChain, clearInput } = useFormStore()
+	const { fromChain, toChain, clearInputs } = useFormStore()
 	const { txStatus } = useTxProcess()
 
 	const handleReset = useCallback(() => {
 		reset()
-		clearInput()
-	}, [reset])
+		clearInputs()
+	}, [reset, clearInputs])
 
 	const handleShareOnX = useCallback(() => {
 		const time = executionTime ? executionTime : '10.00'
 
-		const fromChainHandle = sourceChain?.id
-			? chainsTwitterMap[Number(sourceChain.id)] || sourceChain.name
-			: 'ethereum'
+		const fromChainHandle = fromChain?.id ? chainsTwitterMap[Number(fromChain.id)] || fromChain.name : 'ethereum'
 
-		const toChainHandle = destinationChain?.id
-			? chainsTwitterMap[Number(destinationChain.id)] || destinationChain.name
-			: 'ethereum'
+		const toChainHandle = toChain?.id ? chainsTwitterMap[Number(toChain.id)] || toChain.name : 'ethereum'
 
 		const tweetText = `Just performed a fully decentralised bridge from @${fromChainHandle} to @${toChainHandle} in just ${time} sec on @concero_io testnet using the new Concero Messaging V2.\n\nTry to break my record on https://testnet.concero.io 👇`
 
 		const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`
 		window.open(shareUrl, '_blank', 'noopener,noreferrer')
-	}, [executionTime, sourceChain, destinationChain])
+	}, [executionTime, fromChain, toChain])
 
 	if (txStatus === Status.FAILED || txStatus === Status.REJECTED) {
 		return (

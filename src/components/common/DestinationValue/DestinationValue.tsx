@@ -8,12 +8,12 @@ import './DestinationValue.pcss'
 
 export const DestinationValue = memo(() => {
 	const { route, isLoading } = useRouteStore()
-	const { destinationToken } = useFormStore()
+	const { toToken } = useFormStore()
 
 	const displayValue = useMemo(() => {
 		const rawAmount = route?.to?.amount
-		const priceUsd = destinationToken?.priceUsd
-		const decimals = destinationToken?.decimals ?? 18
+		const priceUsd = toToken?.priceUsd
+		const decimals = toToken?.decimals ?? 18
 
 		if (!rawAmount || !priceUsd) return null
 
@@ -28,7 +28,7 @@ export const DestinationValue = memo(() => {
 		} catch {
 			return null
 		}
-	}, [route?.to?.amount, destinationToken?.decimals, destinationToken?.priceUsd])
+	}, [route?.to?.amount, toToken?.decimals, toToken?.priceUsd])
 
 	if (isLoading || !displayValue) {
 		return (

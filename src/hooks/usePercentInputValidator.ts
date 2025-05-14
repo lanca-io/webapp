@@ -4,7 +4,7 @@ import { ExtendedToken } from '../store/tokens/types'
 import { toPreciseNumber, preciseMultiply } from '../utils/new/operations'
 
 export const usePercentInputValidator = (value: string, token: ExtendedToken | null) => {
-	const { setError, setAmount } = useFormStore()
+	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
 
 	const validation = useMemo(() => {
@@ -52,7 +52,7 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 	}, [value, balance])
 
 	return useCallback(() => {
-		setError(validation.errorMessage)
-		setAmount(validation.valid ? validation.machineAmount : null)
-	}, [validation, setError, setAmount])
+		setAmountInputError(validation.errorMessage)
+		setFromAmount(validation.valid ? validation.machineAmount : null)
+	}, [validation, setAmountInputError, setFromAmount])
 }

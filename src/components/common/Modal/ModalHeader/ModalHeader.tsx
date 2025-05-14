@@ -32,5 +32,3 @@ export const ModalHeader: FC<ModalHeaderProps> = ({ title, onClose }) => {
 		</div>
 	)
 }
-
-ModalHeader.displayName = 'ModalHeader'

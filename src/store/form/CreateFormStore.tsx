@@ -1,10 +1,10 @@
 import type { FormState } from './types'
 import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../tokens/types'
-import { Mode } from './types'
+import { Mode, AddressMode } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-const initialSourceToken: ExtendedToken = {
+const initFromToken: ExtendedToken = {
 	chain_id: '10',
 	name: 'USD Coin',
 	symbol: 'USDC',
@@ -17,7 +17,7 @@ const initialSourceToken: ExtendedToken = {
 	priceUsd: 1,
 }
 
-const initialDestinationToken: ExtendedToken = {
+const initToToken: ExtendedToken = {
 	chain_id: '137',
 	name: 'USD Coin',
 	symbol: 'USDC',
@@ -29,14 +29,14 @@ const initialDestinationToken: ExtendedToken = {
 	priceUsd: 1,
 }
 
-const initialSourceChain: ILancaChain = {
+const initFromChain: ILancaChain = {
 	id: '10',
 	name: 'Optimism',
 	logoURI: 'https://api.concero.io/static/icons/chains/10.svg',
 	explorerURI: 'https://optimistic.etherscan.io',
 }
 
-const initialDestinationChain: ILancaChain = {
+const initToChain: ILancaChain = {
 	id: '137',
 	name: 'Polygon',
 	logoURI: 'https://api.concero.io/static/icons/chains/filled/137.svg',
@@ -46,38 +46,54 @@ const initialDestinationChain: ILancaChain = {
 export const CreateFormStore = () =>
 	createWithEqualityFn<FormState>(
 		set => ({
-			sourceChain: initialSourceChain,
-			destinationChain: initialDestinationChain,
-			sourceToken: initialSourceToken,
-			destinationToken: initialDestinationToken,
-			destinationAddress: null,
-			error: null,
-			inputValue: '',
-			inputMode: Mode.None,
-			amount: null,
-			setSourceChain: chain => set({ sourceChain: chain }),
-			setDestinationChain: chain => set({ destinationChain: chain }),
-			setSourceToken: token => set({ sourceToken: token }),
-			setDestinationToken: token => set({ destinationToken: token }),
-			setDestinationAddress: address => set({ destinationAddress: address }),
-			setError: error => set({ error }),
-			swapChainsAndTokens: () =>
-				set(state => ({
-					sourceChain: state.destinationChain,
-					destinationChain: state.sourceChain,
-					sourceToken: state.destinationToken,
-					destinationToken: state.sourceToken,
-				})),
-			setInputValue: value => set({ inputValue: value }),
-			setInputMode: mode => set({ inputMode: mode }),
-			setAmount: amount => set({ amount }),
-			clearInput: () =>
+			fromChain: initFromChain,
+			toChain: initToChain,
+			fromToken: initFromToken,
+			toToken: initToToken,
+			fromAmount: null,
+			toAddress: null,
+			amountInput: '',
+			amountInputError: null,
+			amountInputMode: Mode.None,
+			amountInputFocused: false,
+			addressInput: '',
+			addressInputError: null,
+			addressInputMode: AddressMode.None,
+			addressInputFocused: false,
+			setFromChain: chain => set({ fromChain: chain }),
+			setToChain: chain => set({ toChain: chain }),
+			setFromToken: token => set({ fromToken: token }),
+			setToToken: token => set({ toToken: token }),
+			setFromAmount: amount => set({ fromAmount: amount }),
+			setToAddress: address => set({ toAddress: address }),
+			setAmountInput: value => set({ amountInput: value }),
+			setAmountInputError: error => set({ amountInputError: error }),
+			setAmountInputMode: mode => set({ amountInputMode: mode }),
+			setAmountInputFocused: focused => set({ amountInputFocused: focused }),
+			setAddressInput: value => set({ addressInput: value }),
+			setAddressInputError: error => set({ addressInputError: error }),
+			setAddressInputMode: mode => set({ addressInputMode: mode }),
+			setAddressInputFocused: focused => set({ addressInputFocused: focused }),
+			clearInputs: () =>
 				set({
-					inputValue: '',
-					inputMode: Mode.None,
-					error: null,
-					amount: null,
+					fromAmount: null,
+					toAddress: null,
+					amountInput: '',
+					amountInputError: null,
+					amountInputMode: Mode.None,
+					amountInputFocused: false,
+					addressInput: '',
+					addressInputError: null,
+					addressInputMode: AddressMode.None,
+					addressInputFocused: false,
 				}),
+			swap: () =>
+				set(state => ({
+					fromChain: state.toChain,
+					toChain: state.fromChain,
+					fromToken: state.toToken,
+					toToken: state.fromToken,
+				})),
 		}),
 		Object.is,
 	)

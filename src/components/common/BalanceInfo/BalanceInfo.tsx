@@ -11,7 +11,7 @@ type BalanceInfoProps = {
 }
 
 export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): JSX.Element => {
-	const { setInputValue } = useFormStore()
+	const { setAmountInput } = useFormStore()
 
 	const { displayValue, symbol, hasBalance } = useMemo(() => {
 		if (!token?.balance) return { displayValue: '0', symbol: '', hasBalance: false }
@@ -28,9 +28,9 @@ export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): J
 		(e: React.MouseEvent<HTMLButtonElement>) => {
 			e.preventDefault()
 			if (!token?.balance) return
-			setInputValue(formatTokenAmount(token.balance, token.decimals))
+			setAmountInput(formatTokenAmount(token.balance, token.decimals))
 		},
-		[token, setInputValue],
+		[token, setAmountInput],
 	)
 
 	return (
