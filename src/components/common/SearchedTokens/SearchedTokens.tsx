@@ -2,6 +2,7 @@ import type { ExtendedToken } from '../../../store/tokens/types'
 import { memo, useCallback } from 'react'
 import { Token } from '../Token/Token'
 import { TokenSkeleton } from '../Token/TokenSkeleton'
+import { useFormStore } from '../../../store/form/useFormStore'
 import './SearchedTokens.pcss'
 
 type SearchedTokensProps = {
@@ -11,6 +12,14 @@ type SearchedTokensProps = {
 }
 
 export const SearchedTokens = memo(({ tokens, isLoading, onTokenSelect }: SearchedTokensProps): JSX.Element | null => {
+	const { sourceToken, destinationToken } = useFormStore()
+
+	const filteredTokens = tokens.filter(
+		token =>
+			!(token.address === sourceToken?.address && token.chain_id === sourceToken?.chain_id) &&
+			!(token.address === destinationToken?.address && token.chain_id === destinationToken?.chain_id),
+	)
+
 	const handleSelect = useCallback(
 		(token: ExtendedToken) => {
 			return () => onTokenSelect(token)
@@ -18,14 +27,14 @@ export const SearchedTokens = memo(({ tokens, isLoading, onTokenSelect }: Search
 		[onTokenSelect],
 	)
 
-	if (!isLoading && tokens.length === 0) return null
+	if (!isLoading && filteredTokens.length === 0) return null
 
 	return (
 		<div className="searched_tokens" role="region" aria-label="Search results">
 			<h4 className="searched_tokens_title">Tokens</h4>
 			{isLoading
 				? Array.from({ length: 4 }).map((_, i) => <TokenSkeleton key={i} showBalance={false} />)
-				: tokens.map(token => (
+				: filteredTokens.map(token => (
 						<Token
 							key={`${token.address}-${token.chain_id}`}
 							token={token}
