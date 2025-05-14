@@ -19,7 +19,7 @@ export interface FailureInfoProps {
 const ApprovalInfo: FC = memo(() => (
 	<div className="approval_info">
 		<div className="approval_info_icon">
-			<SignIcon />
+			<SignIcon color="#097BB3" />
 		</div>
 		<div className="approval_info_text">
 			<p className="approval_info_heading">Open your wallet</p>

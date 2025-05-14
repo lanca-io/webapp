@@ -47,9 +47,9 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 			</div>
 
 			<div className="destination_panel_info">
-				<SlippageInfo />
 				{route && !routeLoading && (
 					<>
+						<SlippageInfo />
 						<GasInfo />
 						<ETAInfo />
 						<Button

@@ -5,6 +5,7 @@ import { CardSwitcher } from '../CardSwitcher/CardSwitcher'
 import { SwapAction } from '../SwapAction/SwapAction'
 import { ProcessCard } from '../ProcessCard/ProcessCard'
 import { useTxProcess } from '../../../hooks/useTxProcess'
+import { ModeMenu } from '../ModeMenu/ModeMenu'
 import './SwapWidget.pcss'
 
 export const SwapWidget: FC = memo(() => {
@@ -20,6 +21,7 @@ export const SwapWidget: FC = memo(() => {
 			default:
 				return (
 					<>
+						<ModeMenu />
 						<SourceCard />
 						<CardSwitcher />
 						<DestinationCard />

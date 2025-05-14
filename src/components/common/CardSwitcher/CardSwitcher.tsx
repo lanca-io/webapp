@@ -21,7 +21,7 @@ export const CardSwitcher = (): JSX.Element => {
 		cardRef.current = card
 
 		const updatePosition = () => {
-			const position = card.offsetHeight + 15
+			const position = card.offsetHeight + 60
 			setTop(position)
 		}
 
