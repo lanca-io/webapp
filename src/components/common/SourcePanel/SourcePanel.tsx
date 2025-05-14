@@ -16,7 +16,7 @@ export const SourcePanel = memo((): JSX.Element => {
 
 	return (
 		<div className="source_panel" role="region" aria-label="Source input panel">
-			<WidgetInput type="number" value={inputValue} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
+			<WidgetInput value={inputValue} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
 			<ValueInfo />
 			{isConnected && hasBalance && <BalanceInfo token={sourceToken} />}
 		</div>

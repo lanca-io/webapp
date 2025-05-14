@@ -40,7 +40,7 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 				{isLoading ? (
 					<SkeletonLoader height={60} width={160} />
 				) : (
-					<WidgetInput value={amount || '0'} disabled />
+					<WidgetInput type="text" value={amount || '0'} disabled />
 				)}
 				<DestinationValue />
 				{hasBalance && <BalanceInfo token={destinationToken} showMax={false} />}
