@@ -19,7 +19,7 @@ export const CardPointer = (): JSX.Element => {
 
 		const updatePosition = () => {
 			const srcBottom = src_card.offsetHeight + 60
-			const dstTop = dst_card.offsetHeight + 5
+			const dstTop = dst_card.offsetHeight + 2
 			const position = srcBottom + dstTop
 			setTop(position)
 		}

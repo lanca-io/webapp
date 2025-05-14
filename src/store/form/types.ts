@@ -2,6 +2,7 @@ import type { ExtendedToken } from '../tokens/types'
 import type { ILancaChain } from '@lanca/sdk'
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 import type { StoreApi } from 'zustand'
+import type { Address } from 'viem'
 
 export enum Mode {
 	None = 'none',
@@ -16,6 +17,7 @@ export type FormStateSlice = {
 	destinationChain: ILancaChain | null
 	sourceToken: ExtendedToken | null
 	destinationToken: ExtendedToken | null
+	destinationAddress: Address | null
 	error: string | null
 	inputValue: string
 	inputMode: Mode
@@ -33,6 +35,7 @@ export type FormActions = {
 	setInputMode: (mode: Mode) => void
 	setAmount: (amount: string | null) => void
 	clearInput: () => void
+	setDestinationAddress: (address: Address | null) => void
 }
 
 export type FormState = FormStateSlice & FormActions

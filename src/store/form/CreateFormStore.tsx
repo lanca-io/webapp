@@ -32,16 +32,14 @@ const initialDestinationToken: ExtendedToken = {
 const initialSourceChain: ILancaChain = {
 	id: '10',
 	name: 'Optimism',
-	// @ts-ignore
-	logoURL: 'https://api.concero.io/static/icons/chains/10.svg',
+	logoURI: 'https://api.concero.io/static/icons/chains/10.svg',
 	explorerURI: 'https://optimistic.etherscan.io',
 }
 
 const initialDestinationChain: ILancaChain = {
 	id: '137',
 	name: 'Polygon',
-	// @ts-ignore
-	logoURL: 'https://api.concero.io/static/icons/chains/filled/137.svg',
+	logoURI: 'https://api.concero.io/static/icons/chains/filled/137.svg',
 	explorerURI: 'https://polygonscan.com',
 }
 
@@ -52,6 +50,7 @@ export const CreateFormStore = () =>
 			destinationChain: initialDestinationChain,
 			sourceToken: initialSourceToken,
 			destinationToken: initialDestinationToken,
+			destinationAddress: null,
 			error: null,
 			inputValue: '',
 			inputMode: Mode.None,
@@ -60,6 +59,7 @@ export const CreateFormStore = () =>
 			setDestinationChain: chain => set({ destinationChain: chain }),
 			setSourceToken: token => set({ sourceToken: token }),
 			setDestinationToken: token => set({ destinationToken: token }),
+			setDestinationAddress: address => set({ destinationAddress: address }),
 			setError: error => set({ error }),
 			swapChainsAndTokens: () =>
 				set(state => ({

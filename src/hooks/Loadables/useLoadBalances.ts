@@ -29,7 +29,7 @@ export const useLoadBalances = () => {
 				return data[chainId].map(({ _id, ...token }) => ({
 					...token,
 					chain_id: chainId,
-					chainLogoURI: chain.logoURL,
+					chainLogoURI: chain.logoURI,
 				}))
 			} catch (error) {
 				console.error('Error fetching balances for chain:', chainId, error)

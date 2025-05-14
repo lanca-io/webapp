@@ -30,7 +30,7 @@ export const AssetSelection = memo(
 
 				<p className="asset_selection_pointer">on</p>
 
-				<ChainSelection logoURI={chain?.logoURL} name={chain?.name} />
+				<ChainSelection logoURI={chain?.logoURI} name={chain?.name} />
 
 				{hasInteractiveElement && (
 					<div className="asset_selection_arrow">

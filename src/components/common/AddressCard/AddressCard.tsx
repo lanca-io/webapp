@@ -1,19 +1,20 @@
-import type { FC, ChangeEvent } from 'react'
-import { useState } from 'react'
+import type { FC } from 'react'
 import { WidgetInput } from '../WidgetInput/WidgetInput'
+import { useAddressInputHandlers } from '../../../hooks/useAddressInput'
 import './AddressCard.pcss'
 
 export const AddressCard: FC = () => {
-	const [address, setAddress] = useState<string>('')
-
-	const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setAddress(e.target.value)
-	}
+	const { address, onChange, onFocus, onBlur } = useAddressInputHandlers()
 
 	return (
 		<div className="address_card">
-			<WidgetInput value={address} onChange={handleAddressChange} placeholder="Wallet or ENS" />
-			<p className="address-card-display">{address ? `Current Address: ${address}` : 'No address entered'}</p>
+			<WidgetInput
+				value={address}
+				onChange={onChange}
+				onFocus={onFocus}
+				onBlur={onBlur}
+				placeholder="Wallet or ENS"
+			/>
 		</div>
 	)
 }
