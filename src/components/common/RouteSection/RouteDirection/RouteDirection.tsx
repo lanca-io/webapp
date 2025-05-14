@@ -22,7 +22,8 @@ export const RouteDirection: FC<RouteDirectionProps> = memo(({ data, heading }) 
 	}, [data.amount, data.token.decimals])
 
 	const tokenLogo = data.token.logoURL || `${config.CONCERO_ASSETS_URI}/tokens/default.svg`
-	const chainLogo = data.chain.logoURI || `${config.CONCERO_ASSETS_URI}/chains/default.svg`
+	// @ts-ignore
+	const chainLogo = data.chain.logoURL || `${config.CONCERO_ASSETS_URI}/chains/default.svg`
 
 	return (
 		<div className="route_direction">
