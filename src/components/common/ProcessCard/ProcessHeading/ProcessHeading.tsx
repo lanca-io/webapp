@@ -5,15 +5,18 @@ import { LeftIcon } from '../../../../assets/icons/LeftIcon'
 import { useTxProcess } from '../../../../hooks/useTxProcess'
 import { useProcessHeading } from '../../../../hooks/useProcessHeading'
 import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'
+import { useFormStore } from '../../../../store/form/useFormStore'
 import './ProcessHeading.pcss'
 
 export const ProcessHeading: FC = memo(() => {
+	const { clearInput } = useFormStore()
 	const { reset } = useTxExecutionStore()
 	const { isTerminalStage } = useTxProcess()
 	const heading = useProcessHeading()
 
 	const handleReset = useCallback(() => {
 		reset()
+		clearInput()
 	}, [reset])
 
 	return (

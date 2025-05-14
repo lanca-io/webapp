@@ -17,11 +17,12 @@ const chainsTwitterMap: Record<string, string> = {
 
 export const ProcessAction: FC = memo((): JSX.Element | null => {
 	const { reset, executionTime } = useTxExecutionStore()
-	const { sourceChain, destinationChain } = useFormStore()
+	const { sourceChain, destinationChain, clearInput } = useFormStore()
 	const { txStatus } = useTxProcess()
 
 	const handleReset = useCallback(() => {
 		reset()
+		clearInput()
 	}, [reset])
 
 	const handleShareOnX = useCallback(() => {
