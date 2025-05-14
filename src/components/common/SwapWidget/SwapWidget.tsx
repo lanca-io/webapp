@@ -1,15 +1,19 @@
 import { FC, useMemo, memo } from 'react'
+import { SplitSubvariantType } from '../../../store/subvariant/types'
 import { SourceCard } from '../SourceCard/SourceCard'
 import { DestinationCard } from '../DestinationCard/DestinationCard'
 import { CardSwitcher } from '../CardSwitcher/CardSwitcher'
 import { SwapAction } from '../SwapAction/SwapAction'
+import { CardPointer } from '../CardPointer/CardPointer'
 import { ProcessCard } from '../ProcessCard/ProcessCard'
 import { useTxProcess } from '../../../hooks/useTxProcess'
 import { ModeMenu } from '../ModeMenu/ModeMenu'
+import { useSubvariantStore } from '../../../store/subvariant/useSubvariantStore'
 import './SwapWidget.pcss'
 
 export const SwapWidget: FC = memo(() => {
 	const { txStatus } = useTxProcess()
+	const { state } = useSubvariantStore()
 
 	const Card = useMemo(() => {
 		switch (txStatus) {
@@ -25,11 +29,12 @@ export const SwapWidget: FC = memo(() => {
 						<SourceCard />
 						<CardSwitcher />
 						<DestinationCard />
+						{state === SplitSubvariantType.SEND && <CardPointer />}
 						<SwapAction />
 					</>
 				)
 		}
-	}, [txStatus])
+	}, [txStatus, state])
 
 	return (
 		<div className="swap_container" data-testid="swap-widget">
