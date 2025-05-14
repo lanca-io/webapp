@@ -2,6 +2,7 @@ import type { ExtendedToken } from '../../../store/tokens/types'
 import { memo, useCallback } from 'react'
 import { Token } from '../Token/Token'
 import { TokenSkeleton } from '../Token/TokenSkeleton'
+import { useBalancesStore } from '../../../store/balances/useBalancesStore'
 import './PopularTokens.pcss'
 
 type PopularTokensProps = {
@@ -11,6 +12,18 @@ type PopularTokensProps = {
 }
 
 export const PopularTokens = memo(({ tokens, isLoading, onTokenSelect }: PopularTokensProps): JSX.Element | null => {
+	const { balances } = useBalancesStore()
+
+	const filteredTokens = tokens.filter(
+		token =>
+			!balances.some(
+				balance =>
+					balance.address === token.address &&
+					balance.chain_id === token.chain_id &&
+					Number(balance.balance) > 0,
+			),
+	)
+
 	const handleSelect = useCallback(
 		(token: ExtendedToken) => {
 			return () => onTokenSelect(token)
@@ -18,12 +31,12 @@ export const PopularTokens = memo(({ tokens, isLoading, onTokenSelect }: Popular
 		[onTokenSelect],
 	)
 
-	if (!isLoading && tokens.length === 0) return null
+	if (!isLoading && filteredTokens.length === 0) return null
 
 	return (
 		<div className="popular_tokens" role="region" aria-label="Popular tokens">
 			<h4 className="popular_tokens_title">Popular Tokens</h4>
-			{tokens.map(token => (
+			{filteredTokens.map(token => (
 				<Token
 					key={`${token.address}-${token.chain_id}`}
 					token={token}

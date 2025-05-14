@@ -13,6 +13,8 @@ type BalanceInfoProps = {
 export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): JSX.Element => {
 	const { setInputValue } = useFormStore()
 
+	console.log('This is the token', token)
+
 	const { displayValue, symbol, hasBalance } = useMemo(() => {
 		if (!token?.balance) return { displayValue: '0', symbol: '', hasBalance: false }
 
