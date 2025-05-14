@@ -7,6 +7,7 @@ import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 const ONE_HOUR_MS = 3_600_000
 const TWO_HOURS_MS = 7_200_000
 
+// @ts-ignore
 type SimplifiedChain = Pick<ILancaChain, 'id' | 'name' | 'logoURL' | 'explorerURI'>
 
 export const useLoadChains = () => {
@@ -46,6 +47,7 @@ export const useLoadChains = () => {
 
 	useEffect(() => {
 		if (chains) {
+			// @ts-ignore
 			setChains(chains as ILancaChain[])
 		}
 	}, [chains, setChains])
