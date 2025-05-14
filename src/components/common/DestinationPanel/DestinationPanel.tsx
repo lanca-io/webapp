@@ -12,6 +12,7 @@ import { useRouteStore } from '../../../store/route/useRouteStore'
 import { ReviewModal } from '../ReviewModal/ReviewModal'
 import { Spinner } from '@concero/ui-kit'
 import { DestinationValue } from '../DestinationValue/DestinationValue'
+import { useAccount } from 'wagmi'
 import './DestinationPanel.pcss'
 
 type DestinationPanelProps = {
@@ -20,6 +21,7 @@ type DestinationPanelProps = {
 }
 
 export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelProps): JSX.Element => {
+	const { address } = useAccount()
 	const { route, isLoading: routeLoading } = useRouteStore()
 	const { destinationToken } = useFormStore()
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
@@ -43,7 +45,7 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 					<WidgetInput type="text" value={amount || '0'} disabled />
 				)}
 				<DestinationValue />
-				{hasBalance && <BalanceInfo token={destinationToken} showMax={false} />}
+				{address && hasBalance && <BalanceInfo token={destinationToken} showMax={false} />}
 			</div>
 
 			<div className="destination_panel_info">
