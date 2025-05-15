@@ -10,10 +10,6 @@ type SlippageMenuProps = {
 export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | null => {
 	const { isCustom, display, toggle, handleChange, handleBlur } = useHandleSlippageInput()
 
-	console.log(display, 'display')
-	console.log(isCustom, 'isCustom')
-	console.log(isOpen, 'isOpen')
-
 	if (!isOpen) return null
 
 	return (
