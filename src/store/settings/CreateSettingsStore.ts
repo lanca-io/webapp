@@ -3,7 +3,7 @@ import type { StateCreator } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-export const defaultSlippage = '0.5'
+export const defaultSlippage = '0.005'
 
 export const CreateSettingsStore = () =>
 	createWithEqualityFn<SettingsState>(

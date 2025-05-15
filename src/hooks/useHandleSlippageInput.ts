@@ -1,33 +1,51 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { defaultSlippage } from '../store/settings/CreateSettingsStore'
 import { normalizeSlippageInput } from '../utils/new/input'
 import { useDebounce } from './useDebounce'
+import { useSettingsStore } from '../store/settings/useSettings'
 
-export function useHandleSlippageInput(
-	slippage: string,
-	setSlippage: (value: string) => void,
-	maxSlippage: number = 100,
-) {
-	const [isCustom, setIsCustom] = useState(slippage !== defaultSlippage)
-	const [input, setInput] = useState(slippage !== defaultSlippage ? String(slippage) + '%' : '')
-	const debouncedInput = useDebounce(input, 700)
+const MIN = 0.0001
+const MAX = 0.99
+const DEBOUNCE = 1000
+const VALID_INPUT = /^(?:\d{1,2}(?:\.\d{0,2})?|\.\d{1,2})?$/
+
+export function useHandleSlippageInput() {
+	const { slippage, setSlippage } = useSettingsStore()
+	const [isCustom, setIsCustom] = useState(() => slippage !== defaultSlippage)
+	const [input, setInput] = useState('')
+	const debouncedValue = useDebounce(input, DEBOUNCE)
+
+	const converters = useMemo(
+		() => ({
+			show: (value: string) => {
+				const num = Number(value) * 100
+				return Number.isInteger(num) ? `${num}%` : `${num.toFixed(2)}%`
+			},
+			store: (value: string) => (Number(value.replace('%', '')) / 100).toFixed(4),
+		}),
+		[],
+	)
 
 	useEffect(() => {
-		if (!isCustom || !debouncedInput) return
+		if (!isCustom || !debouncedValue) return
 
-		const numeric = debouncedInput.replace('%', '')
-		if (!numeric) return
+		const raw = debouncedValue.replace('%', '')
+		if (!raw || !VALID_INPUT.test(raw)) return
 
-		if (/^\d{0,3}(\.\d{0,3})?$/.test(numeric)) {
-			let num = parseFloat(numeric)
-			if (!isNaN(num) && num >= 0.1 && num <= maxSlippage) {
-				setSlippage(String(num))
-			} else if (num > maxSlippage) {
-				setInput(String(maxSlippage) + '%')
-				setSlippage(String(maxSlippage))
-			}
+		const percent = Number(raw)
+		const decimal = percent / 100
+
+		if (percent > 99) {
+			setInput('99%')
+			setSlippage(MAX.toFixed(4))
+			return
 		}
-	}, [debouncedInput, isCustom, setSlippage, maxSlippage])
+
+		const clampedDecimal = Math.min(Math.max(decimal, MIN), MAX)
+		const exactSlippage = (Math.round(clampedDecimal * 10000) / 10000).toFixed(4)
+
+		setSlippage(exactSlippage)
+	}, [debouncedValue, isCustom, setSlippage])
 
 	useEffect(() => {
 		if (slippage === defaultSlippage) {
@@ -35,49 +53,48 @@ export function useHandleSlippageInput(
 			setInput('')
 		} else {
 			setIsCustom(true)
-			setInput(String(slippage) + '%')
+			setInput(converters.show(slippage))
 		}
-	}, [slippage])
+	}, [slippage, converters.show])
 
-	const toggleMode = useCallback(() => {
-		if (!isCustom) {
-			setIsCustom(true)
-			setInput('')
-		} else {
-			setIsCustom(false)
-			setSlippage(defaultSlippage)
-			setInput('')
+	const toggle = useCallback(() => {
+		setIsCustom(prev => {
+			if (!prev) setInput('')
+			else setSlippage(defaultSlippage)
+			return !prev
+		})
+	}, [setSlippage])
+
+	const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		const clean = normalizeSlippageInput(e.target.value)
+		const numeric = Number(clean.replace('%', ''))
+		if (numeric > 99) {
+			setInput('99%')
+			return
 		}
-	}, [isCustom, setSlippage])
-
-	const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		const rawInput = e.target.value
-		const sanitized = normalizeSlippageInput(rawInput)
-		setInput(sanitized)
+		if (!VALID_INPUT.test(clean.replace('%', ''))) return
+		setInput(clean)
 	}, [])
 
-	const onBlur = useCallback(() => {
-		const numeric = input.replace('%', '')
-		const num = parseFloat(numeric)
-		if (!input || isNaN(num) || num < 0.1 || num > maxSlippage) {
+	const handleBlur = useCallback(() => {
+		if (!input) {
+			setSlippage(defaultSlippage)
+			return
+		}
+
+		const decimal = Number(converters.store(input))
+		if (decimal < MIN || decimal > MAX) {
 			setSlippage(defaultSlippage)
 			setIsCustom(false)
 			setInput('')
-		} else {
-			setInput(String(num) + '%')
 		}
-	}, [input, setSlippage, maxSlippage])
-
-	const displayValue = isCustom ? input : `${defaultSlippage}%`
+	}, [input, setSlippage, converters.store])
 
 	return {
 		isCustom,
-		setIsCustom,
-		input,
-		setInput,
-		displayValue,
-		toggleMode,
-		onChange,
-		onBlur,
+		display: isCustom ? input : converters.show(defaultSlippage),
+		toggle,
+		handleChange,
+		handleBlur,
 	}
 }

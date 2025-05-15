@@ -6,6 +6,7 @@ import { SlippageMenu } from '../SlippageMenu/SlippageMenu'
 import { useSettingsStore } from '../../../store/settings/useSettings'
 import { defaultSlippage } from '../../../store/settings/CreateSettingsStore'
 import './SlippageInfo.pcss'
+import { format } from '../../../utils/new/format'
 
 const VARIANT_MAPPING = {
 	auto: 'neutral',
@@ -19,8 +20,10 @@ export const SlippageInfo = memo((): JSX.Element => {
 	const isAuto = slippage === defaultSlippage
 	const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), [])
 
+	const slippageValue = format(Number(slippage) * 100, 3)
+
 	return (
-		<div className="slippage_info_wrapper" role="group" aria-label="Slippage settings">
+		<div className="slippage_info_wrapper">
 			<div className="slippage_info_container">
 				<div className="slippage_info_description">
 					<SlippageIcon aria-hidden="true" />
@@ -36,9 +39,7 @@ export const SlippageInfo = memo((): JSX.Element => {
 						{isAuto ? 'Auto' : 'Custom'}
 					</Tag>
 
-					<p className="slippage_info_value" aria-label={`Current slippage: ${slippage}%`}>
-						{slippage}%
-					</p>
+					<p className="slippage_info_value">{slippageValue}%</p>
 
 					<IconButton
 						variant="tetrary"
