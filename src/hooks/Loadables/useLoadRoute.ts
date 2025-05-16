@@ -15,17 +15,8 @@ export const useLoadRoute = () => {
 	const { address } = useAccount()
 	const { state } = useSubvariantStore()
 	const { setRoute, setIsLoading } = useRouteStore()
-	const {
-		fromChain,
-		toChain,
-		fromToken,
-		toToken,
-		fromAmount,
-		amountInputError,
-		addressInputError,
-		toAddress,
-		clearInputs,
-	} = useFormStore()
+	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, addressInputError, toAddress } =
+		useFormStore()
 	const { slippage } = useSettingsStore()
 	const [timeToRefresh, setTimeToRefresh] = useState<number>(0)
 	const sdk = useLancaSDK()
@@ -144,11 +135,6 @@ export const useLoadRoute = () => {
 	useEffect(() => {
 		setIsLoading(isRouteLoading)
 	}, [isRouteLoading, setIsLoading])
-
-	useEffect(() => {
-		setRoute(null)
-		clearInputs()
-	}, [state, setRoute, clearInputs])
 
 	useEffect(() => {
 		if (!canFetch) {

@@ -2,17 +2,12 @@ import type { FC } from 'react'
 import { WidgetInput } from '../WidgetInput/WidgetInput'
 import { useAddressInputHandlers } from '../../../hooks/useAddressInput'
 import { useFormStore } from '../../../store/form/useFormStore'
-import './AddressCard.pcss'
 import { AddressInfo } from '../AddressInfo/AddressInfo'
+import './AddressCard.pcss'
 
 export const AddressCard: FC = () => {
-	const { addressInput, addressInputError, addressInputMode, toAddress } = useFormStore()
+	const { addressInput } = useFormStore()
 	const { onChange, onFocus, onBlur } = useAddressInputHandlers()
-
-	console.log('AddressInput', addressInput)
-	console.log('AddressInputError', addressInputError)
-	console.log('AddressInputMode', addressInputMode)
-	console.log('ToAddress', toAddress)
 
 	return (
 		<div className="address_card">
