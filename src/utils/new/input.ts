@@ -1,4 +1,4 @@
-import { toPreciseNumber, preciseMultiply, preciseDivide } from './operations'
+import { preciseMultiply, preciseDivide } from './operations'
 
 /**
  * Formats a value based on numerical input.
@@ -40,7 +40,7 @@ export const sanitizeText = (value: string): string => {
  */
 export const tokenAmountToUsd = (tokenAmount: number, tokenPrice: number): string | null => {
 	if (isNaN(tokenAmount) || isNaN(tokenPrice)) return null
-	const usdValue = preciseMultiply(toPreciseNumber(tokenAmount), toPreciseNumber(tokenPrice))
+	const usdValue = preciseMultiply(tokenAmount, tokenPrice)
 	return usdValue.toString()
 }
 
@@ -51,10 +51,9 @@ export const tokenAmountToUsd = (tokenAmount: number, tokenPrice: number): strin
  * @returns The equivalent token amount as a string, or null if conversion fails.
  */
 export const usdToTokenAmount = (usdAmount: string | number, tokenPrice: number): string | null => {
-	const amount =
-		typeof usdAmount === 'string' ? toPreciseNumber(usdAmount.replace('$', '')) : toPreciseNumber(usdAmount)
-	const price = toPreciseNumber(tokenPrice)
-	if (isNaN(amount) || isNaN(price) || price <= 0) return null
+	const amount = typeof usdAmount === 'string' ? usdAmount.replace('$', '') : usdAmount
+	const price = tokenPrice
+	if (isNaN(Number(amount)) || isNaN(price) || price <= 0) return null
 	return preciseDivide(amount, price).toString()
 }
 
@@ -70,11 +69,11 @@ export const percentOfBalanceToUsd = (
 	balanceString: string,
 	tokenPrice: number,
 ): string | null => {
-	const percent = toPreciseNumber(percentString.replace('%', ''))
-	const balance = toPreciseNumber(balanceString)
-	const price = toPreciseNumber(tokenPrice)
-	if (isNaN(percent) || isNaN(balance) || isNaN(price)) return null
-	const tokenAmount = preciseMultiply(balance, percent / 100)
+	const percent = percentString.replace('%', '')
+	const balance = balanceString
+	const price = tokenPrice
+	if (isNaN(Number(percent)) || isNaN(Number(balance)) || isNaN(price)) return null
+	const tokenAmount = preciseMultiply(balance, Number(percent) / 100)
 	return preciseMultiply(tokenAmount, price).toString()
 }
 
@@ -90,8 +89,8 @@ export const textCommandToUsd = (
 	balanceValue: string | number,
 	tokenPrice: number,
 ): string | null => {
-	const balance = typeof balanceValue === 'string' ? toPreciseNumber(balanceValue) : toPreciseNumber(balanceValue)
-	const tokenAmount = textToAmount(textCommand, balance)
+	const balance = typeof balanceValue === 'string' ? balanceValue : balanceValue
+	const tokenAmount = textToAmount(textCommand, Number(balance))
 	if (tokenAmount === null) return null
 	return preciseMultiply(tokenAmount, tokenPrice).toString()
 }
@@ -104,16 +103,15 @@ export const textCommandToUsd = (
  */
 export const textToAmount = (text: string, balance: number): number | null => {
 	const t = text.toLowerCase()
-	const b = toPreciseNumber(balance)
 	switch (t) {
 		case 'max':
-			return b
+			return balance
 		case 'half':
-			return preciseDivide(b, 2)
+			return preciseDivide(balance, 2)
 		case 'third':
-			return preciseDivide(b, 3)
+			return preciseDivide(balance, 3)
 		case 'quarter':
-			return preciseDivide(b, 4)
+			return preciseDivide(balance, 4)
 		default:
 			return null
 	}

@@ -1,7 +1,7 @@
 import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
-import { toPreciseNumber, preciseMultiply } from '../utils/new/operations'
+import { preciseMultiply } from '../utils/new/operations'
 
 export const useNumberInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
@@ -23,21 +23,12 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 		}
 
 		try {
-			const amount = toPreciseNumber(value)
-			const decimalPart = value.split('.')[1] || ''
-
-			if (decimalPart.length > decimals) {
-				return {
-					valid: false,
-					errorMessage: `Maximum ${decimals} decimal places`,
-					machineAmount: null,
-				}
-			}
+			const amount = value
 
 			const decimalsFactor = 10 ** decimals
-			const machineAmount = preciseMultiply(amount, decimalsFactor).toFixed(0)
+			const machineAmount = preciseMultiply(amount, decimalsFactor).toString()
 
-			if (machineAmount === '0' && amount > 0) {
+			if (machineAmount === '0' && Number(amount) > 0) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too small',

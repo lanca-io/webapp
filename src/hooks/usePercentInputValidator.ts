@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
-import { toPreciseNumber, preciseMultiply } from '../utils/new/operations'
+import { preciseMultiply } from '../utils/new/operations'
 
 export const usePercentInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
@@ -14,9 +14,9 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 
 		try {
 			const cleanValue = value.replace(/[^\d.]/g, '')
-			const percentage = toPreciseNumber(cleanValue)
+			const percentage = cleanValue
 
-			if (percentage > 100) {
+			if (Number(percentage) > 100) {
 				return {
 					valid: false,
 					errorMessage: 'Percentage cannot exceed 100%',
@@ -29,7 +29,7 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 			const amountBigInt = (balanceBigInt * BigInt(basisPoints)) / BigInt(10000)
 			const machineAmount = amountBigInt.toString()
 
-			if (amountBigInt === 0n && percentage > 0) {
+			if (amountBigInt === 0n && Number(percentage) > 0) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too small',

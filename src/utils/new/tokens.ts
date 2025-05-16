@@ -1,5 +1,5 @@
 import { formatUnits } from 'viem'
-import { toPreciseNumber, preciseMultiply } from './operations'
+import { preciseMultiply } from './operations'
 
 /**
  * Converts raw token amount (in smallest unit) to human-readable format
@@ -14,7 +14,6 @@ export function formatTokenAmount(amount: string | undefined | null, decimals: n
 
 	try {
 		const formatted = formatUnits(BigInt(amount), decimals)
-		// Trim trailing zeros and unnecessary decimal point
 		return formatted.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.$/, '')
 	} catch (error) {
 		console.error('Format error:', error)
@@ -35,7 +34,7 @@ export function formatTokenPrice(amount?: string, price?: string | number, decim
 
 	try {
 		const amountHuman = decimals !== undefined ? formatTokenAmount(amount, decimals) : amount
-		return preciseMultiply(toPreciseNumber(amountHuman), toPreciseNumber(price))
+		return preciseMultiply(amountHuman, price)
 	} catch (error) {
 		console.error('Price calculation error:', error)
 		return 0
@@ -55,7 +54,7 @@ export function parseTokenAmount(amount: string, decimals: number): string {
 
 	try {
 		const decimalsFactor = 10 ** decimals
-		const preciseValue = toPreciseNumber(amount)
+		const preciseValue = amount
 		const rawValue = preciseMultiply(preciseValue, decimalsFactor)
 
 		if (!Number.isSafeInteger(rawValue)) {

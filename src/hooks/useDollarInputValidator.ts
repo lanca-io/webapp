@@ -1,7 +1,7 @@
 import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
-import { toPreciseNumber, preciseMultiply, preciseDivide } from '../utils/new/operations'
+import { preciseMultiply, preciseDivide } from '../utils/new/operations'
 
 export const useDollarInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
@@ -25,9 +25,9 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 
 		try {
 			const cleanValue = value.replace(/[^\d.]/g, '')
-			const usdAmount = toPreciseNumber(cleanValue)
+			const usdAmount = cleanValue
 
-			if (usdAmount <= 0) {
+			if (Number(usdAmount) <= 0) {
 				return {
 					valid: false,
 					errorMessage: 'Amount must be greater than $0',
@@ -43,7 +43,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 			if (BigInt(machineAmount) > balanceBigInt) {
 				return {
 					valid: false,
-					errorMessage: `Insufficient ${symbol} balance`,
+					errorMessage: `Not enough ${symbol}`,
 					machineAmount: null,
 				}
 			}

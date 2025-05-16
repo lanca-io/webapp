@@ -5,14 +5,6 @@
 const PRECISION_FACTOR = 1_000_000_000
 
 /**
- * Converts a number or numeric string to a precise number,
- * rounded to the supported decimal places.
- */
-export function toPreciseNumber(value: number | string): number {
-	return Math.round(Number(value) * PRECISION_FACTOR) / PRECISION_FACTOR
-}
-
-/**
  * Multiplies two numbers precisely, avoiding floating-point errors.
  */
 export function preciseMultiply(a: number | string, b: number | string): number {
