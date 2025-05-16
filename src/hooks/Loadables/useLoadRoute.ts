@@ -6,31 +6,64 @@ import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 import { useFormStore } from '../../store/form/useFormStore'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { useSettingsStore } from '../../store/settings/useSettings'
+import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
+import { SplitSubvariantType } from '../../store/subvariant/types'
 
 const REFRESH_INTERVAL = 90_000
 
 export const useLoadRoute = () => {
 	const { address } = useAccount()
+	const { state } = useSubvariantStore()
 	const { setRoute, setIsLoading } = useRouteStore()
-	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError } = useFormStore()
+	const {
+		fromChain,
+		toChain,
+		fromToken,
+		toToken,
+		fromAmount,
+		amountInputError,
+		addressInputError,
+		toAddress,
+		clearInputs,
+	} = useFormStore()
 	const { slippage } = useSettingsStore()
 	const [timeToRefresh, setTimeToRefresh] = useState<number>(0)
 	const sdk = useLancaSDK()
 
-	const canFetch = useMemo(
-		() =>
-			!!address &&
-			!!fromChain?.id &&
-			!!toChain?.id &&
-			!!fromToken?.address &&
-			!!toToken?.address &&
-			!!fromAmount &&
-			!amountInputError,
-		[address, fromChain, toChain, fromToken, toToken, fromAmount, amountInputError],
+	const effectiveToAddress = useMemo(
+		() => (state === SplitSubvariantType.SEND ? toAddress : address),
+		[state, toAddress, address],
 	)
 
+	const canFetch = useMemo(() => {
+		const baseParamsValid = Boolean(
+			address &&
+				fromChain?.id &&
+				toChain?.id &&
+				fromToken?.address &&
+				toToken?.address &&
+				fromAmount &&
+				!amountInputError,
+		)
+
+		return state === SplitSubvariantType.SEND
+			? baseParamsValid && Boolean(toAddress) && !addressInputError
+			: baseParamsValid
+	}, [
+		state,
+		address,
+		fromChain,
+		toChain,
+		fromToken,
+		toToken,
+		fromAmount,
+		amountInputError,
+		toAddress,
+		addressInputError,
+	])
+
 	const fetchRoute = useCallback(async () => {
-		if (!canFetch) return null
+		if (!canFetch || !address || !effectiveToAddress) return null
 
 		try {
 			return await sdk.getRoute({
@@ -39,14 +72,15 @@ export const useLoadRoute = () => {
 				fromToken: fromToken!.address as Address,
 				toToken: toToken!.address as Address,
 				amount: fromAmount!,
-				fromAddress: address!,
-				toAddress: address!,
+				fromAddress: address,
+				toAddress: effectiveToAddress,
 				slippageTolerance: slippage,
 			})
 		} catch (error) {
+			console.error('[fetchRoute] Error:', error)
 			throw error
 		}
-	}, [sdk, canFetch, fromChain, toChain, fromToken, toToken, fromAmount, address, slippage])
+	}, [sdk, canFetch, fromChain, toChain, fromToken, toToken, fromAmount, address, effectiveToAddress, slippage])
 
 	const queryKey = useMemo(
 		() => [
@@ -58,9 +92,10 @@ export const useLoadRoute = () => {
 				toToken: toToken?.address,
 				amount: fromAmount,
 				slippage,
+				effectiveToAddress,
 			},
 		],
-		[fromChain?.id, toChain?.id, fromToken?.address, toToken?.address, fromAmount, slippage],
+		[fromChain?.id, toChain?.id, fromToken?.address, toToken?.address, fromAmount, slippage, effectiveToAddress],
 	)
 
 	const {
@@ -96,10 +131,7 @@ export const useLoadRoute = () => {
 		const interval = setInterval(() => {
 			const newTime = calculateTime()
 			setTimeToRefresh(newTime)
-
-			if (newTime === 0) {
-				refetch()
-			}
+			if (newTime === 0) refetch()
 		}, 1000)
 
 		return () => clearInterval(interval)
@@ -112,6 +144,18 @@ export const useLoadRoute = () => {
 	useEffect(() => {
 		setIsLoading(isRouteLoading)
 	}, [isRouteLoading, setIsLoading])
+
+	useEffect(() => {
+		setRoute(null)
+		clearInputs()
+	}, [state, setRoute, clearInputs])
+
+	useEffect(() => {
+		if (!canFetch) {
+			setRoute(null)
+			setIsLoading(false)
+		}
+	}, [canFetch, setRoute, setIsLoading])
 
 	return {
 		timeToRefresh,

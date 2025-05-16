@@ -5,17 +5,25 @@ import { Button } from '@concero/ui-kit'
 import { useFormStore } from '../../../store/form/useFormStore'
 import { useRouteStore } from '../../../store/route/useRouteStore'
 import { useExecuteRoute } from '../../../hooks/useExecuteRoute'
+import { useSubvariantStore } from '../../../store/subvariant/useSubvariantStore'
+import { SplitSubvariantType } from '../../../store/subvariant/types'
 import './SwapAction.pcss'
 
 export const SwapAction = memo((): JSX.Element => {
 	const { open } = useAppKit()
+	const { state } = useSubvariantStore()
 	const { isConnected, isConnecting } = useAccount()
 	const { route, isLoading: routeLoading } = useRouteStore()
-	const { amountInputError } = useFormStore()
+	const { amountInputError, addressInputError } = useFormStore()
 	const executeRoute = useExecuteRoute(route)
 
 	const isLoading = isConnecting || routeLoading
-	const isDisabled = isConnected && (!!amountInputError || !route)
+
+	const hasErrors =
+		state === SplitSubvariantType.SEND ? !!amountInputError || !!addressInputError : !!amountInputError
+
+	const isDisabled = isConnected && (hasErrors || !route)
+
 	const buttonText = isConnected ? 'Begin Swap' : 'Connect Wallet'
 
 	const handleClick = useCallback(() => {
