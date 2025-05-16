@@ -49,7 +49,7 @@ const getConceroRoute = async ({ swapState, swapDispatch }: GetConceroRoutes): P
 	try {
 		const { from, to } = swapState
 
-		const tolerance = '0.5'
+		const tolerance = '0.005'
 		const amount = parseUnits(from.amount, from.token.decimals)
 		const routeRequest: RouteRequest = {
 			fromChainId: from.chain.id,
