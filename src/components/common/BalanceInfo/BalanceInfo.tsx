@@ -36,12 +36,8 @@ export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): J
 	return (
 		<div className="balance_info_container">
 			<span className="balance_info_title">Balance</span>
-			<span className="balance_info_value" aria-label={`Current balance: ${displayValue}`}>
-				{displayValue}
-			</span>
-			<span className="balance_info_symbol" aria-label="Token symbol">
-				{symbol}
-			</span>
+			<span className="balance_info_value">{displayValue}</span>
+			<span className="balance_info_symbol">{symbol}</span>
 			{hasBalance && showMax && (
 				<button
 					onClick={handleMaxClick}

@@ -4,122 +4,115 @@ import { useTxExecutionStore } from '../../store/tx-execution/useTxExecutionStor
 import { getPublicClient } from '../../web3/wagmi'
 import { Hash, PublicClient } from 'viem'
 
-const DEFAULT_ESTIMATE = '~15'
+const BRIDGE_ESTIMATE = '~15'
+const SWAP_ESTIMATE = '~10'
 
 export const useLoadTxExecutionTime = () => {
 	const { fromChain, toChain } = useFormStore()
 	const { srcHash, dstHash, setExecutionTime } = useTxExecutionStore()
 	const [isLoading, setIsLoading] = useState(false)
 
-	const fetchTransactions = async (srcClient: PublicClient, dstClient: PublicClient) => {
+	const isSwap = !!srcHash && !dstHash
+
+	const fetchSourceTransaction = async (client: PublicClient) => {
 		try {
-			const [srcTx, dstTx] = await Promise.all([
-				srcClient.getTransaction({ hash: srcHash as Hash }),
-				dstClient.getTransaction({ hash: dstHash as Hash }),
-			])
-
-			if (!srcTx?.blockNumber || !dstTx?.blockNumber) {
-				throw new Error('Missing block numbers')
-			}
-
-			return { srcTx, dstTx }
-		} catch (error) {
-			console.warn('Error fetching transactions:', error)
+			const tx = await client.getTransaction({ hash: srcHash as Hash })
+			if (!tx?.blockNumber) throw new Error('Missing source block number')
+			return tx
+		} catch {
 			return null
 		}
 	}
 
-	const fetchBlocks = async (
-		srcClient: PublicClient,
-		dstClient: PublicClient,
-		srcBlockNumber: bigint,
-		dstBlockNumber: bigint,
-	) => {
+	const fetchDestinationTransaction = async (client: PublicClient) => {
 		try {
-			const [srcBlock, dstBlock] = await Promise.all([
-				srcClient.getBlock({ blockNumber: srcBlockNumber }),
-				dstClient.getBlock({ blockNumber: dstBlockNumber }),
-			])
-
-			if (!srcBlock?.timestamp || !dstBlock?.timestamp) {
-				throw new Error('Missing block timestamps')
-			}
-
-			return { srcBlock, dstBlock }
-		} catch (error) {
-			console.warn('Error fetching chain blocks:', error)
+			const tx = await client.getTransaction({ hash: dstHash as Hash })
+			if (!tx?.blockNumber) throw new Error('Missing destination block number')
+			return tx
+		} catch {
 			return null
 		}
 	}
 
-	const calculateTimeDifference = (srcTimestamp: bigint, dstTimestamp: bigint) => {
-		const srcTime = Number(srcTimestamp)
-		const dstTime = Number(dstTimestamp)
-
-		if (isNaN(srcTime) || isNaN(dstTime)) {
-			throw new Error('Invalid timestamp values')
+	const fetchBlockTimestamp = async (client: PublicClient, blockNumber: bigint) => {
+		try {
+			const block = await client.getBlock({ blockNumber })
+			if (!block?.timestamp) throw new Error('Missing block timestamp')
+			return block.timestamp
+		} catch {
+			return null
 		}
-
-		return dstTime - srcTime
 	}
 
-	const fetchTxExecutionTime = useCallback(async () => {
-		if (!srcHash || !dstHash || !fromChain?.id || !toChain?.id) return
+	const calculateExecutionTime = (srcTimestamp: bigint, dstTimestamp?: bigint) => {
+		const now = Math.floor(Date.now() / 1000)
+		return !dstTimestamp ? now - Number(srcTimestamp) : Number(dstTimestamp) - Number(srcTimestamp)
+	}
+
+	const handleEstimation = useCallback(async () => {
+		if (!srcHash || !fromChain?.id) {
+			return
+		}
 
 		setIsLoading(true)
 
 		try {
 			const srcClient = getPublicClient(Number(fromChain.id))
-			const dstClient = getPublicClient(Number(toChain.id))
+			// @ts-ignore
+			const srcTx = await fetchSourceTransaction(srcClient)
+			if (!srcTx) {
+				setExecutionTime(isSwap ? SWAP_ESTIMATE : BRIDGE_ESTIMATE)
+				return
+			}
 
 			// @ts-ignore
-			const txData = await fetchTransactions(srcClient, dstClient)
-			if (!txData) {
-				setExecutionTime(DEFAULT_ESTIMATE)
-				setIsLoading(false)
-				return DEFAULT_ESTIMATE
+			const srcTimestamp = await fetchBlockTimestamp(srcClient, srcTx.blockNumber)
+			if (!srcTimestamp) {
+				setExecutionTime(isSwap ? SWAP_ESTIMATE : BRIDGE_ESTIMATE)
+				return
 			}
 
-			const blockData = await fetchBlocks(
-				// @ts-ignore
-				srcClient,
-				dstClient,
-				txData.srcTx.blockNumber,
-				txData.dstTx.blockNumber,
-			)
-			if (!blockData) {
-				setExecutionTime(DEFAULT_ESTIMATE)
-				setIsLoading(false)
-				return DEFAULT_ESTIMATE
+			if (isSwap) {
+				const swapTime = calculateExecutionTime(srcTimestamp)
+				setExecutionTime(swapTime.toString())
+				return
 			}
 
-			try {
-				const timeDiff = calculateTimeDifference(blockData.srcBlock.timestamp, blockData.dstBlock.timestamp)
-
-				const result = timeDiff.toString()
-				setExecutionTime(result)
-				setIsLoading(false)
-				return result
-			} catch (error) {
-				console.warn('Error calculating time difference:', error)
-				setExecutionTime(DEFAULT_ESTIMATE)
-				setIsLoading(false)
-				return DEFAULT_ESTIMATE
+			if (!dstHash || !toChain?.id) {
+				setExecutionTime(BRIDGE_ESTIMATE)
+				return
 			}
-		} catch (error) {
-			console.error('Error estimating execution time:', error)
-			setExecutionTime(DEFAULT_ESTIMATE)
+
+			const dstClient = getPublicClient(Number(toChain.id))
+			// @ts-ignore
+			const dstTx = await fetchDestinationTransaction(dstClient)
+			if (!dstTx) {
+				setExecutionTime(BRIDGE_ESTIMATE)
+				return
+			}
+
+			// @ts-ignore
+			const dstTimestamp = await fetchBlockTimestamp(dstClient, dstTx.blockNumber)
+			if (!dstTimestamp) {
+				setExecutionTime(BRIDGE_ESTIMATE)
+				return
+			}
+
+			const bridgeTime = calculateExecutionTime(srcTimestamp, dstTimestamp)
+			setExecutionTime(bridgeTime.toString())
+		} catch {
+			setExecutionTime(isSwap ? SWAP_ESTIMATE : BRIDGE_ESTIMATE)
+		} finally {
 			setIsLoading(false)
-			return DEFAULT_ESTIMATE
 		}
-	}, [srcHash, dstHash, fromChain?.id, toChain?.id, setExecutionTime])
+	}, [srcHash, dstHash, fromChain?.id, toChain?.id, isSwap, setExecutionTime])
 
 	useEffect(() => {
-		fetchTxExecutionTime()
-	}, [fetchTxExecutionTime])
+		handleEstimation()
+	}, [handleEstimation])
 
 	return {
-		estimateTime: fetchTxExecutionTime,
+		estimateTime: handleEstimation,
 		isLoading,
 	}
 }
