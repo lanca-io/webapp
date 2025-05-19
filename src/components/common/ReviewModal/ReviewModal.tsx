@@ -18,6 +18,7 @@ export const ReviewModal = memo(
 			title="Review"
 			onClose={onClose}
 			modalExtension={<RouteSection />}
+			onBackdropClick={onClose}
 		>
 			<ReviewSection />
 		</Modal>

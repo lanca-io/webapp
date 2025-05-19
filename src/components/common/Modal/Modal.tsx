@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren, ReactNode } from 'react'
+import type { FC, PropsWithChildren, ReactNode, MouseEvent } from 'react'
 import { useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { ModalHeader } from './ModalHeader/ModalHeader'
@@ -8,6 +8,7 @@ type ModalProps = {
 	isOpen: boolean
 	title: string
 	onClose: () => void
+	onBackdropClick: () => void
 	modalExtension?: ReactNode
 	className?: string
 	extensionClassName?: string
@@ -17,6 +18,7 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 	isOpen,
 	title,
 	onClose,
+	onBackdropClick,
 	modalExtension,
 	children,
 	className = '',
@@ -27,8 +29,21 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 
 	if (!isOpen) return null
 
+	const handleBackdropClick = useCallback(
+		(e: MouseEvent<HTMLDivElement>) => {
+			if (e.target === e.currentTarget) {
+				if (onBackdropClick) {
+					onBackdropClick()
+				} else {
+					onClose()
+				}
+			}
+		},
+		[onClose, onBackdropClick],
+	)
+
 	return createPortal(
-		<div className="modal_backdrop">
+		<div className="modal_backdrop" onClick={handleBackdropClick}>
 			<div className={`modal${className ? ` ${className}` : ''}`}>
 				{header}
 				{children}

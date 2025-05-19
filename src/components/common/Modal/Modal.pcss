@@ -3,12 +3,11 @@
 	height: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: center;
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 10;
-	background: rgba(52, 64, 84, 0.4);
+	background: rgba(51, 59, 63, 0.5);
 	backdrop-filter: blur(18px) saturate(120%);
 	padding: var(--sp-xxxl) var(--sp-lg);
 	will-change: opacity;
@@ -65,6 +64,7 @@
 
 @media only screen and (max-width: 768px) {
 	.modal {
+		width: 100%;
 		max-width: 448px;
 		max-height: 860px;
 	}

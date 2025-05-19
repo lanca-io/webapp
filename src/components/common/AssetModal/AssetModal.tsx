@@ -76,7 +76,7 @@ export const AssetsModal = memo(
 		)
 
 		return (
-			<Modal title="Select a token and chain" isOpen={isOpen} onClose={onClose}>
+			<Modal title="Select a token and chain" isOpen={isOpen} onClose={onClose} onBackdropClick={onClose}>
 				{search}
 				{notFound}
 				<div className="scroll_content" ref={ref}>
