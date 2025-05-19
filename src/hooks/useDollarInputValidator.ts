@@ -5,7 +5,7 @@ import { preciseMultiply, preciseDivide } from '../utils/new/operations'
 
 export const useDollarInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
-	const price = token?.priceUsd ?? 0
+	const priceUsd = token?.priceUsd ?? 0
 	const symbol = token?.symbol ?? ''
 	const balance = token?.balance ?? '0'
 	const decimals = token?.decimals ?? 18
@@ -43,7 +43,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
-			const tokenAmount = preciseDivide(usdAmount, price)
+			const tokenAmount = preciseDivide(usdAmount, priceUsd)
 			const decimalsFactor = Math.pow(10, decimals)
 			const machineAmount = preciseMultiply(tokenAmount, decimalsFactor).toFixed(0)
 
@@ -64,6 +64,16 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
+			const usdValue = preciseMultiply(Number(value), priceUsd)
+
+			if (usdValue < 0.15) {
+				return {
+					valid: false,
+					errorMessage: 'Amount too low',
+					machineAmount: null,
+				}
+			}
+
 			return {
 				valid: true,
 				errorMessage: null,
@@ -76,7 +86,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				machineAmount: null,
 			}
 		}
-	}, [value, price, symbol, balance, decimals])
+	}, [value, priceUsd, symbol, balance, decimals])
 
 	return useCallback(() => {
 		setAmountInputError(validation.errorMessage)

@@ -9,6 +9,7 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
+	const priceUsd = token?.priceUsd ?? 0
 
 	const validation = useMemo(() => {
 		if (!text.trim()) {
@@ -45,6 +46,16 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 				return {
 					valid: false,
 					errorMessage: 'Amount too small',
+					machineAmount: null,
+				}
+			}
+
+			const usdValue = preciseMultiply(Number(humanAmount), priceUsd)
+
+			if (usdValue < 0.15) {
+				return {
+					valid: false,
+					errorMessage: 'Amount too low',
 					machineAmount: null,
 				}
 			}

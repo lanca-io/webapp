@@ -8,6 +8,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
+	const priceUsd = token?.priceUsd ?? 0
 
 	const validation = useMemo(() => {
 		if (!value.trim()) {
@@ -39,6 +40,16 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 				return {
 					valid: false,
 					errorMessage: 'Amount too small',
+					machineAmount: null,
+				}
+			}
+
+			const usdValue = preciseMultiply(Number(amount), priceUsd)
+
+			if (usdValue < 0.15) {
+				return {
+					valid: false,
+					errorMessage: 'Amount too low',
 					machineAmount: null,
 				}
 			}
