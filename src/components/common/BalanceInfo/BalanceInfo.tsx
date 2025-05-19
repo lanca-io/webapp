@@ -18,7 +18,7 @@ export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): J
 
 		const balance = Number(formatTokenAmount(token.balance, token.decimals))
 		return {
-			displayValue: format(balance, 4),
+			displayValue: format(balance, 2),
 			symbol: token.symbol,
 			hasBalance: balance > 0,
 		}
@@ -34,7 +34,7 @@ export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): J
 	)
 
 	return (
-		<div className="balance_info_container" role="group" aria-label="Balance information">
+		<div className="balance_info_container">
 			<span className="balance_info_title">Balance</span>
 			<span className="balance_info_value" aria-label={`Current balance: ${displayValue}`}>
 				{displayValue}
