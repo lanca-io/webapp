@@ -14,7 +14,15 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 			return { valid: false, errorMessage: null, machineAmount: null }
 		}
 
-		if (!/^-?\d*\.?\d*$/.test(value)) {
+		if (value.startsWith('-')) {
+			return {
+				valid: false,
+				errorMessage: 'Negative values are not allowed',
+				machineAmount: null,
+			}
+		}
+
+		if (!/^\d*\.?\d*$/.test(value)) {
 			return {
 				valid: false,
 				errorMessage: 'Invalid number format',
@@ -24,7 +32,6 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 
 		try {
 			const amount = value
-
 			const decimalsFactor = 10 ** decimals
 			const machineAmount = preciseMultiply(amount, decimalsFactor).toString()
 
@@ -49,14 +56,14 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 				errorMessage: null,
 				machineAmount,
 			}
-		} catch (error) {
+		} catch (_) {
 			return {
 				valid: false,
 				errorMessage: 'Invalid number input',
 				machineAmount: null,
 			}
 		}
-	}, [value, balance, decimals])
+	}, [value, balance, decimals, symbol])
 
 	return useCallback(() => {
 		setAmountInputError(validation.errorMessage)

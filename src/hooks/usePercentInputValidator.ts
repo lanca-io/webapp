@@ -14,9 +14,25 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 
 		try {
 			const cleanValue = value.replace(/[^\d.]/g, '')
-			const percentage = cleanValue
+			const percentage = Number(cleanValue)
 
-			if (Number(percentage) > 100) {
+			if (isNaN(percentage)) {
+				return {
+					valid: false,
+					errorMessage: 'Input is not a valid number',
+					machineAmount: null,
+				}
+			}
+
+			if (percentage < 0) {
+				return {
+					valid: false,
+					errorMessage: 'Percentage cannot be negative',
+					machineAmount: null,
+				}
+			}
+
+			if (percentage > 100) {
 				return {
 					valid: false,
 					errorMessage: 'Percentage cannot exceed 100%',
@@ -24,12 +40,14 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 				}
 			}
 
-			const basisPoints = Math.round(preciseMultiply(percentage, 100))
+			const basisPoints = preciseMultiply(cleanValue, 100)
+			const basisPointsBigInt = BigInt(basisPoints)
+
 			const balanceBigInt = BigInt(balance)
-			const amountBigInt = (balanceBigInt * BigInt(basisPoints)) / BigInt(10000)
+			const amountBigInt = (balanceBigInt * basisPointsBigInt) / 10000n
 			const machineAmount = amountBigInt.toString()
 
-			if (amountBigInt === 0n && Number(percentage) > 0) {
+			if (amountBigInt === 0n && percentage > 0) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too small',
@@ -42,7 +60,7 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 				errorMessage: null,
 				machineAmount,
 			}
-		} catch (error) {
+		} catch (_) {
 			return {
 				valid: false,
 				errorMessage: 'Invalid percentage input',

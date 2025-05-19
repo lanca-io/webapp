@@ -16,25 +16,35 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 		}
 
 		try {
-			const decimalsFactor = Math.pow(10, decimals)
+			const balanceBigInt = BigInt(balance)
+			const decimalsFactor = 10 ** decimals
 			const bal = preciseDivide(balance, decimalsFactor.toString())
 			const humanAmount = textToAmount(text, Number(bal))
 
 			if (!humanAmount) {
 				return {
 					valid: false,
-					errorMessage: 'Unsupported command',
+					errorMessage: 'Invalid amount format',
 					machineAmount: null,
 				}
 			}
 
 			const machineAmount = preciseMultiply(humanAmount.toString(), decimalsFactor.toString())
 			const machineAmountStr = machineAmount.toFixed(0)
+			const machineAmountBigInt = BigInt(machineAmountStr)
 
-			if (BigInt(machineAmountStr) > BigInt(balance)) {
+			if (machineAmountBigInt > balanceBigInt) {
 				return {
 					valid: false,
 					errorMessage: `Not enough ${symbol}`,
+					machineAmount: null,
+				}
+			}
+
+			if (machineAmountBigInt === 0n && Number(humanAmount) > 0) {
+				return {
+					valid: false,
+					errorMessage: 'Amount too small',
 					machineAmount: null,
 				}
 			}
@@ -44,17 +54,17 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 				errorMessage: null,
 				machineAmount: machineAmountStr,
 			}
-		} catch (error) {
+		} catch (_) {
 			return {
 				valid: false,
-				errorMessage: 'Invalid input',
+				errorMessage: 'Invalid text input',
 				machineAmount: null,
 			}
 		}
-	}, [text, balance, decimals])
+	}, [text, balance, decimals, symbol])
 
 	return useCallback(() => {
 		setAmountInputError(validation.errorMessage)
-		setFromAmount(validation.machineAmount ?? '0')
+		setFromAmount(validation.valid ? validation.machineAmount : null)
 	}, [validation, setAmountInputError, setFromAmount])
 }

@@ -27,7 +27,15 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 			const cleanValue = value.replace(/[^\d.]/g, '')
 			const usdAmount = cleanValue
 
-			if (Number(usdAmount) <= 0) {
+			if (usdAmount.startsWith('-')) {
+				return {
+					valid: false,
+					errorMessage: 'Dollar amount cannot be negative',
+					machineAmount: null,
+				}
+			}
+
+			if (!usdAmount || Number(usdAmount) <= 0) {
 				return {
 					valid: false,
 					errorMessage: 'Amount must be greater than $0',
@@ -48,15 +56,23 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
+			if (BigInt(machineAmount) === 0n && Number(usdAmount) > 0) {
+				return {
+					valid: false,
+					errorMessage: 'Amount too small to convert',
+					machineAmount: null,
+				}
+			}
+
 			return {
 				valid: true,
 				errorMessage: null,
 				machineAmount,
 			}
-		} catch (error) {
+		} catch (_) {
 			return {
 				valid: false,
-				errorMessage: 'Invalid dollar amount',
+				errorMessage: 'Invalid dollar input',
 				machineAmount: null,
 			}
 		}
