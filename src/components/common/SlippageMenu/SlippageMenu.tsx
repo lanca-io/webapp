@@ -14,14 +14,7 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 
 	return (
 		<div className="slippage_menu">
-			<Button
-				variant={isCustom ? 'secondary' : 'secondary_color'}
-				onClick={toggle}
-				size="m"
-				isFull
-				aria-pressed={isCustom}
-				aria-label={isCustom ? 'Switch to auto slippage' : 'Switch to custom slippage'}
-			>
+			<Button variant={isCustom ? 'secondary' : 'secondary_color'} onClick={toggle} size="m" isFull>
 				Auto
 			</Button>
 			<Input
@@ -30,9 +23,9 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 				value={display}
 				onChange={handleChange}
 				isDisabled={!isCustom}
+				isFocused={false}
 				inputProps={{
 					inputMode: 'decimal',
-					'aria-label': 'Custom slippage value',
 					onBlur: handleBlur,
 				}}
 				placeholder="0.5%"

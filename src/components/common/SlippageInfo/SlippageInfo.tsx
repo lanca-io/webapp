@@ -5,8 +5,8 @@ import { SettingsIcon } from '../../../assets/icons/SettingsIcon'
 import { SlippageMenu } from '../SlippageMenu/SlippageMenu'
 import { useSettingsStore } from '../../../store/settings/useSettings'
 import { defaultSlippage } from '../../../store/settings/CreateSettingsStore'
-import './SlippageInfo.pcss'
 import { format } from '../../../utils/new/format'
+import './SlippageInfo.pcss'
 
 const VARIANT_MAPPING = {
 	auto: 'neutral',
@@ -15,15 +15,19 @@ const VARIANT_MAPPING = {
 
 export const SlippageInfo = memo((): JSX.Element => {
 	const { slippage } = useSettingsStore()
-	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
+	const [isHovered, setIsHovered] = useState<boolean>(false)
 
 	const isAuto = slippage === defaultSlippage
 	const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), [])
 
+	const handleEnter = useCallback(() => setIsHovered(true), [])
+	const handleLeave = useCallback(() => setIsHovered(false), [])
+
 	const slippageValue = format(Number(slippage) * 100, 3)
 
 	return (
-		<div className="slippage_info_wrapper">
+		<div className="slippage_info_wrapper" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
 			<div className="slippage_info_container">
 				<div className="slippage_info_description">
 					<SlippageIcon aria-hidden="true" />
@@ -46,9 +50,8 @@ export const SlippageInfo = memo((): JSX.Element => {
 						size="s"
 						className="slippage_info_button"
 						onClick={toggleMenu}
-						aria-label="Adjust slippage settings"
-						aria-haspopup="dialog"
-						aria-expanded={isMenuOpen}
+						isFocused={isMenuOpen}
+						isHovered={isHovered}
 					>
 						<SettingsIcon aria-hidden="true" />
 					</IconButton>
