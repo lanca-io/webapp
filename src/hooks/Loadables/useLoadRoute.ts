@@ -9,7 +9,7 @@ import { useSettingsStore } from '../../store/settings/useSettings'
 import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
-const REFRESH_INTERVAL = 90_000
+const REFRESH_INTERVAL = 60_000
 
 export const useLoadRoute = () => {
 	const { address } = useAccount()
