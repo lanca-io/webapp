@@ -7,7 +7,7 @@ import { useDebounce } from './useDebounce'
 export const useEnsInputValidator = (value: string) => {
 	const { setAddressInputError, setToAddress } = useFormStore()
 	const [resolvedAddress, setResolvedAddress] = useState<Address | null>(null)
-	const debouncedValue = useDebounce(value, 500)
+	const debouncedValue = useDebounce(value, 800)
 
 	const validation = useMemo(() => {
 		if (!debouncedValue.trim()) {
