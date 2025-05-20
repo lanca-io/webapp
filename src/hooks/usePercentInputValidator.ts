@@ -1,12 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
-import { preciseMultiply } from '../utils/new/operations'
+import { preciseDivide, preciseMultiply } from '../utils/new/operations'
 
 export const usePercentInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
 	const priceUsd = token?.priceUsd ?? 0
+	const decimals = token?.decimals ?? 18
 
 	const validation = useMemo(() => {
 		if (!value.trim()) {
@@ -42,11 +43,18 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 			}
 
 			const basisPoints = preciseMultiply(cleanValue, 100)
+			console.log('basisPoints', basisPoints)
 			const basisPointsBigInt = BigInt(basisPoints)
+			console.log('basisPointsBigInt', basisPointsBigInt)
 
 			const balanceBigInt = BigInt(balance)
+			console.log('balanceBigInt', balanceBigInt)
 			const amountBigInt = (balanceBigInt * basisPointsBigInt) / 10000n
+			console.log('amountBigInt', amountBigInt)
 			const machineAmount = amountBigInt.toString()
+			console.log('machineAmount', machineAmount)
+
+			console.log(machineAmount)
 
 			if (amountBigInt === 0n && percentage > 0) {
 				return {
@@ -56,9 +64,10 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 				}
 			}
 
-			const usdValue = preciseMultiply(Number(value), priceUsd)
+			const amount = preciseDivide(Number(amountBigInt), 10 ** decimals)
+			const usdValue = preciseMultiply(Number(amount), priceUsd)
 
-			if (usdValue < 0.15) {
+			if (Number(usdValue) < 0.15) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too low',
