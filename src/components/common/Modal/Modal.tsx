@@ -27,8 +27,6 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 	const handleClose = useCallback(() => onClose(), [onClose])
 	const header = useMemo(() => <ModalHeader title={title} onClose={handleClose} />, [title, handleClose])
 
-	if (!isOpen) return null
-
 	const handleBackdropClick = useCallback(
 		(e: MouseEvent<HTMLDivElement>) => {
 			if (e.target === e.currentTarget) {
@@ -41,6 +39,8 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 		},
 		[onClose, onBackdropClick],
 	)
+
+	if (!isOpen) return null
 
 	return createPortal(
 		<div className="modal_backdrop" onClick={handleBackdropClick}>
