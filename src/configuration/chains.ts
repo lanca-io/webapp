@@ -1,11 +1,10 @@
 import type { AppKitNetwork } from '@reown/appkit/networks'
 import { http, fallback } from 'viem'
-import { optimism, polygon, arbitrum, avalanche, base, mainnet } from '@reown/appkit/networks'
+import { optimism, polygon, arbitrum, avalanche, base } from '@reown/appkit/networks'
 
-export const chains: [AppKitNetwork, ...AppKitNetwork[]] = [mainnet, optimism, polygon, arbitrum, avalanche, base]
+export const chains: [AppKitNetwork, ...AppKitNetwork[]] = [optimism, polygon, arbitrum, avalanche, base]
 
 export const transports = {
-	[mainnet.id]: http(),
 	[polygon.id]: fallback([
 		http('https://polygon.publicnode.com'),
 		http('https://polygon.drpc.org'),

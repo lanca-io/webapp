@@ -3,41 +3,47 @@ import { useCallback, useEffect } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { AddressMode } from '../store/form/types'
 import { useAddressInputValidator } from './useAddressInputValidator'
+import { useEnsInputValidator } from './useENSInputValidator'
+import { isAddress } from 'viem'
 
-const SANITIZE_REGEX = /[^a-zA-Z0-9.@:-]/g
+const SANITIZE_REGEX = /[^a-zA-Z0-9.-]/g
 
 export const useAddressInputHandlers = () => {
 	const {
 		addressInput,
 		addressInputMode,
 		setAddressInput,
-		setAddressInputError,
 		setAddressInputMode,
-		setToAddress,
 		setAddressInputFocused,
+		clearInputs,
 	} = useFormStore()
 
 	const addressValidator = useAddressInputValidator(addressInput)
+	const ensValidator = useEnsInputValidator(addressInput)
+
 	const determineAddressMode = useCallback((input: string): AddressMode => {
 		if (!input) return AddressMode.None
-		return AddressMode.Address
+		if (/^([a-zA-Z0-9-]+\.)+[a-z]{2,}$/.test(input)) return AddressMode.ENS
+		return isAddress(input) ? AddressMode.Address : AddressMode.None
 	}, [])
 
 	const validateInput = useCallback(() => {
 		if (addressInputMode === AddressMode.None) return
-		if (addressInputMode === AddressMode.Address) {
-			addressValidator()
-		}
-	}, [addressInputMode, addressValidator])
+
+		const validator = {
+			[AddressMode.ENS]: ensValidator,
+			[AddressMode.Address]: addressValidator,
+		}[addressInputMode]
+
+		validator()
+	}, [addressInputMode, ensValidator, addressValidator])
 
 	useEffect(() => {
-		const newMode = determineAddressMode(addressInput)
-		if (newMode !== addressInputMode) {
-			setAddressInputMode(newMode)
+		const mode = determineAddressMode(addressInput)
+		if (mode !== addressInputMode) {
+			setAddressInputMode(mode)
 		}
-		if (addressInput && newMode === addressInputMode) {
-			validateInput()
-		}
+		validateInput()
 	}, [addressInput, addressInputMode, determineAddressMode, setAddressInputMode, validateInput])
 
 	const onChange = useCallback(
@@ -45,12 +51,8 @@ export const useAddressInputHandlers = () => {
 			const value = event.target.value
 			const sanitizedValue = value.replace(SANITIZE_REGEX, '').toLowerCase()
 			setAddressInput(sanitizedValue)
-			if (!sanitizedValue) {
-				setAddressInputError(null)
-				setToAddress(null)
-			}
 		},
-		[setAddressInput, setAddressInputError, setToAddress],
+		[setAddressInput],
 	)
 
 	const onFocus = useCallback(
@@ -65,12 +67,11 @@ export const useAddressInputHandlers = () => {
 		(e: FocusEvent<HTMLInputElement>) => {
 			setAddressInputFocused(false)
 			if (!e.target.value) {
-				e.target.placeholder = 'Wallet'
-				setAddressInputError(null)
-				setToAddress(null)
+				e.target.placeholder = 'Wallet or ENS'
+				clearInputs()
 			}
 		},
-		[setAddressInputFocused, setAddressInputError, setToAddress],
+		[setAddressInputFocused, clearInputs],
 	)
 
 	return {

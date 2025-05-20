@@ -6,8 +6,10 @@ import { AddressInfo } from '../AddressInfo/AddressInfo'
 import './AddressCard.pcss'
 
 export const AddressCard: FC = () => {
-	const { addressInput } = useFormStore()
+	const { addressInput, toAddress } = useFormStore()
 	const { onChange, onFocus, onBlur } = useAddressInputHandlers()
+
+	console.log(toAddress, addressInput)
 
 	return (
 		<div className="address_card">
@@ -16,7 +18,7 @@ export const AddressCard: FC = () => {
 				onChange={onChange}
 				onFocus={onFocus}
 				onBlur={onBlur}
-				placeholder="Wallet"
+				placeholder="Wallet or ENS"
 			/>
 			<AddressInfo />
 		</div>
