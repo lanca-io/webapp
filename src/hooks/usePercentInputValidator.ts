@@ -43,18 +43,11 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 			}
 
 			const basisPoints = preciseMultiply(cleanValue, 100)
-			console.log('basisPoints', basisPoints)
 			const basisPointsBigInt = BigInt(basisPoints)
-			console.log('basisPointsBigInt', basisPointsBigInt)
 
 			const balanceBigInt = BigInt(balance)
-			console.log('balanceBigInt', balanceBigInt)
 			const amountBigInt = (balanceBigInt * basisPointsBigInt) / 10000n
-			console.log('amountBigInt', amountBigInt)
 			const machineAmount = amountBigInt.toString()
-			console.log('machineAmount', machineAmount)
-
-			console.log(machineAmount)
 
 			if (amountBigInt === 0n && percentage > 0) {
 				return {

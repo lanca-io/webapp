@@ -23,7 +23,6 @@ export const useExecutionListener = () => {
 			state.steps.forEach(step => {
 				if (step.execution && step.execution.status) {
 					setStepStatus(step.type, step.execution.status)
-					console.log(step)
 					if (step.execution.status === Status.SUCCESS && hasHashes(step.execution)) {
 						if (step.execution.txHash) {
 							setSrcHash(step.execution.txHash)

@@ -9,8 +9,6 @@ export const AddressCard: FC = () => {
 	const { addressInput, toAddress } = useFormStore()
 	const { onChange, onFocus, onBlur } = useAddressInputHandlers()
 
-	console.log(toAddress, addressInput)
-
 	return (
 		<div className="address_card">
 			<WidgetInput
