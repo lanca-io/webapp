@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Button } from '@concero/ui-kit'
 import './ModeButton.pcss'
 
 type ModeButtonProps = {
@@ -9,13 +10,14 @@ type ModeButtonProps = {
 
 export const ModeButton = memo(
 	({ isActive, onClick, text }: ModeButtonProps): JSX.Element => (
-		<button
-			className={`mode_button${isActive ? ' active' : ''}`}
+		<Button
+			className={`${!isActive ? 'inactive' : ''}`}
+			variant="secondary_color"
 			onClick={onClick}
-			type="button"
+			size="s"
 			aria-pressed={isActive}
 		>
 			{text}
-		</button>
+		</Button>
 	),
 )
