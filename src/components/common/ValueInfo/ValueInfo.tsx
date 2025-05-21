@@ -22,7 +22,7 @@ export const ValueInfo = memo((): JSX.Element => {
 			)}
 			{showPrompt && (
 				<span className="value_info_title" aria-label="Input prompt">
-					Enter amount
+					Enter amount, % or $
 				</span>
 			)}
 			{showIndicator && <SourceValue />}

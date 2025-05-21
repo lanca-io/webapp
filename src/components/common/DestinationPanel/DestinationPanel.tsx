@@ -48,8 +48,8 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 				{address && hasBalance && <BalanceInfo token={toToken} showMax={false} />}
 			</div>
 
-			<div className="destination_panel_info">
-				{route && !routeLoading && (
+			{route && !routeLoading && (
+				<div className="destination_panel_info">
 					<>
 						<SlippageInfo />
 						<GasInfo />
@@ -64,8 +64,8 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 							Review
 						</Button>
 					</>
-				)}
-			</div>
+				</div>
+			)}
 
 			{routeLoading && (
 				<div className="destination_panel_loader" aria-live="polite">
