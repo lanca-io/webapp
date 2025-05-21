@@ -11,7 +11,15 @@ import { useAccount } from 'wagmi'
 
 export const useInputHandlers = () => {
 	const { isConnected } = useAccount()
-	const { fromToken, amountInput, amountInputMode, setAmountInput, setAmountInputMode, clearInputs } = useFormStore()
+	const {
+		fromToken,
+		amountInput,
+		amountInputMode,
+		setAmountInput,
+		setAmountInputMode,
+		clearInputs,
+		setAmountInputFocused,
+	} = useFormStore()
 
 	const textValidator = useTextInputValidator(amountInput, fromToken)
 	const numberValidator = useNumberInputValidator(amountInput, fromToken)
@@ -62,6 +70,7 @@ export const useInputHandlers = () => {
 	const onFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
 		if (e.target.placeholder === '0') {
 			e.target.placeholder = ''
+			setAmountInputFocused(true)
 		}
 	}, [])
 

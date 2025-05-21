@@ -69,11 +69,19 @@ export const CreateFormStore = () =>
 			setAmountInput: value => set({ amountInput: value }),
 			setAmountInputError: error => set({ amountInputError: error }),
 			setAmountInputMode: mode => set({ amountInputMode: mode }),
-			setAmountInputFocused: focused => set({ amountInputFocused: focused }),
+			setAmountInputFocused: focused =>
+				set(state => ({
+					amountInputFocused: focused,
+					addressInputFocused: focused ? false : state.addressInputFocused,
+				})),
 			setAddressInput: value => set({ addressInput: value }),
 			setAddressInputError: error => set({ addressInputError: error }),
 			setAddressInputMode: mode => set({ addressInputMode: mode }),
-			setAddressInputFocused: focused => set({ addressInputFocused: focused }),
+			setAddressInputFocused: focused =>
+				set(state => ({
+					addressInputFocused: focused,
+					amountInputFocused: focused ? false : state.amountInputFocused,
+				})),
 			clearInputs: () =>
 				set({
 					fromAmount: null,

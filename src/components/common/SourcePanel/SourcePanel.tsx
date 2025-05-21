@@ -10,13 +10,23 @@ import './SourcePanel.pcss'
 export const SourcePanel = memo((): JSX.Element => {
 	const { isConnected } = useAccount()
 	const { onChange, onFocus, onBlur } = useInputHandlers()
-	const { fromToken, amountInput } = useFormStore()
+	const { fromToken, amountInput, amountInputFocused, addressInputFocused } = useFormStore()
 
 	const hasBalance = Boolean(fromToken?.balance && fromToken.balance !== '0')
+	const hasAmountValue = Boolean(amountInput && amountInput !== '0')
+	const isCompact = addressInputFocused && !amountInputFocused && hasAmountValue
+
+	const inputClassName = isCompact ? 'input-compact' : ''
 
 	return (
-		<div className="source_panel" role="region" aria-label="Source input panel">
-			<WidgetInput value={amountInput} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
+		<div className={`source_panel ${isCompact ? 'source_panel-compact' : ''}`}>
+			<WidgetInput
+				value={amountInput}
+				onChange={onChange}
+				onFocus={onFocus}
+				onBlur={onBlur}
+				className={inputClassName}
+			/>
 			<ValueInfo />
 			{isConnected && hasBalance && <BalanceInfo token={fromToken} />}
 		</div>

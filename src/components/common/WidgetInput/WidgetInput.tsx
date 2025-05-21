@@ -9,6 +9,7 @@ type WidgetInputProps = {
 	placeholder?: string
 	disabled?: boolean
 	type?: string
+	className?: string
 }
 
 export const WidgetInput = memo(
@@ -20,11 +21,12 @@ export const WidgetInput = memo(
 		placeholder = '0',
 		disabled = false,
 		type = 'text',
+		className = '',
 	}: WidgetInputProps): JSX.Element => {
 		const inputClass = value && value !== '0' ? 'input has_value' : 'input'
 
 		return (
-			<div className="widget_input_container">
+			<div className={`widget_input_container ${className}`.trim()}>
 				<input
 					type={type}
 					className={inputClass}
