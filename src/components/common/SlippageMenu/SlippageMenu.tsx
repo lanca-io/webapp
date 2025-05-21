@@ -14,22 +14,23 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 
 	return (
 		<div className="slippage_menu">
-			<Button variant={isCustom ? 'secondary' : 'secondary_color'} onClick={toggle} size="m" isFull>
-				Auto
-			</Button>
-			<Input
-				className="slippage_input"
-				size="m"
-				value={display}
-				onChange={handleChange}
-				isDisabled={!isCustom}
-				isFocused={false}
-				inputProps={{
-					inputMode: 'decimal',
-					onBlur: handleBlur,
-				}}
-				placeholder="0.5%"
-			/>
+			<div className="slippage_menu_content">
+				<Button variant={isCustom ? 'secondary' : 'secondary_color'} onClick={toggle} size="m" isFull>
+					Auto
+				</Button>
+				<Input
+					className="slippage_input"
+					size="m"
+					value={display}
+					onChange={handleChange}
+					inputProps={{
+						inputMode: 'decimal',
+						onBlur: handleBlur,
+					}}
+					placeholder="0.5%"
+				/>
+			</div>
+			<div className="slippage_menu_separator" />
 		</div>
 	)
 })
