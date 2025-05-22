@@ -49,7 +49,6 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 			const decimalsFactor = Math.pow(10, decimals)
 			const machineAmount = preciseMultiply(tokenAmount, decimalsFactor).toFixed(0)
 
-			// Skip wallet-specific validations if not connected
 			if (!isConnected) {
 				return {
 					valid: true,
