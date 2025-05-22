@@ -46,7 +46,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 
 			const usdValue = preciseMultiply(Number(amount), priceUsd)
 
-			if (usdValue < 0.15) {
+			if (usdValue < 0.25) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too low',
@@ -54,7 +54,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
-			if (machineAmount > balance) {
+			if (Number(machineAmount) > Number(balance)) {
 				return {
 					valid: false,
 					errorMessage: `Not enough ${symbol}`,

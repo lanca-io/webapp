@@ -61,7 +61,7 @@ export function parseTokenAmount(amount: string, decimals: number): string {
 			throw new Error('Value exceeds safe integer range')
 		}
 
-		return rawValue.toFixed(0)
+		return rawValue.toString()
 	} catch (error) {
 		console.error('Parse error:', error)
 		return '0'
