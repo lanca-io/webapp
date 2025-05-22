@@ -11,9 +11,10 @@ import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
 const REFRESH_INTERVAL = 60_000
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const useLoadRoute = () => {
-	const { address } = useAccount()
+	const { address, isConnected } = useAccount()
 	const { state } = useSubvariantStore()
 	const { setRoute, setIsLoading, setError } = useRouteStore()
 	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, addressInputError, toAddress } =
@@ -25,42 +26,27 @@ export const useLoadRoute = () => {
 	const sdk = useLancaSDK()
 
 	const effectiveToAddress = useMemo(
-		() => (state === SplitSubvariantType.SEND ? toAddress : address),
+		() => (state === SplitSubvariantType.SEND ? toAddress : address || ZERO_ADDRESS),
 		[state, toAddress, address],
 	)
 
 	const canFetch = useMemo(() => {
 		const baseParamsValid = Boolean(
-			address &&
-				fromChain?.id &&
-				toChain?.id &&
-				fromToken?.address &&
-				toToken?.address &&
-				fromAmount &&
-				!amountInputError,
+			fromChain?.id && toChain?.id && fromToken?.address && toToken?.address && fromAmount && !amountInputError,
 		)
 
-		return state === SplitSubvariantType.SEND
-			? baseParamsValid && Boolean(toAddress) && !addressInputError
-			: baseParamsValid
-	}, [
-		state,
-		address,
-		fromChain,
-		toChain,
-		fromToken,
-		toToken,
-		fromAmount,
-		amountInputError,
-		toAddress,
-		addressInputError,
-	])
+		if (state === SplitSubvariantType.SEND) {
+			return baseParamsValid && Boolean(toAddress) && !addressInputError
+		}
+
+		return baseParamsValid
+	}, [state, fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, toAddress, addressInputError])
 
 	const fetchRoute = useCallback(async () => {
-		if (!canFetch || !address || !effectiveToAddress) return null
+		if (!canFetch) return null
 
 		try {
-			if (isBridge(fromChain?.id, toChain?.id)) {
+			if (isBridge(fromChain?.id, toChain?.id) && isConnected) {
 				const liquidityResult = await checkLiquidity({
 					fromChain,
 					toChain,
@@ -82,8 +68,8 @@ export const useLoadRoute = () => {
 				fromToken: fromToken!.address as Address,
 				toToken: toToken!.address as Address,
 				amount: fromAmount!,
-				fromAddress: address,
-				toAddress: effectiveToAddress,
+				fromAddress: address || ZERO_ADDRESS,
+				toAddress: effectiveToAddress || ZERO_ADDRESS,
 				slippageTolerance: slippage,
 			})
 		} catch (error) {
@@ -104,6 +90,7 @@ export const useLoadRoute = () => {
 		isBridge,
 		checkLiquidity,
 		setError,
+		isConnected,
 	])
 
 	const queryKey = useMemo(

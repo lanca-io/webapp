@@ -2,9 +2,11 @@ import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { preciseMultiply, preciseDivide } from '../utils/new/operations'
+import { useAccount } from 'wagmi'
 
 export const useDollarInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
+	const { isConnected } = useAccount()
 	const priceUsd = token?.priceUsd ?? 0
 	const symbol = token?.symbol ?? ''
 	const balance = token?.balance ?? '0'
@@ -47,6 +49,15 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 			const decimalsFactor = Math.pow(10, decimals)
 			const machineAmount = preciseMultiply(tokenAmount, decimalsFactor).toFixed(0)
 
+			// Skip wallet-specific validations if not connected
+			if (!isConnected) {
+				return {
+					valid: true,
+					errorMessage: null,
+					machineAmount,
+				}
+			}
+
 			const balanceBigInt = BigInt(balance)
 			if (BigInt(machineAmount) > balanceBigInt) {
 				return {
@@ -64,7 +75,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
-			const usdValue = preciseMultiply(Number(value), priceUsd)
+			const usdValue = preciseMultiply(Number(usdAmount), priceUsd)
 
 			if (usdValue < 0.15) {
 				return {
@@ -86,7 +97,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				machineAmount: null,
 			}
 		}
-	}, [value, priceUsd, symbol, balance, decimals])
+	}, [value, priceUsd, symbol, balance, decimals, isConnected])
 
 	return useCallback(() => {
 		setAmountInputError(validation.errorMessage)

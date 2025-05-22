@@ -26,17 +26,30 @@ export const useInputHandlers = () => {
 	const percentValidator = usePercentInputValidator(amountInput, fromToken)
 	const dollarValidator = useDollarInputValidator(amountInput, fromToken)
 
-	const determineMode = useCallback((input: string): Mode => {
+	const determineMode = useCallback((input: string, connected: boolean): Mode => {
 		if (!input) return Mode.None
+		if (input.includes('$')) return Mode.Dollar
+
+		if (!connected) {
+			return Mode.Number
+		}
+
 		if (/^[a-zA-Z]+$/.test(input)) return Mode.Text
 		if (input.includes('%')) return Mode.Percent
-		if (input.includes('$')) return Mode.Dollar
 		return Mode.Number
 	}, [])
 
 	const validateInput = useCallback(() => {
-		if (!isConnected) return
 		if (amountInputMode === Mode.None) return
+
+		if (!isConnected) {
+			if (amountInputMode === Mode.Number) {
+				numberValidator()
+			} else if (amountInputMode === Mode.Dollar) {
+				dollarValidator()
+			}
+			return
+		}
 
 		const validator = {
 			[Mode.Text]: textValidator,
@@ -49,30 +62,43 @@ export const useInputHandlers = () => {
 	}, [amountInputMode, textValidator, numberValidator, percentValidator, dollarValidator, isConnected])
 
 	useEffect(() => {
-		const mode = determineMode(amountInput)
+		const mode = determineMode(amountInput, isConnected)
 		if (mode !== amountInputMode) {
 			setAmountInputMode(mode)
 		}
-		if (isConnected) {
-			validateInput()
-		}
+		validateInput()
 	}, [amountInput, amountInputMode, determineMode, setAmountInputMode, validateInput, isConnected])
 
 	const onChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			const value = event.target.value
+
+			if (!isConnected) {
+				if (value.includes('$')) {
+					const sanitizedValue = sanitizeNumbers(value.replace('$', ''))
+					setAmountInput('$' + sanitizedValue)
+				} else {
+					const sanitizedValue = sanitizeNumbers(value)
+					setAmountInput(sanitizedValue)
+				}
+				return
+			}
+
 			const sanitizedValue = /^[a-zA-Z]+$/.test(value) ? sanitizeText(value) : sanitizeNumbers(value)
 			setAmountInput(sanitizedValue)
 		},
-		[setAmountInput],
+		[setAmountInput, isConnected],
 	)
 
-	const onFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
-		if (e.target.placeholder === '0') {
-			e.target.placeholder = ''
-			setAmountInputFocused(true)
-		}
-	}, [])
+	const onFocus = useCallback(
+		(e: FocusEvent<HTMLInputElement>) => {
+			if (e.target.placeholder === '0') {
+				e.target.placeholder = ''
+				setAmountInputFocused(true)
+			}
+		},
+		[setAmountInputFocused],
+	)
 
 	const onBlur = useCallback(
 		(e: FocusEvent<HTMLInputElement>) => {

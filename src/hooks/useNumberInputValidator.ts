@@ -2,9 +2,11 @@ import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { preciseMultiply } from '../utils/new/operations'
+import { useAccount } from 'wagmi'
 
 export const useNumberInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
+	const { isConnected } = useAccount()
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
@@ -28,6 +30,26 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 				valid: false,
 				errorMessage: 'Invalid number format',
 				machineAmount: null,
+			}
+		}
+
+		if (!isConnected) {
+			const amount = value
+			const decimalsFactor = 10 ** decimals
+			try {
+				const machineAmount = preciseMultiply(amount, decimalsFactor).toString()
+				return {
+					valid: true,
+					errorMessage: null,
+					machineAmount,
+				}
+			} catch (error) {
+				console.error('Error parsing number:', error)
+				return {
+					valid: false,
+					errorMessage: 'Invalid number input',
+					machineAmount: null,
+				}
 			}
 		}
 
@@ -67,15 +89,15 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 				errorMessage: null,
 				machineAmount,
 			}
-		} catch (_) {
-			console.error('Error parsing number:', _)
+		} catch (error) {
+			console.error('Error parsing number:', error)
 			return {
 				valid: false,
 				errorMessage: 'Invalid number input',
 				machineAmount: null,
 			}
 		}
-	}, [value, balance, decimals, symbol])
+	}, [value, balance, decimals, symbol, priceUsd, isConnected])
 
 	return useCallback(() => {
 		setAmountInputError(validation.errorMessage)
