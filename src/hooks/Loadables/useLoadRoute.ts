@@ -6,6 +6,7 @@ import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 import { useFormStore } from '../../store/form/useFormStore'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { useSettingsStore } from '../../store/settings/useSettings'
+import { useCheckLiquidity } from '../useCheckLiquidity'
 import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
@@ -14,9 +15,11 @@ const REFRESH_INTERVAL = 60_000
 export const useLoadRoute = () => {
 	const { address } = useAccount()
 	const { state } = useSubvariantStore()
-	const { setRoute, setIsLoading } = useRouteStore()
+	const { setRoute, setIsLoading, setError } = useRouteStore()
 	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, addressInputError, toAddress } =
 		useFormStore()
+
+	const { isBridge, checkLiquidity } = useCheckLiquidity()
 	const { slippage } = useSettingsStore()
 	const [timeToRefresh, setTimeToRefresh] = useState<number>(0)
 	const sdk = useLancaSDK()
@@ -57,6 +60,22 @@ export const useLoadRoute = () => {
 		if (!canFetch || !address || !effectiveToAddress) return null
 
 		try {
+			if (isBridge(fromChain?.id, toChain?.id)) {
+				const liquidityResult = await checkLiquidity({
+					fromChain,
+					toChain,
+					fromToken,
+					fromAmount,
+				})
+
+				if (!liquidityResult.isSuccess) {
+					setError('Insufficient liquidity')
+					return null
+				} else {
+					setError(null)
+				}
+			}
+
 			return await sdk.getRoute({
 				fromChainId: fromChain!.id,
 				toChainId: toChain!.id,
@@ -71,7 +90,21 @@ export const useLoadRoute = () => {
 			console.error('[fetchRoute] Error:', error)
 			throw error
 		}
-	}, [sdk, canFetch, fromChain, toChain, fromToken, toToken, fromAmount, address, effectiveToAddress, slippage])
+	}, [
+		sdk,
+		canFetch,
+		fromChain,
+		toChain,
+		fromToken,
+		toToken,
+		fromAmount,
+		address,
+		effectiveToAddress,
+		slippage,
+		isBridge,
+		checkLiquidity,
+		setError,
+	])
 
 	const queryKey = useMemo(
 		() => [
@@ -140,8 +173,9 @@ export const useLoadRoute = () => {
 		if (!canFetch) {
 			setRoute(null)
 			setIsLoading(false)
+			setError(null)
 		}
-	}, [canFetch, setRoute, setIsLoading])
+	}, [canFetch, setRoute, setIsLoading, setError])
 
 	return {
 		timeToRefresh,

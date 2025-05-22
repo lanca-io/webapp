@@ -7,6 +7,7 @@ export const CreateRoutesStore = () =>
 		set => ({
 			route: null,
 			isLoading: false,
+			error: null,
 			setRoute: (route: IRouteType | null) => {
 				if (!route) {
 					set({ route: null })
@@ -42,6 +43,9 @@ export const CreateRoutesStore = () =>
 			},
 			setIsLoading: (isLoading: boolean) => {
 				set({ isLoading })
+			},
+			setError: (error: string | null) => {
+				set({ error })
 			},
 		}),
 		Object.is,

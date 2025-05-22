@@ -23,7 +23,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 			}
 		}
 
-		if (!/^\d*\.?\d*$/.test(value)) {
+		if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(String(value))) {
 			return {
 				valid: false,
 				errorMessage: 'Invalid number format',
@@ -54,7 +54,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
-			if (BigInt(machineAmount) > BigInt(balance)) {
+			if (machineAmount > balance) {
 				return {
 					valid: false,
 					errorMessage: `Not enough ${symbol}`,
@@ -68,9 +68,10 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 				machineAmount,
 			}
 		} catch (_) {
+			console.error('Error parsing number:', _)
 			return {
 				valid: false,
-				errorMessage: 'Invalid number input',
+				errorMessage: 'Invalid number input bla bla',
 				machineAmount: null,
 			}
 		}

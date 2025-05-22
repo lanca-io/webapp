@@ -1,9 +1,26 @@
 import type { Address } from 'viem'
+import { conceroProxyMap } from '@lanca/sdk'
 
 export const contractAddresses: Record<string, Address> = {
-	'10': '0xCF93E045778dE481De87586b91BC7C4F09147502',
-	'137': '0x4B95b9b404BD69D5c9af00B7F43f327A376909F4',
-	'42161': '0xe6BbA380D02BF8a4c8185cA95025206B6f1Cf8C7',
-	'8453': '0xE66F53C27Ebe29E85D8396563B35BF8915039796',
-	'43114': '0x4459d95b396c418B2144943910E2e68548fFE589',
+	'10': conceroProxyMap.CONCERO_PROXY_OPTIMISM,
+	'137': conceroProxyMap.CONCERO_PROXY_POLYGON,
+	'42161': conceroProxyMap.CONCERO_PROXY_ARBITRUM,
+	'8453': conceroProxyMap.CONCERO_PROXY_BASE,
+	'43114': conceroProxyMap.CONCERO_PROXY_AVALANCHE,
+}
+
+export const poolAddresses: Record<string, Address> = {
+	'10': conceroProxyMap.CONCERO_POOL_OPTIMISM,
+	'137': conceroProxyMap.CONCERO_POOL_POLYGON,
+	'42161': conceroProxyMap.CONCERO_POOL_ARBITRUM,
+	'8453': conceroProxyMap.CONCERO_POOL_BASE,
+	'43114': conceroProxyMap.CONCERO_POOL_AVALANCHE,
+}
+
+export const usdcAddresses: Record<string, Address> = {
+	'10': conceroProxyMap.USDC_OPTIMISM,
+	'137': conceroProxyMap.USDC_POLYGON,
+	'42161': conceroProxyMap.USDC_ARBITRUM,
+	'8453': conceroProxyMap.USDC_BASE,
+	'43114': conceroProxyMap.USDC_AVALANCHE,
 }
