@@ -142,6 +142,7 @@ export const useInputHandlers = () => {
 
 	const onBlur = useCallback(
 		(e: FocusEvent<HTMLInputElement>) => {
+			setAmountInputFocused(false)
 			if (!e.target.value) {
 				e.target.placeholder = '0'
 				clearInputs()

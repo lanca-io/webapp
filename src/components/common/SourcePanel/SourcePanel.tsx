@@ -15,6 +15,10 @@ export const SourcePanel = memo((): JSX.Element => {
 	const hasBalance = Boolean(fromToken?.balance && fromToken.balance !== '0')
 	const isCompact = addressInputFocused && !amountInputFocused
 
+	console.log('Amount Input Focused:', amountInputFocused)
+	console.log('Address Input Focused:', addressInputFocused)
+
+	console.log(isCompact)
 	const inputClassName = isCompact ? 'input-compact' : ''
 
 	return (
