@@ -8,6 +8,7 @@ import { useNumberInputValidator } from './useNumberInputValidator'
 import { usePercentInputValidator } from './usePercentInputValidator'
 import { useDollarInputValidator } from './useDollarInputValidator'
 import { useAccount } from 'wagmi'
+import { useDebounce } from '../hooks/useDebounce'
 
 export const useInputHandlers = () => {
 	const { isConnected } = useAccount()
@@ -19,12 +20,18 @@ export const useInputHandlers = () => {
 		setAmountInputMode,
 		clearInputs,
 		setAmountInputFocused,
+		setAmountInputError,
+		setFromAmount,
 	} = useFormStore()
 
-	const textValidator = useTextInputValidator(amountInput, fromToken)
-	const numberValidator = useNumberInputValidator(amountInput, fromToken)
-	const percentValidator = usePercentInputValidator(amountInput, fromToken)
-	const dollarValidator = useDollarInputValidator(amountInput, fromToken)
+	const debouncedAmountInput = useDebounce(amountInput, 800)
+
+	const isInputEmpty = !amountInput.trim()
+
+	const textValidator = useTextInputValidator(debouncedAmountInput, fromToken)
+	const numberValidator = useNumberInputValidator(debouncedAmountInput, fromToken)
+	const percentValidator = usePercentInputValidator(debouncedAmountInput, fromToken)
+	const dollarValidator = useDollarInputValidator(debouncedAmountInput, fromToken)
 
 	const determineMode = useCallback((input: string, connected: boolean): Mode => {
 		if (!input) return Mode.None
@@ -40,6 +47,11 @@ export const useInputHandlers = () => {
 	}, [])
 
 	const validateInput = useCallback(() => {
+		if (isInputEmpty) {
+			setAmountInputError(null)
+			return
+		}
+
 		if (amountInputMode === Mode.None) return
 
 		if (!isConnected) {
@@ -59,19 +71,47 @@ export const useInputHandlers = () => {
 		}[amountInputMode]
 
 		validator()
-	}, [amountInputMode, textValidator, numberValidator, percentValidator, dollarValidator, isConnected])
+	}, [
+		amountInputMode,
+		textValidator,
+		numberValidator,
+		percentValidator,
+		dollarValidator,
+		isConnected,
+		isInputEmpty,
+		setAmountInputError,
+	])
 
 	useEffect(() => {
-		const mode = determineMode(amountInput, isConnected)
+		if (isInputEmpty) {
+			setAmountInputError(null)
+			setFromAmount(null)
+			return
+		}
+
+		const mode = determineMode(debouncedAmountInput, isConnected)
 		if (mode !== amountInputMode) {
 			setAmountInputMode(mode)
 		}
 		validateInput()
-	}, [amountInput, amountInputMode, determineMode, setAmountInputMode, validateInput, isConnected])
+	}, [
+		debouncedAmountInput,
+		amountInputMode,
+		determineMode,
+		setAmountInputMode,
+		validateInput,
+		isConnected,
+		isInputEmpty,
+		setAmountInputError,
+	])
 
 	const onChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			const value = event.target.value
+
+			if (!value.trim()) {
+				setAmountInputError(null)
+			}
 
 			if (!isConnected) {
 				if (value.includes('$')) {
@@ -87,7 +127,7 @@ export const useInputHandlers = () => {
 			const sanitizedValue = /^[a-zA-Z]+$/.test(value) ? sanitizeText(value) : sanitizeNumbers(value)
 			setAmountInput(sanitizedValue)
 		},
-		[setAmountInput, isConnected],
+		[setAmountInput, setAmountInputError, isConnected],
 	)
 
 	const onFocus = useCallback(

@@ -4,8 +4,10 @@ import { useValueConversion } from '../../../hooks/useValueConversion'
 import { SourceValue } from '../SourceValue/SourceValue'
 import { Mode } from '../../../store/form/types'
 import './ValueInfo.pcss'
+import { useAccount } from 'wagmi'
 
 export const ValueInfo = memo((): JSX.Element => {
+	const { isConnected } = useAccount()
 	const { amountInputError, amountInput, amountInputMode } = useFormStore()
 	const { usd } = useValueConversion()
 
@@ -22,7 +24,7 @@ export const ValueInfo = memo((): JSX.Element => {
 			)}
 			{showPrompt && (
 				<span className="value_info_title" aria-label="Input prompt">
-					Enter amount, % or $
+					{isConnected ? 'Enter amount, % or $' : 'Enter amount'}
 				</span>
 			)}
 			{showIndicator && <SourceValue />}
