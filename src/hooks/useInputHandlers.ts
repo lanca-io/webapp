@@ -24,7 +24,7 @@ export const useInputHandlers = () => {
 		setFromAmount,
 	} = useFormStore()
 
-	const debouncedAmountInput = useDebounce(amountInput, 800)
+	const debouncedAmountInput = useDebounce(amountInput, 300)
 
 	const isInputEmpty = !amountInput.trim()
 

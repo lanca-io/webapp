@@ -3,8 +3,8 @@ import { useFormStore } from '../../../store/form/useFormStore'
 import { useValueConversion } from '../../../hooks/useValueConversion'
 import { SourceValue } from '../SourceValue/SourceValue'
 import { Mode } from '../../../store/form/types'
-import './ValueInfo.pcss'
 import { useAccount } from 'wagmi'
+import './ValueInfo.pcss'
 
 export const ValueInfo = memo((): JSX.Element => {
 	const { isConnected } = useAccount()
