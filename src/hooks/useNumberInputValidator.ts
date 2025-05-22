@@ -71,7 +71,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 			console.error('Error parsing number:', _)
 			return {
 				valid: false,
-				errorMessage: 'Invalid number input bla bla',
+				errorMessage: 'Invalid number input',
 				machineAmount: null,
 			}
 		}
