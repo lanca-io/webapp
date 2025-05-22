@@ -11,7 +11,7 @@ import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
 const REFRESH_INTERVAL = 60_000
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+const ZERO_ADDRESS = '0x'
 
 export const useLoadRoute = () => {
 	const { address, isConnected } = useAccount()

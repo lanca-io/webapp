@@ -8,7 +8,7 @@ import { useNumberInputValidator } from './useNumberInputValidator'
 import { usePercentInputValidator } from './usePercentInputValidator'
 import { useDollarInputValidator } from './useDollarInputValidator'
 import { useAccount } from 'wagmi'
-import { useDebounce } from '../hooks/useDebounce'
+import { useDebounce } from './useDebounce'
 
 export const useInputHandlers = () => {
 	const { isConnected } = useAccount()
@@ -35,9 +35,9 @@ export const useInputHandlers = () => {
 
 	const determineMode = useCallback((input: string, connected: boolean): Mode => {
 		if (!input) return Mode.None
-		if (input.includes('$')) return Mode.Dollar
 
 		if (!connected) {
+			if (input.includes('$')) return Mode.Dollar
 			return Mode.Number
 		}
 
@@ -103,6 +103,7 @@ export const useInputHandlers = () => {
 		isConnected,
 		isInputEmpty,
 		setAmountInputError,
+		setFromAmount,
 	])
 
 	const onChange = useCallback(
@@ -113,18 +114,23 @@ export const useInputHandlers = () => {
 				setAmountInputError(null)
 			}
 
+			const processedValue = !isConnected ? value.replace(/%/g, '') : value
+
 			if (!isConnected) {
-				if (value.includes('$')) {
-					const sanitizedValue = sanitizeNumbers(value.replace('$', ''))
-					setAmountInput('$' + sanitizedValue)
+				if (processedValue.includes('$')) {
+					const sanitizedValue = sanitizeNumbers(processedValue.replace('$', ''))
+					setAmountInput(sanitizedValue + '$')
 				} else {
-					const sanitizedValue = sanitizeNumbers(value)
+					const sanitizedValue = sanitizeNumbers(processedValue)
 					setAmountInput(sanitizedValue)
 				}
 				return
 			}
 
-			const sanitizedValue = /^[a-zA-Z]+$/.test(value) ? sanitizeText(value) : sanitizeNumbers(value)
+			const sanitizedValue = /^[a-zA-Z]+$/.test(processedValue)
+				? sanitizeText(processedValue)
+				: sanitizeNumbers(processedValue)
+
 			setAmountInput(sanitizedValue)
 		},
 		[setAmountInput, setAmountInputError, isConnected],
@@ -148,7 +154,7 @@ export const useInputHandlers = () => {
 				clearInputs()
 			}
 		},
-		[clearInputs],
+		[clearInputs, setAmountInputFocused],
 	)
 
 	return {
