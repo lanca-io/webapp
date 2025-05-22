@@ -7,16 +7,14 @@ import './AddressCard.pcss'
 
 export const AddressCard: FC = () => {
 	const { addressInput, amountInputFocused, addressInputFocused } = useFormStore()
-
 	const { onChange, onFocus, onBlur } = useAddressInputHandlers()
 
-	const hasAddressValue = Boolean(addressInput && addressInput.trim() !== '')
-	const isCompact = amountInputFocused && !addressInputFocused && hasAddressValue
+	const isCompact = amountInputFocused && !addressInputFocused
 
 	const inputClassName = isCompact ? 'input-compact' : ''
 
 	return (
-		<div className={`address_card ${isCompact ? 'address_card-compact' : ''}`}>
+		<div className={`address_card`}>
 			<WidgetInput
 				value={addressInput}
 				onChange={onChange}

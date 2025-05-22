@@ -132,9 +132,9 @@ export const useInputHandlers = () => {
 
 	const onFocus = useCallback(
 		(e: FocusEvent<HTMLInputElement>) => {
+			setAmountInputFocused(true)
 			if (e.target.placeholder === '0') {
 				e.target.placeholder = ''
-				setAmountInputFocused(true)
 			}
 		},
 		[setAmountInputFocused],

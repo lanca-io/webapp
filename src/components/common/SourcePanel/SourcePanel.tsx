@@ -13,13 +13,12 @@ export const SourcePanel = memo((): JSX.Element => {
 	const { fromToken, amountInput, amountInputFocused, addressInputFocused } = useFormStore()
 
 	const hasBalance = Boolean(fromToken?.balance && fromToken.balance !== '0')
-	const hasAmountValue = Boolean(amountInput && amountInput !== '0')
-	const isCompact = addressInputFocused && !amountInputFocused && hasAmountValue
+	const isCompact = addressInputFocused && !amountInputFocused
 
 	const inputClassName = isCompact ? 'input-compact' : ''
 
 	return (
-		<div className={`source_panel ${isCompact ? 'source_panel-compact' : ''}`}>
+		<div className={`source_panel`}>
 			<WidgetInput
 				value={amountInput}
 				onChange={onChange}
