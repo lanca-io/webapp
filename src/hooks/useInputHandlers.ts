@@ -26,6 +26,8 @@ export const useInputHandlers = () => {
 
 	const debouncedAmountInput = useDebounce(amountInput, 300)
 
+	console.log(amountInputMode)
+
 	const isInputEmpty = !amountInput.trim()
 
 	const textValidator = useTextInputValidator(debouncedAmountInput, fromToken)
@@ -41,6 +43,7 @@ export const useInputHandlers = () => {
 			return Mode.Number
 		}
 
+		if (input.includes('$')) return Mode.Dollar
 		if (/^[a-zA-Z]+$/.test(input)) return Mode.Text
 		if (input.includes('%')) return Mode.Percent
 		return Mode.Number
