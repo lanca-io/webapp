@@ -6,7 +6,7 @@ import { Balance } from '../Balance/Balance'
 import { truncate, truncateAddress } from '../../../utils/new/truncate'
 import { LinkIcon } from '../../../assets/icons/LinkIcon'
 import { useChainsStore } from '../../../store/chains/useChainsStore'
-import { Tag } from '@concero/ui-kit'
+import { NativeInfo } from './NativeInfo/NativeInfo'
 import { isNative } from '@lanca/sdk'
 import './Token.pcss'
 
@@ -60,11 +60,7 @@ export const Token = memo(({ token, showBalance = false, onClick }: TokenProps):
 				<div className="token_description">
 					<div className="token_symbols">
 						<h4 className="token_symbol">{symbol}</h4>
-						{native && (
-							<Tag className="token_chain" size="s" variant="neutral">
-								Gas
-							</Tag>
-						)}
+						<NativeInfo isVisible={native} />
 					</div>
 					<div className="token_information">
 						<p className="token_name">{name}</p>
