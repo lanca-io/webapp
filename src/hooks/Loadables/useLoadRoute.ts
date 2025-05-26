@@ -1,4 +1,4 @@
-import type { Address } from 'viem'
+import { zeroAddress, type Address } from 'viem'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccount } from 'wagmi'
@@ -11,7 +11,6 @@ import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
 const REFRESH_INTERVAL = 60_000
-const ZERO_ADDRESS = '0x'
 
 export const useLoadRoute = () => {
 	const { address, isConnected } = useAccount()
@@ -25,22 +24,21 @@ export const useLoadRoute = () => {
 	const [timeToRefresh, setTimeToRefresh] = useState<number>(0)
 	const sdk = useLancaSDK()
 
-	const effectiveToAddress = useMemo(
-		() => (state === SplitSubvariantType.SEND ? toAddress : address || ZERO_ADDRESS),
-		[state, toAddress, address],
-	)
+	const effectiveToAddress = useMemo(() => {
+		if (state === SplitSubvariantType.SEND) {
+			if (toAddress && !addressInputError) {
+				return toAddress
+			}
+			return address || zeroAddress
+		}
+		return address || zeroAddress
+	}, [state, toAddress, address, addressInputError])
 
 	const canFetch = useMemo(() => {
-		const baseParamsValid = Boolean(
+		return Boolean(
 			fromChain?.id && toChain?.id && fromToken?.address && toToken?.address && fromAmount && !amountInputError,
 		)
-
-		if (state === SplitSubvariantType.SEND) {
-			return baseParamsValid && Boolean(toAddress) && !addressInputError
-		}
-
-		return baseParamsValid
-	}, [state, fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, toAddress, addressInputError])
+	}, [fromChain, toChain, fromToken, toToken, fromAmount, amountInputError])
 
 	const fetchRoute = useCallback(async () => {
 		if (!canFetch) return null
@@ -68,8 +66,8 @@ export const useLoadRoute = () => {
 				fromToken: fromToken!.address as Address,
 				toToken: toToken!.address as Address,
 				amount: fromAmount!,
-				fromAddress: address || ZERO_ADDRESS,
-				toAddress: effectiveToAddress || ZERO_ADDRESS,
+				fromAddress: address || zeroAddress,
+				toAddress: effectiveToAddress,
 				slippageTolerance: slippage,
 			})
 		} catch (error) {

@@ -25,9 +25,6 @@ export const useInputHandlers = () => {
 	} = useFormStore()
 
 	const debouncedAmountInput = useDebounce(amountInput, 300)
-
-	console.log(amountInputMode)
-
 	const isInputEmpty = !amountInput.trim()
 
 	const textValidator = useTextInputValidator(debouncedAmountInput, fromToken)
