@@ -10,7 +10,7 @@ import { useCheckLiquidity } from '../useCheckLiquidity'
 import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
-const REFRESH_INTERVAL = 10_000
+const REFRESH_INTERVAL = 60_000
 const DEFAULT_ADDRESS: Address = '0xe4aD9f82AE0A4Ce2D2128755C7F4a16D471a0fe1'
 
 export const useLoadRoute = () => {
