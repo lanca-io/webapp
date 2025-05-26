@@ -1,8 +1,13 @@
 import type { ExtendedToken } from '../../../store/tokens/types'
+import type { Address } from 'viem'
 import { memo, useCallback, useMemo } from 'react'
 import { Badge } from '../../layout/Badge/Badge'
 import { Balance } from '../Balance/Balance'
 import { truncate, truncateAddress } from '../../../utils/new/truncate'
+import { LinkIcon } from '../../../assets/icons/LinkIcon'
+import { useChainsStore } from '../../../store/chains/useChainsStore'
+import { Tag } from '@concero/ui-kit'
+import { isNative } from '@lanca/sdk'
 import './Token.pcss'
 
 type TokenProps = {
@@ -13,13 +18,27 @@ type TokenProps = {
 }
 
 export const Token = memo(({ token, showBalance = false, onClick }: TokenProps): JSX.Element => {
-	const symbol = truncate(token.symbol, 20)
-	const name = truncate(token.name, 15)
-	const address = truncateAddress(token.address)
+	const { chains } = useChainsStore()
 
-	const handleClick = useCallback(() => {
-		if (onClick) onClick()
-	}, [onClick])
+	const explorer = useMemo(
+		() => chains.find(chain => chain.id === token.chain_id)?.explorerURI,
+		[chains, token.chain_id],
+	)
+
+	const native = useMemo(() => isNative(token.address as Address), [token.address])
+
+	const [symbol, name, address] = useMemo(
+		() => [truncate(token.symbol, 20), truncate(token.name, 15), truncateAddress(token.address)],
+		[token.symbol, token.name, token.address],
+	)
+
+	const explorerUrl = useMemo(
+		() => (explorer ? `${explorer}/token/${token.address}` : null),
+		[explorer, token.address],
+	)
+
+	const handleClick = useCallback(() => onClick?.(), [onClick])
+	const handleLinkClick = useCallback((e: React.MouseEvent) => e.stopPropagation(), [])
 
 	const badge = useMemo(
 		() => <Badge tokenLogoSrc={token.logoURI} chainLogoSrc={token.chainLogoURI || ''} size="l" />,
@@ -39,10 +58,28 @@ export const Token = memo(({ token, showBalance = false, onClick }: TokenProps):
 			<div className="token_content">
 				{badge}
 				<div className="token_description">
-					<h4 className="token_symbol">{symbol}</h4>
+					<div className="token_symbols">
+						<h4 className="token_symbol">{symbol}</h4>
+						{native && (
+							<Tag className="token_chain" size="s" variant="neutral">
+								Gas
+							</Tag>
+						)}
+					</div>
 					<div className="token_information">
 						<p className="token_name">{name}</p>
-						<p className="token_address">{`(${address})`}</p>
+						{explorerUrl && (
+							<a
+								href={explorerUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								onClick={handleLinkClick}
+								className="token_address_container"
+							>
+								<p className="token_address">{`(${address})`}</p>
+								<LinkIcon />
+							</a>
+						)}
 					</div>
 				</div>
 			</div>

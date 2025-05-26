@@ -18,11 +18,11 @@
 }
 
 .token:hover {
-	background-color: var(--color-grey-100);
+	background-color: var(--color-grey-50);
 }
 
 .token:active {
-	background-color: var(--color-grey-200);
+	background-color: var(--color-grey-100);
 }
 
 .token:focus {
@@ -46,10 +46,18 @@
 	flex: 1;
 }
 
+.token_symbols {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--sp-sm);
+	max-height: 18px;
+}
+
 .token_information {
 	display: flex;
 	flex-direction: row;
-	gap: var(--sp-xs);
+	gap: var(--sp-sm);
 }
 
 .token_symbol {
@@ -84,12 +92,47 @@
 	color: var(--color-grey-600);
 }
 
-.token_address {
+.token_address_container {
 	display: none;
+	align-items: center;
+	gap: var(--sp-xs);
+	text-decoration: none;
+	color: var(--color-grey-600);
 }
 
-.token:hover .token_address,
-.token:focus .token_address,
-.token:active .token_address {
-	display: inline;
+.token:hover .token_address_container,
+.token:focus .token_address_container,
+.token:active .token_address_container {
+	display: flex;
+	flex-direction: row;
+}
+
+.token_address_container svg,
+.token_address_container svg path,
+.token_address_container svg rect {
+	fill: var(--color-grey-600);
+}
+
+.token_address_container:hover {
+	color: var(--color-grey-700);
+}
+
+.token_address_container:hover .token_address {
+	color: var(--color-grey-700);
+}
+
+.token_address_container:hover svg,
+.token_address_container:hover svg path,
+.token_address_container:hover svg rect {
+	fill: var(--color-grey-700);
+}
+
+.token_address,
+.token_address_container svg,
+.token_address_container svg path,
+.token_address_container svg rect {
+	transition:
+		color 0.2s ease,
+		fill 0.2s ease,
+		stroke 0.2s ease;
 }
