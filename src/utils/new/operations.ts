@@ -50,13 +50,17 @@ export function preciseSubtract(a: number | string, b: number | string): number 
  * @throws Will throw an error if the input cannot be converted to a valid BigInt.
  */
 export function scientificToBigInt(num: number | string): bigint {
-	const str = String(num)
+	let str = String(num)
 
-	if (!str.toLowerCase().includes('e')) {
-		return BigInt(str)
+	if (/e/i.test(str)) {
+		str = Number(str).toLocaleString('fullwide', { useGrouping: false })
 	}
 
-	const decimalStr = Number(str).toLocaleString('fullwide', { useGrouping: false })
+	const [integerPart] = str.split('.')
 
-	return BigInt(decimalStr)
+	if (!/^-?\d+$/.test(integerPart)) {
+		throw new Error(`Invalid numeric format: ${str}`)
+	}
+
+	return BigInt(integerPart)
 }

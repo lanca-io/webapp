@@ -62,6 +62,7 @@ export const useLoadRoute = () => {
 
 		try {
 			setError(null)
+			setRoute(null)
 
 			if (isBridge(fromChain?.id, toChain?.id) && isConnected) {
 				const liquidityResult = await checkLiquidity({
@@ -92,7 +93,7 @@ export const useLoadRoute = () => {
 			return route
 		} catch (error: any) {
 			console.error('[fetchRoute] Error:', error)
-			if (error?.message !== 'Insufficient liquidity') {
+			if (error.message !== 'Insufficient liquidity') {
 				setError('No route found')
 			}
 			throw error

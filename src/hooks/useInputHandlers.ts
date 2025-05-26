@@ -9,6 +9,7 @@ import { usePercentInputValidator } from './usePercentInputValidator'
 import { useDollarInputValidator } from './useDollarInputValidator'
 import { useAccount } from 'wagmi'
 import { useDebounce } from './useDebounce'
+import { useRouteStore } from '../store/route/useRouteStore'
 
 export const useInputHandlers = () => {
 	const { isConnected } = useAccount()
@@ -23,6 +24,8 @@ export const useInputHandlers = () => {
 		setAmountInputError,
 		setFromAmount,
 	} = useFormStore()
+
+	const { setError } = useRouteStore()
 
 	const debouncedAmountInput = useDebounce(amountInput, 300)
 	const isInputEmpty = !amountInput.trim()
@@ -85,6 +88,7 @@ export const useInputHandlers = () => {
 	useEffect(() => {
 		if (isInputEmpty) {
 			setAmountInputError(null)
+			setError(null)
 			setFromAmount(null)
 			return
 		}
