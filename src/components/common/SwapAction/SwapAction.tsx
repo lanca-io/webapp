@@ -13,7 +13,7 @@ export const SwapAction = memo((): JSX.Element => {
 	const { open } = useAppKit()
 	const { state } = useSubvariantStore()
 	const { isConnected, isConnecting } = useAccount()
-	const { route, isLoading: routeLoading } = useRouteStore()
+	const { route, isLoading: routeLoading, error } = useRouteStore()
 	const { amountInputError, addressInputError } = useFormStore()
 	const executeRoute = useExecuteRoute(route)
 
@@ -22,7 +22,7 @@ export const SwapAction = memo((): JSX.Element => {
 	const hasErrors =
 		state === SplitSubvariantType.SEND ? !!amountInputError || !!addressInputError : !!amountInputError
 
-	const isDisabled = isConnected && (hasErrors || !route)
+	const isDisabled = isConnected && (hasErrors || !route || !!error)
 
 	const buttonText = isConnected ? 'Begin Swap' : 'Connect Wallet'
 
