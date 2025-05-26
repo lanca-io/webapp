@@ -26,7 +26,9 @@ export const NativeInfo = memo(({ isVisible }: NativeTokenBadgeProps): JSX.Eleme
 					</span>
 				}
 			>
-				<InfoIcon color="#66767d" />
+				<div className="info_icon_wrapper">
+					<InfoIcon color="#66767d" />
+				</div>
 			</Tooltip>
 		</div>
 	)
