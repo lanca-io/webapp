@@ -1,7 +1,8 @@
 import { memo, useMemo } from 'react'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { InfoIcon } from '../../../assets/icons/InfoIcon'
-import { FeesContent, ImpactSeverity } from './FeesContent/FeesContent'
+import { FeesContent } from './FeesContent/FeesContent'
+import { ImpactSeverity } from '../../../hooks/useEstimatePriceImpact'
 import './FeesDropdown.pcss'
 
 type FeesDropdownProps = {

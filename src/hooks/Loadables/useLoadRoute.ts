@@ -16,12 +16,9 @@ const DEFAULT_ADDRESS: Address = '0xe4aD9f82AE0A4Ce2D2128755C7F4a16D471a0fe1'
 export const useLoadRoute = () => {
 	const { address, isConnected } = useAccount()
 	const { state } = useSubvariantStore()
-	const { setRoute, setIsLoading, setError, error } = useRouteStore()
+	const { setRoute, setIsLoading, setError } = useRouteStore()
 	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, addressInputError, toAddress } =
 		useFormStore()
-
-	console.log('This is the fromAmount:', fromAmount)
-	console.log('This is the error:', error)
 
 	const { isBridge, checkLiquidity } = useCheckLiquidity()
 	const { slippage } = useSettingsStore()

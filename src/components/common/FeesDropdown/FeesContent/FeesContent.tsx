@@ -1,12 +1,6 @@
 import type { FC } from 'react'
+import { ImpactSeverity } from '../../../../hooks/useEstimatePriceImpact'
 import './FeesContent.pcss'
-
-export enum ImpactSeverity {
-	POSITIVE = 'impact_positive',
-	NORMAL = 'impact_normal',
-	WARNING = 'impact_warning',
-	DANGER = 'impact_danger',
-}
 
 type FeesContentProps = {
 	severity: ImpactSeverity
