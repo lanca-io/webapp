@@ -1,4 +1,4 @@
-import { zeroAddress, type Address } from 'viem'
+import { type Address } from 'viem'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccount } from 'wagmi'
@@ -11,13 +11,17 @@ import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
 const REFRESH_INTERVAL = 60_000
+const DEFAULT_ADDRESS: Address = '0xe4aD9f82AE0A4Ce2D2128755C7F4a16D471a0fe1'
 
 export const useLoadRoute = () => {
 	const { address, isConnected } = useAccount()
 	const { state } = useSubvariantStore()
-	const { setRoute, setIsLoading, setError } = useRouteStore()
+	const { setRoute, setIsLoading, setError, error } = useRouteStore()
 	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, addressInputError, toAddress } =
 		useFormStore()
+
+	console.log('This is the fromAmount:', fromAmount)
+	console.log('This is the error:', error)
 
 	const { isBridge, checkLiquidity } = useCheckLiquidity()
 	const { slippage } = useSettingsStore()
@@ -29,22 +33,40 @@ export const useLoadRoute = () => {
 			if (toAddress && !addressInputError) {
 				return toAddress
 			}
-			return address || zeroAddress
+			return (address as Address) || DEFAULT_ADDRESS
 		}
-		return address || zeroAddress
+		return (address as Address) || DEFAULT_ADDRESS
 	}, [state, toAddress, address, addressInputError])
 
 	const canFetch = useMemo(() => {
+		const isValidAmount =
+			fromAmount !== null &&
+			fromAmount &&
+			fromAmount !== '0' &&
+			fromAmount !== '' &&
+			!isNaN(Number(fromAmount)) &&
+			Number(fromAmount) > 0
+
 		return Boolean(
-			fromChain?.id && toChain?.id && fromToken?.address && toToken?.address && fromAmount && !amountInputError,
+			isValidAmount &&
+				fromChain?.id &&
+				toChain?.id &&
+				fromToken?.address &&
+				toToken?.address &&
+				!amountInputError,
 		)
 	}, [fromChain, toChain, fromToken, toToken, fromAmount, amountInputError])
 
 	const fetchRoute = useCallback(async () => {
-		if (!canFetch) return null
+		if (!canFetch || !fromAmount || fromAmount === '0' || fromAmount === '') {
+			setError(null)
+			return null
+		}
 
 		try {
-			if (isBridge(fromChain?.id, toChain?.id) && isConnected) {
+			setError(null)
+
+			if (isBridge(fromChain?.id, toChain?.id)) {
 				const liquidityResult = await checkLiquidity({
 					fromChain,
 					toChain,
@@ -53,25 +75,29 @@ export const useLoadRoute = () => {
 				})
 
 				if (!liquidityResult.isSuccess) {
-					setError('Insufficient liquidity')
-					return null
-				} else {
-					setError(null)
+					const err = new Error('Insufficient liquidity')
+					setError(err.message)
+					throw err
 				}
 			}
 
-			return await sdk.getRoute({
+			const route = await sdk.getRoute({
 				fromChainId: fromChain!.id,
 				toChainId: toChain!.id,
 				fromToken: fromToken!.address as Address,
 				toToken: toToken!.address as Address,
 				amount: fromAmount!,
-				fromAddress: address || zeroAddress,
+				fromAddress: (address as Address) || DEFAULT_ADDRESS,
 				toAddress: effectiveToAddress,
 				slippageTolerance: slippage,
 			})
-		} catch (error) {
+
+			return route
+		} catch (error: any) {
 			console.error('[fetchRoute] Error:', error)
+			if (error?.message !== 'Insufficient liquidity') {
+				setError('No route found')
+			}
 			throw error
 		}
 	}, [
@@ -117,12 +143,37 @@ export const useLoadRoute = () => {
 	} = useQuery({
 		queryKey,
 		queryFn: fetchRoute,
+		retry: false,
 		refetchInterval: REFRESH_INTERVAL,
 		enabled: canFetch,
 		staleTime: REFRESH_INTERVAL,
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 	})
 
 	const isRouteLoading = useMemo(() => canFetch && (isLoading || isFetching), [canFetch, isLoading, isFetching])
+
+	useEffect(() => {
+		if (route) {
+			setError(null)
+		}
+	}, [route, setError])
+
+	useEffect(() => {
+		setRoute(route ?? null)
+	}, [route, setRoute])
+
+	useEffect(() => {
+		setIsLoading(isRouteLoading)
+	}, [isRouteLoading, setIsLoading])
+
+	useEffect(() => {
+		if (!canFetch) {
+			setRoute(null)
+			setIsLoading(false)
+			setError(null)
+		}
+	}, [canFetch, setRoute, setIsLoading, setError])
 
 	useEffect(() => {
 		if (!canFetch || !dataUpdatedAt) {
@@ -145,22 +196,6 @@ export const useLoadRoute = () => {
 
 		return () => clearInterval(interval)
 	}, [dataUpdatedAt, canFetch, refetch])
-
-	useEffect(() => {
-		setRoute(route ?? null)
-	}, [route, setRoute])
-
-	useEffect(() => {
-		setIsLoading(isRouteLoading)
-	}, [isRouteLoading, setIsLoading])
-
-	useEffect(() => {
-		if (!canFetch) {
-			setRoute(null)
-			setIsLoading(false)
-			setError(null)
-		}
-	}, [canFetch, setRoute, setIsLoading, setError])
 
 	return {
 		timeToRefresh,

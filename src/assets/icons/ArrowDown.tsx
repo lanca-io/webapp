@@ -3,8 +3,8 @@ export const ArrowDown = () => {
 		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
 			<rect x="8.80078" width="14.88" height="1.6" rx="0.8" transform="rotate(90 8.80078 0)" fill="#66767D" />
 			<path
-				fullRule="evenodd"
-				clipRile="evenodd"
+				fullrule="evenodd"
+				clipRule="evenodd"
 				d="M14.1661 9.03436C14.4785 9.34678 14.4785 9.85331 14.1661 10.1657L8.56608 15.7657C8.25366 16.0782 7.74712 16.0782 7.4347 15.7657L1.8347 10.1657C1.52229 9.85331 1.52229 9.34678 1.8347 9.03436C2.14712 8.72194 2.65366 8.72194 2.96608 9.03436L8.00039 14.0687L13.0347 9.03436C13.3471 8.72194 13.8537 8.72194 14.1661 9.03436Z"
 				fill="#66767D"
 			/>

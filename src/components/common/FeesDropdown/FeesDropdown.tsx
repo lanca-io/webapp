@@ -1,21 +1,22 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { InfoIcon } from '../../../assets/icons/InfoIcon'
-import { FeesContent } from './FeesContent/FeesContent'
+import { FeesContent, ImpactSeverity } from './FeesContent/FeesContent'
 import './FeesDropdown.pcss'
 
 type FeesDropdownProps = {
-	impact: number | null
-	isPositive?: boolean
+	severity: ImpactSeverity
 }
 
-export const FeesDropdown = memo(({ impact, isPositive }: FeesDropdownProps) => {
+export const FeesDropdown = memo(({ severity }: FeesDropdownProps) => {
+	const tooltipContent = useMemo(() => <FeesContent severity={severity} />, [severity])
+
 	return (
 		<Tooltip
 			place="bottom"
 			className="fee_dropdown"
 			tooltipId="destination_value_tooltip"
-			tooltipContent={<FeesContent impact={impact} isPositive={isPositive} />}
+			tooltipContent={tooltipContent}
 		>
 			<InfoIcon color="#66767d" />
 		</Tooltip>

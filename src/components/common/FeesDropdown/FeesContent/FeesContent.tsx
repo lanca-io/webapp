@@ -1,85 +1,49 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
-import { useRouteStore } from '../../../../store/route/useRouteStore'
-import { format } from '../../../../utils/new/format'
 import './FeesContent.pcss'
 
-const feeMapping: Record<string, string> = {
-	ConceroMessageFee: 'Concero Message Fee',
-	LancaPoolRebalanceFee: 'Pool Rebalance Fee',
-	LancaFee: 'Lanca Fee',
-	LancaPoolLPFee: 'Lanca Pool LP Fee',
-	Slippage: 'Slippage',
+export enum ImpactSeverity {
+	POSITIVE = 'impact_positive',
+	NORMAL = 'impact_normal',
+	WARNING = 'impact_warning',
+	DANGER = 'impact_danger',
 }
 
 type FeesContentProps = {
-	impact: number | null
-	isPositive?: boolean
+	severity: ImpactSeverity
 }
 
-export const FeesContent: FC<FeesContentProps> = ({ impact, isPositive }) => {
-	const { route } = useRouteStore()
+const TITLES: Record<ImpactSeverity | 'default', string> = {
+	[ImpactSeverity.POSITIVE]: 'Positive price Impact',
+	[ImpactSeverity.NORMAL]: 'Price impact',
+	[ImpactSeverity.WARNING]: 'High price impact',
+	[ImpactSeverity.DANGER]: 'Extreme price impact',
+	default: 'Price Impact',
+}
 
-	const fees = useMemo(() => {
-		if (!route?.steps || !Array.isArray(route.steps)) {
-			return []
-		}
+const MESSAGES: Record<ImpactSeverity | 'default', string> = {
+	[ImpactSeverity.POSITIVE]:
+		'A positive price impact means you received a better rate than anticipated—enjoy the savings!',
+	[ImpactSeverity.NORMAL]:
+		'This represents the gap between the expected and actual swap price. It covers slippage, fees, and related costs.',
+	[ImpactSeverity.WARNING]:
+		'This transaction has a moderate price impact. Consider reviewing the details before proceeding.',
+	[ImpactSeverity.DANGER]:
+		'It could result in extreme slippage and additional costs. For your protection, this trade will not be executed.',
+	default: 'Review the transaction details before proceeding.',
+}
 
-		const allFees: any[] = []
-
-		route.steps.forEach(step => {
-			if (step && 'fees' in step && Array.isArray((step as any).fees)) {
-				const stepFees = (step as any).fees || []
-				allFees.push(...stepFees)
-			}
-		})
-
-		return allFees
-	}, [route])
-
-	const totalFeesUsd = useMemo(() => {
-		return fees.reduce((total, fee) => {
-			const feeAmount = Number(fee.amount) / 10 ** fee.token.decimals
-			const feeUsd = feeAmount * Number(fee.token.priceUsd)
-			return total + feeUsd
-		}, 0)
-	}, [fees])
-
-	const slippage = useMemo(() => {
-		if (impact === null) return 0
-		const absoluteImpact = Math.abs(impact)
-		if (isPositive && totalFeesUsd < absoluteImpact) {
-			return absoluteImpact - totalFeesUsd
-		}
-		return totalFeesUsd - absoluteImpact
-	}, [impact, totalFeesUsd, isPositive])
+export const FeesContent: FC<FeesContentProps> = ({ severity }) => {
+	const isPositive = severity === ImpactSeverity.POSITIVE
+	const title = TITLES[severity] || TITLES.default
+	const message = MESSAGES[severity] || MESSAGES.default
 
 	return (
-		<div className="fees_content">
-			<span className={`fees_content_heading ${isPositive ? 'positive' : 'negative'}`}>Price Impact</span>
+		<div className={`fees_content ${severity}`}>
+			<span className={`fees_content_heading ${isPositive ? 'positive' : ''}`}>{title}</span>
 			<div className="fees_content_items">
-				{impact !== null && slippage !== 0 && (
-					<div className="fees_content_item">
-						<div className="fees_content_item">
-							{`Slippage (${isPositive ? '+' : '-'}${format(Math.abs(slippage), 2, '$')})`}
-						</div>
-					</div>
-				)}
-				{fees.length > 0 ? (
-					fees.map((fee, index) => {
-						const feeName = feeMapping[fee.type] || fee.type
-						const feeAmount = Number(fee.amount) / 10 ** fee.token.decimals
-						const feeUsd = feeAmount * Number(fee.token.priceUsd)
-
-						return (
-							<div key={index} className="fees_content_item">
-								<div className="fees_content_item">{`${feeName} (-${format(feeUsd, 2, '$')})`}</div>
-							</div>
-						)
-					})
-				) : (
-					<div className="fees_content_item">No fee breakdown available</div>
-				)}
+				<div className="fees_content_item">
+					<div className="fees_content_message">{message}</div>
+				</div>
 			</div>
 		</div>
 	)

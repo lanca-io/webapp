@@ -12,7 +12,9 @@ import { useRouteStore } from '../../../store/route/useRouteStore'
 import { ReviewModal } from '../ReviewModal/ReviewModal'
 import { Spinner } from '@concero/ui-kit'
 import { DestinationValue } from '../DestinationValue/DestinationValue'
+import { Alert } from '../Alert/Alert'
 import { useAccount } from 'wagmi'
+import { InfoIcon } from '../../../assets/icons/InfoIcon'
 import './DestinationPanel.pcss'
 
 type DestinationPanelProps = {
@@ -22,9 +24,11 @@ type DestinationPanelProps = {
 
 export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelProps): JSX.Element => {
 	const { address } = useAccount()
-	const { route, isLoading: routeLoading } = useRouteStore()
+	const { route, isLoading: routeLoading, error } = useRouteStore()
 	const { toToken } = useFormStore()
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
+	const hasValidInputs = Boolean(amount && amount !== '0' && amount !== '')
+	const isIdle = !routeLoading && !route && !error && !hasValidInputs
 
 	const handleOpenReviewModal = useCallback(() => {
 		setIsReviewModalOpen(true)
@@ -48,29 +52,29 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 				{address && hasBalance && <BalanceInfo token={toToken} showMax={false} />}
 			</div>
 
-			{route && !routeLoading && (
+			{routeLoading ? (
+				<div>
+					<Spinner type="gray" />
+				</div>
+			) : error ? (
+				<Alert title={error} variant="error" icon={<InfoIcon color="var(--color-danger-600)" />} />
+			) : route ? (
 				<div className="destination_panel_info">
-					<>
-						<SlippageInfo />
-						<GasInfo />
-						<ETAInfo />
-						<Button
-							isFull
-							variant="secondary"
-							rightIcon={<TrailArrowRightIcon aria-hidden="true" />}
-							onClick={handleOpenReviewModal}
-							aria-label="Review transaction details"
-						>
-							Review
-						</Button>
-					</>
+					<SlippageInfo />
+					<GasInfo />
+					<ETAInfo />
+					<Button
+						isFull
+						variant="secondary"
+						rightIcon={<TrailArrowRightIcon aria-hidden="true" />}
+						onClick={handleOpenReviewModal}
+						aria-label="Review transaction details"
+					>
+						Review
+					</Button>
 				</div>
-			)}
-
-			{routeLoading && (
-				<div className="destination_panel_loader" aria-live="polite">
-					<Spinner type="gray" aria-label="Loading route details" />
-				</div>
+			) : isIdle ? null : (
+				<Alert title="No route found" variant="error" icon={<InfoIcon color="var(--color-danger-600)" />} />
 			)}
 
 			<ReviewModal isOpen={isReviewModalOpen} onClose={handleCloseReviewModal} />

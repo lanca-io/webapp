@@ -4,9 +4,8 @@ import { useCallback } from 'react'
 import { formatUnits } from 'viem'
 import { getPublicClient } from '../web3/wagmi'
 import { erc20Abi } from 'viem'
-import { contractAddresses } from '../configuration/addresses'
+import { poolAddresses } from '../configuration/addresses'
 import { usdcAddresses } from '../configuration/addresses'
-import { preciseMultiply, preciseDivide } from '../utils/new/operations'
 
 const USDC_DECIMALS = 6
 
@@ -25,7 +24,7 @@ type LiquidityResult = {
 
 export const useCheckLiquidity = () => {
 	const getPoolLiquidity = useCallback(async (chainId: string): Promise<string> => {
-		const conceroContract = contractAddresses[chainId]
+		const conceroContract = poolAddresses[chainId]
 		const usdcContract = usdcAddresses[chainId]
 		const client = getPublicClient(Number(chainId))
 
@@ -55,10 +54,8 @@ export const useCheckLiquidity = () => {
 			try {
 				const poolAmount = await getPoolLiquidity(toChain.id)
 				const decimals = Number(fromToken.decimals)
-				const tokenPrice = fromToken.priceUsd ?? 0
-
-				const normalizedAmount = preciseDivide(fromAmount, 10 ** decimals)
-				const fromAmountUsd = preciseMultiply(normalizedAmount, tokenPrice)
+				const normalizedAmount = Number(fromAmount) / 10 ** decimals
+				const fromAmountUsd = normalizedAmount * (fromToken.priceUsd ?? 0)
 
 				if (fromAmountUsd > Number(poolAmount)) {
 					return {
