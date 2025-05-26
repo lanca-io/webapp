@@ -63,7 +63,7 @@ export const useLoadRoute = () => {
 		try {
 			setError(null)
 
-			if (isBridge(fromChain?.id, toChain?.id)) {
+			if (isBridge(fromChain?.id, toChain?.id) && isConnected) {
 				const liquidityResult = await checkLiquidity({
 					fromChain,
 					toChain,

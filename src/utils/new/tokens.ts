@@ -1,5 +1,6 @@
 import { formatUnits } from 'viem'
 import { preciseMultiply } from './operations'
+import { scientificToBigInt } from './operations'
 
 /**
  * Converts raw token amount (in smallest unit) to human-readable format
@@ -13,7 +14,7 @@ export function formatTokenAmount(amount: string | undefined | null, decimals: n
 	if (!amount || isNaN(Number(amount))) return '0'
 
 	try {
-		const formatted = formatUnits(BigInt(amount), decimals)
+		const formatted = formatUnits(scientificToBigInt(amount), decimals)
 		return formatted.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.$/, '')
 	} catch (error) {
 		console.error('Format error:', error)
@@ -56,12 +57,13 @@ export function parseTokenAmount(amount: string, decimals: number): string {
 		const decimalsFactor = 10 ** decimals
 		const preciseValue = amount
 		const rawValue = preciseMultiply(preciseValue, decimalsFactor)
+		const rawBigInt = scientificToBigInt(rawValue.toString())
 
-		if (!Number.isSafeInteger(rawValue)) {
+		if (rawBigInt > BigInt(Number.MAX_SAFE_INTEGER)) {
 			throw new Error('Value exceeds safe integer range')
 		}
 
-		return rawValue.toString()
+		return rawBigInt.toString()
 	} catch (error) {
 		console.error('Parse error:', error)
 		return '0'

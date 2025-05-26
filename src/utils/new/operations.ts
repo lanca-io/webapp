@@ -40,3 +40,23 @@ export function preciseSubtract(a: number | string, b: number | string): number 
 	const bNum = Number(b)
 	return Math.round((aNum - bNum) * PRECISION_FACTOR) / PRECISION_FACTOR
 }
+
+/**
+ * Converts a number or numeric string, including those in scientific notation,
+ * to a BigInt.
+ *
+ * @param num - The input number or numeric string to convert.
+ * @returns The BigInt representation of the input.
+ * @throws Will throw an error if the input cannot be converted to a valid BigInt.
+ */
+export function scientificToBigInt(num: number | string): bigint {
+	const str = String(num)
+
+	if (!str.toLowerCase().includes('e')) {
+		return BigInt(str)
+	}
+
+	const decimalStr = Number(str).toLocaleString('fullwide', { useGrouping: false })
+
+	return BigInt(decimalStr)
+}
