@@ -43,7 +43,7 @@ export const SwapWidget: FC = memo(() => {
 	}, [txStatus, state])
 
 	return (
-		<div className="swap_container" data-testid="swap-widget">
+		<div className={`swap_container`} data-testid="swap-widget">
 			{Card}
 		</div>
 	)

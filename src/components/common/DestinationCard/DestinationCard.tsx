@@ -8,10 +8,12 @@ import { formatTokenAmount } from '../../../utils/new/tokens'
 import { useSubvariantStore } from '../../../store/subvariant/useSubvariantStore'
 import { RouteTimer } from '../RouteTimer/RouteTimer'
 import { SplitSubvariantType } from '../../../store/subvariant/types'
+import { useEstimatePriceImpact } from '../../../hooks/useEstimatePriceImpact'
 import './DestinationCard.pcss'
 
 export const DestinationCard = memo(() => {
 	const { route, isLoading } = useRouteStore()
+	const { severity } = useEstimatePriceImpact()
 	const { state } = useSubvariantStore()
 	const { toToken, toChain } = useFormStore()
 	const { openToAssetModal } = useModalsStore()
@@ -22,7 +24,7 @@ export const DestinationCard = memo(() => {
 	}, [route?.to?.amount, toToken?.decimals])
 
 	return (
-		<div className="destination_card_wrapper">
+		<div className={`destination_card_wrapper ${severity ? ` severity_${severity}` : ''}`}>
 			<div
 				className="destination_card"
 				style={{ paddingBottom: state === SplitSubvariantType.SEND && route ? '32px' : '16px' }}
