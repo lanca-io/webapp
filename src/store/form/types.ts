@@ -18,6 +18,11 @@ export enum AddressMode {
 	ENS = 'ens',
 }
 
+export enum SlippageMode {
+	Auto = 'auto',
+	Custom = 'custom',
+}
+
 export type FormStateSlice = {
 	fromChain: ILancaChain | null
 	toChain: ILancaChain | null
@@ -35,6 +40,11 @@ export type FormStateSlice = {
 	addressInputError: string | null
 	addressInputMode: AddressMode
 	addressInputFocused: boolean
+
+	slippageInput: string
+	slippageInputError: string | null
+	slippageInputMode: SlippageMode
+	slippageInputFocused: boolean
 }
 
 export type FormActions = {
@@ -52,6 +62,10 @@ export type FormActions = {
 	setAddressInputError: (error: string | null) => void
 	setAddressInputMode: (mode: AddressMode) => void
 	setAddressInputFocused: (focused: boolean) => void
+	setSlippageInput: (value: string) => void
+	setSlippageInputError: (error: string | null) => void
+	setSlippageMode: (mode: SlippageMode) => void
+	setSlippageInputFocused: (focused: boolean) => void
 	clearInputs: () => void
 	swap: () => void
 }

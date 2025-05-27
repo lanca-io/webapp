@@ -1,7 +1,7 @@
 import type { FormState } from './types'
 import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../tokens/types'
-import { Mode, AddressMode } from './types'
+import { Mode, AddressMode, SlippageMode } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
 const initFromToken: ExtendedToken = {
@@ -60,6 +60,10 @@ export const CreateFormStore = () =>
 			addressInputError: null,
 			addressInputMode: AddressMode.None,
 			addressInputFocused: false,
+			slippageInput: '',
+			slippageInputError: null,
+			slippageInputMode: SlippageMode.Auto,
+			slippageInputFocused: false,
 			setFromChain: chain => set({ fromChain: chain }),
 			setToChain: chain => set({ toChain: chain }),
 			setFromToken: token => set({ fromToken: token }),
@@ -74,6 +78,10 @@ export const CreateFormStore = () =>
 			setAddressInputError: error => set({ addressInputError: error }),
 			setAddressInputMode: mode => set({ addressInputMode: mode }),
 			setAddressInputFocused: focused => set({ addressInputFocused: focused }),
+			setSlippageInput: value => set({ slippageInput: value }),
+			setSlippageInputError: error => set({ slippageInputError: error }),
+			setSlippageMode: mode => set({ slippageInputMode: mode }),
+			setSlippageInputFocused: focused => set({ slippageInputFocused: focused }),
 			clearInputs: () =>
 				set({
 					fromAmount: null,
@@ -87,6 +95,7 @@ export const CreateFormStore = () =>
 					addressInputMode: AddressMode.None,
 					addressInputFocused: false,
 				}),
+
 			swap: () =>
 				set(state => ({
 					fromChain: state.toChain,

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Button, Input } from '@concero/ui-kit'
-import { useHandleSlippageInput } from '../../../hooks/useHandleSlippageInput'
+import { useSlippageInput } from '../../../hooks/useSlippageInput'
 import './SlippageMenu.pcss'
 
 type SlippageMenuProps = {
@@ -8,7 +8,7 @@ type SlippageMenuProps = {
 }
 
 export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | null => {
-	const { isCustom, display, toggle, handleChange, handleBlur } = useHandleSlippageInput()
+	const { isCustom, display, toggle, handleChange, handleBlur, handleFocus } = useSlippageInput()
 
 	if (!isOpen) return null
 
@@ -19,6 +19,7 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 					Auto
 				</Button>
 				<Input
+					id="slippage-input"
 					className="slippage_input"
 					classNameWrap="slippage_input_wrap"
 					size="m"
@@ -27,6 +28,7 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 					inputProps={{
 						inputMode: 'decimal',
 						onBlur: handleBlur,
+						onFocus: handleFocus,
 					}}
 					placeholder="0.5%"
 				/>

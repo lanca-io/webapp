@@ -4,8 +4,9 @@ import { SlippageIcon } from '../../../assets/icons/SlippageIcon'
 import { SettingsIcon } from '../../../assets/icons/SettingsIcon'
 import { SlippageMenu } from '../SlippageMenu/SlippageMenu'
 import { useSettingsStore } from '../../../store/settings/useSettings'
-import { defaultSlippage } from '../../../store/settings/CreateSettingsStore'
 import { format } from '../../../utils/new/format'
+import { useFormStore } from '../../../store/form/useFormStore'
+import { SlippageMode } from '../../../store/form/types'
 import './SlippageInfo.pcss'
 
 const VARIANT_MAPPING = {
@@ -15,10 +16,11 @@ const VARIANT_MAPPING = {
 
 export const SlippageInfo = memo((): JSX.Element => {
 	const { slippage } = useSettingsStore()
+	const { slippageInputMode } = useFormStore()
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 	const [isHovered, setIsHovered] = useState<boolean>(false)
 
-	const isAuto = slippage === defaultSlippage
+	const isAuto = slippageInputMode === SlippageMode.Auto
 	const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), [])
 
 	const handleEnter = useCallback(() => setIsHovered(true), [])

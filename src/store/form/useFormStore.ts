@@ -21,6 +21,10 @@ export const useFormStore = () => {
 	const addressInputError = useStore(state => state.addressInputError)
 	const addressInputMode = useStore(state => state.addressInputMode)
 	const addressInputFocused = useStore(state => state.addressInputFocused)
+	const slippageInput = useStore(state => state.slippageInput)
+	const slippageInputError = useStore(state => state.slippageInputError)
+	const slippageInputMode = useStore(state => state.slippageInputMode)
+	const slippageInputFocused = useStore(state => state.slippageInputFocused)
 	const setFromChain = useStore(state => state.setFromChain)
 	const setToChain = useStore(state => state.setToChain)
 	const setFromToken = useStore(state => state.setFromToken)
@@ -35,6 +39,10 @@ export const useFormStore = () => {
 	const setAddressInputError = useStore(state => state.setAddressInputError)
 	const setAddressInputMode = useStore(state => state.setAddressInputMode)
 	const setAddressInputFocused = useStore(state => state.setAddressInputFocused)
+	const setSlippageInput = useStore(state => state.setSlippageInput)
+	const setSlippageInputError = useStore(state => state.setSlippageInputError)
+	const setSlippageMode = useStore(state => state.setSlippageMode)
+	const setSlippageInputFocused = useStore(state => state.setSlippageInputFocused)
 	const clearInputs = useStore(state => state.clearInputs)
 	const swap = useStore(state => state.swap)
 
@@ -53,6 +61,10 @@ export const useFormStore = () => {
 		addressInputError,
 		addressInputMode,
 		addressInputFocused,
+		slippageInput,
+		slippageInputError,
+		slippageInputMode,
+		slippageInputFocused,
 		setFromChain,
 		setToChain,
 		setFromToken,
@@ -67,6 +79,10 @@ export const useFormStore = () => {
 		setAddressInputError,
 		setAddressInputMode,
 		setAddressInputFocused,
+		setSlippageInput,
+		setSlippageInputError,
+		setSlippageMode,
+		setSlippageInputFocused,
 		clearInputs,
 		swap,
 	}
