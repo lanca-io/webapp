@@ -15,7 +15,13 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 	return (
 		<div className="slippage_menu">
 			<div className="slippage_menu_content">
-				<Button variant={isCustom ? 'secondary' : 'secondary_color'} onClick={toggle} size="m" isFull>
+				<Button
+					variant={isCustom ? 'secondary' : 'secondary_color'}
+					onClick={toggle}
+					size="m"
+					isFull
+					className={!isCustom ? 'no-hover' : ''}
+				>
 					Auto
 				</Button>
 				<Input
