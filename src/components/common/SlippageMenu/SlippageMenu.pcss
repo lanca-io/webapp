@@ -10,6 +10,19 @@
 	transform: translateY(0);
 }
 
+.slippage_input_wrap [class*='input'] {
+	color: var(--color-grey-500) !important;
+}
+
+.slippage_input_wrap:hover [class*='input'] {
+	color: var(--color-grey-700) !important;
+}
+
+.slippage_input_wrap [class*='is_focused'] [class*='input'],
+.slippage_input_wrap [class*='input']:focus {
+	color: var(--color-grey-700) !important;
+}
+
 .slippage_menu_content {
 	display: flex;
 	width: 100%;

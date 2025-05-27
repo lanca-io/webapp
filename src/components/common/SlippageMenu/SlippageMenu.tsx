@@ -20,6 +20,7 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 				</Button>
 				<Input
 					className="slippage_input"
+					classNameWrap="slippage_input_wrap"
 					size="m"
 					value={display}
 					onChange={handleChange}
