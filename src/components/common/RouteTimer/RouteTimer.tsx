@@ -15,7 +15,14 @@ const TIMER_COLORS = {
 	neutral: 'var(--color-grey-600)',
 	warning: 'var(--color-warning-700)',
 	negative: 'var(--color-danger-700)',
-	branded: 'var(--color-grey-600)',
+	branded: 'var(--color-primary-600)',
+}
+
+const TEXT_COLORS = {
+	neutral: 'var(--color-grey-600)',
+	warning: 'var(--color-warning-700)',
+	negative: 'var(--color-danger-700)',
+	branded: 'var(--color-primary-700)',
 }
 
 export const RouteTimer = memo(() => {
@@ -25,13 +32,14 @@ export const RouteTimer = memo(() => {
 	if (!route || (!isLoading && (!timeToRefresh || timeToRefresh > 60))) return null
 
 	const variant = isLoading ? 'branded' : getVariant(timeToRefresh)
-	const color = TIMER_COLORS[variant]
+	const iconColor = TIMER_COLORS[variant]
+	const textColor = TEXT_COLORS[variant]
 
 	return (
 		<Tag variant={variant} size="s" className="route_timer_tag">
 			<div className="route_timer">
-				<TimeIcon color={color} />
-				<span className="route_info" style={{ color }}>
+				<TimeIcon color={iconColor} />
+				<span className="route_info" style={{ color: textColor }}>
 					{isLoading ? 'Updating route info...' : `${timeToRefresh}s`}
 				</span>
 			</div>
