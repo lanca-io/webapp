@@ -44,6 +44,14 @@ export const useSlippageInput = () => {
 	}, [debouncedInput, isAutoMode, setSlippage, setSlippageInput])
 
 	useEffect(() => {
+		if (!isAutoMode && slippageInput && debouncedInput === slippageInput) {
+			if (!slippageInput.endsWith('%')) {
+				setSlippageInput(`${slippageInput}%`)
+			}
+		}
+	}, [debouncedInput, isAutoMode, slippageInput, setSlippageInput])
+
+	useEffect(() => {
 		if (slippage !== defaultSlippage && isAutoMode) {
 			setSlippageMode(SlippageMode.Custom)
 			setSlippageInput(`${Number(slippage) * 100}%`)
@@ -81,6 +89,8 @@ export const useSlippageInput = () => {
 				setSlippage(defaultSlippage)
 				setSlippageMode(SlippageMode.Auto)
 				setSlippageInput('')
+			} else if (!slippageInput.endsWith('%')) {
+				setSlippageInput(`${slippageInput}%`)
 			}
 		}
 		setSlippageInputFocused(false)
