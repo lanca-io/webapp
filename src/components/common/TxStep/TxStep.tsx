@@ -4,7 +4,7 @@ import { capitalizeFirstLetter } from '../../../utils/new/format'
 import { StepType, Status } from '@lanca/sdk'
 import { Spinner } from '@concero/ui-kit'
 import { SuccessIcon } from '../../../assets/icons/SuccessIcon'
-import { InfoIcon } from '../../../assets/icons/InfoIcon'
+import { DangerIcon } from '../../../assets/icons/DangerIcon'
 import './TxStep.pcss'
 
 type TxStepProps = {
@@ -15,8 +15,8 @@ type TxStepProps = {
 const statusIcons = {
 	[Status.NOT_STARTED]: null,
 	[Status.PENDING]: <Spinner type="gray" />,
-	[Status.REJECTED]: <InfoIcon color="var(--color-danger-600)" />,
-	[Status.FAILED]: <InfoIcon color="var(--color-danger-600)" />,
+	[Status.REJECTED]: <DangerIcon />,
+	[Status.FAILED]: <DangerIcon />,
 	[Status.SUCCESS]: <SuccessIcon />,
 }
 

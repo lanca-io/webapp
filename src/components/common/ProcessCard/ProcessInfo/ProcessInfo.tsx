@@ -4,7 +4,7 @@ import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecuti
 import { Status, StepType } from '@lanca/sdk'
 import { Alert } from '../../Alert/Alert'
 import { SignIcon } from '../../../../assets/icons/SignIcon'
-import { InfoIcon } from '../../../../assets/icons/InfoIcon'
+import { DangerIcon } from '../../../../assets/icons/DangerIcon'
 import './ProcessInfo.pcss'
 
 export type FailureStep = StepType.ALLOWANCE | StepType.BRIDGE | StepType.SRC_SWAP | StepType.DST_SWAP
@@ -47,7 +47,7 @@ const FailureInfo: FC<FailureInfoProps> = memo(({ step, reason }) => {
 		<Alert
 			variant="error"
 			title={`${stepLabels[step]} ${reasonLabels[reason]}`}
-			icon={<InfoIcon color="#F04438" />}
+			icon={<DangerIcon />}
 			data-testid={`failure-alert-${step}-${reason}`}
 		/>
 	)

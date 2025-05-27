@@ -68,7 +68,7 @@ export const Success: FC = memo((): JSX.Element => {
 						</div>
 					)}
 					<div className="success_info_timer">
-						<ClockIcon color="#097BB3" />
+						<ClockIcon color="var(--color-primary-500)" />
 						{isLoading ? (
 							<SkeletonLoader width={87} height={18} className="success_info_timer_skeleton" />
 						) : (
