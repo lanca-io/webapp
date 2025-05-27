@@ -8,6 +8,7 @@ import { useAccount } from 'wagmi'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 import { useTxProcess } from '../useTxProcess'
 import { Status } from '@lanca/sdk'
+import { areTokensEqual } from '../../utils/new/tokens'
 
 const REFRESH_INTERVAL_MS = 300_000
 const MAX_RETRIES = 2
@@ -66,15 +67,41 @@ export const useLoadBalances = () => {
 
 	const updateTokensInFormStore = useCallback(
 		(balances: ExtendedToken[]) => {
-			const updatedFromToken = balances.find(
-				token => token.address === fromToken?.address && token.chain_id === fromToken?.chain_id,
-			)
-			const updatedToToken = balances.find(
-				token => token.address === toToken?.address && token.chain_id === toToken?.chain_id,
-			)
+			const updatedFromToken =
+				fromToken &&
+				balances.find(token => token.address === fromToken.address && token.chain_id === fromToken.chain_id)
 
-			if (updatedFromToken) setFromToken(updatedFromToken)
-			if (updatedToToken) setToToken(updatedToToken)
+			const updatedToToken =
+				toToken &&
+				balances.find(token => token.address === toToken.address && token.chain_id === toToken.chain_id)
+
+			if (fromToken) {
+				if (!updatedFromToken) {
+					if (fromToken.balance !== '0') {
+						const zeroBalanceToken: ExtendedToken = {
+							...fromToken,
+							balance: '0',
+						}
+						setFromToken(zeroBalanceToken)
+					}
+				} else if (!areTokensEqual(fromToken, updatedFromToken)) {
+					setFromToken(updatedFromToken)
+				}
+			}
+
+			if (toToken) {
+				if (!updatedToToken) {
+					if (toToken.balance !== '0') {
+						const zeroBalanceToken: ExtendedToken = {
+							...toToken,
+							balance: '0',
+						}
+						setToToken(zeroBalanceToken)
+					}
+				} else if (!areTokensEqual(toToken, updatedToToken)) {
+					setToToken(updatedToToken)
+				}
+			}
 		},
 		[fromToken, toToken, setFromToken, setToToken],
 	)

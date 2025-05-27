@@ -1,3 +1,4 @@
+import type { ExtendedToken } from '../../store/tokens/types'
 import { formatUnits } from 'viem'
 import { preciseMultiply } from './operations'
 import { scientificToBigInt } from './operations'
@@ -68,4 +69,28 @@ export function parseTokenAmount(amount: string, decimals: number): string {
 		console.error('Parse error:', error)
 		return '0'
 	}
+}
+
+/**
+ * Compares two tokens to determine if they're functionally equal.
+ * Only compares essential properties that would affect UI or behavior
+ * to avoid unnecessary re-renders and updates in React components.
+ *
+ * @param a - First token to compare
+ * @param b - Second token to compare
+ * @returns `true` if tokens have the same essential properties, `false` otherwise
+ *
+ * @example
+ * const tokenA = { address: '0x123', chain_id: '1', balance: '1000', symbol: 'ETH', decimals: 18 };
+ * const tokenB = { address: '0x123', chain_id: '1', balance: '1000', symbol: 'ETH', decimals: 18 };
+ * const equal = areTokensEqual(tokenA, tokenB); // true
+ */
+export const areTokensEqual = (a: ExtendedToken, b: ExtendedToken): boolean => {
+	return (
+		a.address === b.address &&
+		a.chain_id === b.chain_id &&
+		a.balance === b.balance &&
+		a.symbol === b.symbol &&
+		a.decimals === b.decimals
+	)
 }
