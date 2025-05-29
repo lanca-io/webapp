@@ -4,7 +4,7 @@ import { type KeyboardEvent, useEffect, useState } from 'react'
 import { LanguageModal } from '../../../modals/LanguageModal/LanguageModal'
 import { animated, useSpring } from '@react-spring/web'
 import { useTranslation } from 'react-i18next'
-import { useMediaQuery } from '../../../../hooks/useMediaQuery'
+import { useQuery } from '../../../../hooks/useQuery'
 import { MobileBreadcrumbs } from './MobileBreadcrumbs/MobileBreadcrumbs'
 import { ContactSupportModal } from '../../../modals/ContactSupportModal/ContactSupportModal'
 import { IconButton } from '../../buttons/IconButton/IconButton'
@@ -15,7 +15,7 @@ export function BurgerMenu() {
 	const [isMenuOpened, setIsMenuOpened] = useState(false)
 	const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false)
 	const [isContactSupportModalVisible, setIsModalContactSupportModalVisible] = useState(false)
-	const isMobile = useMediaQuery('mobile')
+	const isMobile = useQuery('mobile')
 	const { t } = useTranslation()
 
 	const handleKeyDown = (event: KeyboardEvent) => {

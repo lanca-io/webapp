@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
 import { SwapIcon } from '../../../assets/icons/SwapIcon'
 import { useFormStore } from '../../../store/form/useFormStore'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import './CardSwitcher.pcss'
 
 export const CardSwitcher = (): JSX.Element => {
@@ -9,6 +10,7 @@ export const CardSwitcher = (): JSX.Element => {
 	const [top, setTop] = useState<number>(0)
 	const cardRef = useRef<HTMLElement | null>(null)
 	const observerRef = useRef<ResizeObserver | null>(null)
+	const isMobile = useIsMobile()
 
 	const handleSwap = useCallback(() => {
 		swap()
@@ -21,7 +23,8 @@ export const CardSwitcher = (): JSX.Element => {
 		cardRef.current = card
 
 		const updatePosition = () => {
-			const position = card.offsetHeight + 60
+			const offset = isMobile ? 42 : 60
+			const position = card.offsetHeight + offset
 			setTop(position)
 		}
 
@@ -34,7 +37,7 @@ export const CardSwitcher = (): JSX.Element => {
 			observer.unobserve(card)
 			observer.disconnect()
 		}
-	}, [])
+	}, [isMobile])
 
 	useEffect(() => {
 		const cleanup = setupObserver()

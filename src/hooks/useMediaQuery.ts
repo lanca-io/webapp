@@ -1,32 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const sizes = {
-	mobile: '768px',
-	ipad: '1024px',
+export const breakpoints = {
+	mobile: '(max-width: 576px)',
+	tablet: '(max-width: 768px) and (min-width: 577px)',
+	desktop: '(min-width: 769px)',
 }
 
-type Screen = 'ipad' | 'mobile'
+type BreakpointKey = keyof typeof breakpoints
 
-export const useMediaQuery = (screen: Screen) => {
-	const [matches, setMatches] = useState(() => {
-		const query = `(max-width: ${sizes[screen]})`
-		return window.matchMedia(query).matches
-	})
+const useMediaQuery = (query: string | BreakpointKey): boolean => {
+	const [matches, setMatches] = useState<boolean>(false)
+	const queryString = breakpoints[query as BreakpointKey] || query
 
 	useEffect(() => {
-		const query = `(max-width: ${sizes[screen]})`
-		const media = window.matchMedia(query)
+		if (typeof window === 'undefined') return
 
-		const listener = (event: MediaQueryListEvent) => {
-			setMatches(event.matches)
+		const media = window.matchMedia(queryString)
+		setMatches(media.matches)
+		const updateMatches = (e: MediaQueryListEvent): void => {
+			setMatches(e.matches)
 		}
-
-		media.addEventListener('change', listener)
+		media.addEventListener('change', updateMatches)
 
 		return () => {
-			media.removeEventListener('change', listener)
+			media.removeEventListener('change', updateMatches)
 		}
-	}, [screen])
+	}, [queryString])
 
 	return matches
 }
+
+export const useIsMobile = () => useMediaQuery('mobile')
+export const useIsTablet = () => useMediaQuery('tablet')
+export const useIsDesktop = () => useMediaQuery('desktop')
+
+export default useMediaQuery
