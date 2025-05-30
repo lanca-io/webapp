@@ -1,0 +1,48 @@
+.dest_value_indicator {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--sp-sm);
+	position: relative;
+}
+
+.dest_value_info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: var(--sp-xs);
+}
+
+.dest_value_indicator span {
+	font-size: 0.875rem;
+	line-height: 18px;
+	font-style: normal;
+}
+
+.dest_value_indicator_equal {
+	font-weight: 400;
+	color: var(--color-grey-500);
+}
+
+.dest_value_indicator_value,
+.dest_value_indicator_impact {
+	font-weight: 400;
+	color: var(--color-grey-600);
+	transition:
+		color 0.2s ease,
+		font-weight 0.1s ease;
+}
+
+.impact_positive {
+	color: var(--color-success-600);
+}
+
+.impact_warning {
+	color: var(--color-warning-600);
+}
+
+.impact_danger {
+	color: var(--color-danger-600);
+}

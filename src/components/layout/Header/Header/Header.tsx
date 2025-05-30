@@ -2,7 +2,7 @@ import { type FC, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import classNames from './Header.module.pcss'
 import { Logo } from '../../Logo/Logo'
-import { useMediaQuery } from '../../../../hooks/useMediaQuery'
+import { useQuery } from '../../../../hooks/useQuery'
 import { WalletButton } from '../WalletButton/WalletButton'
 import { BurgerMenu } from '../BurgerMenu/BurgerMenu'
 import { Button } from '../../buttons/Button/Button'
@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({ children }) => {
-	const isMobile = useMediaQuery('mobile')
+	const isMobile = useQuery('mobile')
 	const location = useLocation()
 
 	const getButtonClass = (path: string) => {

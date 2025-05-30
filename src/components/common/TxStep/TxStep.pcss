@@ -1,0 +1,41 @@
+.tx_step {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--sp-sm);
+}
+
+.tx_step_title {
+	color: var(--color-grey-500);
+	font-size: 0.875rem;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1.125rem;
+}
+
+.tx_step_NOT_STARTED {
+	color: var(--color-grey-500);
+	font-weight: 500;
+}
+
+.tx_step_PENDING {
+	color: var(--color-grey-700);
+	font-weight: 500;
+}
+
+.tx_step_SUCCESS {
+	color: var(--color-success-600);
+	font-weight: 500;
+}
+
+.tx_step_FAILED,
+.tx_step_REJECTED {
+	color: var(--color-danger-600);
+	font-weight: 500;
+}
+
+.tx_step svg {
+	width: 16px;
+	height: 16px;
+}

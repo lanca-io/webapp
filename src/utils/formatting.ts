@@ -171,7 +171,6 @@ interface FormatNumberOptions {
 }
 
 export function formatNumber(num: number, options: FormatNumberOptions = {}): string {
-	// console.log('formatNumber', num, options)
 	let { decimals = 10, decimalPlaces = 6, separator, minDigits = 1, disableUnit = false } = options
 	if (num === undefined || num === null) return ''
 

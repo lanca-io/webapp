@@ -1,0 +1,62 @@
+.slippage_menu {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--sp-md);
+	animation: fadeIn 0.3s ease forwards;
+	transition: all 0.3s ease;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.slippage_input_wrap [class*='input'] {
+	color: var(--color-grey-500) !important;
+}
+
+.slippage_input_wrap:hover [class*='input'] {
+	color: var(--color-grey-700) !important;
+}
+
+.slippage_input_wrap [class*='is_focused'] [class*='input'],
+.slippage_input_wrap [class*='input']:focus {
+	color: var(--color-grey-700) !important;
+}
+
+.slippage_menu_content {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	gap: var(--sp-xs);
+}
+
+.slippage_menu_separator {
+	width: 100%;
+	border-bottom: 1px solid var(--color-grey-100);
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-2.5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.no-hover {
+	pointer-events: none !important;
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(2.5px);
+	}
+}

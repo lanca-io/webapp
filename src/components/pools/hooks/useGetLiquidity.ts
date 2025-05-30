@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { type IPoolConfig, isPoolFullAbi, poolConfigs, poolLoansInUseAbiITem } from '../config/poolConfig'
-import { getPublicClient } from '../../../web3/wagmi'
+import { getPublicClient } from '../../../configuration/chains'
 import { erc20Abi, formatUnits } from 'viem'
 import { usdcDecimals } from '../config/usdcTokenAddresses'
 import { getMaxCap } from './useGetMaxCap'
