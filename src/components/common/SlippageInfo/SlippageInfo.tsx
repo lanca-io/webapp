@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useState, useEffect, useRef } from 'react'
 import { Tag, IconButton } from '@concero/ui-kit'
 import { SlippageIcon } from '../../../assets/icons/SlippageIcon'
 import { SettingsIcon } from '../../../assets/icons/SettingsIcon'
@@ -19,17 +19,48 @@ export const SlippageInfo = memo((): JSX.Element => {
 	const { slippageInputMode } = useFormStore()
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 	const [isHovered, setIsHovered] = useState<boolean>(false)
+	const slippageRef = useRef<HTMLDivElement>(null)
 
 	const isAuto = slippageInputMode === SlippageMode.Auto
-	const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), [])
+
+	const toggleMenu = useCallback((e: React.MouseEvent) => {
+		e.stopPropagation()
+		setIsMenuOpen(prev => !prev)
+	}, [])
 
 	const handleEnter = useCallback(() => setIsHovered(true), [])
 	const handleLeave = useCallback(() => setIsHovered(false), [])
 
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (isMenuOpen && slippageRef.current && !slippageRef.current.contains(event.target as Node)) {
+				setIsMenuOpen(false)
+			}
+		}
+
+		if (isMenuOpen) {
+			document.addEventListener('mousedown', handleClickOutside)
+		}
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [isMenuOpen])
+
 	const slippageValue = format(Number(slippage) * 100, 3)
 
 	return (
-		<div className="slippage_info_wrapper" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+		<div
+			ref={slippageRef}
+			className="slippage_info_wrapper"
+			onMouseEnter={handleEnter}
+			onMouseLeave={handleLeave}
+			onClick={toggleMenu}
+			role="button"
+			tabIndex={0}
+			aria-expanded={isMenuOpen}
+			aria-haspopup="menu"
+		>
 			<div className="slippage_info_container">
 				<div className="slippage_info_description">
 					<SlippageIcon aria-hidden="true" />
@@ -54,6 +85,7 @@ export const SlippageInfo = memo((): JSX.Element => {
 						onClick={toggleMenu}
 						isFocused={isMenuOpen}
 						isHovered={isHovered}
+						aria-label="Toggle slippage settings"
 					>
 						<SettingsIcon aria-hidden="true" />
 					</IconButton>

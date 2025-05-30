@@ -13,8 +13,8 @@ const getVariant = (time: number) => {
 
 const TIMER_COLORS = {
 	neutral: 'var(--color-grey-600)',
-	warning: 'var(--color-warning-700)',
-	negative: 'var(--color-danger-700)',
+	warning: 'var(--color-warning-600)',
+	negative: 'var(--color-danger-600)',
 	branded: 'var(--color-primary-600)',
 }
 
