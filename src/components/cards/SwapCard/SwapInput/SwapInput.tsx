@@ -9,7 +9,7 @@ import { IconButton } from '../../../layout/buttons/IconButton/IconButton'
 import { FeeDropdown } from '../SwapDetails/FeeDropdown/FeeDropdown'
 import { Separator } from '../../../layout/Separator/Separator'
 import { getWalletClient } from '@wagmi/core'
-import { config } from '../../../../web3/wagmi'
+import { adapter } from '../../../../configuration/wagmi'
 import { SwapActionType } from '../swapReducer/types'
 import { handleSwap } from '../swapExecution/handleSwap'
 
@@ -18,7 +18,7 @@ export const SwapInput = React.memo(({ swapState, swapDispatch }: SwapInputProps
 
 	const handleSwapButtonClick = useCallback(async () => {
 		try {
-			const walletClient = await getWalletClient(config, { chainId: Number(from.chain.id) })
+			const walletClient = await getWalletClient(adapter.wagmiConfig, { chainId: Number(from.chain.id) })
 			await handleSwap({
 				swapState,
 				swapDispatch,

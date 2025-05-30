@@ -1,6 +1,6 @@
 import { type Dispatch } from 'react'
 import { SwapActionType, type SwapAction } from '../components/cards/SwapCard/swapReducer/types'
-import { getPublicClient } from '../web3/wagmi'
+import { getPublicClient } from '../configuration/chains'
 import { TokenAmount } from './TokenAmount'
 import { type Address, getContract } from 'viem'
 import ERC20 from '../abi/ERC20.json'

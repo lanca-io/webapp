@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useFormStore } from '../../store/form/useFormStore'
 import { useTxExecutionStore } from '../../store/tx-execution/useTxExecutionStore'
-import { getPublicClient } from '../../web3/wagmi'
+import { getPublicClient } from '../../configuration/chains'
 import { Hash, PublicClient } from 'viem'
 
 const BRIDGE_ESTIMATE = '~15'

@@ -1,5 +1,5 @@
 import { erc20Abi, formatUnits } from 'viem'
-import { getPublicClient } from '../../../../../web3/wagmi'
+import { getPublicClient } from '../../../../../configuration/chains'
 import { type IPoolConfig, poolConfigs, poolLoansInUseAbiITem } from '../../../config/poolConfig'
 import { usdcDecimals } from '../../../config/usdcTokenAddresses'
 
