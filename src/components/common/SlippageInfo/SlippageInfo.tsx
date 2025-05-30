@@ -32,17 +32,25 @@ export const SlippageInfo = memo((): JSX.Element => {
 	const handleLeave = useCallback(() => setIsHovered(false), [])
 
 	useEffect(() => {
+		if (!isMenuOpen) return
+
 		const handleClickOutside = (event: MouseEvent) => {
-			if (isMenuOpen && slippageRef.current && !slippageRef.current.contains(event.target as Node)) {
+			const menuElement = document.querySelector('.slippage_menu')
+			const isInSlippageMenu = menuElement ? menuElement.contains(event.target as Node) : false
+
+			const isInSlippageInfo = slippageRef.current ? slippageRef.current.contains(event.target as Node) : false
+
+			if (!isInSlippageMenu && !isInSlippageInfo) {
 				setIsMenuOpen(false)
 			}
 		}
 
-		if (isMenuOpen) {
+		const timeoutId = setTimeout(() => {
 			document.addEventListener('mousedown', handleClickOutside)
-		}
+		}, 100)
 
 		return () => {
+			clearTimeout(timeoutId)
 			document.removeEventListener('mousedown', handleClickOutside)
 		}
 	}, [isMenuOpen])

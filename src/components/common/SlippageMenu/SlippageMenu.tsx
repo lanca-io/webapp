@@ -12,8 +12,12 @@ export const SlippageMenu = memo(({ isOpen }: SlippageMenuProps): JSX.Element | 
 
 	if (!isOpen) return null
 
+	const handleMenuClick = (e: React.MouseEvent) => {
+		e.stopPropagation()
+	}
+
 	return (
-		<div className="slippage_menu">
+		<div className="slippage_menu" onClick={handleMenuClick}>
 			<div className="slippage_menu_content">
 				<Button
 					variant={isCustom ? 'secondary' : 'secondary_color'}
