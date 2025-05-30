@@ -3,7 +3,7 @@ import { base, baseSepolia } from 'viem/chains'
 import { config } from '../../../../../constants/config'
 import { getPoolLiquidity } from './handleFetchPoolLiquidity'
 import { abi as ParentPool } from '../../../config/abi/ParentPool.json'
-import { getPublicClient } from '../../../../../web3/wagmi'
+import { getPublicClient } from '../../../../../configuration/chains'
 import { lpTokenBase, parentPoolBase } from '../../../config/poolMainnetAddresses'
 import { lpTokenBaseSepolia, parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
 

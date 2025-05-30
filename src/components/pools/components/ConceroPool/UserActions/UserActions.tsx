@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 import { UserAction } from './Action/Action'
 import { Modal } from '../../../../modals/Modal/Modal'
 import { Button } from '../../../../layout/buttons/Button/Button'
-import { useMediaQuery } from '../../../../../hooks/useMediaQuery'
+import { useQuery } from '../../../../../hooks/useQuery'
 import { IconButton } from '../../../../layout/buttons/IconButton/IconButton'
 import { CrossIcon } from '../../../../../assets/icons/CrossIcon'
 import { useGetUserActions } from '../../../hooks/useGetUserActions'
@@ -33,7 +33,7 @@ export function UserActions() {
 	const { address } = useAccount()
 	const [isOpen, setIsOpen] = useState(false)
 	const [retryTimeLeft, setRetryTimeLeft] = useState<number>(0)
-	const isMobile = useMediaQuery('ipad')
+	const isMobile = useQuery('ipad')
 
 	const { actions, isLoading, error } = useGetUserActions(address, retryTimeLeft)
 

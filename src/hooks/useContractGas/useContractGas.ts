@@ -4,7 +4,7 @@ import { config } from '../../constants/config'
 import { type Token } from '../../api/concero/types'
 import { gasUsedMap } from './gasPriceMap'
 import { type IRouteType, StepType, type TxName } from '@lanca/sdk'
-import { getPublicClient } from '../../web3/wagmi'
+import { getPublicClient } from '../../configuration/chains'
 
 const getUsdPrice = async (chainId: string): Promise<Token | null> => {
 	try {

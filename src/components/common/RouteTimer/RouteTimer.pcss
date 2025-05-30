@@ -1,0 +1,42 @@
+.route_timer_tag {
+	animation: fadeIn 0.3s ease forwards;
+	transition: all 0.3s ease;
+}
+
+.route_timer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--sp-xs);
+}
+
+.route_info {
+	font-size: 0.875rem;
+	font-weight: 500;
+	line-height: 18px;
+	font-style: normal;
+	color: var(--color-grey-700);
+	transition: color 0.3s ease;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-2.5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(2.5px);
+	}
+}

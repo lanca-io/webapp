@@ -3,7 +3,7 @@ import { base, baseSepolia } from 'wagmi/chains'
 import { abi } from '../config/abi/ParentPool.json'
 import { usdcDecimals } from '../config/usdcTokenAddresses'
 import { config } from '../../../constants/config'
-import { getPublicClient } from '../../../web3/wagmi'
+import { getPublicClient } from '../../../configuration/chains'
 import { parentPoolBase } from '../config/poolMainnetAddresses'
 import { parentPoolBaseSepolia } from '../config/poolTestnetAddresses'
 

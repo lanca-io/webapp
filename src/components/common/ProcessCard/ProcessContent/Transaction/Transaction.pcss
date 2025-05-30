@@ -1,0 +1,69 @@
+.transaction_content {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--sp-sm);
+	align-self: stretch;
+}
+
+.token_with_chain {
+	position: relative;
+	display: inline-block;
+}
+
+.transaction_content_from,
+.transaction_content_to {
+	display: flex;
+	height: 160px;
+	width: 160px;
+	padding: var(--sp-xxxl);
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	flex: 1 0 0;
+	border-radius: var(--sp-lg);
+	background-color: var(--color-grey-50);
+}
+
+.transaction_content_arrow {
+	display: flex;
+	width: 24px;
+	height: 24px;
+	padding: var(--sp-xs);
+	justify-content: center;
+	align-items: center;
+	background-color: var(--color-grey-50);
+	border-radius: var(--sp-sm);
+}
+
+.transaction_chain_image {
+	background-color: var(--color-grey-25);
+	border-radius: var(--sp-xs);
+	box-shadow:
+		0 0 6px 0 rgba(52, 64, 84, 0.3),
+		0 2px 3px 0 rgba(52, 64, 84, 0.15);
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.transaction_content_image {
+	width: 48px;
+	height: 48px;
+	border-radius: var(--sp-xxxl);
+}
+
+.transaction_chain_image {
+	width: 24px;
+	height: 24px;
+	border-radius: var(--sp-sm);
+}
+
+@media only screen and (max-width: 768px) {
+	.transaction_content_from,
+	.transaction_content_to {
+		max-width: 128px;
+		width: 100%;
+	}
+}

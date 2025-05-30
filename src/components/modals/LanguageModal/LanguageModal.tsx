@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { Button } from '../../layout/buttons/Button/Button'
 import classNames from '../../layout/Header/WalletButton/WalletButton.module.pcss'
 import { IconCheck } from '@tabler/icons-react'
-import { type Language, languages } from '../../../i18n/languages'
+import type { Language } from '../../../providers/I18NProvider/types'
+import { languages } from '../../../providers/I18NProvider/languages'
 import { setItem } from '../../../utils/localStorage'
 
 interface LanguageModalProps {
