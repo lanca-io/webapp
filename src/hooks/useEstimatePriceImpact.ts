@@ -72,8 +72,6 @@ export const useEstimatePriceImpact = () => {
 
 	useEffect(() => {
 		if (fromAmount && severity === ImpactSeverity.DANGER) {
-			console.log(fromAmount, severity, impact)
-			console.log(route?.to?.amount, inUsd, outUsd)
 			setError('Extreme price impact')
 		}
 	}, [severity, error, setError])

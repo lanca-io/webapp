@@ -15,4 +15,9 @@ export const truncate = (str: string, length = 100, ending = '...'): string =>
  * @param str - The address to be truncated.
  * @returns The truncated address.
  */
-export const truncateAddress = (str: string): string => `${str.slice(0, 5)}...${str.slice(-4)}`
+export const truncateAddress = (str: string, startChars = 5, endChars = 4, separator = '...'): string => {
+	if (!str) return ''
+	if (str.length <= startChars + endChars) return str
+
+	return `${str.slice(0, startChars)}${separator}${str.slice(-endChars)}`
+}
