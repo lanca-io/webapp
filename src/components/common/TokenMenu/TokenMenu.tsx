@@ -5,7 +5,7 @@ import { SearchedTokens } from '../SearchedTokens/SearchedTokens'
 import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../../../store/tokens/types'
 
-interface MenuProps {
+type MenuProps = {
 	chain: ILancaChain | null
 	tokens: ExtendedToken[]
 	isSearchActive: boolean
@@ -15,14 +15,18 @@ interface MenuProps {
 }
 
 export const TokenMenu = memo(
-	({ chain, tokens, searchedTokens, isLoading, isSearchActive, onTokenSelect }: MenuProps): JSX.Element => (
-		<>
-			<TokenBalances chain={chain} items={4} onTokenSelect={onTokenSelect} />
-			{isSearchActive ? (
-				<SearchedTokens tokens={searchedTokens} isLoading={isLoading} onTokenSelect={onTokenSelect} />
-			) : (
-				<PopularTokens tokens={tokens} isLoading={isLoading} onTokenSelect={onTokenSelect} />
-			)}
-		</>
-	),
+	({ chain, tokens, searchedTokens, isLoading, isSearchActive, onTokenSelect }: MenuProps): JSX.Element => {
+		const hasSearchResults = searchedTokens.length > 0
+
+		return (
+			<>
+				<TokenBalances chain={chain} items={4} onTokenSelect={onTokenSelect} isSearchActive={isSearchActive} />
+				{isSearchActive && hasSearchResults ? (
+					<SearchedTokens tokens={searchedTokens} isLoading={isLoading} onTokenSelect={onTokenSelect} />
+				) : (
+					<PopularTokens tokens={tokens} isLoading={isLoading} onTokenSelect={onTokenSelect} />
+				)}
+			</>
+		)
+	},
 )

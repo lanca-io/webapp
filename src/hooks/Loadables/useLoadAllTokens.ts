@@ -1,11 +1,11 @@
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { handleFetchTokens } from '../../handlers/tokens'
 import { useTokensStore } from '../../store/tokens/useTokensStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 
-const FIVE_MINUTES_MS = 5 * 60 * 1000
+const CACHE_TIME = 5 * 60 * 1000
 const TOKENS_PER_CHAIN = 3
 
 export const useLoadAllTokens = () => {
@@ -21,8 +21,12 @@ export const useLoadAllTokens = () => {
 	} = useTokensStore()
 	const { chains } = useChainsStore()
 
+	const tokensRef = useRef<ExtendedToken[]>([])
+
 	const fetchTokens = useCallback(
 		async (offset: number, search: string): Promise<ExtendedToken[]> => {
+			if (chains.length === 0) return []
+
 			try {
 				const results = await Promise.all(
 					chains.map(async chain => {
@@ -35,49 +39,57 @@ export const useLoadAllTokens = () => {
 				)
 				return results.flat()
 			} catch (error) {
-				console.error(error)
+				console.error('Failed to fetch all tokens:', error)
 				return []
 			}
 		},
 		[chains],
 	)
 
+	const queryKey = useMemo(() => ['allTokens', offset, search], [offset, search])
 	const { data: tokens, isFetching: isLoading } = useQuery({
-		queryKey: ['allTokens', offset, search],
+		queryKey,
 		queryFn: () => fetchTokens(offset, search),
 		enabled: chains.length > 0,
-		staleTime: FIVE_MINUTES_MS,
+		staleTime: CACHE_TIME,
 	})
 
-	const processTokens = useCallback(
-		(data: ExtendedToken[] | undefined) => {
-			if (!data) return
+	useEffect(() => {
+		if (!tokens) return
 
-			const isPagination = offset > 0
-			const isSearching = Boolean(search)
+		const isPaginating = offset > 0
+		const isSearching = Boolean(search)
 
-			if (isPagination) {
-				addTokens(data)
-				if (isSearching) {
-					addSearched(data)
-				}
-			} else {
-				setTokens(data)
-				if (isSearching) {
-					setSearched(data)
-				}
-			}
-		},
-		[offset, search, addTokens, setTokens, setSearched, addSearched],
-	)
+		const updateStrategies = {
+			search: isPaginating ? addSearched : setSearched,
+			default: isPaginating
+				? (items: ExtendedToken[]) => {
+						addTokens(items)
+						tokensRef.current = [...tokensRef.current, ...items]
+					}
+				: (items: ExtendedToken[]) => {
+						setTokens(items)
+						tokensRef.current = items
+					},
+		}
+
+		const handler = isSearching ? updateStrategies.search : updateStrategies.default
+		handler(tokens)
+
+		if (!isSearching) {
+			setSearched([])
+		}
+	}, [tokens, offset, search, addTokens, setTokens, addSearched, setSearched])
+
+	useEffect(() => {
+		if (search && tokensRef.current.length > 0) {
+			setTokens(tokensRef.current)
+		}
+	}, [search, setTokens])
 
 	useEffect(() => {
 		setLoading(isLoading)
 	}, [isLoading, setLoading])
-
-	useEffect(() => {
-		processTokens(tokens)
-	}, [tokens, processTokens])
 
 	useEffect(() => {
 		setOffset(0)

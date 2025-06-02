@@ -31,7 +31,7 @@ export const AddressInfo: FC = () => {
 			)}
 			{showAddress && (
 				<span className="asset_info_title" aria-label="No info">
-					{truncateAddress(toAddress)}
+					{truncateAddress(toAddress, 6, 6)}
 				</span>
 			)}
 		</div>
