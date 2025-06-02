@@ -23,7 +23,6 @@ export const AssetsModal = memo(
 	({ isOpen, onClose, onSelect, onChainSelect, selectedChain }: ModalProps): JSX.Element => {
 		const { isActive, hasResults, setActive, setResults, updateSearch } = useAssetSearch(selectedChain)
 		const { tokens, searchTokens, isLoading, offset, setOffset } = useTokenSelection(selectedChain)
-
 		const loadMore = useCallback(() => {
 			setOffset(offset + 15)
 		}, [offset, setOffset])

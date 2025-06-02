@@ -1,12 +1,13 @@
 import type { ExtendedToken } from '../../store/tokens/types'
-import { useEffect, useCallback } from 'react'
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useEffect, useCallback, useRef, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { handleFetchTokens } from '../../handlers/tokens'
 import { useTokensStore } from '../../store/tokens/useTokensStore'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 import { useModalsStore } from '../../store/modals/useModalsStore'
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000
+const PAGINATION_LIMIT = 15
 
 type FetchTokensParams = {
 	chainId?: string
@@ -21,15 +22,20 @@ export const useLoadTokens = () => {
 	const { searchValue, offset, setTokens, addTokens, setLoading, setOffset, setSearchedTokens, addSearchedTokens } =
 		useTokensStore()
 
-	const activeChain = isFromAssetModalOpen ? fromChain : isToAssetModalOpen ? toChain : null
+	const activeChain = useMemo(
+		() => (isFromAssetModalOpen ? fromChain : isToAssetModalOpen ? toChain : null),
+		[isFromAssetModalOpen, isToAssetModalOpen, fromChain, toChain],
+	)
+
 	const chainId = activeChain?.id
+	const tokensRef = useRef<ExtendedToken[]>([])
 
 	const fetchTokens = useCallback(
-		async ({ chainId, offset, limit = 15, searchValue }: FetchTokensParams): Promise<ExtendedToken[]> => {
+		async ({ chainId, offset, limit = 15, searchValue }: FetchTokensParams) => {
 			if (!chainId) return []
 
 			try {
-				const tokens = await handleFetchTokens(chainId, offset, limit, searchValue)
+				const tokens: ExtendedToken[] = await handleFetchTokens(chainId, offset, limit, searchValue)
 				const chain = chains.find(c => c.id === chainId)
 
 				return tokens.map((token: ExtendedToken) => ({
@@ -44,52 +50,48 @@ export const useLoadTokens = () => {
 		[chains],
 	)
 
-	const { data, isFetching }: UseQueryResult<ExtendedToken[]> = useQuery({
+	const { data, isFetching } = useQuery({
 		queryKey: ['tokens', chainId, offset, searchValue],
 		queryFn: () =>
 			fetchTokens({
 				chainId,
 				offset,
-				limit: 15,
+				limit: PAGINATION_LIMIT,
 				searchValue,
 			}),
 		enabled: Boolean(chainId) && chains.length > 0,
 		staleTime: FIVE_MINUTES_MS,
 	})
 
-	const processTokens = useCallback(
-		(tokens: ExtendedToken[] | undefined): void => {
-			if (!tokens) return
+	useEffect(() => {
+		if (!data) return
 
-			const hasTokens = tokens.length > 0
-			const isPagination = offset > 0
-			const isSearching = Boolean(searchValue)
+		const isPaginating = offset > 0
+		const isSearching = Boolean(searchValue)
 
-			if (isPagination) {
-				if (hasTokens) {
-					addTokens(tokens)
-				}
-
-				if (isSearching) {
-					addSearchedTokens(tokens)
-				}
+		if (isSearching) {
+			isPaginating ? addSearchedTokens(data) : setSearchedTokens(data)
+		} else {
+			if (isPaginating) {
+				addTokens(data)
+				tokensRef.current = [...tokensRef.current, ...data]
 			} else {
-				setTokens(tokens)
-				if (isSearching) {
-					setSearchedTokens(tokens)
-				}
+				setTokens(data)
+				tokensRef.current = data
 			}
-		},
-		[offset, searchValue, setTokens, addTokens, setSearchedTokens, addSearchedTokens],
-	)
+			setSearchedTokens([])
+		}
+	}, [data, offset, searchValue, addTokens, setTokens, addSearchedTokens, setSearchedTokens])
+
+	useEffect(() => {
+		if (searchValue && tokensRef.current.length > 0) {
+			setTokens(tokensRef.current)
+		}
+	}, [searchValue, setTokens])
 
 	useEffect(() => {
 		setLoading(isFetching)
 	}, [isFetching, setLoading])
-
-	useEffect(() => {
-		processTokens(data)
-	}, [data, processTokens])
 
 	useEffect(() => {
 		setOffset(0)

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
 import { ArrowDown } from '../../../assets/icons/ArrowDown'
-import { useIsMobile } from '../../../hooks/useMediaQuery'
+import { useIsMobile, useIsTablet } from '../../../hooks/useMediaQuery'
 import './CardPointer.pcss'
 
 export const CardPointer = (): JSX.Element => {
@@ -10,6 +10,7 @@ export const CardPointer = (): JSX.Element => {
 	const dstRef = useRef<HTMLElement | null>(null)
 	const observerRef = useRef<ResizeObserver | null>(null)
 	const isMobile = useIsMobile()
+	const isTablet = useIsTablet()
 
 	const setupObserver = useCallback(() => {
 		const src_card = document.querySelector('.source_card') as HTMLElement
@@ -20,7 +21,16 @@ export const CardPointer = (): JSX.Element => {
 		dstRef.current = dst_card
 
 		const updatePosition = () => {
-			const srcOffset = isMobile ? 45 : 60
+			let srcOffset: number
+
+			if (isMobile) {
+				srcOffset = 45
+			} else if (isTablet) {
+				srcOffset = 50
+			} else {
+				srcOffset = 60
+			}
+
 			const srcBottom = src_card.offsetHeight + srcOffset
 			const dstTop = dst_card.offsetHeight + 2
 			const position = srcBottom + dstTop
@@ -39,7 +49,7 @@ export const CardPointer = (): JSX.Element => {
 			observer.unobserve(dst_card)
 			observer.disconnect()
 		}
-	}, [isMobile])
+	}, [isMobile, isTablet])
 
 	useEffect(() => {
 		const cleanup = setupObserver()
