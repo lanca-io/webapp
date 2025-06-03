@@ -1,8 +1,9 @@
 import type { ExtendedToken } from '../../../store/tokens/types'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Token } from '../Token/Token'
 import { TokenSkeleton } from '../Token/TokenSkeleton'
 import { useFormStore } from '../../../store/form/useFormStore'
+import { useBalancesStore } from '../../../store/balances/useBalancesStore'
 import './SearchedTokens.pcss'
 
 type SearchedTokensProps = {
@@ -13,12 +14,23 @@ type SearchedTokensProps = {
 
 export const SearchedTokens = memo(({ tokens, isLoading, onTokenSelect }: SearchedTokensProps): JSX.Element | null => {
 	const { fromToken, toToken } = useFormStore()
+	const { balances } = useBalancesStore()
 
-	const filteredTokens = tokens.filter(
-		token =>
-			!(token.address === fromToken?.address && token.chain_id === fromToken?.chain_id) &&
-			!(token.address === toToken?.address && token.chain_id === toToken?.chain_id),
-	)
+	const filteredTokens = useMemo(() => {
+		return tokens.filter(token => {
+			const isSelectedToken =
+				(token.address === fromToken?.address && token.chain_id === fromToken?.chain_id) ||
+				(token.address === toToken?.address && token.chain_id === toToken?.chain_id)
+
+			if (isSelectedToken) return false
+
+			const isInBalances = balances.some(
+				bal => bal.address.toLowerCase() === token.address.toLowerCase() && bal.chain_id === token.chain_id,
+			)
+
+			return !isInBalances
+		})
+	}, [tokens, fromToken, toToken, balances])
 
 	const handleSelect = useCallback(
 		(token: ExtendedToken) => {

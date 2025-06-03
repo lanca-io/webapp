@@ -16,6 +16,7 @@ const ADMIN_ADDRESSES: string[] = Array.from(
 		'0x1fF551B110ecDE2D7BABA67A2ba2552455D7f6C4',
 		'0x546060B9f58182ad21fBA50bf78E71eaF3925B32',
 		'0x207Da52a19bDde899f200989c04B4f62Ad5176Ef',
+		'0xf46beA4c3Ba0455Bf9537282238eabA193851e30',
 	]),
 ).map(addr => addr.toLowerCase().trim())
 
