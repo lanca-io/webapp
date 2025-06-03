@@ -43,13 +43,15 @@ export const useEstimatePriceImpact = () => {
 		const impactPct = ((Number(outUsd) - Number(inUsd)) / Number(inUsd)) * 100
 		const isGain = impactPct > 0
 		const absImpact = Math.abs(impactPct)
+		const dollarDifference = Math.abs(Number(outUsd) - Number(inUsd))
+		const isSmallAmount = Number(inUsd) <= 10
 
 		let severity: ImpactSeverity = ImpactSeverity.NORMAL
 
 		if (isGain) {
 			severity = ImpactSeverity.POSITIVE
 		} else {
-			if (Number(inUsd) <= 10) {
+			if (isSmallAmount) {
 				severity = ImpactSeverity.NORMAL
 			} else {
 				severity =
@@ -61,9 +63,16 @@ export const useEstimatePriceImpact = () => {
 			}
 		}
 
+		let impactText
+		if (isSmallAmount) {
+			impactText = `${isGain ? '+ ' : '- '}${format(dollarDifference, 2, '$')}`
+		} else {
+			impactText = `${isGain ? '+ ' : '- '}${format(absImpact, 2, '')}%`
+		}
+
 		return {
 			impact: {
-				text: `${isGain ? '+ ' : '- '}${format(absImpact, 2, '')}%`,
+				text: impactText,
 				isGain,
 			},
 			severity,
