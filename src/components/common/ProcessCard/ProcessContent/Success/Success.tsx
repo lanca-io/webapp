@@ -31,7 +31,7 @@ export const Success: FC = memo((): JSX.Element => {
 
 	const imageSrc = '/Swap/Success.webp'
 	const altText = 'Success Process'
-	const headingText = 'You received'
+	const headingText = hasDestination ? 'You sent' : 'You received'
 
 	return (
 		<>

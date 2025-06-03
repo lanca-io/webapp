@@ -9,6 +9,8 @@ import { ProcessCard } from '../ProcessCard/ProcessCard'
 import { useTxProcess } from '../../../hooks/useTxProcess'
 import { ModeMenu } from '../ModeMenu/ModeMenu'
 import { AddressCard } from '../AddressCard/AddressCard'
+import { Status } from '@lanca/sdk'
+import { RewardsWidget } from '../RewardsWidget/RewardsWidget'
 import { useSubvariantStore } from '../../../store/subvariant/useSubvariantStore'
 import './SwapWidget.pcss'
 
@@ -45,6 +47,7 @@ export const SwapWidget: FC = memo(() => {
 	return (
 		<div className={`swap_container`} data-testid="swap-widget">
 			{Card}
+			{txStatus === Status.SUCCESS && <RewardsWidget />}
 		</div>
 	)
 })

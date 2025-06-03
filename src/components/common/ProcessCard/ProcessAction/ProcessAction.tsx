@@ -5,7 +5,7 @@ import { useTxProcess } from '../../../../hooks/useTxProcess'
 import { Button } from '@concero/ui-kit'
 import { Status } from '@lanca/sdk'
 import { useFormStore } from '../../../../store/form/useFormStore'
-import { arbitrum, base, polygon, avalanche } from 'viem/chains'
+import { arbitrum, base, polygon, avalanche, optimism } from 'viem/chains'
 import './ProcessAction.pcss'
 
 const chainsTwitterMap: Record<string, string> = {
@@ -13,6 +13,7 @@ const chainsTwitterMap: Record<string, string> = {
 	[base.id]: 'base',
 	[polygon.id]: '0xPolygon',
 	[avalanche.id]: 'avax',
+	[optimism.id]: 'Optimism',
 }
 
 export const ProcessAction: FC = memo((): JSX.Element | null => {
@@ -29,12 +30,9 @@ export const ProcessAction: FC = memo((): JSX.Element | null => {
 		const time = executionTime ? executionTime : '10.00'
 
 		const fromChainHandle = fromChain?.id ? chainsTwitterMap[Number(fromChain.id)] || fromChain.name : 'ethereum'
-
 		const toChainHandle = toChain?.id ? chainsTwitterMap[Number(toChain.id)] || toChain.name : 'ethereum'
+		const shareUrl = `https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${fromChainHandle}%20to%20%40${toChainHandle}%20in%20just%20${time}%20sec%20on%20%40lanca_io!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`
 
-		const tweetText = `Just performed a fully decentralised bridge from @${fromChainHandle} to @${toChainHandle} in just ${time} sec on @concero_io testnet using the new Concero Messaging V2.\n\nTry to break my record on https://testnet.concero.io 👇`
-
-		const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`
 		window.open(shareUrl, '_blank', 'noopener,noreferrer')
 	}, [executionTime, fromChain, toChain])
 
