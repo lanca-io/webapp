@@ -53,7 +53,7 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 			</div>
 
 			{routeLoading ? (
-				<div>
+				<div className="destination_panel_loader">
 					<Spinner type="gray" />
 				</div>
 			) : error ? (

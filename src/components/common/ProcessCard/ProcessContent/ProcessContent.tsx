@@ -7,9 +7,9 @@ import { Success } from './Success/Success'
 import { useTxProcess } from '../../../../hooks/useTxProcess'
 import { Status, StepType } from '@lanca/sdk'
 import { trackEvent } from '../../../../hooks/useTracking'
-import { useFormStore } from '../../../../store/form/useFormStore'
 import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'
 import { action, category } from '../../../../constants/tracking'
+import { useRouteStore } from '../../../../store/route/useRouteStore'
 import './ProcessContent.pcss'
 
 const trackedEvents = {
@@ -20,8 +20,8 @@ const trackedEvents = {
 
 export const ProcessContent: FC = memo((): JSX.Element | null => {
 	const { txStatus, currentStep } = useTxProcess()
-	const { fromToken, toToken, fromChain, toChain } = useFormStore()
-	const { srcHash, dstHash } = useTxExecutionStore()
+	const { srcHash } = useTxExecutionStore()
+	const { route } = useRouteStore()
 
 	const trackTxEvent = (eventType: string, eventData: any) => {
 		if (trackedEvents[eventType as keyof typeof trackedEvents]) {
@@ -39,12 +39,8 @@ export const ProcessContent: FC = memo((): JSX.Element | null => {
 					action: action.SwapFailed,
 					label: action.SwapFailed,
 					data: {
-						fromToken: fromToken,
-						toToken: toToken,
-						fromChain: fromChain,
-						toChain: toChain,
-						srcHash: srcHash,
-						dstHash: dstHash,
+						route: route,
+						txHash: srcHash,
 					},
 				})
 				return <Failure />
@@ -55,12 +51,8 @@ export const ProcessContent: FC = memo((): JSX.Element | null => {
 					action: action.SwapRejected,
 					label: action.SwapRejected,
 					data: {
-						fromToken: fromToken,
-						toToken: toToken,
-						fromChain: fromChain,
-						toChain: toChain,
-						srcHash: srcHash,
-						dstHash: dstHash,
+						route: route,
+						txHash: srcHash,
 					},
 				})
 				return <Failure />
@@ -71,12 +63,8 @@ export const ProcessContent: FC = memo((): JSX.Element | null => {
 					action: action.SwapSuccess,
 					label: 'swap_success',
 					data: {
-						fromToken: fromToken,
-						toToken: toToken,
-						fromChain: fromChain,
-						toChain: toChain,
-						srcHash: srcHash,
-						dstHash: dstHash,
+						route: route,
+						txHash: srcHash,
 					},
 				})
 				return <Success />
