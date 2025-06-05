@@ -36,6 +36,23 @@
 	justify-content: center;
 	padding: var(--sp-sm) var(--sp-lg);
 	gap: 10px;
+	position: relative;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	border: none;
+	outline: none;
+}
+
+.header_nav_item:hover .header_nav_item_text {
+	color: var(--color-grey-700);
+}
+
+.header_nav_item:focus {
+	outline: none;
+}
+
+.header_nav_item.active .header_nav_item_text {
+	color: var(--color-primary-600);
 }
 
 .header_nav_item_wrap {
@@ -44,6 +61,7 @@
 	align-items: center;
 	justify-content: center;
 	gap: 10px;
+	transition: transform 0.2s ease;
 }
 
 .header_nav_item_text {
@@ -52,6 +70,7 @@
 	font-weight: 500;
 	line-height: 18px;
 	font-style: normal;
+	transition: all 0.3s ease;
 }
 
 .header_nav_item_icon {
@@ -61,6 +80,7 @@
 	justify-content: center;
 	height: 24px;
 	width: 24px;
+	transition: transform 0.3s ease;
 }
 
 .header_nav_item_content {
