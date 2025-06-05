@@ -11,9 +11,8 @@ import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 
 const REFRESH_INTERVAL = 60_000
-const DEFAULT_ADDRESS: Address = '0xe4aD9f82AE0A4Ce2D2128755C7F4a16D471a0fe1'
 
-export const useLoadRoute = () => {
+export const useLoadRouteQuote = () => {
 	const { address, isConnected } = useAccount()
 	const { state } = useSubvariantStore()
 	const { setRoute, setIsLoading, setError } = useRouteStore()
@@ -30,9 +29,9 @@ export const useLoadRoute = () => {
 			if (toAddress && !addressInputError) {
 				return toAddress
 			}
-			return (address as Address) || DEFAULT_ADDRESS
+			return address as Address
 		}
-		return (address as Address) || DEFAULT_ADDRESS
+		return address as Address
 	}, [state, toAddress, address, addressInputError])
 
 	const canFetch = useMemo(() => {
@@ -83,7 +82,7 @@ export const useLoadRoute = () => {
 				fromToken: fromToken!.address as Address,
 				toToken: toToken!.address as Address,
 				amount: fromAmount!,
-				fromAddress: (address as Address) || DEFAULT_ADDRESS,
+				fromAddress: address as Address,
 				toAddress: effectiveToAddress,
 				slippageTolerance: slippage,
 			})
