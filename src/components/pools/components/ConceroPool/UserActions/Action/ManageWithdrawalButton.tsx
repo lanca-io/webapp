@@ -1,7 +1,7 @@
 import { UserActionStatus, type UserTransaction } from '../UserActions'
 import { TransactionStatus, retryWithdrawal } from '../../../Pool/poolExecution/withdrawal'
 import { type Dispatch, type SetStateAction } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useWalletClient } from 'wagmi'
 import { Button } from '../../../../../layout/buttons/Button/Button'
 import { trackEvent } from '../../../../../../hooks/useTracking'
 import { action as trackingAction, category } from '../../../../../../constants/tracking'
@@ -15,7 +15,8 @@ interface Props {
 }
 
 export const ManageWithdrawalButton = ({ action, status, setStatus, setRetryTimeLeft }: Props) => {
-	const { address, chainId } = useAccount()
+	const { address } = useAccount()
+	const { data: client } = useWalletClient()
 	const isRetryRequestWithdraw = action.status === UserActionStatus.WithdrawRetryNeeded
 	const isTxFailed = status === TransactionStatus.FAILED
 	const isPending = status === TransactionStatus.PENDING
@@ -26,7 +27,7 @@ export const ManageWithdrawalButton = ({ action, status, setStatus, setRetryTime
 
 	const handleRetryWithdrawal = async () => {
 		try {
-			if (!address) return
+			if (!address || !client) return
 			setStatus(TransactionStatus.PENDING)
 
 			trackEvent({
@@ -36,7 +37,7 @@ export const ManageWithdrawalButton = ({ action, status, setStatus, setRetryTime
 				data: { action },
 			})
 
-			const txStatus = await retryWithdrawal(address, chainId!)
+			const txStatus = await retryWithdrawal(address, client)
 
 			if (txStatus === TransactionStatus.SUCCESS) {
 				const timeLeft = new Date().getTime()
