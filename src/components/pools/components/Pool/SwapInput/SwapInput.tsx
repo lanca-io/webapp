@@ -1,8 +1,6 @@
 import { TokenArea } from '../TokenArea/TokenArea'
 import { handleWithdrawal } from '../poolExecution/withdrawal'
-import { adapter } from '../../../../../configuration/wagmi'
 import { handleDeposit } from '../poolExecution/deposit'
-import { getWalletClient } from '@wagmi/core'
 import { Separator } from '../../../../layout/Separator/Separator'
 import { SwapDetails } from '../SwapDetails/SwapDetails'
 import { IconButton } from '../../../../layout/buttons/IconButton/IconButton'
@@ -13,7 +11,7 @@ import { type PoolAction, type PoolState, PoolActionType } from '../poolReducer/
 import type { Dispatch, MouseEvent } from 'react'
 import { Button } from '../../../../layout/buttons/Button/Button'
 import { useAppKit } from '@reown/appkit/react'
-import { useAccount } from 'wagmi'
+import { useAccount, useWalletClient } from 'wagmi'
 import classNames from './SwapInput.module.pcss'
 
 export interface SwapInputProps {
@@ -25,6 +23,7 @@ export interface SwapInputProps {
 export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) => {
 	const { inputError, from, to, poolMode, isLoading, balance, stage } = poolState
 	const { isConnected } = useAccount()
+	const { data: client } = useWalletClient()
 	const { open } = useAppKit()
 
 	const amountIsAvailable = Number(from.amount) >= 250
@@ -34,16 +33,16 @@ export const SwapInput = ({ poolState, poolDispatch, onClose }: SwapInputProps) 
 	const isDisabled: boolean = (isDeposit && !amountIsAvailable) || !isConnected
 
 	const handleStartTx = async () => {
-		const walletClient = await getWalletClient(adapter.wagmiConfig, { chainId: Number(from.chain.id) })
+		await client?.switchChain({ id: Number(from.chain.id) })
 		if (from.amount.length === 0) {
 			poolDispatch({ type: PoolActionType.SET_INPUT_ERROR, payload: ErrorType.ENTER_AMOUNT })
 			return
 		}
 
-		if (isDeposit) {
-			await handleDeposit(poolState, poolDispatch, walletClient)
-		} else {
-			await handleWithdrawal(poolState, poolDispatch, walletClient)
+		if (isDeposit && client) {
+			await handleDeposit(poolState, poolDispatch, client)
+		} else if (!isDeposit && client) {
+			await handleWithdrawal(poolState, poolDispatch, client)
 		}
 	}
 
