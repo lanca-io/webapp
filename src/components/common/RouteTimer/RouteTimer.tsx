@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Tag } from '@concero/ui-kit'
 import { TimeIcon } from '../../../assets/icons/TimeIcon'
-import { useLoadRoute } from '../../../hooks/Loadables/useLoadRoute'
+import { useLoadRouteQuote } from '../../../hooks/Loadables/useLoadRouteQuote'
 import { useRouteStore } from '../../../store/route/useRouteStore'
 import './RouteTimer.pcss'
 
@@ -27,7 +27,7 @@ const TEXT_COLORS = {
 
 export const RouteTimer = memo(() => {
 	const { route, isLoading } = useRouteStore()
-	const { timeToRefresh } = useLoadRoute()
+	const { timeToRefresh } = useLoadRouteQuote()
 
 	if (!route || (!isLoading && (!timeToRefresh || timeToRefresh > 60))) return null
 

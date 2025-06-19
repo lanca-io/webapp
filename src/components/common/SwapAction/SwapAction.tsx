@@ -8,6 +8,7 @@ import { useExecuteRoute } from '../../../hooks/useExecuteRoute'
 import { useSubvariantStore } from '../../../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../../../store/subvariant/types'
 import { useEstimatePriceImpact } from '../../../hooks/useEstimatePriceImpact'
+import { Spinner } from '@concero/ui-kit'
 import './SwapAction.pcss'
 
 export const SwapAction = memo((): JSX.Element => {
@@ -17,9 +18,9 @@ export const SwapAction = memo((): JSX.Element => {
 	const { isConnected, isConnecting } = useAccount()
 	const { route, isLoading: routeLoading, error } = useRouteStore()
 	const { amountInputError, addressInputError } = useFormStore()
-	const executeRoute = useExecuteRoute(route)
+	const { executeRoute, isExecuting } = useExecuteRoute(route)
 
-	const isLoading = isConnecting || routeLoading
+	const isLoading = isConnecting || routeLoading || isExecuting
 
 	const hasErrors =
 		state === SplitSubvariantType.SEND ? !!amountInputError || !!addressInputError : !!amountInputError
@@ -47,7 +48,7 @@ export const SwapAction = memo((): JSX.Element => {
 					onClick={handleClick}
 					aria-label={isConnected ? 'Initiate swap' : 'Connect wallet'}
 				>
-					{buttonText}
+					{isLoading ? <Spinner type="gray" /> : buttonText}
 				</Button>
 			</div>
 		</div>
