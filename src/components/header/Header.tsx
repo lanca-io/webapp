@@ -23,7 +23,7 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-	{ to: routes.home, label: 'Swap' },
+	{ to: routes.home, label: 'Swap & Bridge' },
 	{ to: routes.pools, label: 'Provide Liquidity' },
 	{
 		to: 'https://app.concero.io/rewards',
