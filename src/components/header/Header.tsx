@@ -8,11 +8,15 @@ import { useAppKit } from '@reown/appkit/react'
 import { useAccount } from 'wagmi'
 import { trackEvent } from '../../hooks/useTracking'
 import { action, category } from '../../constants/tracking'
-import { truncateWallet } from '../../utils/formatting'
-import { Burger } from './Burger/Burger'
+import { Dropdown } from './Dropdown/Dropdown'
 import { routes } from '../../constants/routes'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useIsTablet } from '../../hooks/useMediaQuery'
+import { ContactSupportModal } from '../modals/ContactSupportModal/ContactSupportModal'
+import { truncateAddress } from '../../utils/new/truncate'
+import { Burger } from './Burger/Burger'
+import { TrailArrowRightIcon } from '../../assets/icons/TrailArrowRightIcon'
+import { WalletIcon } from '../../assets/icons/WalletIcon'
 import './Header.pcss'
 
 type NavItem = {
@@ -39,12 +43,17 @@ export const Header: FC = () => {
 	const location = useLocation()
 	const isMobile = useIsMobile()
 	const isTablet = useIsTablet()
-
+	const [isSupportModalOpen, setIsSupportModalOpen] = useState(false)
+	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
 	const [isBurgerOpen, setIsBurgerOpen] = useState<boolean>(false)
 
-	const showNavItems = !isMobile && !isTablet
+	const isDesktop = !isMobile && !isTablet
+	const showNavItems = isDesktop
+	const showDropdown = isTablet
+	const showBurger = isMobile
 
 	useEffect(() => {
+		setIsDropdownOpen(false)
 		setIsBurgerOpen(false)
 	}, [location.pathname])
 
@@ -57,8 +66,12 @@ export const Header: FC = () => {
 		})
 	}, [open])
 
+	const handleSupportClick = useCallback(() => {
+		setIsSupportModalOpen(true)
+	}, [])
+
 	const walletButtonText = useMemo(() => {
-		if (isConnected) return truncateWallet(address!)
+		if (isConnected) return truncateAddress(address!, 4, 4)
 		if (isConnecting) return 'Connecting...'
 		return 'Connect Wallet'
 	}, [isConnected, isConnecting, address])
@@ -88,11 +101,29 @@ export const Header: FC = () => {
 				{showNavItems && <nav className="header_nav">{navItems}</nav>}
 			</div>
 			<div className="header_actions">
-				<Button variant={isConnected ? 'secondary' : 'secondary_color'} size="m" onClick={handleWalletClick}>
+				{isDesktop && (
+					<Button variant="secondary" size="m" onClick={handleSupportClick}>
+						Contact Support
+					</Button>
+				)}
+				<Button
+					variant={isConnected ? 'secondary' : 'secondary_color'}
+					rightIcon={isConnected ? <TrailArrowRightIcon /> : undefined}
+					leftIcon={isConnected ? <WalletIcon /> : undefined}
+					size="m"
+					onClick={handleWalletClick}
+				>
 					{walletButtonText}
 				</Button>
-				<Burger isMenuOpen={isBurgerOpen} onToggleMenu={() => setIsBurgerOpen(prev => !prev)} />
+
+				{showDropdown && (
+					<Dropdown isMenuOpen={isDropdownOpen} onToggleMenu={() => setIsDropdownOpen(prev => !prev)} />
+				)}
+				{showBurger && <Burger isMenuOpen={isBurgerOpen} onToggleMenu={() => setIsBurgerOpen(prev => !prev)} />}
 			</div>
+			{isSupportModalOpen && (
+				<ContactSupportModal isShow={isSupportModalOpen} setIsShow={setIsSupportModalOpen} />
+			)}
 		</header>
 	)
 }

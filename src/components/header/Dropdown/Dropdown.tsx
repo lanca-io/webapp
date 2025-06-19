@@ -11,9 +11,9 @@ import { routes } from '../../../constants/routes'
 import { CloseIcon } from '../../../assets/icons/CloseIcon'
 import { SwapBridgeIcon } from '../../../assets/icons/SwapBridge'
 import { LiquidityIcon } from '../../../assets/icons/LiquidityIcon'
-import './Burger.pcss'
+import './Dropdown.pcss'
 
-type BurgerProps = {
+type DropdownProps = {
 	isMenuOpen?: boolean
 	onToggleMenu?: () => void
 }
@@ -31,7 +31,7 @@ type MenuItem = {
 	dividerAfter?: boolean
 }
 
-export const Burger: FC<BurgerProps> = ({ isMenuOpen = false, onToggleMenu }) => {
+export const Dropdown: FC<DropdownProps> = ({ isMenuOpen = false, onToggleMenu }) => {
 	const navigate = useNavigate()
 	const [isSupportModalOpen, setIsSupportModalOpen] = useState(false)
 
@@ -90,13 +90,13 @@ export const Burger: FC<BurgerProps> = ({ isMenuOpen = false, onToggleMenu }) =>
 	}
 
 	return (
-		<div className="burger">
+		<div className="dropdown">
 			<IconButton variant="secondary" onClick={onToggleMenu} isFocused={isMenuOpen}>
 				{isMenuOpen ? <CloseIcon /> : <IconBurger />}
 			</IconButton>
 			{isMenuOpen && (
-				<div className="burger_menu">
-					<div className="burger_menu_content">
+				<div className="dropdown_menu">
+					<div className="dropdown_menu_content">
 						{menuItems.map(
 							({
 								key,
@@ -111,8 +111,8 @@ export const Burger: FC<BurgerProps> = ({ isMenuOpen = false, onToggleMenu }) =>
 								to,
 							}) => (
 								<Fragment key={key}>
-									{dividerBefore && <div className="burger_menu_divider" />}
-									<div className="burger_menu_item">
+									{dividerBefore && <div className="dropdown_menu_divider" />}
+									<div className="dropdown_menu_item">
 										<Button
 											variant={variant}
 											size={size}
@@ -120,25 +120,18 @@ export const Burger: FC<BurgerProps> = ({ isMenuOpen = false, onToggleMenu }) =>
 											leftIcon={leftIcon}
 											trailIcon={trailIcon ? { show: true, icon: trailIcon } : undefined}
 											onClick={() => handleNavigation(to)}
-											className="burger_menu_button"
 										>
 											{label}
 										</Button>
 									</div>
-									{dividerAfter && <div className="burger_menu_divider" />}
+									{dividerAfter && <div className="dropdown_menu_divider" />}
 								</Fragment>
 							),
 						)}
-						<Button
-							variant="secondary_color"
-							size="l"
-							isFull
-							onClick={handleSupportClick}
-							className="burger_menu_support_button"
-						>
-							Contact Support
-						</Button>
 					</div>
+					<Button variant="secondary_color" size="l" isFull onClick={handleSupportClick}>
+						Contact Support
+					</Button>
 				</div>
 			)}
 			{isSupportModalOpen && (
