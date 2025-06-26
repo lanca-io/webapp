@@ -26,7 +26,7 @@ export const CardPointer = (): JSX.Element => {
 			if (isMobile) {
 				srcOffset = 45
 			} else if (isTablet) {
-				srcOffset = 50
+				srcOffset = 60
 			} else {
 				srcOffset = 60
 			}

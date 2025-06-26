@@ -29,7 +29,7 @@ export const CardSwitcher = (): JSX.Element => {
 			if (isMobile) {
 				offset = 42
 			} else if (isTablet) {
-				offset = 43
+				offset = 57
 			} else {
 				offset = 60
 			}
