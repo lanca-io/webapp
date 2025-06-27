@@ -21,6 +21,31 @@ export function format(value: number, decimalPlaces: number = 2, symbol?: string
 }
 
 /**
+ * Formats a numeric string to a maximum number of decimals.
+ * If the input is an integer (no decimals), returns the string as is.
+ * If the decimal part exceeds maxDecimals, rounds to maxDecimals.
+ *
+ * @param value - The numeric string to format.
+ * @param maxDecimals - Maximum number of decimals to show (default: 3).
+ * @returns The formatted string.
+ */
+export function formatToMaxDecimals(value: string, maxDecimals: number = 3): string {
+	if (!value) return ''
+	const num = Number(value)
+	if (isNaN(num)) return value
+
+	if (!value.includes('.')) {
+		return value
+	}
+
+	const [, decimalPart = ''] = value.split('.')
+	if (decimalPart.length > maxDecimals) {
+		return num.toFixed(maxDecimals)
+	}
+	return value
+}
+
+/**
  * Capitalizes the first letter of a given string and converts the rest to lowercase.
  *
  * @param {string} str - The string to format.
