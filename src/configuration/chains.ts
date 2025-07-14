@@ -42,7 +42,6 @@ export const transports = {
 		http('https://1rpc.io/base'),
 		http('https://base-rpc.publicnode.com'),
 		http('https://base.blockpi.network/v1/rpc/public'),
-		http('https://public.stackup.sh/api/v1/node/base-mainnet'),
 		http('https://base.drpc.org'),
 		http(),
 	]),
