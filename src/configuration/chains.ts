@@ -23,8 +23,8 @@ export const transports = {
 	]),
 
 	[optimism.id]: fallback([
-		http('https://1rpc.io/op'),
 		http('https://optimism-rpc.publicnode.com'),
+		http('https://1rpc.io/op'),
 		http('https://optimism.drpc.org'),
 		http('https://endpoints.omniatech.io/v1/op/mainnet/public'),
 		http(),
@@ -39,8 +39,8 @@ export const transports = {
 	]),
 
 	[base.id]: fallback([
-		http('https://1rpc.io/base'),
 		http('https://base-rpc.publicnode.com'),
+		http('https://1rpc.io/base'),
 		http('https://base.blockpi.network/v1/rpc/public'),
 		http('https://base.drpc.org'),
 		http(),

@@ -18,7 +18,7 @@ export const useValueConversion = (): ConversionResult => {
 	const { balance, price } = useMemo(
 		() => ({
 			balance: formatTokenAmount(fromToken?.balance ?? '0', fromToken?.decimals ?? 18),
-			price: fromToken?.priceUsd ?? 0,
+			price: fromToken?.price_usd ?? 0,
 			decimals: fromToken?.decimals ?? 18,
 		}),
 		[fromToken],
@@ -31,7 +31,9 @@ export const useValueConversion = (): ConversionResult => {
 			const value = amountInput.replace(/^\$/, '')
 			const num = parseFloat(value)
 
-			return isNaN(num) ? { usd: null, token: null } : { usd: `${num}$`, token: usdToTokenAmount(num, price) }
+			return isNaN(num)
+				? { usd: null, token: null }
+				: { usd: `${num}$`, token: usdToTokenAmount(num, Number(price)) }
 		}
 
 		let usd: string | null = null
@@ -39,13 +41,13 @@ export const useValueConversion = (): ConversionResult => {
 		switch (amountInputMode) {
 			case Mode.Number:
 				const amount = parseFloat(amountInput)
-				usd = isNaN(amount) ? null : tokenAmountToUsd(amount, price)
+				usd = isNaN(amount) ? null : tokenAmountToUsd(amount, Number(price))
 				break
 			case Mode.Percent:
-				usd = percentOfBalanceToUsd(amountInput, balance, price)
+				usd = percentOfBalanceToUsd(amountInput, balance, Number(price))
 				break
 			case Mode.Text:
-				usd = textCommandToUsd(amountInput, balance, price)
+				usd = textCommandToUsd(amountInput, balance, Number(price))
 				break
 		}
 
@@ -55,7 +57,7 @@ export const useValueConversion = (): ConversionResult => {
 	return {
 		usd,
 		token,
-		isValid: usd !== null && price > 0,
+		isValid: usd !== null && Number(price) > 0,
 		rawUsd: usd?.replace('$', '') || null,
 		isUsdMode: amountInputMode === Mode.Dollar,
 	}

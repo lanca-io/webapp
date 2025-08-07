@@ -2,16 +2,14 @@ import { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 import { StoreApi } from 'zustand'
 
 export type Token = {
-	address: string
-	chain_id: string
-	chainLogoURI?: string | null
+	chain_id: number
 	decimals: number
-	is_popular: boolean
-	logoURI: string
+	address: string
+	chainLogoURI?: string
+	logo_url: string
 	name: string
 	symbol: string
-	coinGeckoId: string | null
-	priceUsd: number | null
+	price_usd: string
 }
 
 export type ExtendedToken = Token & {

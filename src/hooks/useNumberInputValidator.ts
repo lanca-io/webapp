@@ -10,7 +10,7 @@ export const useNumberInputValidator = (value: string, token: ExtendedToken | nu
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
-	const priceUsd = token?.priceUsd ?? 0
+	const priceUsd = token?.price_usd ?? 0
 
 	const validation = useMemo(() => {
 		if (!value.trim()) {
