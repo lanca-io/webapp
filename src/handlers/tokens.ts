@@ -1,11 +1,10 @@
 import type { TokenBalance } from '../api/concero/types'
-import { config } from '../constants/config'
 import { get } from '../api/client'
 
-export async function handleFetchBalances(chainId: string | undefined, address: string): Promise<TokenBalance | null> {
+export async function handleFetchBalances(chainId: string, address: string): Promise<TokenBalance | null> {
 	if (!address) return null
 
-	const url = `${config.baseURL}/balances`
+	const url = `https://dev.concero.io/api/v1/balances`
 	const params = {
 		wallet_address: address,
 		chain_id: chainId,
@@ -13,7 +12,7 @@ export async function handleFetchBalances(chainId: string | undefined, address: 
 
 	try {
 		const response = await get(url, params)
-		return response.data.data || null
+		return response.data.payload?.data?.[chainId] || null
 	} catch (error) {
 		return null
 	}
@@ -30,12 +29,12 @@ export const handleFetchTokens = async (chainId?: string, offset?: number, limit
 		params.append('search', search)
 	}
 
-	const url = `${config.baseURL}/tokens/?${params.toString()}`
+	const url = `https://dev.concero.io/api/v1/tokens?${params.toString()}`
 
 	try {
 		const response = await get(url)
 		if (response.status !== 200) throw new Error(response.statusText)
-		return response.data.data
+		return response.data.payload.tokens
 	} catch (error) {
 		console.warn('Error fetching tokens:', error)
 		return []

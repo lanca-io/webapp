@@ -9,7 +9,7 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 	const balance = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
-	const priceUsd = token?.priceUsd ?? 0
+	const priceUsd = token?.price_usd ?? 0
 
 	const validation = useMemo(() => {
 		if (!text.trim()) {

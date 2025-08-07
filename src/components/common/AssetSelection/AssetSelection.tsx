@@ -26,7 +26,7 @@ export const AssetSelection = memo(
 				tabIndex={hasInteractiveElement ? 0 : -1}
 				aria-disabled={isDisabled}
 			>
-				<TokenSelection logoURI={token?.logoURI} symbol={token?.symbol} />
+				<TokenSelection logoURI={token?.logo_url} symbol={token?.symbol} />
 
 				<p className="asset_selection_pointer">on</p>
 

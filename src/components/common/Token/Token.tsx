@@ -21,7 +21,7 @@ export const Token = memo(({ token, showBalance = false, onClick }: TokenProps):
 	const { chains } = useChainsStore()
 
 	const explorer = useMemo(
-		() => chains.find(chain => chain.id === token.chain_id)?.explorerURI,
+		() => chains.find(chain => Number(chain.id) === Number(token.chain_id))?.explorerURI,
 		[chains, token.chain_id],
 	)
 
@@ -41,16 +41,16 @@ export const Token = memo(({ token, showBalance = false, onClick }: TokenProps):
 	const handleLinkClick = useCallback((e: React.MouseEvent) => e.stopPropagation(), [])
 
 	const badge = useMemo(
-		() => <Badge tokenLogoSrc={token.logoURI} chainLogoSrc={token.chainLogoURI || ''} size="l" />,
-		[token.logoURI, token.chainLogoURI],
+		() => <Badge tokenLogoSrc={token.logo_url} chainLogoSrc={token.chainLogoURI || ''} size="l" />,
+		[token.logo_url, token.chainLogoURI],
 	)
 
 	const balance = useMemo(
 		() =>
 			showBalance ? (
-				<Balance balance={token.balance || '0'} decimals={token.decimals} price={token.priceUsd} />
+				<Balance balance={token.balance || '0'} decimals={token.decimals} price={Number(token.price_usd)} />
 			) : null,
-		[showBalance, token.balance, token.decimals, token.priceUsd],
+		[showBalance, token.balance, token.decimals, token.price_usd],
 	)
 
 	return (

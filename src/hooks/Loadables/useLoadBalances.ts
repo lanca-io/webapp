@@ -28,9 +28,9 @@ export const useLoadBalances = () => {
 				const data = await handleFetchBalances(chainId, address)
 				const chain = chains.find(c => c.id === chainId)
 
-				if (!data || !data[chainId] || !chain) return []
+				if (!Array.isArray(data) || !chain) return []
 
-				return data[chainId].map(({ _id, ...token }) => ({
+				return data.map(({ _id, ...token }) => ({
 					...token,
 					chain_id: chainId,
 					chainLogoURI: chain.logoURI,
