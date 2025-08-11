@@ -77,14 +77,13 @@ export const useLoadRouteQuote = () => {
 			}
 
 			const route = await sdk.getRoute({
-				fromChainId: fromChain!.id,
-				toChainId: toChain!.id,
+				fromChainId: Number(fromChain!.id),
+				toChainId: Number(toChain!.id),
 				fromToken: fromToken!.address as Address,
 				toToken: toToken!.address as Address,
 				amount: fromAmount!,
-				fromAddress: address as Address,
-				toAddress: effectiveToAddress,
-				slippageTolerance: slippage,
+				sender: address as Address,
+				slippage: slippage,
 			})
 
 			return route
