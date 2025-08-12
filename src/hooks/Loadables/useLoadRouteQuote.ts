@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { zeroAddress, type Address } from 'viem'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccount } from 'wagmi'
@@ -18,7 +18,6 @@ export const useLoadRouteQuote = () => {
 	const { setRoute, setIsLoading, setError } = useRouteStore()
 	const { fromChain, toChain, fromToken, toToken, fromAmount, amountInputError, addressInputError, toAddress } =
 		useFormStore()
-
 	const { isBridge, checkLiquidity } = useCheckLiquidity()
 	const { slippage } = useSettingsStore()
 	const [timeToRefresh, setTimeToRefresh] = useState<number>(0)
@@ -82,9 +81,14 @@ export const useLoadRouteQuote = () => {
 				fromToken: fromToken!.address as Address,
 				toToken: toToken!.address as Address,
 				amount: fromAmount!,
-				sender: address as Address,
+				sender: address ?? zeroAddress,
 				slippage: slippage,
 			})
+
+			if (!route) {
+				setError('No route found')
+				return null
+			}
 
 			return route
 		} catch (error: any) {

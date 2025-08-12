@@ -20,8 +20,8 @@ export const useEstimatePriceImpact = () => {
 		const ready = Boolean(
 			fromAmount &&
 				route?.to?.amount &&
-				fromToken?.priceUsd &&
-				toToken?.priceUsd &&
+				fromToken?.price_usd &&
+				toToken?.price_usd &&
 				typeof fromToken.decimals === 'number' &&
 				typeof toToken.decimals === 'number',
 		)
@@ -32,8 +32,8 @@ export const useEstimatePriceImpact = () => {
 		const outAmount = formatTokenAmount(route?.to.amount, toToken?.decimals || 18)
 
 		return {
-			inUsd: tokenAmountToUsd(Number(inAmount), fromToken?.priceUsd || 0),
-			outUsd: tokenAmountToUsd(Number(outAmount), toToken?.priceUsd || 0),
+			inUsd: tokenAmountToUsd(Number(inAmount), Number(fromToken?.price_usd || 0)),
+			outUsd: tokenAmountToUsd(Number(outAmount), Number(toToken?.price_usd || 0)),
 		}
 	}, [fromAmount, route?.to?.amount, fromToken, toToken])
 
