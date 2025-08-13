@@ -69,11 +69,16 @@ export const useLoadBalances = () => {
 		(balances: ExtendedToken[]) => {
 			const updatedFromToken =
 				fromToken &&
-				balances.find(token => token.address === fromToken.address && token.chain_id === fromToken.chain_id)
+				balances.find(
+					token =>
+						token.address === fromToken.address && Number(token.chain_id) === Number(fromToken.chain_id),
+				)
 
 			const updatedToToken =
 				toToken &&
-				balances.find(token => token.address === toToken.address && token.chain_id === toToken.chain_id)
+				balances.find(
+					token => token.address === toToken.address && Number(token.chain_id) === Number(toToken.chain_id),
+				)
 
 			if (fromToken) {
 				if (!updatedFromToken) {

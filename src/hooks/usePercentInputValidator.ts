@@ -60,7 +60,7 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 			const amount = preciseDivide(Number(amountBigInt), 10 ** decimals)
 			const usdValue = preciseMultiply(Number(amount), priceUsd)
 
-			if (Number(usdValue) < 0.15) {
+			if (Number(usdValue) < 0.25) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too low',
