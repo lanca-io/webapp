@@ -19,13 +19,15 @@ export const SearchedTokens = memo(({ tokens, isLoading, onTokenSelect }: Search
 	const filteredTokens = useMemo(() => {
 		return tokens.filter(token => {
 			const isSelectedToken =
-				(token.address === fromToken?.address && token.chain_id === fromToken?.chain_id) ||
-				(token.address === toToken?.address && token.chain_id === toToken?.chain_id)
+				(token.address === fromToken?.address && Number(token.chain_id) === Number(fromToken?.chain_id)) ||
+				(token.address === toToken?.address && Number(token.chain_id) === Number(toToken?.chain_id))
 
 			if (isSelectedToken) return false
 
 			const isInBalances = balances.some(
-				bal => bal.address.toLowerCase() === token.address.toLowerCase() && bal.chain_id === token.chain_id,
+				bal =>
+					bal.address.toLowerCase() === token.address.toLowerCase() &&
+					Number(bal.chain_id) === Number(token.chain_id),
 			)
 
 			return !isInBalances

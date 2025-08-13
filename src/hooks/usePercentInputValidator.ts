@@ -6,7 +6,7 @@ import { preciseDivide, preciseMultiply } from '../utils/new/operations'
 export const usePercentInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balance = token?.balance ?? '0'
-	const priceUsd = token?.priceUsd ?? 0
+	const priceUsd = token?.price_usd ?? 0
 	const decimals = token?.decimals ?? 18
 
 	const validation = useMemo(() => {
@@ -60,7 +60,7 @@ export const usePercentInputValidator = (value: string, token: ExtendedToken | n
 			const amount = preciseDivide(Number(amountBigInt), 10 ** decimals)
 			const usdValue = preciseMultiply(Number(amount), priceUsd)
 
-			if (Number(usdValue) < 0.15) {
+			if (Number(usdValue) < 0.25) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too low',

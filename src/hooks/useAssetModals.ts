@@ -16,7 +16,7 @@ export const useAssetModals = () => {
 	const selectFromAsset = useCallback(
 		(token: ExtendedToken) => {
 			const chainId = token.chain_id
-			const chain = fromChain || chains.find(chain => chain.id === chainId)
+			const chain = fromChain || chains.find(chain => Number(chain.id) === Number(chainId))
 
 			if (!chain) return
 
@@ -30,7 +30,7 @@ export const useAssetModals = () => {
 	const selectToAsset = useCallback(
 		(token: ExtendedToken) => {
 			const chainId = token.chain_id
-			const chain = toChain || chains.find(chain => chain.id === chainId)
+			const chain = toChain || chains.find(chain => Number(chain.id) === Number(chainId))
 
 			if (!chain) return
 

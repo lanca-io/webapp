@@ -19,7 +19,7 @@ export const PopularTokens = memo(({ tokens, isLoading, onTokenSelect }: Popular
 			!balances.some(
 				balance =>
 					balance.address === token.address &&
-					balance.chain_id === token.chain_id &&
+					Number(balance.chain_id) === Number(token.chain_id) &&
 					Number(balance.balance) > 0,
 			),
 	)

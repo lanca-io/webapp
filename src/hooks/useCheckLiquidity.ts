@@ -55,7 +55,7 @@ export const useCheckLiquidity = () => {
 				const poolAmount = await getPoolLiquidity(toChain.id)
 				const decimals = Number(fromToken.decimals)
 				const normalizedAmount = Number(fromAmount) / 10 ** decimals
-				const fromAmountUsd = normalizedAmount * (fromToken.priceUsd ?? 0)
+				const fromAmountUsd = normalizedAmount * (Number(fromToken.price_usd) ?? 0)
 
 				if (fromAmountUsd > Number(poolAmount)) {
 					return {

@@ -30,8 +30,11 @@ export const TokenBalances = memo(
 			() =>
 				balances.filter(
 					token =>
-						!(token.address === fromToken?.address && token.chain_id === fromToken?.chain_id) &&
-						!(token.address === toToken?.address && token.chain_id === toToken?.chain_id),
+						!(
+							token.address === fromToken?.address &&
+							Number(token.chain_id) === Number(fromToken?.chain_id)
+						) &&
+						!(token.address === toToken?.address && Number(token.chain_id) === Number(toToken?.chain_id)),
 				),
 			[balances, fromToken, toToken],
 		)

@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi'
 export const useDollarInputValidator = (value: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const { isConnected } = useAccount()
-	const priceUsd = token?.priceUsd ?? 0
+	const priceUsd = token?.price_usd ?? 0
 	const symbol = token?.symbol ?? ''
 	const balance = token?.balance ?? '0'
 	const decimals = token?.decimals ?? 18
@@ -74,9 +74,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
-			const usdValue = preciseMultiply(Number(usdAmount), priceUsd)
-
-			if (usdValue < 0.15) {
+			if (Number(usdAmount) < 0.25) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too low',

@@ -28,9 +28,9 @@ export const useLoadBalances = () => {
 				const data = await handleFetchBalances(chainId, address)
 				const chain = chains.find(c => c.id === chainId)
 
-				if (!data || !data[chainId] || !chain) return []
+				if (!Array.isArray(data) || !chain) return []
 
-				return data[chainId].map(({ _id, ...token }) => ({
+				return data.map(({ _id, ...token }) => ({
 					...token,
 					chain_id: chainId,
 					chainLogoURI: chain.logoURI,
@@ -69,11 +69,16 @@ export const useLoadBalances = () => {
 		(balances: ExtendedToken[]) => {
 			const updatedFromToken =
 				fromToken &&
-				balances.find(token => token.address === fromToken.address && token.chain_id === fromToken.chain_id)
+				balances.find(
+					token =>
+						token.address === fromToken.address && Number(token.chain_id) === Number(fromToken.chain_id),
+				)
 
 			const updatedToToken =
 				toToken &&
-				balances.find(token => token.address === toToken.address && token.chain_id === toToken.chain_id)
+				balances.find(
+					token => token.address === toToken.address && Number(token.chain_id) === Number(toToken.chain_id),
+				)
 
 			if (fromToken) {
 				if (!updatedFromToken) {

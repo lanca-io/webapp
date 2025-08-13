@@ -45,7 +45,7 @@ export const Success: FC = memo((): JSX.Element => {
 				<div className="success_info_stats">
 					<div className="success_info_details">
 						<div className="success_info_token">
-							<Badge logoURL={toToken?.logoURI} size="m" />
+							<Badge logoURL={toToken?.logo_url} size="m" />
 							<p className="success_info_name">{toToken?.symbol}</p>
 						</div>
 						<p className="success_info_pointer">on</p>

@@ -18,10 +18,10 @@ export const SourceInfo = memo((): JSX.Element => {
 
 	const formattedUsd = useMemo(() => {
 		if (isLoading) return '-'
-		if (!fromToken?.priceUsd) return '-'
-		const usdValue = tokenAmountToUsd(Number(tokenAmount), fromToken.priceUsd)
+		if (!fromToken?.price_usd) return '-'
+		const usdValue = tokenAmountToUsd(Number(tokenAmount), Number(fromToken.price_usd))
 		return usdValue ? `= $${format(Number(usdValue), 2)}` : '-'
-	}, [isLoading, tokenAmount, fromToken?.priceUsd])
+	}, [isLoading, tokenAmount, fromToken?.price_usd])
 
 	return (
 		<div className="route_info_source" role="region" aria-label="Source information">
