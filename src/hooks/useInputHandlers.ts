@@ -27,7 +27,7 @@ export const useInputHandlers = () => {
 
 	const { setError } = useRouteStore()
 
-	const debouncedAmountInput = useDebounce(amountInput, 300)
+	const debouncedAmountInput = useDebounce(amountInput, 800)
 	const isInputEmpty = !amountInput.trim()
 
 	const textValidator = useTextInputValidator(debouncedAmountInput, fromToken)

@@ -74,9 +74,7 @@ export const useDollarInputValidator = (value: string, token: ExtendedToken | nu
 				}
 			}
 
-			const usdValue = preciseMultiply(Number(usdAmount), priceUsd)
-
-			if (usdValue < 0.15) {
+			if (Number(usdAmount) < 0.25) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too low',
