@@ -52,7 +52,7 @@ export const useTextInputValidator = (text: string, token: ExtendedToken | null)
 
 			const usdValue = preciseMultiply(Number(humanAmount), priceUsd)
 
-			if (usdValue < 0.15) {
+			if (usdValue < 0.25) {
 				return {
 					valid: false,
 					errorMessage: 'Amount too low',
