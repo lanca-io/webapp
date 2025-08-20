@@ -1,21 +1,19 @@
+import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import type { Address } from 'viem'
-import { zeroAddress } from 'viem'
+import { ILancaChain, Status } from '@lanca/sdk'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 import { useAccount } from 'wagmi'
 import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
 import { useFormStore } from '../../store/form/useFormStore'
 import { useCheckLiquidity } from '../useCheckLiquidity'
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { ILancaChain } from '@lanca/sdk'
 import { ExtendedToken } from '../../store/tokens/types'
 import { useRouteStore } from '../../store/route/useRouteStore'
 import { useSettingsStore } from '../../store/settings/useSettings'
 import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
-import { useQuery } from '@tanstack/react-query'
 import { useTxExecutionStore } from '../../store/tx-execution/useTxExecutionStore'
-import { Status } from '@lanca/sdk'
 
-const REFRESH_INTERVAL = 60_000
+const REFRESH_INTERVAL = 60_000 // 60 seconds
 
 export const useLoadRoute = () => {
 	const { address, isConnected } = useAccount()
@@ -25,97 +23,85 @@ export const useLoadRoute = () => {
 	const { setRoute, setIsLoading, setError } = useRouteStore()
 	const { fromChain, toChain, fromToken, toToken, fromAmount, toAddress, amountInputError } = useFormStore()
 	const { overallStatus } = useTxExecutionStore()
+	const sdk = useLancaSDK()
 
 	const [refreshTime, setRefreshTime] = useState<number>(0)
 
-	const sdk = useLancaSDK()
-
-	const sender: Address = useMemo(() => {
-		return state === SplitSubvariantType.SEND && toAddress ? toAddress : (address ?? zeroAddress)
-	}, [state, toAddress, address])
+	const receiver = useMemo(
+		() => (state === SplitSubvariantType.SEND && toAddress ? toAddress : address),
+		[state, toAddress, address],
+	)
 
 	const validAmount = useMemo(() => {
 		if (amountInputError || !fromAmount) return false
-
 		const num = Number(fromAmount)
-		if (isNaN(num) || !isFinite(num) || num <= 0) return false
-
-		return true
+		return isFinite(num) && num > 0
 	}, [fromAmount, amountInputError])
 
-	const hasParams = useMemo(() => {
-		return Boolean(fromChain && toChain && fromToken?.address && toToken?.address && !amountInputError)
-	}, [fromChain, toChain, fromToken, toToken, amountInputError])
+	const hasParams = useMemo(
+		() => Boolean(fromChain && toChain && fromToken?.address && toToken?.address && !amountInputError),
+		[fromChain, toChain, fromToken, toToken, amountInputError],
+	)
 
-	const hasLiquidity = async (
-		fromChain: ILancaChain,
-		toChain: ILancaChain,
-		fromToken: ExtendedToken,
-		fromAmount: string,
-	): Promise<boolean> => {
-		const hasBridge: boolean = isBridge(fromChain?.id, toChain?.id)
-
-		if (hasBridge && isConnected) {
-			const liquidity = await checkLiquidity({
-				fromChain,
-				toChain,
-				fromToken,
-				fromAmount,
+	const checkHasLiquidity = async (
+		srcChain: ILancaChain,
+		dstChain: ILancaChain,
+		token: ExtendedToken,
+		amount: string,
+	) => {
+		if (isBridge(srcChain?.id, dstChain?.id) && isConnected) {
+			const lq = await checkLiquidity({
+				fromChain: srcChain,
+				toChain: dstChain,
+				fromToken: token,
+				fromAmount: amount,
 			})
-
-			if (liquidity.isSuccess) return true
-
-			return false
+			return lq.isSuccess
 		}
-
 		return true
 	}
 
 	const fetchRoute = useCallback(async () => {
-		setRoute(null)
-
 		if (!hasParams || !validAmount) {
 			setError(null)
 			return null
 		}
 
+		const liquid = await checkHasLiquidity(
+			fromChain as ILancaChain,
+			toChain as ILancaChain,
+			fromToken as ExtendedToken,
+			fromAmount as string,
+		)
+
+		if (!liquid) {
+			setError('Insufficient liquidity')
+			setRoute(null)
+			return null
+		}
+
+		const params = {
+			fromChainId: String(fromChain!.id),
+			toChainId: String(toChain!.id),
+			fromToken: fromToken!.address as Address,
+			toToken: toToken!.address as Address,
+			amount: fromAmount!,
+			sender: address as Address,
+			slippage: slippage,
+		}
+
 		try {
-			const isRouteLiquid = await hasLiquidity(
-				fromChain as ILancaChain,
-				toChain as ILancaChain,
-				fromToken as ExtendedToken,
-				fromAmount as string,
-			)
-
-			if (!isRouteLiquid) {
-				setError('Insufficient liquidity')
-				setRoute(null)
-				return null
-			}
-
-			const parameters = {
-				fromChainId: Number(fromChain?.id),
-				toChainId: Number(toChain?.id),
-				fromToken: fromToken?.address as Address,
-				toToken: toToken?.address as Address,
-				amount: fromAmount as string,
-				sender: sender as Address,
-				slippage: slippage,
-			}
-
-			const route = await sdk.getRoute(parameters)
-
-			if (!route) {
+			const routeRes = await sdk.getRoute(params)
+			if (!routeRes) {
 				setError('No route found')
 				setRoute(null)
 				return null
 			}
-
-			return route
-		} catch (e) {
+			return routeRes
+		} catch {
 			setError('No route found')
 			setRoute(null)
-			throw e
+			return null
 		}
 	}, [
 		hasParams,
@@ -124,11 +110,12 @@ export const useLoadRoute = () => {
 		toChain,
 		fromToken,
 		fromAmount,
-		sender,
+		receiver,
 		slippage,
-		hasLiquidity,
+		checkHasLiquidity,
 		sdk,
 		setError,
+		setRoute,
 	])
 
 	const queryKey = useMemo(
@@ -141,10 +128,10 @@ export const useLoadRoute = () => {
 				toToken: toToken?.address,
 				amount: fromAmount,
 				slippage,
-				sender,
+				receiver,
 			},
 		],
-		[fromChain?.id, toChain?.id, fromToken?.address, toToken?.address, fromAmount, slippage, sender],
+		[fromChain?.id, toChain?.id, fromToken?.address, toToken?.address, fromAmount, slippage, receiver],
 	)
 
 	const {
@@ -158,9 +145,7 @@ export const useLoadRoute = () => {
 		queryKey,
 		queryFn: fetchRoute,
 		retry: false,
-
 		enabled: hasParams && validAmount,
-		staleTime: REFRESH_INTERVAL,
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 	})
@@ -172,7 +157,7 @@ export const useLoadRoute = () => {
 		}
 		setRoute(route ?? null)
 		if (route) setError(null)
-	}, [route, setRoute, setError])
+	}, [route, queryError, setRoute, setError])
 
 	useEffect(() => {
 		if (!hasParams || !validAmount) {
@@ -181,39 +166,30 @@ export const useLoadRoute = () => {
 			setError(null)
 			return
 		}
-
 		setIsLoading(isLoading || isFetching)
 	}, [hasParams, validAmount, isLoading, isFetching, setIsLoading, setRoute, setError])
 
 	useEffect(() => {
-		if (overallStatus !== Status.NOT_STARTED) {
+		if (overallStatus !== Status.NOT_STARTED || !route || !dataUpdatedAt) {
 			setRefreshTime(0)
 			return
 		}
 
-		if (!route || !dataUpdatedAt) {
-			setRefreshTime(0)
-			return
+		const calcTime = () => {
+			const next = dataUpdatedAt + REFRESH_INTERVAL
+			return Math.max(0, Math.floor((next - Date.now()) / 1000))
 		}
 
-		const calculateTime = () => {
-			const nextUpdate = dataUpdatedAt + REFRESH_INTERVAL
-			return Math.max(0, Math.floor((nextUpdate - Date.now()) / 1000))
-		}
-
-		setRefreshTime(calculateTime())
+		setRefreshTime(calcTime())
 
 		const interval = setInterval(() => {
-			const newTime = calculateTime()
-			setRefreshTime(newTime)
-
-			if (newTime === 0) {
-				refetch()
-			}
+			const t = calcTime()
+			setRefreshTime(t)
+			if (t === 0) refetch()
 		}, 1000)
 
 		return () => clearInterval(interval)
-	}, [overallStatus, route, dataUpdatedAt, queryKey, refetch])
+	}, [overallStatus, dataUpdatedAt, refetch, route])
 
 	return {
 		route,
