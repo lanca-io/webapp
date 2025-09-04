@@ -3,104 +3,93 @@ import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { preciseMultiply } from '../utils/new/operations'
 import { useAccount } from 'wagmi'
+import Decimal from 'decimal.js'
 
-export const useNumberInputValidator = (value: string, token: ExtendedToken | null) => {
+export const useNumberInputValidator = (input: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const { isConnected } = useAccount()
-	const balance = token?.balance ?? '0'
+	const balanceStr = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
 	const priceUsd = token?.price_usd ?? 0
 
 	const validation = useMemo(() => {
-		if (!value.trim()) {
-			return { valid: false, errorMessage: null, machineAmount: null }
+		if (!input.trim()) {
+			return { valid: false, error: null, machineAmt: null }
 		}
 
-		if (value.startsWith('-')) {
+		if (input.startsWith('-')) {
 			return {
 				valid: false,
-				errorMessage: 'Negative values are not allowed',
-				machineAmount: null,
+				error: 'Negative values are not allowed',
+				machineAmt: null,
 			}
 		}
 
-		if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(String(value))) {
+		if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(input)) {
 			return {
 				valid: false,
-				errorMessage: 'Invalid number format',
-				machineAmount: null,
-			}
-		}
-
-		if (!isConnected) {
-			const amount = value
-			const decimalsFactor = 10 ** decimals
-			try {
-				const machineAmount = preciseMultiply(amount, decimalsFactor).toString()
-				return {
-					valid: true,
-					errorMessage: null,
-					machineAmount,
-				}
-			} catch (error) {
-				console.error('Error parsing number:', error)
-				return {
-					valid: false,
-					errorMessage: 'Invalid number input',
-					machineAmount: null,
-				}
+				error: 'Invalid number format',
+				machineAmt: null,
 			}
 		}
 
 		try {
-			const amount = value
-			const decimalsFactor = 10 ** decimals
-			const machineAmount = preciseMultiply(amount, decimalsFactor).toString()
+			const amtDec = new Decimal(input)
+			const factor = new Decimal(10).pow(decimals)
+			const machineAmtDec = preciseMultiply(amtDec, factor)
 
-			if (machineAmount === '0' && Number(amount) > 0) {
+			if (machineAmtDec.eq(0) && amtDec.gt(0)) {
 				return {
 					valid: false,
-					errorMessage: 'Amount too small',
-					machineAmount: null,
+					error: 'Amount too small',
+					machineAmt: null,
 				}
 			}
 
-			const usdValue = preciseMultiply(Number(amount), priceUsd)
-
-			if (usdValue < 0.25) {
+			if (!isConnected) {
 				return {
-					valid: false,
-					errorMessage: 'Amount too low',
-					machineAmount: null,
+					valid: true,
+					error: null,
+					machineAmt: machineAmtDec.toFixed(0),
 				}
 			}
 
-			if (Number(machineAmount) > Number(balance)) {
+			const usdVal = preciseMultiply(amtDec, new Decimal(priceUsd))
+			if (usdVal.lt(0.25)) {
 				return {
 					valid: false,
-					errorMessage: `Not enough ${symbol}`,
-					machineAmount: null,
+					error: 'Amount too low',
+					machineAmt: null,
+				}
+			}
+
+			const balDec = new Decimal(balanceStr)
+			if (machineAmtDec.gt(balDec)) {
+				return {
+					valid: false,
+					error: `Not enough ${symbol}`,
+					machineAmt: null,
 				}
 			}
 
 			return {
 				valid: true,
-				errorMessage: null,
-				machineAmount,
+				error: null,
+				machineAmt: machineAmtDec.toFixed(0),
 			}
-		} catch (error) {
-			console.error('Error parsing number:', error)
+		} catch (e) {
+			console.error('Error parsing number:', e)
 			return {
 				valid: false,
-				errorMessage: 'Invalid number input',
-				machineAmount: null,
+				error: 'Invalid number input',
+				machineAmt: null,
 			}
 		}
-	}, [value, balance, decimals, symbol, priceUsd, isConnected])
+	}, [input, balanceStr, decimals, symbol, priceUsd, isConnected])
 
 	return useCallback(() => {
-		setAmountInputError(validation.errorMessage)
-		setFromAmount(validation.valid ? validation.machineAmount : null)
+		setAmountInputError(validation.error)
+		setFromAmount(validation.valid ? validation.machineAmt : null)
 	}, [validation, setAmountInputError, setFromAmount])
 }

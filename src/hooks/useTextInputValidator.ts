@@ -3,79 +3,56 @@ import { textToAmount } from '../utils/new/input'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
 import { preciseDivide, preciseMultiply } from '../utils/new/operations'
+import { Decimal } from 'decimal.js'
 
-export const useTextInputValidator = (text: string, token: ExtendedToken | null) => {
+export const useTextInputValidator = (input: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
-	const balance = token?.balance ?? '0'
+	const balanceStr = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
 	const decimals = token?.decimals ?? 18
-	const priceUsd = token?.price_usd ?? 0
+	const price = token?.price_usd ?? 0
 
 	const validation = useMemo(() => {
-		if (!text.trim()) {
-			return { valid: false, errorMessage: null, machineAmount: null }
+		if (!input.trim()) {
+			return { valid: false, error: null, machineAmt: null }
 		}
 
 		try {
-			const balanceBigInt = BigInt(balance)
-			const decimalsFactor = 10 ** decimals
-			const bal = preciseDivide(balance, decimalsFactor.toString())
-			const humanAmount = textToAmount(text, Number(bal))
+			const balanceInt = BigInt(balanceStr)
+			const factorDec = new Decimal(10).pow(decimals)
+			const balanceDec = preciseDivide(balanceStr, factorDec.toString())
 
-			if (!humanAmount) {
-				return {
-					valid: false,
-					errorMessage: 'Invalid amount format',
-					machineAmount: null,
-				}
+			const humanAmt = textToAmount(input, balanceDec)
+			if (!humanAmt) {
+				return { valid: false, error: 'Invalid amount format', machineAmt: null }
 			}
 
-			const machineAmount = preciseMultiply(humanAmount.toString(), decimalsFactor.toString())
-			const machineAmountStr = machineAmount.toFixed(0)
-			const machineAmountBigInt = BigInt(machineAmountStr)
+			const humanDec = new Decimal(humanAmt.toString())
+			const machineDec = preciseMultiply(humanDec, factorDec)
+			const machineStr = machineDec.toFixed(0)
+			const machineInt = BigInt(machineStr)
 
-			if (machineAmountBigInt > balanceBigInt) {
-				return {
-					valid: false,
-					errorMessage: `Not enough ${symbol}`,
-					machineAmount: null,
-				}
+			if (machineInt > balanceInt) {
+				return { valid: false, error: `Not enough ${symbol}`, machineAmt: null }
 			}
 
-			if (machineAmountBigInt === 0n && Number(humanAmount) > 0) {
-				return {
-					valid: false,
-					errorMessage: 'Amount too small',
-					machineAmount: null,
-				}
+			if (machineInt === 0n && humanDec.gt(0)) {
+				return { valid: false, error: 'Amount too small', machineAmt: null }
 			}
 
-			const usdValue = preciseMultiply(Number(humanAmount), priceUsd)
-
-			if (usdValue < 0.15) {
-				return {
-					valid: false,
-					errorMessage: 'Amount too low',
-					machineAmount: null,
-				}
+			const usdValue = preciseMultiply(humanDec, new Decimal(price))
+			if (usdValue.lt(0.15)) {
+				return { valid: false, error: 'Amount too low', machineAmt: null }
 			}
 
-			return {
-				valid: true,
-				errorMessage: null,
-				machineAmount: machineAmountStr,
-			}
-		} catch (_) {
-			return {
-				valid: false,
-				errorMessage: 'Invalid text input',
-				machineAmount: null,
-			}
+			return { valid: true, error: null, machineAmt: machineStr }
+		} catch {
+			return { valid: false, error: 'Invalid text input', machineAmt: null }
 		}
-	}, [text, balance, decimals, symbol])
+	}, [input, balanceStr, decimals, symbol, price])
 
 	return useCallback(() => {
-		setAmountInputError(validation.errorMessage)
-		setFromAmount(validation.valid ? validation.machineAmount : null)
+		setAmountInputError(validation.error)
+		setFromAmount(validation.valid ? validation.machineAmt : null)
 	}, [validation, setAmountInputError, setFromAmount])
 }

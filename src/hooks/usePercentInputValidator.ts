@@ -2,88 +2,60 @@ import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
 import { preciseDivide, preciseMultiply } from '../utils/new/operations'
+import { Decimal } from 'decimal.js'
 
-export const usePercentInputValidator = (value: string, token: ExtendedToken | null) => {
+export const usePercentInputValidator = (input: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
-	const balance = token?.balance ?? '0'
-	const priceUsd = token?.price_usd ?? 0
+	const balanceStr = token?.balance ?? '0'
+	const price = token?.price_usd ?? 0
 	const decimals = token?.decimals ?? 18
 
 	const validation = useMemo(() => {
-		if (!value.trim()) {
-			return { valid: false, errorMessage: null, machineAmount: null }
+		if (!input.trim()) {
+			return { valid: false, error: null, machineAmt: null }
 		}
 
 		try {
-			const cleanValue = value.replace(/[^\d.]/g, '')
-			const percentage = Number(cleanValue)
+			const cleanInput = input.replace(/[^\d.]/g, '')
+			const percent = new Decimal(cleanInput)
 
-			if (isNaN(percentage)) {
-				return {
-					valid: false,
-					errorMessage: 'Input is not a valid number',
-					machineAmount: null,
-				}
+			if (percent.isNaN()) {
+				return { valid: false, error: 'Input is not a valid number', machineAmt: null }
 			}
 
-			if (percentage < 0) {
-				return {
-					valid: false,
-					errorMessage: 'Percentage cannot be negative',
-					machineAmount: null,
-				}
+			if (percent.lt(0)) {
+				return { valid: false, error: 'Percentage cannot be negative', machineAmt: null }
 			}
 
-			if (percentage > 100) {
-				return {
-					valid: false,
-					errorMessage: 'Percentage cannot exceed 100%',
-					machineAmount: null,
-				}
+			if (percent.gt(100)) {
+				return { valid: false, error: 'Percentage cannot exceed 100%', machineAmt: null }
 			}
 
-			const basisPoints = preciseMultiply(cleanValue, 100)
-			const basisPointsBigInt = BigInt(basisPoints)
+			const bps = preciseMultiply(percent, 100)
+			const balInt = BigInt(balanceStr)
+			const bpsInt = BigInt(bps.toFixed(0))
 
-			const balanceBigInt = BigInt(balance)
-			const amountBigInt = (balanceBigInt * basisPointsBigInt) / 10000n
-			const machineAmount = amountBigInt.toString()
+			const amtInt = (balInt * bpsInt) / 10000n
 
-			if (amountBigInt === 0n && percentage > 0) {
-				return {
-					valid: false,
-					errorMessage: 'Amount too small',
-					machineAmount: null,
-				}
+			if (amtInt === 0n && percent.gt(0)) {
+				return { valid: false, error: 'Amount too small', machineAmt: null }
 			}
 
-			const amount = preciseDivide(Number(amountBigInt), 10 ** decimals)
-			const usdValue = preciseMultiply(Number(amount), priceUsd)
+			const amtDec = preciseDivide(new Decimal(amtInt.toString()), new Decimal(10).pow(decimals))
+			const usdVal = preciseMultiply(amtDec, new Decimal(price))
 
-			if (Number(usdValue) < 0.25) {
-				return {
-					valid: false,
-					errorMessage: 'Amount too low',
-					machineAmount: null,
-				}
+			if (usdVal.lt(0.25)) {
+				return { valid: false, error: 'Amount too low', machineAmt: null }
 			}
 
-			return {
-				valid: true,
-				errorMessage: null,
-				machineAmount,
-			}
-		} catch (_) {
-			return {
-				valid: false,
-				errorMessage: 'Invalid percentage input',
-				machineAmount: null,
-			}
+			return { valid: true, error: null, machineAmt: amtInt.toString() }
+		} catch {
+			return { valid: false, error: 'Invalid percentage input', machineAmt: null }
 		}
-	}, [value, balance])
+	}, [input, balanceStr, decimals, price])
 
 	return useCallback(() => {
-		setAmountInputError(validation.errorMessage)
-		setFromAmount(validation.valid ? validation.machineAmount : null)
+		setAmountInputError(validation.error)
+		setFromAmount(validation.valid ? validation.machineAmt : null)
 	}, [validation, setAmountInputError, setFromAmount])
 }

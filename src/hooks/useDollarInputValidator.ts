@@ -3,101 +3,69 @@ import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { preciseMultiply, preciseDivide } from '../utils/new/operations'
 import { useAccount } from 'wagmi'
+import { Decimal } from 'decimal.js'
 
-export const useDollarInputValidator = (value: string, token: ExtendedToken | null) => {
+export const useDollarInputValidator = (input: string, token: ExtendedToken | null) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const { isConnected } = useAccount()
-	const priceUsd = token?.price_usd ?? 0
+	const price = token?.price_usd ?? 0
 	const symbol = token?.symbol ?? ''
-	const balance = token?.balance ?? '0'
+	const balanceStr = token?.balance ?? '0'
 	const decimals = token?.decimals ?? 18
 
 	const validation = useMemo(() => {
-		if (!value.trim()) {
-			return { valid: false, errorMessage: null, machineAmount: null }
+		if (!input.trim()) {
+			return { valid: false, error: null, machineAmt: null }
 		}
 
-		if (!/^\$?\d*\.?\d*\$?$/.test(value)) {
-			return {
-				valid: false,
-				errorMessage: 'Please enter a valid dollar amount',
-				machineAmount: null,
-			}
+		if (!/^\$?\d*\.?\d*\$?$/.test(input)) {
+			return { valid: false, error: 'Please enter a valid dollar amount', machineAmt: null }
 		}
 
 		try {
-			const cleanValue = value.replace(/[^\d.]/g, '')
-			const usdAmount = cleanValue
+			const cleanInput = input.replace(/[^\d.]/g, '')
+			const usdDec = new Decimal(cleanInput)
 
-			if (usdAmount.startsWith('-')) {
-				return {
-					valid: false,
-					errorMessage: 'Dollar amount cannot be negative',
-					machineAmount: null,
-				}
+			if (cleanInput.startsWith('-')) {
+				return { valid: false, error: 'Dollar amount cannot be negative', machineAmt: null }
 			}
 
-			if (!usdAmount || Number(usdAmount) <= 0) {
-				return {
-					valid: false,
-					errorMessage: 'Amount must be greater than $0',
-					machineAmount: null,
-				}
+			if (usdDec.lte(0)) {
+				return { valid: false, error: 'Amount must be greater than $0', machineAmt: null }
 			}
 
-			const tokenAmount = preciseDivide(usdAmount, priceUsd)
-			const decimalsFactor = Math.pow(10, decimals)
-			const machineAmount = preciseMultiply(tokenAmount, decimalsFactor).toFixed(0)
+			const tokenAmount = preciseDivide(usdDec, new Decimal(price))
+			const factorDec = new Decimal(10).pow(decimals)
+			const machineDec = preciseMultiply(tokenAmount, factorDec)
+			const machineStr = machineDec.toFixed(0)
 
 			if (!isConnected) {
-				return {
-					valid: true,
-					errorMessage: null,
-					machineAmount,
-				}
+				return { valid: true, error: null, machineAmt: machineStr }
 			}
 
-			const balanceBigInt = BigInt(balance)
-			if (BigInt(machineAmount) > balanceBigInt) {
-				return {
-					valid: false,
-					errorMessage: `Not enough ${symbol}`,
-					machineAmount: null,
-				}
+			const balanceInt = BigInt(balanceStr)
+			const machineInt = BigInt(machineStr)
+
+			if (machineInt > balanceInt) {
+				return { valid: false, error: `Not enough ${symbol}`, machineAmt: null }
 			}
 
-			if (BigInt(machineAmount) === 0n && Number(usdAmount) > 0) {
-				return {
-					valid: false,
-					errorMessage: 'Amount too small to convert',
-					machineAmount: null,
-				}
+			if (machineInt === 0n && usdDec.gt(0)) {
+				return { valid: false, error: 'Amount too small to convert', machineAmt: null }
 			}
 
-			if (Number(usdAmount) < 0.25) {
-				return {
-					valid: false,
-					errorMessage: 'Amount too low',
-					machineAmount: null,
-				}
+			if (usdDec.lt(0.25)) {
+				return { valid: false, error: 'Amount too low', machineAmt: null }
 			}
 
-			return {
-				valid: true,
-				errorMessage: null,
-				machineAmount,
-			}
-		} catch (_) {
-			return {
-				valid: false,
-				errorMessage: 'Invalid dollar input',
-				machineAmount: null,
-			}
+			return { valid: true, error: null, machineAmt: machineStr }
+		} catch {
+			return { valid: false, error: 'Invalid dollar input', machineAmt: null }
 		}
-	}, [value, priceUsd, symbol, balance, decimals, isConnected])
+	}, [input, price, symbol, balanceStr, decimals, isConnected])
 
 	return useCallback(() => {
-		setAmountInputError(validation.errorMessage)
-		setFromAmount(validation.valid ? validation.machineAmount : null)
+		setAmountInputError(validation.error)
+		setFromAmount(validation.valid ? validation.machineAmt : null)
 	}, [validation, setAmountInputError, setFromAmount])
 }

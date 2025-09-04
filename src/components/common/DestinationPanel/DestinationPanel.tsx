@@ -39,7 +39,6 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 	}, [])
 
 	const hasBalance = Boolean(toToken?.balance !== undefined && toToken?.balance !== null)
-	console.log(amount, typeof amount, 'amount in destination panel')
 
 	return (
 		<div className="destination_panel">
