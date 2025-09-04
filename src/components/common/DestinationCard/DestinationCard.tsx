@@ -9,7 +9,7 @@ import { useSubvariantStore } from '../../../store/subvariant/useSubvariantStore
 import { RouteTimer } from '../RouteTimer/RouteTimer'
 import { SplitSubvariantType } from '../../../store/subvariant/types'
 import { useEstimatePriceImpact } from '../../../hooks/useEstimatePriceImpact'
-import { formatToMaxDecimals } from '../../../utils/new/format'
+import { format } from '../../../utils/new/format'
 import './DestinationCard.pcss'
 
 export const DestinationCard = memo(() => {
@@ -22,8 +22,8 @@ export const DestinationCard = memo(() => {
 	const amount = useMemo(() => {
 		if (!route?.to?.amount) return ''
 		return toToken?.decimals
-			? formatToMaxDecimals(formatTokenAmount(route.to.amount, toToken.decimals))
-			: formatToMaxDecimals(route.to.amount)
+			? format(Number(formatTokenAmount(route.to.amount, toToken.decimals)), 3)
+			: format(Number(route.to.amount), 3)
 	}, [route?.to?.amount, toToken?.decimals])
 
 	return (
