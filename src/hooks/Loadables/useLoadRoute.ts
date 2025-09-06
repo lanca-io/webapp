@@ -81,14 +81,13 @@ export const useLoadRoute = () => {
 		}
 
 		const params = {
-			fromChainId: fromChain!.id,
-			toChainId: toChain!.id,
+			fromChainId: String(fromChain!.id),
+			toChainId: String(toChain!.id),
 			fromToken: fromToken!.address as Address,
 			toToken: toToken!.address as Address,
 			amount: fromAmount!,
-			fromAddress: address as Address,
-			toAddress: receiver as Address,
-			slippageTolerance: slippage,
+			sender: address as Address,
+			slippage: slippage,
 		}
 
 		try {

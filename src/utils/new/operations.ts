@@ -1,44 +1,37 @@
-/**
- * The factor determines decimal precision (1e9 = 9 decimals).
- * You can increase this for even higher precision if needed.
- */
-const PRECISION_FACTOR = 1_000_000_000
+import { Decimal } from 'decimal.js'
 
 /**
  * Multiplies two numbers precisely, avoiding floating-point errors.
+ * Returns a Decimal instance.
  */
-export function preciseMultiply(a: number | string, b: number | string): number {
-	const aNum = Number(a)
-	const bNum = Number(b)
-	return Math.round(aNum * bNum * PRECISION_FACTOR) / PRECISION_FACTOR
+export function preciseMultiply(a: Decimal.Value, b: Decimal.Value): Decimal {
+	return new Decimal(a).mul(new Decimal(b))
 }
 
 /**
  * Divides two numbers precisely, avoiding floating-point errors.
+ * Returns a Decimal instance.
  */
-export function preciseDivide(a: number | string, b: number | string): number {
-	const aNum = Number(a)
-	const bNum = Number(b)
-	if (bNum === 0) throw new Error('Division by zero')
-	return Math.round((aNum / bNum) * PRECISION_FACTOR) / PRECISION_FACTOR
+export function preciseDivide(a: Decimal.Value, b: Decimal.Value): Decimal {
+	const divisor = new Decimal(b)
+	if (divisor.isZero()) throw new Error('Division by zero')
+	return new Decimal(a).div(divisor)
 }
 
 /**
  * Adds two numbers precisely.
+ * Returns a Decimal instance.
  */
-export function preciseAdd(a: number | string, b: number | string): number {
-	const aNum = Number(a)
-	const bNum = Number(b)
-	return Math.round((aNum + bNum) * PRECISION_FACTOR) / PRECISION_FACTOR
+export function preciseAdd(a: Decimal.Value, b: Decimal.Value): Decimal {
+	return new Decimal(a).add(new Decimal(b))
 }
 
 /**
  * Subtracts two numbers precisely.
+ * Returns a Decimal instance.
  */
-export function preciseSubtract(a: number | string, b: number | string): number {
-	const aNum = Number(a)
-	const bNum = Number(b)
-	return Math.round((aNum - bNum) * PRECISION_FACTOR) / PRECISION_FACTOR
+export function preciseSubtract(a: Decimal.Value, b: Decimal.Value): Decimal {
+	return new Decimal(a).sub(new Decimal(b))
 }
 
 /**

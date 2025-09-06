@@ -1,4 +1,5 @@
 import { preciseMultiply, preciseDivide } from './operations'
+import { Decimal } from 'decimal.js'
 
 /**
  * Formats a value based on numerical input.
@@ -38,10 +39,16 @@ export const sanitizeText = (value: string): string => {
  * @param tokenPrice - The USD price per token.
  * @returns The equivalent USD value as a string, or null if conversion fails.
  */
-export const tokenAmountToUsd = (tokenAmount: number, tokenPrice: number): string | null => {
-	if (isNaN(tokenAmount) || isNaN(tokenPrice)) return null
-	const usdValue = preciseMultiply(tokenAmount, tokenPrice)
-	return usdValue.toString()
+export const tokenAmountToUsd = (tokenAmount: Decimal.Value, tokenPrice: Decimal.Value): string | null => {
+	try {
+		const amountDec = new Decimal(tokenAmount)
+		const priceDec = new Decimal(tokenPrice)
+		if (amountDec.isNaN() || priceDec.isNaN()) return null
+		const usdVal = preciseMultiply(amountDec, priceDec)
+		return usdVal.toString()
+	} catch {
+		return null
+	}
 }
 
 /**
@@ -50,31 +57,52 @@ export const tokenAmountToUsd = (tokenAmount: number, tokenPrice: number): strin
  * @param tokenPrice - The USD price per token.
  * @returns The equivalent token amount as a string, or null if conversion fails.
  */
-export const usdToTokenAmount = (usdAmount: string | number, tokenPrice: number): string | null => {
-	const amount = typeof usdAmount === 'string' ? usdAmount.replace('$', '') : usdAmount
-	const price = tokenPrice
-	if (isNaN(Number(amount)) || isNaN(price) || price <= 0) return null
-	return preciseDivide(amount, price).toString()
+export const usdToTokenAmount = (usdAmount: Decimal.Value, tokenPrice: Decimal.Value): string | null => {
+	try {
+		let amountStr: string
+		if (typeof usdAmount === 'string') {
+			amountStr = usdAmount.replace('$', '')
+		} else if (usdAmount instanceof Decimal) {
+			amountStr = usdAmount.toString()
+		} else {
+			amountStr = usdAmount.toString()
+		}
+		const amountDec = new Decimal(amountStr)
+		const priceDec = new Decimal(tokenPrice)
+		if (amountDec.isNaN() || priceDec.isNaN() || priceDec.lte(0)) return null
+		const tokenAmt = preciseDivide(amountDec, priceDec)
+		return tokenAmt.toString()
+	} catch {
+		return null
+	}
 }
 
 /**
  * Converts a percentage of a token balance to its equivalent USD value.
  * @param percentString - The percentage to convert (with or without % symbol).
- * @param balanceString - The token balance as a string.
+ * @param balanceString - The token balance as a string or number.
  * @param tokenPrice - The USD price per token.
  * @returns The equivalent USD value as a string, or null if conversion fails.
  */
 export const percentOfBalanceToUsd = (
 	percentString: string,
-	balanceString: string,
-	tokenPrice: number,
+	balanceString: Decimal.Value,
+	tokenPrice: Decimal.Value,
 ): string | null => {
-	const percent = percentString.replace('%', '')
-	const balance = balanceString
-	const price = tokenPrice
-	if (isNaN(Number(percent)) || isNaN(Number(balance)) || isNaN(price)) return null
-	const tokenAmount = preciseMultiply(balance, Number(percent) / 100)
-	return preciseMultiply(tokenAmount, price).toString()
+	try {
+		const percentStr = percentString.replace('%', '')
+		const percentDec = new Decimal(percentStr)
+		const balanceDec = new Decimal(balanceString)
+		const priceDec = new Decimal(tokenPrice)
+
+		if (percentDec.isNaN() || balanceDec.isNaN() || priceDec.isNaN()) return null
+
+		const tokenAmt = preciseMultiply(balanceDec, percentDec.div(100))
+		const usdVal = preciseMultiply(tokenAmt, priceDec)
+		return usdVal.toString()
+	} catch {
+		return null
+	}
 }
 
 /**
@@ -86,32 +114,39 @@ export const percentOfBalanceToUsd = (
  */
 export const textCommandToUsd = (
 	textCommand: string,
-	balanceValue: string | number,
-	tokenPrice: number,
+	balanceValue: Decimal.Value,
+	tokenPrice: Decimal.Value,
 ): string | null => {
-	const balance = typeof balanceValue === 'string' ? balanceValue : balanceValue
-	const tokenAmount = textToAmount(textCommand, Number(balance))
-	if (tokenAmount === null) return null
-	return preciseMultiply(tokenAmount, tokenPrice).toString()
+	try {
+		const balanceDec = new Decimal(balanceValue)
+		const tokenAmount = textToAmount(textCommand, balanceDec)
+		if (tokenAmount === null) return null
+		const priceDec = new Decimal(tokenPrice)
+		if (priceDec.isNaN()) return null
+		const usdVal = preciseMultiply(tokenAmount, priceDec)
+		return usdVal.toString()
+	} catch {
+		return null
+	}
 }
 
 /**
  * Converts a text keyword to a token amount based on the balance.
  * @param text - The text keyword (max, half, third, quarter).
- * @param balance - The token balance.
- * @returns The calculated token amount, or null if the keyword is not recognized.
+ * @param balance - The token balance as Decimal.
+ * @returns The calculated token amount as Decimal, or null if the keyword is not recognized.
  */
-export const textToAmount = (text: string, balance: number): number | null => {
+export const textToAmount = (text: string, balance: Decimal): Decimal | null => {
 	const t = text.toLowerCase()
 	switch (t) {
 		case 'max':
 			return balance
 		case 'half':
-			return preciseDivide(balance, 2)
+			return preciseDivide(balance, new Decimal(2))
 		case 'third':
-			return preciseDivide(balance, 3)
+			return preciseDivide(balance, new Decimal(3))
 		case 'quarter':
-			return preciseDivide(balance, 4)
+			return preciseDivide(balance, new Decimal(4))
 		default:
 			return null
 	}
