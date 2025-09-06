@@ -4,7 +4,7 @@ import { get } from '../api/client'
 export async function handleFetchBalances(chainId: string, address: string): Promise<TokenBalance | null> {
 	if (!address) return null
 
-	const url = `https://dev.concero.io/api/v1/balances`
+	const url = `https://api.v2.concero.io/api/v1/balances`
 	const params = {
 		wallet_address: address,
 		chain_id: chainId,
@@ -29,7 +29,7 @@ export const handleFetchTokens = async (chainId?: string, offset?: number, limit
 		params.append('search', search)
 	}
 
-	const url = `https://dev.concero.io/api/v1/tokens?${params.toString()}`
+	const url = `https://api.v2.concero.io/api/v1/tokens?${params.toString()}`
 
 	try {
 		const response = await get(url)
