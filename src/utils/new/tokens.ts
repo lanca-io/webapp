@@ -1,7 +1,7 @@
 import type { ExtendedToken } from '../../store/tokens/types'
 import { formatUnits } from 'viem'
-import { preciseMultiply } from './operations'
-import { scientificToBigInt } from './operations'
+import { preciseMultiply, scientificToBigInt } from './operations'
+import { Decimal } from 'decimal.js'
 
 /**
  * Converts raw token amount (in smallest unit) to human-readable format
@@ -12,10 +12,10 @@ import { scientificToBigInt } from './operations'
  * @returns Human-readable amount as string (e.g. "1.234568")
  */
 export function formatTokenAmount(amount: string | undefined | null, decimals: number): string {
-	if (!amount || isNaN(Number(amount))) return '0'
-
+	if (!amount) return '0'
 	try {
-		const formatted = formatUnits(scientificToBigInt(amount), decimals)
+		const rawInt = scientificToBigInt(amount)
+		const formatted = formatUnits(rawInt, decimals)
 		return formatted.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.$/, '')
 	} catch (error) {
 		console.error('Format error:', error)
@@ -36,7 +36,9 @@ export function formatTokenPrice(amount?: string, price?: string | number, decim
 
 	try {
 		const amountHuman = decimals !== undefined ? formatTokenAmount(amount, decimals) : amount
-		return preciseMultiply(amountHuman, price)
+		const usdValue = preciseMultiply(new Decimal(amountHuman), new Decimal(price))
+		// Convert Decimal to number safely, consider rounding if needed
+		return usdValue.toNumber()
 	} catch (error) {
 		console.error('Price calculation error:', error)
 		return 0
@@ -52,19 +54,21 @@ export function formatTokenPrice(amount?: string, price?: string | number, decim
  * @returns Raw amount as string (e.g. "123450000" for 1.2345 with 8 decimals)
  */
 export function parseTokenAmount(amount: string, decimals: number): string {
-	if (!amount || isNaN(Number(amount))) return '0'
+	if (!amount) return '0'
 
 	try {
-		const decimalsFactor = 10 ** decimals
-		const preciseValue = amount
-		const rawValue = preciseMultiply(preciseValue, decimalsFactor)
-		const rawBigInt = scientificToBigInt(rawValue.toString())
+		const factor = new Decimal(10).pow(decimals)
+		const amountDec = new Decimal(amount)
+		const rawDec = preciseMultiply(amountDec, factor)
+		const rawStr = rawDec.toFixed(0)
+		const rawInt = scientificToBigInt(rawStr)
 
-		if (rawBigInt > BigInt(Number.MAX_SAFE_INTEGER)) {
+		if (rawInt > BigInt(Number.MAX_SAFE_INTEGER)) {
+			// Consider switching to string or BigInt safe handling everywhere if this is problematic
 			throw new Error('Value exceeds safe integer range')
 		}
 
-		return rawBigInt.toString()
+		return rawInt.toString()
 	} catch (error) {
 		console.error('Parse error:', error)
 		return '0'
@@ -79,11 +83,6 @@ export function parseTokenAmount(amount: string, decimals: number): string {
  * @param a - First token to compare
  * @param b - Second token to compare
  * @returns `true` if tokens have the same essential properties, `false` otherwise
- *
- * @example
- * const tokenA = { address: '0x123', chain_id: '1', balance: '1000', symbol: 'ETH', decimals: 18 };
- * const tokenB = { address: '0x123', chain_id: '1', balance: '1000', symbol: 'ETH', decimals: 18 };
- * const equal = areTokensEqual(tokenA, tokenB); // true
  */
 export const areTokensEqual = (a: ExtendedToken, b: ExtendedToken): boolean => {
 	return (

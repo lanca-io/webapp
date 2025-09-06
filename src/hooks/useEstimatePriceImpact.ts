@@ -4,6 +4,7 @@ import { useFormStore } from '../store/form/useFormStore'
 import { format } from '../utils/new/format'
 import { formatTokenAmount } from '../utils/new/tokens'
 import { tokenAmountToUsd } from '../utils/new/input'
+import { Decimal } from 'decimal.js'
 
 export enum ImpactSeverity {
 	POSITIVE = 'impact_positive',
@@ -20,31 +21,36 @@ export const useEstimatePriceImpact = () => {
 		const ready = Boolean(
 			fromAmount &&
 				route?.to?.amount &&
-				fromToken?.priceUsd &&
-				toToken?.priceUsd &&
+				fromToken?.price_usd !== undefined &&
+				toToken?.price_usd !== undefined &&
 				typeof fromToken.decimals === 'number' &&
 				typeof toToken.decimals === 'number',
 		)
 
 		if (!ready) return { inUsd: null, outUsd: null }
 
-		const inAmount = formatTokenAmount(fromAmount, fromToken?.decimals || 18)
-		const outAmount = formatTokenAmount(route?.to.amount, toToken?.decimals || 18)
+		const inAmount = formatTokenAmount(fromAmount, fromToken?.decimals ?? 18)
+		const outAmount = formatTokenAmount(route?.to.amount, toToken?.decimals ?? 18)
 
-		return {
-			inUsd: tokenAmountToUsd(Number(inAmount), fromToken?.priceUsd || 0),
-			outUsd: tokenAmountToUsd(Number(outAmount), toToken?.priceUsd || 0),
-		}
+		const inUsdVal = tokenAmountToUsd(new Decimal(inAmount), new Decimal(fromToken?.price_usd || 0))
+		const outUsdVal = tokenAmountToUsd(new Decimal(outAmount), new Decimal(toToken?.price_usd || 0))
+
+		return { inUsd: inUsdVal, outUsd: outUsdVal }
 	}, [fromAmount, route?.to?.amount, fromToken, toToken])
 
 	const { impact, severity } = useMemo(() => {
-		if (!inUsd || !outUsd || Number(inUsd) === 0) return { impact: null, severity: null }
+		if (!inUsd || !outUsd) return { impact: null, severity: null }
 
-		const impactPct = ((Number(outUsd) - Number(inUsd)) / Number(inUsd)) * 100
-		const isGain = impactPct > 0
-		const absImpact = Math.abs(impactPct)
-		const dollarDifference = Math.abs(Number(outUsd) - Number(inUsd))
-		const isSmallAmount = Number(inUsd) <= 10
+		const inUsdDec = new Decimal(inUsd)
+		const outUsdDec = new Decimal(outUsd)
+
+		if (inUsdDec.isZero()) return { impact: null, severity: null }
+
+		const impactPct = outUsdDec.sub(inUsdDec).div(inUsdDec).mul(100)
+		const isGain = impactPct.gt(0)
+		const absImpact = impactPct.abs()
+		const dollarDifference = outUsdDec.sub(inUsdDec).abs()
+		const isSmallAmount = inUsdDec.lte(new Decimal(10))
 
 		let severity: ImpactSeverity = ImpactSeverity.NORMAL
 
@@ -54,27 +60,20 @@ export const useEstimatePriceImpact = () => {
 			if (isSmallAmount) {
 				severity = ImpactSeverity.NORMAL
 			} else {
-				severity =
-					absImpact >= 50
-						? ImpactSeverity.DANGER
-						: absImpact >= 25
-							? ImpactSeverity.WARNING
-							: ImpactSeverity.NORMAL
+				severity = absImpact.gte(50)
+					? ImpactSeverity.DANGER
+					: absImpact.gte(25)
+						? ImpactSeverity.WARNING
+						: ImpactSeverity.NORMAL
 			}
 		}
 
-		let impactText
-		if (isSmallAmount) {
-			impactText = `${isGain ? '+ ' : '- '}${format(dollarDifference, 2, '$')}`
-		} else {
-			impactText = `${isGain ? '+ ' : '- '}${format(absImpact, 2, '')}%`
-		}
+		const impactText = isSmallAmount
+			? `${isGain ? '+ ' : '- '}${format(dollarDifference.toNumber(), 2, '$')}`
+			: `${isGain ? '+ ' : '- '}${format(absImpact.toNumber(), 2, '')}%`
 
 		return {
-			impact: {
-				text: impactText,
-				isGain,
-			},
+			impact: { text: impactText, isGain },
 			severity,
 		}
 	}, [inUsd, outUsd])
@@ -83,10 +82,10 @@ export const useEstimatePriceImpact = () => {
 		if (fromAmount && severity === ImpactSeverity.DANGER) {
 			setError('Extreme price impact')
 		}
-	}, [severity, error, setError])
+	}, [severity, error, setError, fromAmount])
 
 	const valueText = useMemo(() => {
-		return outUsd ? format(Number(outUsd), 2, '$') : null
+		return outUsd ? format(new Decimal(outUsd).toNumber(), 2, '$') : null
 	}, [outUsd])
 
 	return {

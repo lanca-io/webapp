@@ -28,7 +28,13 @@ export const BalanceInfo = memo(({ token, showMax = true }: BalanceInfoProps): J
 		(e: React.MouseEvent<HTMLButtonElement>) => {
 			e.preventDefault()
 			if (!token?.balance) return
-			setAmountInput(formatTokenAmount(token.balance, token.decimals))
+
+			const decimals = token.decimals ?? 18
+			const balance = BigInt(token.balance)
+			const buffer = BigInt(1)
+			const safeBalance = balance > buffer ? balance - buffer : balance
+
+			setAmountInput(formatTokenAmount(safeBalance.toString(), decimals))
 		},
 		[token, setAmountInput],
 	)

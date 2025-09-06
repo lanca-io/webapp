@@ -7,8 +7,8 @@ import './Transaction.pcss'
 export const Transaction: FC = memo(() => {
 	const { fromToken, fromChain, toChain, toToken } = useFormStore()
 
-	const sourceLogo = useMemo(() => fromToken?.logoURI || '', [fromToken])
-	const destinationLogo = useMemo(() => toToken?.logoURI || '', [toToken])
+	const sourceLogo = useMemo(() => fromToken?.logo_url || '', [fromToken])
+	const destinationLogo = useMemo(() => toToken?.logo_url || '', [toToken])
 
 	return (
 		<div className="transaction_content">
