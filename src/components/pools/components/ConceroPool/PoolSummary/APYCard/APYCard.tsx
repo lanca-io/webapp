@@ -67,7 +67,7 @@ export const APYCard = ({ fees, isLoading }: Props) => {
 			if (apy === Infinity) {
 				setCommonValue('Loading...')
 			} else {
-				setCommonValue(toLocaleNumber(apy).toString())
+				setCommonValue(toLocaleNumber(apy, 2).toString())
 			}
 			setApyData(weeklyApyData)
 		} catch (error) {
