@@ -1,14 +1,14 @@
 import { type Address, formatEther } from 'viem'
-import { fetchTokens } from '../../api/concero/fetchTokens'
 import { config } from '../../constants/config'
 import { type Token } from '../../api/concero/types'
 import { gasUsedMap } from './gasPriceMap'
 import { type IRouteType, StepType, type TxName } from '@lanca/sdk'
+import { handleFetchTokens } from '../../handlers/tokens'
 import { getPublicClient } from '../../configuration/chains'
 
 const getUsdPrice = async (chainId: string): Promise<Token | null> => {
 	try {
-		const response = await fetchTokens({ chainId, address: config.NULL_ADDRESS, offset: 0, limit: 1 })
+		const response = await handleFetchTokens(chainId, 0, 1, undefined, config.NULL_ADDRESS)
 		return response[0]
 	} catch (error) {
 		console.error('Error fetching USD price:', error)

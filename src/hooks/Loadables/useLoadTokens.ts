@@ -40,7 +40,7 @@ export const useLoadTokens = () => {
 
 				return tokens.map((token: ExtendedToken) => ({
 					...token,
-					chainLogoURI: chain?.logoURI || null,
+					chainLogoURI: chain?.logoURI,
 				}))
 			} catch (error) {
 				console.error('Failed to fetch tokens:', error)

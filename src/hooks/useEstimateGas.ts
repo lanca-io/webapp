@@ -9,6 +9,7 @@ import { getPublicClient } from '../configuration/chains'
 import { buildRouteData, prepareTxArgs, makeAllowanceOverride } from '../utils/new/args'
 import { contractAddresses } from '../configuration/addresses'
 import { conceroOrchestratorAbi } from '../assets/abi/ConceroOrchestrator'
+import { handleFetchTokens } from '../handlers/tokens'
 import { isNative } from '@lanca/sdk'
 
 type GasEstimation = {
@@ -18,27 +19,8 @@ type GasEstimation = {
 
 async function getNativeTokenUsdPrice(chainId: string): Promise<number | null> {
 	try {
-		const baseUrl = process.env.CONCERO_API_URL
-		const endpoint = new URL(`${baseUrl}/tokens/`)
-		endpoint.search = new URLSearchParams({
-			chain_id: chainId,
-			offset: '0',
-			limit: '1',
-			address: zeroAddress,
-		}).toString()
-
-		const response = await fetch(endpoint, {
-			headers: { Accept: 'application/json' },
-		})
-
-		if (!response.ok) {
-			throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-		}
-
-		const { data = [] } = await response.json()
-		const [token] = data
-
-		return token?.priceUsd ? Number(token.priceUsd) : null
+		const response = await handleFetchTokens(chainId, 0, 1, undefined, zeroAddress as Address)
+		return response?.[0]?.price_usd ? Number(response[0].price_usd) : null
 	} catch (error) {
 		return null
 	}

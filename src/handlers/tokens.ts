@@ -18,11 +18,18 @@ export async function handleFetchBalances(chainId: string, address: string): Pro
 	}
 }
 
-export const handleFetchTokens = async (chainId?: string, offset?: number, limit?: number, search?: string) => {
+export const handleFetchTokens = async (
+	chainId?: string,
+	offset?: number,
+	limit?: number,
+	search?: string,
+	address?: string,
+) => {
 	const params = new URLSearchParams({
 		chain_id: chainId || '',
 		offset: offset?.toString() || '0',
 		limit: limit?.toString() || '15',
+		address: address?.toLowerCase() || '',
 	})
 
 	if (search) {
