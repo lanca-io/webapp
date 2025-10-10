@@ -38,6 +38,7 @@ export const PosthogProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 	const options: Partial<PostHogConfig> = {
 		api_host: `${config.CONCERO_DOMAIN_URL}/posthog`,
 		autocapture: false,
+		disable_session_recording: true,
 	}
 
 	if (process.env.NODE_ENV === 'development') {
