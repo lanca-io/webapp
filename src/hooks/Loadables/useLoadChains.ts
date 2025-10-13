@@ -20,7 +20,7 @@ export const useLoadChains = () => {
 			return (
 				supportedChains?.map((chain: ILancaChain) => ({
 					id: chain.id,
-					name: chain.name,
+					name: chain.name.charAt(0).toUpperCase() + chain.name.slice(1),
 					logoURI: chain.logoURI,
 					explorerURI: chain.explorerURI,
 				})) || []
