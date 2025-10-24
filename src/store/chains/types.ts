@@ -1,21 +1,38 @@
-import type { ILancaChain } from '@lanca/sdk'
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
-import type { StoreApi } from 'zustand'
+import type { StoreApi } from 'zustand/vanilla'
 
-export type ChainsStateSlice = {
-	chains: ILancaChain[]
-	isLoading: boolean
+export type ConceroChain = {
+	id: number
+	name: string
+	selector: bigint
+	logo: string
+	nativeCurrency: {
+		name: string
+		symbol: string
+		decimals: number
+	}
+	rpcUrls: {
+		default: {
+			http: string[]
+		}
+	}
+	explorer: string | null
+	testnet: boolean
+	contracts: {
+		bridge_v2: string
+	}
+}
+
+export type ChainId = number
+
+export type ChainsState = {
+	chains: Record<ChainId, ConceroChain>
+	loading: boolean
 }
 
 export type ChainsActions = {
-	setChains: (chains: ILancaChain[]) => void
-	clearChains: () => void
-	setLoading: (isLoading: boolean) => void
+	setChains: (chains: ConceroChain[]) => void
+	setLoading: (loading: boolean) => void
 }
 
-export type ChainsSelectors = {
-	getChainById: (id: string) => ILancaChain | undefined
-}
-
-export type ChainsState = ChainsStateSlice & ChainsActions & ChainsSelectors
-export type ChainsStore = UseBoundStoreWithEqualityFn<StoreApi<ChainsState>>
+export type ChainsStore = UseBoundStoreWithEqualityFn<StoreApi<ChainsState & ChainsActions>>

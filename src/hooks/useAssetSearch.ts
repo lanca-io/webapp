@@ -1,6 +1,6 @@
-import type { ILancaChain } from '@lanca/sdk'
 import { useState, useCallback, useMemo } from 'react'
 import { useTokensStore } from '../store/tokens/useTokensStore'
+import { ConceroChain } from '../store/chains/types'
 
 type SearchResult = {
 	isActive: boolean
@@ -10,7 +10,7 @@ type SearchResult = {
 	updateSearch: (value: string) => void
 }
 
-export const useAssetSearch = (chain: ILancaChain | null): SearchResult => {
+export const useAssetSearch = (chain: ConceroChain | null): SearchResult => {
 	const [isActive, setIsActive] = useState<boolean>(false)
 	const [hasResults, setHasResults] = useState<boolean>(true)
 

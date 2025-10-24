@@ -1,12 +1,12 @@
-import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../../../store/tokens/types'
 import { memo, useState, useEffect, useCallback } from 'react'
 import { TextInput } from '../../layout/input/TextInput'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { SearchIcon } from '../../../assets/icons/SearchIcon'
+import { ConceroChain } from '../../../store/chains/types'
 
 type TokenSearchProps = {
-	chain: ILancaChain | null
+	chain: ConceroChain | null
 	tokens: ExtendedToken[]
 	setSearchValue: (value: string) => void
 	onSearchResults: (hasResults: boolean) => void

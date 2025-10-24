@@ -10,7 +10,7 @@ const FIVE_MINUTES_MS = 5 * 60 * 1000
 const PAGINATION_LIMIT = 15
 
 type FetchTokensParams = {
-	chainId?: string
+	chainId?: number
 	offset: number
 	limit: number
 	searchValue: string
@@ -27,20 +27,22 @@ export const useLoadTokens = () => {
 		[isFromAssetModalOpen, isToAssetModalOpen, fromChain, toChain],
 	)
 
-	const chainId = activeChain?.id
+	const chainId = activeChain ? Number(activeChain.id) : undefined
 	const tokensRef = useRef<ExtendedToken[]>([])
+
+	const chainsLoaded = useMemo(() => Object.keys(chains).length > 0, [chains])
 
 	const fetchTokens = useCallback(
 		async ({ chainId, offset, limit = 15, searchValue }: FetchTokensParams) => {
 			if (!chainId) return []
 
 			try {
-				const tokens: ExtendedToken[] = await handleFetchTokens(chainId, offset, limit, searchValue)
-				const chain = chains.find(c => c.id === chainId)
+				const tokens: ExtendedToken[] = await handleFetchTokens(String(chainId), offset, limit, searchValue)
+				const chain = chains[chainId]
 
 				return tokens.map((token: ExtendedToken) => ({
 					...token,
-					chainLogoURI: chain?.logoURI,
+					chainLogoURI: chain?.logo,
 				}))
 			} catch (error) {
 				console.error('Failed to fetch tokens:', error)
@@ -59,7 +61,7 @@ export const useLoadTokens = () => {
 				limit: PAGINATION_LIMIT,
 				searchValue,
 			}),
-		enabled: Boolean(chainId) && chains.length > 0,
+		enabled: Boolean(chainId) && chainsLoaded,
 		staleTime: FIVE_MINUTES_MS,
 	})
 

@@ -1,5 +1,5 @@
 import type { ExtendedToken } from '../../../store/tokens/types'
-import type { ILancaChain } from '@lanca/sdk'
+import type { ConceroChain } from '../../../store/chains/types'
 import { memo, useState, useCallback, useMemo, useEffect } from 'react'
 import { Token } from '../Token/Token'
 import { ExpandButton } from '../ExpandButton/ExpandButton'
@@ -11,7 +11,7 @@ import { useTokensStore } from '../../../store/tokens/useTokensStore'
 import './TokenBalances.pcss'
 
 type BalanceProps = {
-	chain: ILancaChain | null
+	chain: ConceroChain | null
 	items: number
 	onTokenSelect: (token: ExtendedToken) => void
 	isSearchActive?: boolean
@@ -20,7 +20,7 @@ type BalanceProps = {
 export const TokenBalances = memo(
 	({ chain, items, onTokenSelect, isSearchActive = false }: BalanceProps): JSX.Element | null => {
 		const { address, isConnected } = useAccount()
-		const { balances, isLoading } = useGetBalances(chain?.id)
+		const { balances, isLoading } = useGetBalances(chain?.id?.toString())
 		const { fromToken, toToken } = useFormStore()
 		const { allSearchValue, searchValue } = useTokensStore()
 		const [shown, setShown] = useState(items)
