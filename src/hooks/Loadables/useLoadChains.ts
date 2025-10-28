@@ -14,7 +14,6 @@ export const useLoadChains = () => {
 		queryKey: ['chainsConfig'],
 		queryFn: async () => {
 			const response = await getChains()
-			console.log('Fetched chains response:', response)
 			return toConceroChains(response.payload.items)
 		},
 		staleTime: 30_000,

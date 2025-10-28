@@ -1,8 +1,8 @@
 import type { FormState } from './types'
-import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../tokens/types'
 import { Mode, AddressMode, SlippageMode } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
+import { ConceroChain } from '../chains/types'
 
 const initFromToken: ExtendedToken = {
 	chain_id: 10,
@@ -25,18 +25,84 @@ const initToToken: ExtendedToken = {
 	price_usd: String(1),
 }
 
-const initFromChain: ILancaChain = {
-	id: '10',
+const initFromChain: ConceroChain = {
+	id: 10,
 	name: 'Optimism',
-	logoURI: 'https://api.v2.concero.io/static/chains/10.svg',
-	explorerURI: 'https://optimistic.etherscan.io',
+	selector: 3734403246176062136n,
+	logo: 'https://api.v2.concero.io/static/chains/10.svg',
+	nativeCurrency: {
+		name: 'ETH',
+		symbol: 'ETH',
+		decimals: 18,
+	},
+	rpcUrls: {
+		default: {
+			http: [
+				'https://optimism-mainnet.public.blastapi.io',
+				'https://optimism.drpc.org',
+				'https://go.getblock.io/e8a75f8dcf614861becfbcb185be6eb4',
+				'https://gateway.tenderly.co/public/optimism',
+				'https://0xrpc.io/op',
+				'https://opt-mainnet.g.alchemy.com/v2/demo',
+				'https://mainnet.optimism.io',
+				'https://optimism.gateway.tenderly.co',
+				'https://optimism-rpc.publicnode.com',
+				'https://optimism.api.onfinality.io/public',
+				'https://1rpc.io/op',
+				'https://optimism.therpc.io',
+				'https://optimism.rpc.subquery.network/public',
+				'https://optimism-public.nodies.app',
+				'https://optimism.public.blockpi.network/v1/rpc/public',
+				'https://public-op-mainnet.fastnode.io',
+			],
+		},
+	},
+	explorer: 'https://optimistic.etherscan.io',
+	testnet: false,
+	contracts: {
+		bridge_v2: '0x084e84446FE08B27d1b7106ef4d29f813708d729',
+	},
 }
 
-const initToChain: ILancaChain = {
-	id: '137',
+const initToChain: ConceroChain = {
+	id: 137,
 	name: 'Polygon',
-	logoURI: 'https://api.v2.concero.io/static/chains/137.svg',
-	explorerURI: 'https://polygonscan.com',
+	selector: 4051577828743386545n,
+	logo: 'https://api.v2.concero.io/static/chains/137.svg',
+	nativeCurrency: {
+		name: 'POL',
+		symbol: 'POL',
+		decimals: 18,
+	},
+	rpcUrls: {
+		default: {
+			http: [
+				'https://polygon-mainnet.public.blastapi.io',
+				'https://rpc.poolz.finance/polygon',
+				'https://go.getblock.io/02667b699f05444ab2c64f9bff28f027',
+				'https://gateway.tenderly.co/public/polygon',
+				'https://polygon.lava.build',
+				'https://polygon.meowrpc.com',
+				'https://polygon-public.nodies.app',
+				'https://polygon-bor-rpc.publicnode.com',
+				'https://polygon-mainnet.g.alchemy.com/v2/demo',
+				'https://polygon.gateway.tenderly.co',
+				'https://polygon.drpc.org',
+				'https://polygon-rpc.com',
+				'https://1rpc.io/matic',
+				'https://polygon.api.onfinality.io/public',
+				'https://polygon.rpc.subquery.network/public',
+				'https://polygon.therpc.io',
+				'https://rpc-mainnet.matic.quiknode.pro',
+				'https://polygon-mainnet.rpcfast.com?api_key=xbhWBI1Wkguk8SNMu1bvvLurPGLXmgwYeC4S6g2H7WdwFigZSmPWVZRxrskEQwIf',
+			],
+		},
+	},
+	explorer: 'https://polygonscan.com',
+	testnet: false,
+	contracts: {
+		bridge_v2: '0x0EF5038Ef129401a5Ff963A55BF37A6CF2f29C91',
+	},
 }
 
 export const CreateFormStore = () =>

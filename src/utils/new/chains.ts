@@ -73,7 +73,7 @@ export type ConceroChain = {
 	explorer: string | null
 	testnet: boolean
 	contracts: {
-		bridge_v2: string
+		orchestrator: string
 	}
 }
 
@@ -158,18 +158,18 @@ const sanitizeRpcUrls = (rpcs: string[]): string[] => {
  * }
  */
 export const toConceroChain = (config: ChainConfig): ConceroChain | null => {
-	const bridgeV2 = findDeploymentAddress(config.deployments, DeploymentType.bridge_v2)
+	const orchestrator = findDeploymentAddress(config.deployments, DeploymentType.orchestrator)
 	const validRpcs = sanitizeRpcUrls(config.chain.rpcs)
 
-	if (!bridgeV2 || validRpcs.length === 0) return null
-	if (!isAddress(bridgeV2)) return null
+	if (!orchestrator || validRpcs.length === 0) return null
+	if (!isAddress(orchestrator)) return null
 
 	const displayName = parseChainName(config.chain.name)
 
 	return {
 		id: Number(config.chain.id),
 		name: displayName,
-		selector: config.chain.concero_selector ? BigInt(config.chain.concero_selector) : 0n,
+		selector: config.chain.ccip_selector ? BigInt(config.chain.ccip_selector) : 0n,
 		logo: `${CHAIN_LOGO_BASE_URL}/${config.chain.id}.svg`,
 		nativeCurrency: {
 			name: config.chain.native_currency_name,
@@ -182,7 +182,7 @@ export const toConceroChain = (config: ChainConfig): ConceroChain | null => {
 		explorer: config.chain.explorer,
 		testnet: config.chain.is_testnet,
 		contracts: {
-			bridge_v2: bridgeV2,
+			orchestrator: orchestrator,
 		},
 	}
 }

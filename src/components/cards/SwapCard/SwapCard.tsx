@@ -30,7 +30,6 @@ export const SwapCard = ({ swapState, swapDispatch }: Props) => {
 		try {
 			return await fetchUserByAddress(swapState.from.address as Address)
 		} catch (e) {
-			console.log('getUser', e)
 			return null
 		}
 	}

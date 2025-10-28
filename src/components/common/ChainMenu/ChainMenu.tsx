@@ -14,8 +14,6 @@ export const ChainMenu = memo(({ activeChain, onChainClick }: MenuProps): JSX.El
 
 	const chainsArray = useMemo(() => Object.values(chains), [chains])
 
-	console.log('chainsArray', chainsArray)
-
 	const handleChainClick = useCallback(
 		(chain: ConceroChain) => {
 			return (e: React.MouseEvent) => {

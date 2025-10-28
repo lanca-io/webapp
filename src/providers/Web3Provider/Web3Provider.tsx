@@ -1,5 +1,5 @@
 import type { AppKitNetwork } from '@reown/appkit/networks'
-import type { Transport } from 'viem'
+import type { Transport, PublicClient } from 'viem'
 import type { ConceroChain } from '../../store/chains/types'
 import { createAppKit } from '@reown/appkit/react'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
@@ -10,6 +10,7 @@ import { WagmiProvider } from 'wagmi'
 import { config } from '../../constants/config'
 import { FullScreenLoader } from '../../components/layout/FullScreenLoader/FullScreenLoader'
 import { TechWorksScreen } from '../../components/screens/TechWorksScreen/TechWorksScreen'
+import { getPublicClient as getWagmiPublicClient } from '@wagmi/core'
 
 const metadata = {
 	name: 'Concero',
@@ -58,6 +59,17 @@ export function initializeAppKit(chains: ConceroChain[], transports: Record<numb
 export function getWagmiAdapter() {
 	if (!wagmiAdapter) throw new Error('AppKit not initialized')
 	return wagmiAdapter
+}
+
+export function getPublicClient(chainId: number): PublicClient {
+	const adapter = getWagmiAdapter()
+	const client = getWagmiPublicClient(adapter.wagmiConfig, { chainId })
+
+	if (!client) {
+		throw new Error(`Public client for chain ${chainId} could not be created`)
+	}
+
+	return client
 }
 
 export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {

@@ -1,22 +1,22 @@
 import type { ExtendedToken } from '../store/tokens/types'
-import type { ILancaChain } from '@lanca/sdk'
 import { useCallback } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { useModalsStore } from '../store/modals/useModalsStore'
 import { useChainsStore } from '../store/chains/useChainsStore'
+import { ConceroChain } from '../store/chains/types'
 
 export const useAssetModals = () => {
 	const { chains } = useChainsStore()
 	const { fromChain, toChain, closeFromAssetModal, closeToAssetModal, setFromChain, setToChain } = useModalsStore()
 	const { setFromChain: setFormFromChain, setToChain: setFormToChain, setFromToken, setToToken } = useFormStore()
 
-	const selectFromChain = useCallback((chain: ILancaChain) => setFromChain(chain), [setFromChain])
-	const selectToChain = useCallback((chain: ILancaChain) => setToChain(chain), [setToChain])
+	const selectFromChain = useCallback((chain: ConceroChain) => setFromChain(chain), [setFromChain])
+	const selectToChain = useCallback((chain: ConceroChain) => setToChain(chain), [setToChain])
 
 	const selectFromAsset = useCallback(
 		(token: ExtendedToken) => {
 			const chainId = token.chain_id
-			const chain = fromChain || chains.find(chain => Number(chain.id) === Number(chainId))
+			const chain = fromChain || Object.values(chains).find(chain => Number(chain.id) === Number(chainId))
 
 			if (!chain) return
 
@@ -30,7 +30,7 @@ export const useAssetModals = () => {
 	const selectToAsset = useCallback(
 		(token: ExtendedToken) => {
 			const chainId = token.chain_id
-			const chain = toChain || chains.find(chain => Number(chain.id) === Number(chainId))
+			const chain = toChain || Object.values(chains).find(chain => Number(chain.id) === Number(chainId))
 
 			if (!chain) return
 

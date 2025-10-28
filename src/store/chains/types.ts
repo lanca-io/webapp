@@ -19,7 +19,7 @@ export type ConceroChain = {
 	explorer: string | null
 	testnet: boolean
 	contracts: {
-		bridge_v2: string
+		orchestrator: string
 	}
 }
 
