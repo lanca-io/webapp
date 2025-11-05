@@ -3,7 +3,7 @@ import { type PoolConfig } from './types'
 import { erc20Abi, formatUnits } from 'viem'
 import { arbitrum, avalanche, base, optimism, polygon } from 'viem/chains'
 import { conceroProxyMap } from '@lanca/sdk'
-import { getPublicClient } from '../../../../configuration/chains'
+import { getPublicClient } from '../../../../providers/Web3Provider/Web3Provider'
 
 const usdcDecimals = 6
 
