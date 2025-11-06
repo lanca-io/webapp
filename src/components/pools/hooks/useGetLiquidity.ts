@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { type IPoolConfig, isPoolFullAbi, poolConfigs, poolLoansInUseAbiITem } from '../config/poolConfig'
-import { getPublicClient } from '../../../configuration/chains'
+import { getPublicClient } from '../../../providers/Web3Provider/Web3Provider'
 import { erc20Abi, formatUnits } from 'viem'
 import { usdcDecimals } from '../config/usdcTokenAddresses'
 import { getMaxCap } from './useGetMaxCap'
@@ -14,26 +14,26 @@ export const getLiquidityOnChain = async (poolConfig: IPoolConfig) => {
 
 	const client = getPublicClient(chain.id)
 
-	const results = await client.multicall({
-		contracts: [
-			{
+	try {
+		const [loansInUse, usdcBalance] = await Promise.all([
+			client.readContract({
 				address: conceroContract,
 				abi: poolLoansInUseAbiITem,
 				functionName: 'getUsdcLoansInUse',
-			},
-			{
+			}),
+			client.readContract({
 				address: usdcContract,
 				abi: erc20Abi,
 				functionName: 'balanceOf',
 				args: [conceroContract],
-			},
-		],
-	})
+			}),
+		])
 
-	return results.reduce((acc, item) => {
-		const balance = item.status === 'success' ? Number(item.result) : 0
-		return balance + acc
-	}, 0)
+		return Number(loansInUse) + Number(usdcBalance)
+	} catch (error) {
+		console.error(`Error fetching liquidity on chain for ${conceroContract}:`, error)
+		return 0
+	}
 }
 
 export const getPoolLiquidity = async (childrenOnly = false) => {
@@ -49,6 +49,7 @@ export const getPoolLiquidity = async (childrenOnly = false) => {
 		return childrenOnly ? BigInt(totalLiquidity) : Number(formatUnits(BigInt(totalLiquidity), usdcDecimals))
 	} catch (error) {
 		console.error('Error fetching pool liquidity:', error)
+		return childrenOnly ? 0n : 0
 	}
 }
 
@@ -65,7 +66,8 @@ export const isPoolFilled = async () => {
 		})
 		return data as boolean
 	} catch (error) {
-		console.error('Error fetching pool liquidity:', error)
+		console.error('Error fetching pool status:', error)
+		return false
 	}
 }
 

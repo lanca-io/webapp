@@ -1,17 +1,17 @@
-import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback } from 'react'
 import { formatUnits } from 'viem'
-import { getPublicClient } from '../configuration/chains'
+import { getPublicClient } from '../providers/Web3Provider/Web3Provider'
 import { erc20Abi } from 'viem'
 import { poolAddresses } from '../configuration/addresses'
 import { usdcAddresses } from '../configuration/addresses'
+import { ConceroChain } from '../store/chains/types'
 
 const USDC_DECIMALS = 6
 
 type LiquidityCheckParams = {
-	fromChain: ILancaChain | null
-	toChain: ILancaChain | null
+	fromChain: ConceroChain | null
+	toChain: ConceroChain | null
 	fromToken: ExtendedToken | null
 	fromAmount: string | null
 }
@@ -52,7 +52,7 @@ export const useCheckLiquidity = () => {
 			}
 
 			try {
-				const poolAmount = await getPoolLiquidity(toChain.id)
+				const poolAmount = await getPoolLiquidity(String(toChain.id))
 				const decimals = Number(fromToken.decimals)
 				const normalizedAmount = Number(fromAmount) / 10 ** decimals
 				const fromAmountUsd = normalizedAmount * (Number(fromToken.price_usd) ?? 0)

@@ -1,8 +1,8 @@
-import type { ILancaChain } from '@lanca/sdk'
 import { useMemo } from 'react'
 import { useTokensStore } from '../store/tokens/useTokensStore'
+import { ConceroChain } from '../store/chains/types'
 
-export const useTokenSelection = (selectedChain: ILancaChain | null) => {
+export const useTokenSelection = (selectedChain: ConceroChain | null) => {
 	const {
 		tokens,
 		allTokens,

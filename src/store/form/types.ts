@@ -1,5 +1,5 @@
 import type { ExtendedToken } from '../tokens/types'
-import type { ILancaChain } from '@lanca/sdk'
+import type { ConceroChain } from '../chains/types'
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 import type { StoreApi } from 'zustand'
 import type { Address } from 'viem'
@@ -24,8 +24,8 @@ export enum SlippageMode {
 }
 
 export type FormStateSlice = {
-	fromChain: ILancaChain | null
-	toChain: ILancaChain | null
+	fromChain: ConceroChain | null
+	toChain: ConceroChain | null
 	fromToken: ExtendedToken | null
 	toToken: ExtendedToken | null
 	fromAmount: string | null
@@ -48,8 +48,8 @@ export type FormStateSlice = {
 }
 
 export type FormActions = {
-	setFromChain: (chain: ILancaChain) => void
-	setToChain: (chain: ILancaChain) => void
+	setFromChain: (chain: ConceroChain) => void
+	setToChain: (chain: ConceroChain) => void
 	setFromToken: (token: ExtendedToken) => void
 	setToToken: (token: ExtendedToken) => void
 	setFromAmount: (amount: string | null) => void

@@ -23,17 +23,21 @@ export const useLoadAllTokens = () => {
 
 	const tokensRef = useRef<ExtendedToken[]>([])
 
+	const chainsArray = useMemo(() => Object.values(chains), [chains])
+
+	const chainIdsKey = useMemo(() => Object.keys(chains).sort().join(','), [chains])
+
 	const fetchTokens = useCallback(
 		async (offset: number, search: string): Promise<ExtendedToken[]> => {
-			if (chains.length === 0) return []
+			if (chainsArray.length === 0) return []
 
 			try {
 				const results = await Promise.all(
-					chains.map(async chain => {
-						const tokens = await handleFetchTokens(chain.id, offset, TOKENS_PER_CHAIN, search)
+					chainsArray.map(async chain => {
+						const tokens = await handleFetchTokens(String(chain.id), offset, TOKENS_PER_CHAIN, search)
 						return tokens.map((token: ExtendedToken) => ({
 							...token,
-							chainLogoURI: chain.logoURI || null,
+							chainLogoURI: chain.logo || null,
 						}))
 					}),
 				)
@@ -43,14 +47,15 @@ export const useLoadAllTokens = () => {
 				return []
 			}
 		},
-		[chains],
+		[chainsArray],
 	)
 
-	const queryKey = useMemo(() => ['allTokens', offset, search], [offset, search])
+	const queryKey = useMemo(() => ['allTokens', chainIdsKey, offset, search], [chainIdsKey, offset, search])
+
 	const { data: tokens, isFetching: isLoading } = useQuery({
 		queryKey,
 		queryFn: () => fetchTokens(offset, search),
-		enabled: chains.length > 0,
+		enabled: chainsArray.length > 0,
 		staleTime: CACHE_TIME,
 	})
 
