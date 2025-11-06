@@ -5,9 +5,9 @@ import { StepType } from '@lanca/sdk'
 import { useRouteStore } from '../store/route/useRouteStore'
 import { useAccount } from 'wagmi'
 import { zeroAddress, maxUint256 } from 'viem'
-import { getPublicClient } from '../configuration/chains'
+import { getPublicClient } from '../providers/Web3Provider/Web3Provider'
 import { buildRouteData, prepareTxArgs, makeAllowanceOverride } from '../utils/new/args'
-import { contractAddresses } from '../configuration/addresses'
+import { useChainsStore } from '../store/chains/useChainsStore'
 import { conceroOrchestratorAbi } from '../assets/abi/ConceroOrchestrator'
 import { handleFetchTokens } from '../handlers/tokens'
 import { isNative } from '@lanca/sdk'
@@ -29,6 +29,7 @@ async function getNativeTokenUsdPrice(chainId: string): Promise<number | null> {
 export const useEstimateGas = () => {
 	const { address } = useAccount()
 	const { route } = useRouteStore()
+	const { chains } = useChainsStore()
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string | null>(null)
 	const [estimate, setEstimate] = useState<GasEstimation | null>(null)
@@ -46,11 +47,12 @@ export const useEstimateGas = () => {
 		setEstimate(null)
 
 		try {
-			const [routeData, client, contractAddress] = await Promise.all([
+			const [routeData, client] = await Promise.all([
 				buildRouteData(route, address),
 				getPublicClient(Number(route.from.chain.id)),
-				contractAddresses[route.from.chain.id.toString()],
 			])
+
+			const contractAddress = chains[Number(route.from.chain.id)]?.contracts.orchestrator as Address
 
 			const preparedArgs = prepareTxArgs(routeData, address, step as IRouteStep, zeroAddress, 0n)
 

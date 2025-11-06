@@ -1,21 +1,21 @@
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 import type { StoreApi } from 'zustand'
-import type { ILancaChain } from '@lanca/sdk'
+import type { ConceroChain } from '../chains/types'
 
 export type ModalsState = {
 	isFromAssetModalOpen: boolean
 	isToAssetModalOpen: boolean
-	fromChain: ILancaChain | null
-	toChain: ILancaChain | null
+	fromChain: ConceroChain | null
+	toChain: ConceroChain | null
 }
 
 export type ModalActions = {
 	openFromAssetModal: () => void
 	closeFromAssetModal: () => void
-	setFromChain: (chain: ILancaChain | null) => void
+	setFromChain: (chain: ConceroChain | null) => void
 	openToAssetModal: () => void
 	closeToAssetModal: () => void
-	setToChain: (chain: ILancaChain | null) => void
+	setToChain: (chain: ConceroChain | null) => void
 }
 
 export type ModalState = ModalsState & ModalActions

@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { SDKContext } from './SDKContext'
+import { SDKContext } from './SDKProvider'
 
 export const useLancaSDK = () => {
 	const context = useContext(SDKContext)

@@ -1,5 +1,5 @@
 import { erc20Abi, formatUnits } from 'viem'
-import { getPublicClient } from '../../../../../configuration/chains'
+import { getPublicClient } from '../../../../../providers/Web3Provider/Web3Provider'
 import { type IPoolConfig, poolConfigs, poolLoansInUseAbiITem } from '../../../config/poolConfig'
 import { usdcDecimals } from '../../../config/usdcTokenAddresses'
 
@@ -9,26 +9,21 @@ export const getLiquidityOnChain = async (poolConfig: IPoolConfig) => {
 	const client = getPublicClient(chain.id)
 
 	try {
-		const results = await client.multicall({
-			contracts: [
-				{
-					address: conceroContract,
-					abi: poolLoansInUseAbiITem,
-					functionName: 'getUsdcLoansInUse',
-				},
-				{
-					address: usdcContract,
-					abi: erc20Abi,
-					functionName: 'balanceOf',
-					args: [conceroContract],
-				},
-			],
-		})
+		const [loansInUse, usdcBalance] = await Promise.all([
+			client.readContract({
+				address: conceroContract,
+				abi: poolLoansInUseAbiITem,
+				functionName: 'getUsdcLoansInUse',
+			}),
+			client.readContract({
+				address: usdcContract,
+				abi: erc20Abi,
+				functionName: 'balanceOf',
+				args: [conceroContract],
+			}),
+		])
 
-		return results.reduce((acc, item) => {
-			const balance = item.status === 'success' ? Number(item.result) : 0
-			return balance + acc
-		}, 0)
+		return Number(loansInUse) + Number(usdcBalance)
 	} catch (error) {
 		console.error(`Error fetching liquidity on chain for ${conceroContract}:`, error)
 		return 0
@@ -52,6 +47,6 @@ export const getPoolLiquidity = async (childrenOnly = false) => {
 		return Number(formatUnits(BigInt(totalLiquidity), usdcDecimals))
 	} catch (error) {
 		console.error('Error fetching pool liquidity:', error)
-		return 0
+		return childrenOnly ? 0n : 0
 	}
 }

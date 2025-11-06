@@ -1,6 +1,6 @@
 import type { ModalState } from './types'
-import type { ILancaChain } from '@lanca/sdk'
 import { createWithEqualityFn } from 'zustand/traditional'
+import { ConceroChain } from '../chains/types'
 
 export const CreateModalsStore = () =>
 	createWithEqualityFn<ModalState>(
@@ -11,10 +11,10 @@ export const CreateModalsStore = () =>
 			toChain: null,
 			openFromAssetModal: () => set({ isFromAssetModalOpen: true }),
 			closeFromAssetModal: () => set({ isFromAssetModalOpen: false, fromChain: null }),
-			setFromChain: (chain: ILancaChain | null) => set({ fromChain: chain }),
+			setFromChain: (chain: ConceroChain | null) => set({ fromChain: chain }),
 			openToAssetModal: () => set({ isToAssetModalOpen: true }),
 			closeToAssetModal: () => set({ isToAssetModalOpen: false, toChain: null }),
-			setToChain: (chain: ILancaChain | null) => set({ toChain: chain }),
+			setToChain: (chain: ConceroChain | null) => set({ toChain: chain }),
 		}),
 		Object.is,
 	)

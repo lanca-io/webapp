@@ -8,18 +8,14 @@ export const useChainsStore = () => {
 	}
 
 	const chains = useStore(state => state.chains)
-	const isLoading = useStore(state => state.isLoading)
+	const loading = useStore(state => state.loading)
 	const setChains = useStore(state => state.setChains)
-	const clearChains = useStore(state => state.clearChains)
 	const setLoading = useStore(state => state.setLoading)
-	const getChainById = useStore(state => state.getChainById)
 
 	return {
 		chains,
-		isLoading,
+		loading,
 		setChains,
-		clearChains,
 		setLoading,
-		getChainById,
 	}
 }
