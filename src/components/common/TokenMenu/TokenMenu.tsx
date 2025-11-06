@@ -2,11 +2,11 @@ import { memo } from 'react'
 import { TokenBalances } from '../TokenBalances/TokenBalances'
 import { PopularTokens } from '../PopularTokens/PopularTokens'
 import { SearchedTokens } from '../SearchedTokens/SearchedTokens'
-import type { ILancaChain } from '@lanca/sdk'
 import type { ExtendedToken } from '../../../store/tokens/types'
+import type { ConceroChain } from '../../../store/chains/types'
 
 type MenuProps = {
-	chain: ILancaChain | null
+	chain: ConceroChain | null
 	tokens: ExtendedToken[]
 	isSearchActive: boolean
 	searchedTokens: ExtendedToken[]

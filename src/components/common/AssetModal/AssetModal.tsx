@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import type { ILancaChain } from '@lanca/sdk'
+import type { ConceroChain } from '../../../store/chains/types'
 import type { ExtendedToken } from '../../../store/tokens/types'
 import { Modal } from '../Modal/Modal'
 import { ChainMenu } from '../ChainMenu/ChainMenu'
@@ -15,8 +15,8 @@ interface ModalProps {
 	isOpen: boolean
 	onClose: () => void
 	onSelect: (token: ExtendedToken) => void
-	onChainSelect: (chain: ILancaChain) => void
-	selectedChain: ILancaChain | null
+	onChainSelect: (chain: ConceroChain) => void
+	selectedChain: ConceroChain | null
 }
 
 export const AssetsModal = memo(

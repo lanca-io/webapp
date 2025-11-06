@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import type { Address } from 'viem'
-import { ILancaChain, Status } from '@lanca/sdk'
+import { Status } from '@lanca/sdk'
 import { SplitSubvariantType } from '../../store/subvariant/types'
 import { useAccount } from 'wagmi'
 import { useSubvariantStore } from '../../store/subvariant/useSubvariantStore'
@@ -12,8 +12,9 @@ import { useRouteStore } from '../../store/route/useRouteStore'
 import { useSettingsStore } from '../../store/settings/useSettings'
 import { useLancaSDK } from '../../providers/SDKProvider/useLancaSDK'
 import { useTxExecutionStore } from '../../store/tx-execution/useTxExecutionStore'
+import { ConceroChain } from '../../store/chains/types'
 
-const REFRESH_INTERVAL = 60_000 // 60 seconds
+const REFRESH_INTERVAL = 60_000
 
 export const useLoadRoute = () => {
 	const { address, isConnected } = useAccount()
@@ -44,12 +45,12 @@ export const useLoadRoute = () => {
 	)
 
 	const checkHasLiquidity = async (
-		srcChain: ILancaChain,
-		dstChain: ILancaChain,
+		srcChain: ConceroChain,
+		dstChain: ConceroChain,
 		token: ExtendedToken,
 		amount: string,
 	) => {
-		if (isBridge(srcChain?.id, dstChain?.id) && isConnected) {
+		if (isBridge(String(srcChain?.id), String(dstChain?.id)) && isConnected) {
 			const lq = await checkLiquidity({
 				fromChain: srcChain,
 				toChain: dstChain,
@@ -68,8 +69,8 @@ export const useLoadRoute = () => {
 		}
 
 		const liquid = await checkHasLiquidity(
-			fromChain as ILancaChain,
-			toChain as ILancaChain,
+			fromChain as ConceroChain,
+			toChain as ConceroChain,
 			fromToken as ExtendedToken,
 			fromAmount as string,
 		)

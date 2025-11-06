@@ -1,14 +1,14 @@
 import type { ExtendedToken } from '../../../store/tokens/types'
-import type { ILancaChain } from '@lanca/sdk'
 import { memo } from 'react'
 import { TokenSelection } from './TokenSelection/TokenSelection'
 import { ChainSelection } from './ChainSelection/ChainSelection'
 import { TrailArrowRightIcon } from '../../../assets/icons/TrailArrowRightIcon'
+import { ConceroChain } from '../../../store/chains/types'
 import './AssetSelection.pcss'
 
 type AssetSelectionProps = {
 	token: ExtendedToken | null
-	chain: ILancaChain | null
+	chain: ConceroChain | null
 	openModal?: () => void
 	disabled?: boolean
 }
@@ -30,7 +30,7 @@ export const AssetSelection = memo(
 
 				<p className="asset_selection_pointer">on</p>
 
-				<ChainSelection logoURI={chain?.logoURI} name={chain?.name} />
+				<ChainSelection logoURI={chain?.logo} name={chain?.name} />
 
 				{hasInteractiveElement && (
 					<div className="asset_selection_arrow">

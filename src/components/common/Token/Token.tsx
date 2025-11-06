@@ -20,10 +20,7 @@ type TokenProps = {
 export const Token = memo(({ token, showBalance = false, onClick }: TokenProps): JSX.Element => {
 	const { chains } = useChainsStore()
 
-	const explorer = useMemo(
-		() => chains.find(chain => Number(chain.id) === Number(token.chain_id))?.explorerURI,
-		[chains, token.chain_id],
-	)
+	const explorer = useMemo(() => chains[Number(token.chain_id)]?.explorer, [chains, token.chain_id])
 
 	const native = useMemo(() => isNative(token.address as Address), [token.address])
 

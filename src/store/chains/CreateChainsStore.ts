@@ -1,19 +1,24 @@
-import type { ChainsState } from './types'
-import type { ILancaChain } from '@lanca/sdk'
+import type { ChainsState, ChainsActions, ConceroChain, ChainId } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
 export const CreateChainsStore = () =>
-	createWithEqualityFn<ChainsState>(
-		(set, get) => ({
-			chains: [],
-			isLoading: false,
-			setChains: (chains: ILancaChain[]) => set({ chains }),
-			clearChains: () => set({ chains: [] }),
-			setLoading: (isLoading: boolean) => set({ isLoading }),
-			getChainById: (id: string) => {
-				const { chains } = get()
-				return chains.find(chain => chain.id === id)
-			},
+	createWithEqualityFn<ChainsState & ChainsActions>(
+		set => ({
+			chains: {},
+			loading: false,
+
+			setChains: (chains: ConceroChain[]) =>
+				set(() => ({
+					chains: chains.reduce(
+						(acc, chain) => {
+							acc[chain.id] = chain
+							return acc
+						},
+						{} as Record<ChainId, ConceroChain>,
+					),
+				})),
+
+			setLoading: (loading: boolean) => set({ loading }),
 		}),
 		Object.is,
 	)

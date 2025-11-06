@@ -1,4 +1,4 @@
-import { getPublicClient } from '../../../../../configuration/chains'
+import { getPublicClient } from '../../../../../providers/Web3Provider/Web3Provider'
 import { config } from '../../../../../constants/config'
 import { base, baseSepolia } from 'viem/chains'
 import { type Address, erc20Abi } from 'viem'

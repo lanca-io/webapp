@@ -1,19 +1,21 @@
-import type { ILancaChain } from '@lanca/sdk'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Chain } from './Chain/Chain'
 import { useChainsStore } from '../../../store/chains/useChainsStore'
+import { ConceroChain } from '../../../store/chains/types'
 import './ChainMenu.pcss'
 
 type MenuProps = {
-	activeChain: ILancaChain | null
-	onChainClick: (chain: ILancaChain) => void
+	activeChain: ConceroChain | null
+	onChainClick: (chain: ConceroChain) => void
 }
 
 export const ChainMenu = memo(({ activeChain, onChainClick }: MenuProps): JSX.Element => {
 	const { chains } = useChainsStore()
 
+	const chainsArray = useMemo(() => Object.values(chains), [chains])
+
 	const handleChainClick = useCallback(
-		(chain: ILancaChain) => {
+		(chain: ConceroChain) => {
 			return (e: React.MouseEvent) => {
 				e.preventDefault()
 				onChainClick(chain)
@@ -27,11 +29,11 @@ export const ChainMenu = memo(({ activeChain, onChainClick }: MenuProps): JSX.El
 			<h4 className="chain_menu_title">Chains</h4>
 			<div className="chain_menu_container">
 				<div className="chain_menu_grid">
-					{chains.map(chain => (
+					{chainsArray.map(chain => (
 						<Chain
 							key={chain.id}
 							name={chain.name}
-							logoURL={chain.logoURI || ''}
+							logoURL={chain.logo || ''}
 							onClick={handleChainClick(chain)}
 							isActive={activeChain?.id === chain.id}
 						/>
