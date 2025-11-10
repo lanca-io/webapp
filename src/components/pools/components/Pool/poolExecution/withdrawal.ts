@@ -9,7 +9,7 @@ import { handleAllowance } from './allowance'
 import { getPublicClient } from '../../../../../providers/Web3Provider/Web3Provider'
 import { ParentPoolABI } from '../../../config/abi/ParentPoolABI1_5'
 import { trackEvent } from '../../../../../hooks/useTracking'
-import { action, category } from '../../../../../constants/tracking'
+import { category } from '../../../../../constants/tracking'
 
 export enum TransactionStatus {
 	SUCCESS = 'SUCCESS',
@@ -22,19 +22,30 @@ const parentPool = config.IS_TESTNET ? parentPoolBaseSepolia : parentPoolBase
 const chain = config.IS_TESTNET ? baseSepolia : base
 const publicClient = getPublicClient(chain.id)
 
+const trackWithdrawalStatus = (status: 'SUCCESS' | 'FAILED', poolState: PoolState, txHash?: Hash) => {
+	const { from } = poolState
+
+	trackEvent({
+		category: category.PoolCard,
+		action: 'withdrawal_status',
+		label: 'Withdrawal Status',
+		data: {
+			user_id: from.address,
+			status: status,
+			amount: from.amount,
+			pool_id: parentPool,
+			product: 'Lanca',
+			txHash: txHash,
+		},
+	})
+}
+
 export async function handleWithdrawal(
 	poolState: PoolState,
 	poolDispatch: Dispatch<PoolAction>,
 	walletClient: WalletClient,
 ) {
 	const { to, from } = poolState
-
-	trackEvent({
-		category: category.PoolCard,
-		action: action.BeginWithdrawalRequest,
-		label: 'concero_begin_withdrawal',
-		data: { from, to },
-	})
 
 	if (to.amount === '' || to.amount === '0') return
 
@@ -71,7 +82,7 @@ export async function handleWithdrawal(
 			],
 		})
 
-		await checkTxStatus(txHash, publicClient, poolDispatch)
+		await checkTxStatus(txHash, publicClient, poolDispatch, poolState)
 	} catch (error: any) {
 		if (error.message.includes('AllowanceError')) {
 			console.error('Allowance error:', error)
@@ -87,13 +98,19 @@ export async function handleWithdrawal(
 					type: StageType.transaction,
 				},
 			})
+			trackWithdrawalStatus('FAILED', poolState)
 		}
 	} finally {
 		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
 	}
 }
 
-const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Dispatch<PoolAction>) => {
+const checkTxStatus = async (
+	txHash: Hash,
+	publicClient: any,
+	poolDispatch: Dispatch<PoolAction>,
+	poolState: PoolState,
+) => {
 	const receipt = await publicClient.waitForTransactionReceipt({
 		hash: txHash,
 		timeout: 0,
@@ -111,12 +128,7 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 			payload: { title: 'Withdrawal failed', body: 'Something went wrong', status: 'error' },
 		})
 
-		trackEvent({
-			category: category.PoolCard,
-			action: action.FailedWithdrawalRequest,
-			label: action.FailedWithdrawalRequest,
-			data: { txHash },
-		})
+		trackWithdrawalStatus('FAILED', poolState, txHash)
 		return
 	}
 
@@ -129,19 +141,16 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 		],
 	})
 
-	trackEvent({
-		category: category.PoolCard,
-		action: action.SuccessWithdrawalRequest,
-		label: 'action_success_withdraw_request',
-		data: { txHash },
-	})
+	trackWithdrawalStatus('SUCCESS', poolState, txHash)
 }
 
-export const retryWithdrawal = async (address: Address, client: WalletClient): Promise<TransactionStatus> => {
+export const retryWithdrawal = async (poolState: PoolState, client: WalletClient): Promise<TransactionStatus> => {
+	const { from } = poolState
+
 	await client.switchChain({ id: chain.id })
 
 	const hash = await client.writeContract({
-		account: address,
+		account: from.address as Address,
 		abi: parseAbi(['function retryPerformWithdrawalRequest() external']),
 		functionName: 'retryPerformWithdrawalRequest',
 		address: parentPool,
@@ -156,21 +165,10 @@ export const retryWithdrawal = async (address: Address, client: WalletClient): P
 	})
 
 	if (receipt.status === 'reverted') {
-		trackEvent({
-			category: category.PoolUserActions,
-			action: action.FailedRetryWithdrawalRequest,
-			label: action.FailedRetryWithdrawalRequest,
-			data: { txHash: hash },
-		})
+		trackWithdrawalStatus('FAILED', poolState, hash)
 		return TransactionStatus.FAILED
 	}
 
-	trackEvent({
-		category: category.PoolUserActions,
-		action: action.SuccessRetryWithdrawalRequest,
-		label: action.SuccessRetryWithdrawalRequest,
-		data: { txHash: hash },
-	})
-
+	trackWithdrawalStatus('SUCCESS', poolState, hash)
 	return TransactionStatus.SUCCESS
 }

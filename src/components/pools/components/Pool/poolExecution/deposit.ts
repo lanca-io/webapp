@@ -9,7 +9,7 @@ import { handleAllowance } from './allowance'
 import { getPublicClient } from '../../../../../providers/Web3Provider/Web3Provider'
 import { ParentPoolABI } from '../../../config/abi/ParentPoolABI1_5'
 import { trackEvent } from '../../../../../hooks/useTracking'
-import { action, category } from '../../../../../constants/tracking'
+import { category } from '../../../../../constants/tracking'
 import { sleep } from '../../../../../utils/sleep'
 
 interface DepositInitiatedArgs {
@@ -23,19 +23,30 @@ const parentPool = config.IS_TESTNET ? parentPoolBaseSepolia : parentPoolBase
 const chain = config.IS_TESTNET ? baseSepolia : base
 const publicClient = getPublicClient(chain.id)
 
+const trackDepositStatus = (status: 'SUCCESS' | 'FAILED', poolState: PoolState, txHash?: Hash) => {
+	const { from } = poolState
+
+	trackEvent({
+		category: category.PoolCard,
+		action: 'deposit_status',
+		label: 'Deposit Status',
+		data: {
+			user_id: from.address,
+			status: status,
+			amount: from.amount,
+			pool_id: parentPool,
+			product: 'Lanca',
+			txHash: txHash,
+		},
+	})
+}
+
 export async function handleDeposit(
 	poolState: PoolState,
 	poolDispatch: Dispatch<PoolAction>,
 	walletClient: WalletClient,
 ) {
 	const { to, from } = poolState
-
-	trackEvent({
-		category: category.PoolCard,
-		action: action.BeginDeposit,
-		label: 'concero_begin_deposit',
-		data: { from, to },
-	})
 
 	if (to.amount === '' || to.amount === '0') return
 
@@ -55,13 +66,6 @@ export async function handleDeposit(
 		})
 
 		const depositAmount = parseUnits(from.amount, from.token.decimals)
-		// const { request } = await publicClient.simulateContract({
-		// 	account: from.address as Address,
-		// 	abi: ParentPoolABI,
-		// 	functionName: 'startDeposit',
-		// 	address: parentPool,
-		// 	args: [depositAmount],
-		// })
 
 		const txHash = await walletClient.writeContract({
 			account: from.address as Address,
@@ -96,6 +100,7 @@ export async function handleDeposit(
 					type: StageType.requestTx,
 				},
 			})
+			trackDepositStatus('FAILED', poolState)
 		}
 	} finally {
 		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
@@ -131,12 +136,7 @@ const checkStartDepositStatus = async (
 			},
 		})
 
-		trackEvent({
-			category: category.PoolCard,
-			action: action.FailedDeposit,
-			label: action.FailedDeposit,
-			data: { txHash },
-		})
+		trackDepositStatus('FAILED', poolState, txHash)
 		return
 	}
 
@@ -182,12 +182,7 @@ const checkStartDepositStatus = async (
 			},
 		})
 
-		trackEvent({
-			category: category.PoolCard,
-			action: action.FailedDeposit,
-			label: action.FailedDeposit,
-			data: { txHash },
-		})
+		trackDepositStatus('FAILED', poolState, txHash)
 		return
 	}
 
@@ -209,18 +204,11 @@ const completeDeposit = async (
 	walletClient: WalletClient,
 	publicClient: any,
 ) => {
-	const { from, to, stage } = poolState
+	const { from, stage } = poolState
 
 	if (stage === PoolCardStage.failed) return
 
 	try {
-		// const { request } = await publicClient.simulateContract({
-		// 	abi: ParentPoolABI,
-		// 	functionName: 'completeDeposit',
-		// 	address: parentPool,
-		// 	args: [depositRequestId],
-		// })
-
 		const txHash = await walletClient.writeContract({
 			account: from.address as Address,
 			abi: ParentPoolABI,
@@ -261,12 +249,7 @@ const completeDeposit = async (
 				},
 			})
 
-			trackEvent({
-				category: category.PoolCard,
-				action: action.FailedDeposit,
-				label: action.FailedDeposit,
-				data: { txHash },
-			})
+			trackDepositStatus('FAILED', poolState, txHash)
 			return
 		}
 
@@ -281,12 +264,7 @@ const completeDeposit = async (
 			],
 		})
 
-		trackEvent({
-			category: category.PoolCard,
-			action: action.SuccessDeposit,
-			label: action.SuccessDeposit,
-			data: { from, to, txHash },
-		})
+		trackDepositStatus('SUCCESS', poolState, txHash)
 	} catch (error) {
 		console.error('Error during completeDeposit:', error)
 		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
@@ -304,11 +282,6 @@ const completeDeposit = async (
 			},
 		})
 
-		trackEvent({
-			category: category.PoolCard,
-			action: action.FailedDeposit,
-			label: action.FailedDeposit,
-			data: { from, to },
-		})
+		trackDepositStatus('FAILED', poolState)
 	}
 }
