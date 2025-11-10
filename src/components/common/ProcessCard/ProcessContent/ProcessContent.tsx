@@ -37,9 +37,9 @@ export const ProcessContent: FC = memo((): JSX.Element | null => {
 			data: {
 				user_id: address,
 				status: status,
-				product: 'Lanca',
 				route: route,
 				txHash: srcHash,
+				product: 'Lanca',
 			},
 		})
 	}

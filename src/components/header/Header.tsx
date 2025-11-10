@@ -6,8 +6,6 @@ import { DividerIcon } from '../../assets/icons/DividerIcon'
 import { TrophyIcon } from '../../assets/icons/TrophyIcon'
 import { useAppKit } from '@reown/appkit/react'
 import { useAccount } from 'wagmi'
-import { trackEvent } from '../../hooks/useTracking'
-import { action, category } from '../../constants/tracking'
 import { Dropdown } from './Dropdown/Dropdown'
 import { routes } from '../../constants/routes'
 import { useIsMobile } from '../../hooks/useMediaQuery'
@@ -59,11 +57,6 @@ export const Header: FC = () => {
 
 	const handleWalletClick = useCallback(() => {
 		open().catch(console.error)
-		trackEvent({
-			category: category.Wallet,
-			action: action.ClickConnectWallet,
-			label: 'Clicked Connect Wallet',
-		})
 	}, [open])
 
 	const handleSupportClick = useCallback(() => {
