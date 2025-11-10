@@ -7,8 +7,6 @@ import { useSubvariantStore } from '../store/subvariant/useSubvariantStore'
 import { SplitSubvariantType } from '../store/subvariant/types'
 import { useFormStore } from '../store/form/useFormStore'
 import { useWalletClient } from 'wagmi'
-import { trackEvent } from '../hooks/useTracking'
-import { category, action } from '../constants/tracking'
 
 export const useExecuteRoute = (route: IRouteType | null) => {
 	const { state } = useSubvariantStore()
@@ -28,13 +26,6 @@ export const useExecuteRoute = (route: IRouteType | null) => {
 		setIsExecuting(true)
 
 		try {
-			trackEvent({
-				category: category.SwapCard,
-				action: action.BeginSwap,
-				label: 'begin_swap',
-				data: { from: route.from, to: route.to },
-			})
-
 			if (state === SplitSubvariantType.SEND && toAddress) {
 				// @ts-ignore
 				return await sdk.executeRoute(route, client, configRef.current, toAddress as Address)

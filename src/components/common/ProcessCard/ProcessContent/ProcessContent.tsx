@@ -8,8 +8,9 @@ import { useTxProcess } from '../../../../hooks/useTxProcess'
 import { Status, StepType } from '@lanca/sdk'
 import { trackEvent } from '../../../../hooks/useTracking'
 import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'
-import { action, category } from '../../../../constants/tracking'
+import { category } from '../../../../constants/tracking'
 import { useRouteStore } from '../../../../store/route/useRouteStore'
+import { useAccount } from 'wagmi'
 import './ProcessContent.pcss'
 
 const trackedEvents = {
@@ -22,51 +23,39 @@ export const ProcessContent: FC = memo((): JSX.Element | null => {
 	const { txStatus, currentStep } = useTxProcess()
 	const { srcHash } = useTxExecutionStore()
 	const { route } = useRouteStore()
+	const { address } = useAccount()
 
-	const trackTxEvent = (eventType: string, eventData: any) => {
-		if (trackedEvents[eventType as keyof typeof trackedEvents]) {
-			return
-		}
-		trackedEvents[eventType as keyof typeof trackedEvents] = true
-		trackEvent(eventData)
+	const trackTxEvent = (status: string, label: string) => {
+		if (trackedEvents[status as keyof typeof trackedEvents]) return
+
+		trackedEvents[status as keyof typeof trackedEvents] = true
+
+		trackEvent({
+			category: category.SwapCard,
+			action: 'transaction_status',
+			label: label,
+			data: {
+				user_id: address,
+				status: status,
+				product: 'Lanca',
+				route: route,
+				txHash: srcHash,
+			},
+		})
 	}
 
 	const content = useMemo(() => {
 		switch (txStatus) {
 			case Status.FAILED:
-				trackTxEvent('FAILED', {
-					category: category.SwapCard,
-					action: action.SwapFailed,
-					label: action.SwapFailed,
-					data: {
-						route: route,
-						txHash: srcHash,
-					},
-				})
+				trackTxEvent('FAILED', 'Transaction failed')
 				return <Failure />
 
 			case Status.REJECTED:
-				trackTxEvent('REJECTED', {
-					category: category.SwapCard,
-					action: action.SwapRejected,
-					label: action.SwapRejected,
-					data: {
-						route: route,
-						txHash: srcHash,
-					},
-				})
+				trackTxEvent('REJECTED', 'Transaction rejected')
 				return <Failure />
 
 			case Status.SUCCESS:
-				trackTxEvent('SUCCESS', {
-					category: category.SwapCard,
-					action: action.SwapSuccess,
-					label: 'swap_success',
-					data: {
-						route: route,
-						txHash: srcHash,
-					},
-				})
+				trackTxEvent('SUCCESS', 'Transaction successful')
 				return <Success />
 
 			case Status.PENDING:
