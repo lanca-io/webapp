@@ -17,7 +17,7 @@
 	animation: burger-menu-slide-in 220ms cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
 	will-change: opacity, transform;
 	overflow-y: auto;
-	padding: var(--sp-xl);
+	padding: var(--space-l);
 }
 
 .burger_menu_content {
@@ -25,10 +25,10 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	gap: var(--sp-md);
+	gap: var(--space-s);
 	align-self: stretch;
 	flex: 1;
-	margin-bottom: var(--sp-xl);
+	margin-bottom: var(--space-l);
 }
 
 .burger_menu_item {
@@ -45,7 +45,7 @@
 }
 
 .burger_menu_support_button {
-	margin-top: var(--sp-sm);
+	margin-top: var(--space-xs);
 }
 
 @keyframes burger-menu-slide-in {
@@ -63,10 +63,10 @@
 
 @media only screen and (max-width: 640px) {
 	.burger_menu {
-		padding: var(--sp-lg) var(--sp-md);
+		padding: var(--space-m) var(--space-s);
 	}
 
 	.burger_menu_content {
-		gap: var(--sp-sm);
+		gap: var(--space-xs);
 	}
 }
