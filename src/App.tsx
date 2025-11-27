@@ -1,7 +1,7 @@
 import { Navigator } from './Navigator'
 import { AppProviders } from './providers/AppProviders'
 import '@concero/ui-kit/styles/lanca/index.css'
-import './styles/index.css'
+import './styles/App.css'
 
 function App() {
 	return (
