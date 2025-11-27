@@ -63,16 +63,6 @@ export const Navigator = () => {
 							</Suspense>
 						}
 					/>
-					{/* <Route path={routes.v2} element={<AdminRoutesGuard />}>
-						<Route
-							path={routes.v2}
-							element={
-								<Suspense fallback={<FullScreenLoader />}>
-									<V2Screen />
-								</Suspense>
-							}
-						/>
-					</Route> */}
 					<Route path={'/*'} element={<Navigate to={routes.home} />} />
 				</Routes>
 			</AppScreen>
