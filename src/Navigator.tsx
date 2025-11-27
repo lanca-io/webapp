@@ -19,7 +19,7 @@ const USDCPoolScreen = lazy(
 		})),
 )
 
-const V2Screen = lazy(
+const SwapScreen = lazy(
 	async () =>
 		await import('./pages/Swap').then(module => ({
 			default: module.SwapPage,
@@ -43,7 +43,7 @@ export const Navigator = () => {
 						path={routes.home}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
-								<V2Screen />
+								<SwapScreen />
 							</Suspense>
 						}
 					/>
