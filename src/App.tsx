@@ -1,4 +1,4 @@
-import './styles/App.css'
+import './styles/index.css'
 import { Navigator } from './Navigator'
 import { ThemeProvider } from './hooks/themeContext'
 import { Notifications } from './components/overlays/Notifications/Notifications'

@@ -6,7 +6,6 @@ import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
-// import { AdminRoutesGuard } from './components/common/RouteGuards/RouteGuards'
 
 const PoolScreen = lazy(
 	async () =>
@@ -26,13 +25,6 @@ const V2Screen = lazy(
 			default: module.SwapPage,
 		})),
 )
-
-// const SwapScreen = lazy(
-// 	async () =>
-// 		await import('./components/screens/SwapScreen/SwapScreen').then(module => ({
-// 			default: module.SwapScreen,
-// 		})),
-// )
 
 export const Navigator = () => {
 	const { address } = useAccount()
