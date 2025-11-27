@@ -1,69 +1,46 @@
-:root {
-	color-scheme: light dark;
-	font-family: DM_Sans, sans-serif;
-	font-size: 16px;
-	-webkit-font-smoothing: antialiased;
-	font-synthesis: none;
-	-moz-osx-font-smoothing: grayscale;
-	text-rendering: optimizeLegibility;
-	-webkit-text-size-adjust: 100%;
+@import './variables.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 
-header,
-main,
-footer,
-aside,
-nav,
-section,
-article,
-figure,
-figcaption,
-ul,
-ol,
-li {
-	display: flex;
+html {
+	-moz-text-size-adjust: none;
+	-webkit-text-size-adjust: none;
+	text-size-adjust: none;
+	font-family: var(--font-family-primary);
+	height: 100%;
+	width: 100vw;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+	display: none;
+}
+ul[role='list'],
+ol[role='list'] {
+	list-style: none;
 }
 
 body {
-	width: 100vw;
-	height: 100vh;
-	background-color: #ffffff;
-	box-sizing: border-box;
-	display: flex;
-	margin: 0;
 	padding: 0;
+	margin: 0;
+	min-height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	position: relative;
 }
 
-@media (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
 	body {
-		width: 100%;
 		height: 100%;
-		overflow: auto;
+		min-height: 100vh;
+		overflow-y: auto;
+		overflow-x: hidden;
 	}
-}
-
-div#root {
-	background-color: var(--color-gray-25);
-	flex: 1;
-	height: 100vh;
-}
-
-@media (max-width: 768px) {
-	div#root {
-		width: 100%;
-	}
-}
-
-div {
-	box-sizing: border-box;
-	color: var(--color-gray-500);
-	display: flex;
-	flex-direction: column;
-	scrollbar-width: none;
-}
-
-div::-webkit-scrollbar {
-	display: none;
 }
 
 main {
@@ -71,6 +48,17 @@ main {
 	flex-direction: column;
 	width: 100%;
 	flex-grow: 1;
+}
+
+a {
+	text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	text-wrap: balance;
 }
 
 h1,
@@ -78,209 +66,25 @@ h2,
 h3,
 h4,
 h5,
-h6,
-p,
-a,
-button,
-input,
-label,
-span,
-li {
-	box-sizing: border-box;
-	font-family: inherit;
-	margin: 0;
-	padding: 0;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
-textarea {
-	box-sizing: border-box;
-	font-family: inherit;
-	margin: 0;
-	padding: 0;
-	resize: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
-textarea:focus {
-	outline: none;
-}
-
-ul,
-ol,
-li {
-	margin-block: 0;
-	margin-inline: 0;
-	padding-inline: 0;
-}
-
-h1 {
-	font-size: 2rem;
-	font-weight: 600;
-}
-
-h2 {
-	font-size: 1.5rem;
-	font-weight: 500;
-}
-
-h3 {
-	font-size: 1.125rem;
-	font-weight: 500;
-}
-
-h4 {
-	font-size: 1rem;
-	line-height: 1.125rem;
-	font-weight: 500;
-}
-
-h5 {
-	font-size: 0.875rem;
-	font-weight: 500;
-}
-
-h6 {
-	font-size: 0.875rem;
-	font-weight: 500;
-	line-height: 1.125rem;
-}
-
 p {
-	display: inline;
-	font-size: 1rem;
-	font-weight: 400;
-}
-
-a {
-	color: inherit;
-	text-decoration: none;
-}
-
-.body1 {
-	color: var(--color-gray-500);
-	font-size: 0.875rem;
-	flex: none;
-}
-
-.body2 {
-	color: var(--color-gray-500);
-	font-size: 0.875rem;
-	flex: none;
-	font-weight: 400;
-	line-height: 1.125rem;
-}
-
-.body3 {
-	color: var(--color-gray-500);
-	font-size: 0.95rem;
-	flex: none;
-}
-
-.body4 {
-	color: var(--color-gray-500);
-	font-size: 1rem;
-	flex: none;
-	font-weight: 400;
-}
-
-.tagBody {
-	color: var(--color-gray-500);
-	font-size: 0.875rem;
-}
-
-button {
-	border: none;
-	cursor: pointer;
-	font-weight: 500;
-	outline: none;
-}
-
-.cardHeaderTitle {
-	color: var(--color-text-secondary);
-}
-
-.scrollable-container {
-	position: relative;
-	height: 100vh;
-	overflow-y: scroll;
-	-ms-overflow-style: auto;
-	scrollbar-width: auto;
-}
-
-/* Fix for scrolling issues - replace the duplicate body/div#root/div/main rules at the end of your file */
-
-/* Make the entire page scrollable */
-html {
-	height: 100%;
-	overflow-y: auto !important;
-}
-
-body {
-	width: 100vw;
-	min-height: 100%;
-	background-color: #ffffff;
-	box-sizing: border-box;
-	display: flex;
 	margin: 0;
-	padding: 0;
-	overflow-y: auto !important;
 }
 
-div#root {
-	background-color: var(--color-gray-25);
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-	overflow-y: visible !important; /* Allow content to flow and scroll naturally */
+a:not([class]) {
+	text-decoration-skip-ink: auto;
+	color: currentColor;
 }
 
-/* Remove scrollbar-width: none from div rule */
-div {
-	box-sizing: border-box;
-	color: var(--color-gray-500);
-	display: flex;
-	flex-direction: column;
+input,
+button,
+textarea,
+select {
+	font-family: inherit;
+	font-size: inherit;
+	outline: none;
+	border: none;
 }
 
-/* Remove this rule entirely to allow scrollbars */
 div::-webkit-scrollbar {
-	display: auto;
-	width: 6px;
-}
-
-div::-webkit-scrollbar-thumb {
-	background-color: var(--color-gray-300);
-	border-radius: 3px;
-}
-
-/* Make main element scrollable */
-main {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	flex-grow: 1;
-	overflow-y: visible;
-}
-
-.container {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	overflow-y: visible;
-}
-
-.app-screen,
-.app-screen > div {
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-	overflow-y: visible;
+	display: none;
 }
