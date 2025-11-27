@@ -59,7 +59,7 @@ export const Dropdown: FC<DropdownProps> = ({ isMenuOpen = false, onToggleMenu }
 		{
 			key: 'rewards',
 			label: 'Rewards Portal',
-			leftIcon: <TrophyIcon color="var(--color-grey-600)" />,
+			leftIcon: <TrophyIcon color="var(--color-gray-600)" />,
 			trailIcon: <TrailArrowRightIcon />,
 			variant: 'tetrary',
 			size: 'm',

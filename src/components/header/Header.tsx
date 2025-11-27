@@ -32,7 +32,7 @@ const NAV_ITEMS: NavItem[] = [
 	{
 		to: 'https://app.concero.io/rewards',
 		label: 'Rewards Portal',
-		icon: <TrophyIcon width={16} height={16} color="var(--color-grey-600)" />,
+		icon: <TrophyIcon width={16} height={16} color="var(--color-gray-600)" />,
 		dividerBefore: true,
 	},
 ]

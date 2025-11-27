@@ -12,8 +12,8 @@ interface Props {
 }
 
 const svgColorMap: Record<Variant, string> = {
-	neutral: 'var(--color-grey-700)',
-	info: 'var(--color-primary-700)',
+	neutral: 'var(--color-gray-700)',
+	info: 'var(--color-accent-700)',
 	success: 'var(--color-success-700)',
 	error: 'var(--color-danger-700)',
 	warning: 'var(--color-warning-700)',

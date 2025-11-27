@@ -12,17 +12,17 @@ const getVariant = (time: number) => {
 }
 
 const TIMER_COLORS = {
-	neutral: 'var(--color-grey-600)',
+	neutral: 'var(--color-gray-600)',
 	warning: 'var(--color-warning-600)',
 	negative: 'var(--color-danger-600)',
-	branded: 'var(--color-primary-600)',
+	branded: 'var(--color-accent-600)',
 }
 
 const TEXT_COLORS = {
-	neutral: 'var(--color-grey-600)',
+	neutral: 'var(--color-gray-600)',
 	warning: 'var(--color-warning-700)',
 	negative: 'var(--color-danger-700)',
-	branded: 'var(--color-primary-700)',
+	branded: 'var(--color-accent-700)',
 }
 
 export const RouteTimer = memo(() => {

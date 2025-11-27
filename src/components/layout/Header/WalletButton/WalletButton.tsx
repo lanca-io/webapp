@@ -31,7 +31,7 @@ export const WalletButton = () => {
 
 	return (
 		<Button
-			leftIcon={isConnected ? <IconWallet size={16} color="var(--color-grey-600)" /> : null}
+			leftIcon={isConnected ? <IconWallet size={16} color="var(--color-gray-600)" /> : null}
 			className={classNames.buttonWallet}
 			variant={isConnected ? 'secondary' : 'secondaryColor'}
 			onClick={handleClick}

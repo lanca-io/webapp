@@ -124,7 +124,7 @@ export const FeedbackModal: FC<FeedbackModalProps> = ({ show, setShow }) => {
 					key="textInput"
 					ref={textInputRef}
 					placeholder={t('placeholder.yourUsername')}
-					icon={<IconUser size={18} color={'var(--color-grey-500'} />}
+					icon={<IconUser size={18} color={'var(--color-gray-500'} />}
 					onChange={e => {
 						setUsername(e.target.value)
 					}}

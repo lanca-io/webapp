@@ -46,7 +46,7 @@ export function updateTooltip(
 			content += `<b>${toLocaleNumber(price)}${customSymbol}</b>`
 		}
 
-		content += `<p style='font-weight: 500; color: var(--color-grey-500);'>${formatTime(
+		content += `<p style='font-weight: 500; color: var(--color-gray-500);'>${formatTime(
 			param.time,
 			'DD MMM. YYYY',
 		)}</p>`

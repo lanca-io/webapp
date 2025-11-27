@@ -32,7 +32,7 @@ const getTimerStatus = (time: number) => {
 }
 
 const statusColorMap = {
-	neutral: 'var(--color-grey-700)',
+	neutral: 'var(--color-gray-700)',
 	warning: 'var(--color-warning-700)',
 	negative: 'var(--color-danger-700)',
 }

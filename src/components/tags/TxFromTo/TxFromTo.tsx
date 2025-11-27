@@ -43,6 +43,6 @@ const getColor = (type: string) => {
 		case 'buy':
 			return 'var(--color-danger-600)'
 		default:
-			return 'var(--color-grey-600)'
+			return 'var(--color-gray-600)'
 	}
 }
