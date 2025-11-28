@@ -1,0 +1,63 @@
+.account_connected {
+	display: flex;
+	min-height: 40px;
+	height: 100%;
+	align-items: center;
+	gap: var(--space-xs);
+
+	& .account_avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		transition: box-shadow 0.3s ease-in;
+	}
+
+	& .account_container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+
+		& .account_address {
+			font-size: 1rem;
+			line-height: 1.25rem;
+			font-weight: 500;
+			color: var(--color-gray-600);
+			transition: color 0.3s ease-in;
+		}
+	}
+
+	& .account_tag {
+		padding: var(--space-xs) !important;
+		border-radius: 12px;
+		background-color: transparent !important;
+		transition:
+			background-color 0.3s ease-in,
+			outline 0.3s ease-in;
+	}
+
+	&:hover,
+	&:focus,
+	&:active,
+	&[data-active='true'] {
+		cursor: pointer;
+
+		& .account_avatar {
+			box-shadow:
+				0 0 0 2.5px var(--color-gray-25),
+				0 0 0 5px var(--color-accent-500);
+		}
+
+		& .account_container {
+			& .account_address {
+				color: var(--color-gray-700);
+			}
+		}
+
+		& .account_tag {
+			padding: var(--space-xs) !important;
+			background-color: var(--color-gray-100) !important;
+			border-radius: 12px;
+		}
+	}
+}

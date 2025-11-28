@@ -1,8 +1,6 @@
 :root {
 	--font-family-primary: 'DM_Sans', sans-serif;
-	--header-height: 48px;
-	--footer-height: 72px;
-	--footer-mobile-height: 248px;
+	--header-height: 56px;
 
 	font-size: 16px;
 	font-family: var(--font-family-primary);

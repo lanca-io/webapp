@@ -7,7 +7,7 @@ import { ETAInfo } from '../ETAInfo/ETAInfo'
 import { GasInfo } from '../GasInfo/GasInfo'
 import { SlippageInfo } from '../SlippageInfo/SlippageInfo'
 import { Button } from '@concero/ui-kit'
-import { TrailArrowRightIcon } from '../../../assets/icons/TrailArrowRightIcon'
+import { TrailRight } from '@/assets/icons/TrailRight'
 import { useRouteStore } from '../../../store/route/useRouteStore'
 import { ReviewModal } from '../ReviewModal/ReviewModal'
 import { Spinner } from '@concero/ui-kit'
@@ -66,7 +66,7 @@ export const DestinationPanel = memo(({ amount, isLoading }: DestinationPanelPro
 					<Button
 						isFull
 						variant="secondary"
-						rightIcon={<TrailArrowRightIcon aria-hidden="true" />}
+						rightIcon={<TrailRight aria-hidden="true" />}
 						onClick={handleOpenReviewModal}
 						aria-label="Review transaction details"
 					>

@@ -2,7 +2,7 @@ import type { ExtendedToken } from '../../../store/tokens/types'
 import { memo } from 'react'
 import { TokenSelection } from './TokenSelection/TokenSelection'
 import { ChainSelection } from './ChainSelection/ChainSelection'
-import { TrailArrowRightIcon } from '../../../assets/icons/TrailArrowRightIcon'
+import { TrailRight } from '@/assets/icons/TrailRight'
 import { ConceroChain } from '../../../store/chains/types'
 import './AssetSelection.pcss'
 
@@ -34,7 +34,7 @@ export const AssetSelection = memo(
 
 				{hasInteractiveElement && (
 					<div className="asset_selection_arrow">
-						<TrailArrowRightIcon aria-hidden="true" />
+						<TrailRight aria-hidden="true" />
 					</div>
 				)}
 			</div>

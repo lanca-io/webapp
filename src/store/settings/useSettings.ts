@@ -9,11 +9,15 @@ export const useSettingsStore = () => {
 
 	const slippage = useStore(state => state.slippage)
 	const setSlippage = useStore(state => state.setSlippage)
+	const theme = useStore(state => state.theme)
+	const setTheme = useStore(state => state.setTheme)
 	const resetSettings = useStore(state => state.resetSettings)
 
 	return {
 		slippage,
 		setSlippage,
+		theme,
+		setTheme,
 		resetSettings,
 	}
 }

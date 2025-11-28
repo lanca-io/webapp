@@ -4,7 +4,7 @@ import { type PoolAction, PoolActionType, PoolCardStage, type PoolState, StageTy
 import { Separator } from '../../../../layout/Separator/Separator'
 import { Alert } from '../../../../layout/Alert/Alert'
 import { Loader } from '../../../../layout/Loader/Loader'
-import { TrailArrowRightIcon } from '../../../../../assets/icons/TrailArrowRightIcon'
+import { TrailRight } from '@/assets/icons/TrailRight'
 import { InfoIcon } from '../../../../../assets/icons/InfoIcon'
 import { PencilIcon } from '../../../../../assets/icons/PencilIcon'
 import { CrossIcon } from '../../../../../assets/icons/CrossIcon'
@@ -156,11 +156,11 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 
 			<div className={classNames.progressContainer}>
 				<TransactionStep status={approvalStatus ?? 'idle'} title="Approvals" />
-				<TrailArrowRightIcon />
+				<TrailRight />
 				{isDeposit && (
 					<>
 						<TransactionStep status={requestTxStatus ?? 'idle'} title="Request" />
-						<TrailArrowRightIcon />
+						<TrailRight />
 					</>
 				)}
 				<TransactionStep status={transactionStatus ?? 'idle'} title={isDeposit ? 'Deposit' : 'Withdrawal'} />

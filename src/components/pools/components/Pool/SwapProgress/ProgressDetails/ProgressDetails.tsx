@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { PoolCardStage, StageType } from '../../poolReducer/types'
-import { TrailArrowRightIcon } from '../../../../../../assets/icons/TrailArrowRightIcon'
+import { TrailRight } from '@/assets/icons/TrailRight'
 import { Badge } from '../../../../../layout/Badge/Badge'
 import classNames from './ProgressDetails.module.pcss'
 
@@ -34,7 +34,7 @@ export const ProgressDetails = memo(({ stage, steps, from, to }: Props) => {
 					<div className={classNames.tokenBox}>
 						<Badge size="xl" tokenLogoSrc={from.token.logoURI} chainLogoSrc={from.chain.logoURI} />
 					</div>
-					<TrailArrowRightIcon />
+					<TrailRight />
 					<div className={classNames.tokenBox}>
 						<Badge size="xl" tokenLogoSrc={to.token.logoURI} chainLogoSrc={to.chain.logoURI} />
 					</div>
