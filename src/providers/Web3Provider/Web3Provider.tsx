@@ -92,5 +92,5 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
 		return <TechWorksScreen />
 	}
 
-	return <WagmiProvider config={adapter.wagmiConfig}>{children}</WagmiProvider>
+	return <WagmiProvider config={adapter.wagmiConfig as any}>{children}</WagmiProvider>
 }
