@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { AppScreen } from './components/screens/AppScreen/AppScreen'
 import { Header } from './components/header/Header'
 import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
@@ -36,36 +35,34 @@ export const Navigator = () => {
 
 	return (
 		<BrowserRouter>
-			<AppScreen>
-				<Header />
-				<Routes>
-					<Route
-						path={routes.home}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<SwapScreen />
-							</Suspense>
-						}
-					/>
-					<Route
-						path={routes.pools}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<PoolScreen />
-							</Suspense>
-						}
-					/>
-					<Route
-						path={routes.usdcPools}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<USDCPoolScreen />
-							</Suspense>
-						}
-					/>
-					<Route path={'/*'} element={<Navigate to={routes.home} />} />
-				</Routes>
-			</AppScreen>
+			<Header />
+			<Routes>
+				<Route
+					path={routes.home}
+					element={
+						<Suspense fallback={<FullScreenLoader />}>
+							<SwapScreen />
+						</Suspense>
+					}
+				/>
+				<Route
+					path={routes.pools}
+					element={
+						<Suspense fallback={<FullScreenLoader />}>
+							<PoolScreen />
+						</Suspense>
+					}
+				/>
+				<Route
+					path={routes.usdcPools}
+					element={
+						<Suspense fallback={<FullScreenLoader />}>
+							<USDCPoolScreen />
+						</Suspense>
+					}
+				/>
+				<Route path={'/*'} element={<Navigate to={routes.home} />} />
+			</Routes>
 		</BrowserRouter>
 	)
 }
