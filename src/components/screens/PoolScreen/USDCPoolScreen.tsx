@@ -1,7 +1,7 @@
 import classNames from './PoolScreen.module.pcss'
 import { config } from '../../../constants/config'
 import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
-import { ConceroPool } from '../../pools/components/ConceroPool/ConceroPool'
+import { ConceroPool } from '../../old-pools/components/ConceroPool/ConceroPool'
 import { Footer } from '../../layout/Footer/Footer'
 
 export const USDCPoolScreen = () => {

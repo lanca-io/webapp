@@ -1,7 +1,7 @@
 import classNames from './PoolScreen.module.pcss'
 import { config } from '../../../constants/config'
 import { TechWorksScreen } from '../TechWorksScreen/TechWorksScreen'
-import { PoolLanding } from '../../pools/components/PoolLanding/PoolLanding'
+import { PoolLanding } from '../../old-pools/components/PoolLanding/PoolLanding'
 import { Footer } from '../../layout/Footer/Footer'
 
 export const PoolScreen = () => {
