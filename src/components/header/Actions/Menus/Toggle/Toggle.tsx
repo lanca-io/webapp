@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import type { BurgerProps } from '../types'
+import type { BurgerProps } from '../Burger/types'
 import { IconButton } from '@concero/ui-kit'
 import { IconBurger } from '@/assets/icons/IconBurger'
 import { CloseIcon } from '@/assets/icons/CloseIcon'
