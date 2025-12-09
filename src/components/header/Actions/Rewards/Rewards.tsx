@@ -1,15 +1,41 @@
+import type { FC } from 'react'
+import { Tooltip } from '@/components/common/Tooltip/Tooltip'
 import { IconButton } from '@concero/ui-kit'
 import { RewardsIcon } from '@/assets/icons/Rewards'
 import { externalRoutes } from '@/constants'
+import './Rewards.pcss'
 
-export const Rewards = (): JSX.Element => {
+const rewardsTooltipId = 'rewards-tooltip'
+
+type RewardsProps = {
+	isOpen: boolean
+}
+
+export const Rewards: FC<RewardsProps> = ({ isOpen }): JSX.Element => {
+	const tooltipContent: JSX.Element = (
+		<div className="rewards_tooltip_content">
+			<span className="rewards_tooltip_title">Rewards Portal</span>
+			<span className="rewards_tooltip_description">
+				Get rewarded for every swap and bridge — check your rewards in the portal.
+			</span>
+		</div>
+	)
+
 	return (
-		<IconButton
-			variant="tetrary"
-			size="m"
-			onClick={() => window.open(externalRoutes.rewards, '_blank', 'noopener,noreferrer')}
+		<Tooltip
+			tooltipId={rewardsTooltipId}
+			tooltipContent={tooltipContent}
+			place="top"
+			className="rewards_tooltip"
+			disabled={isOpen}
 		>
-			<RewardsIcon />
-		</IconButton>
+			<IconButton
+				variant="tetrary"
+				size="m"
+				onClick={() => window.open(externalRoutes.rewards, '_blank', 'noopener,noreferrer')}
+			>
+				<RewardsIcon />
+			</IconButton>
+		</Tooltip>
 	)
 }

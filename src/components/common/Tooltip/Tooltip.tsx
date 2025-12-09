@@ -7,6 +7,7 @@ type TooltipProps = {
 	tooltipId: string
 	tooltipContent: JSX.Element
 	className?: string
+	disabled?: boolean
 	place?:
 		| 'top'
 		| 'top-start'
@@ -22,7 +23,15 @@ type TooltipProps = {
 		| 'left-end'
 }
 
-export const Tooltip = ({ children, tooltipId, tooltipContent, className, place }: TooltipProps): JSX.Element => {
+export const Tooltip = ({
+	children,
+	tooltipId,
+	tooltipContent,
+	className,
+	disabled,
+	place,
+}: TooltipProps): JSX.Element => {
+	if (disabled) return <>{children}</>
 	return (
 		<div>
 			<div data-tooltip-id={tooltipId}>{children}</div>
