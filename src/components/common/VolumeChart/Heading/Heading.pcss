@@ -1,0 +1,47 @@
+.volume_chart_heading {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-xs);
+	width: 100%;
+
+	& .volume_chart_toolbar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+
+		& .volume_chart_description {
+			display: flex;
+			align-items: center;
+			gap: var(--space-xs);
+
+			& .volume_chart_label {
+				font-size: 1.125rem;
+				font-weight: 500;
+				line-height: 1.375rem;
+				color: var(--color-gray-700);
+			}
+
+			& .volume_chart_tooltip_icon {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+	}
+
+	& .volume_chart_total {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+
+		& .volume_chart_total_symbol,
+		& .volume_chart_total_value {
+			font-size: 2rem;
+			font-weight: 500;
+			line-height: 2.25rem;
+			color: var(--color-gray-700);
+		}
+	}
+}
