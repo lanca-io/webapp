@@ -8,17 +8,22 @@ interface TokenSelectionProps {
 	onClick?: () => void
 }
 
-export const TokenSelection = memo(({ logoURI, symbol, onClick }: TokenSelectionProps): JSX.Element => {
-	const handleClick = useCallback(() => {
-		if (onClick) onClick()
-	}, [onClick])
+export const TokenSelection = memo(
+	({ logoURI, symbol, onClick }: TokenSelectionProps): JSX.Element => {
+		const handleClick = useCallback(() => {
+			if (onClick) onClick()
+		}, [onClick])
 
-	const badge = useMemo(() => <Badge tokenLogoSrc={logoURI || ''} size="m" />, [logoURI])
+		const badge = useMemo(
+			() => <Badge tokenLogoSrc={logoURI || ''} size="m" />,
+			[logoURI],
+		)
 
-	return (
-		<div className="token_selection" onClick={handleClick}>
-			{badge}
-			<p className="token_selection_name">{symbol}</p>
-		</div>
-	)
-})
+		return (
+			<div className="token_selection" onClick={handleClick}>
+				{badge}
+				<p className="token_selection_name">{symbol}</p>
+			</div>
+		)
+	},
+)

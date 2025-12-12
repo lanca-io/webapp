@@ -59,7 +59,9 @@ export const ListModal: FC<MultiSelectModalProps> = ({
 				<div className={classNames.inputContainer}>
 					{isSearchable ? (
 						<TextInput
-							icon={<IconSearch color="var(--color-text-secondary)" size={18} />}
+							icon={
+								<IconSearch color="var(--color-text-secondary)" size={18} />
+							}
 							placeholder="Search..."
 							value={search}
 							onChangeText={handleSearch}

@@ -7,7 +7,12 @@ interface Props {
 	onClick?: MouseEventHandler<HTMLButtonElement> | undefined
 	className?: string
 	size?: 'sm' | 'md' | 'lg'
-	variant?: 'default' | 'secondary' | 'secondaryColor' | 'tetrary' | 'tetraryColor'
+	variant?:
+		| 'default'
+		| 'secondary'
+		| 'secondaryColor'
+		| 'tetrary'
+		| 'tetraryColor'
 }
 
 export const IconButton = ({

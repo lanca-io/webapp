@@ -1,5 +1,17 @@
-import { type Address, type Hash, parseAbi, parseUnits, type WalletClient } from 'viem'
-import { type PoolAction, PoolActionType, PoolCardStage, type PoolState, StageType } from '../poolReducer/types'
+import {
+	type Address,
+	type Hash,
+	parseAbi,
+	parseUnits,
+	type WalletClient,
+} from 'viem'
+import {
+	type PoolAction,
+	PoolActionType,
+	PoolCardStage,
+	type PoolState,
+	StageType,
+} from '../poolReducer/types'
 import { type Dispatch } from 'react'
 import { config } from '../../../../../constants/config'
 import { parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
@@ -39,7 +51,10 @@ export async function handleWithdrawal(
 	if (to.amount === '' || to.amount === '0') return
 
 	poolDispatch({ type: PoolActionType.SET_LOADING, payload: true })
-	poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.progress })
+	poolDispatch({
+		type: PoolActionType.SET_SWAP_STAGE,
+		payload: PoolCardStage.progress,
+	})
 
 	try {
 		await walletClient.switchChain({ id: chain.id })
@@ -48,8 +63,16 @@ export async function handleWithdrawal(
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
-				{ title: 'Approval required', status: 'success', type: StageType.approve },
-				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.transaction },
+				{
+					title: 'Approval required',
+					status: 'success',
+					type: StageType.approve,
+				},
+				{
+					title: 'Withdrawal in progress...',
+					status: 'pending',
+					type: StageType.transaction,
+				},
 			],
 		})
 
@@ -66,8 +89,16 @@ export async function handleWithdrawal(
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
 			payload: [
-				{ title: 'Signature required', status: 'success', type: StageType.approve },
-				{ title: 'Withdrawal in progress...', status: 'pending', type: StageType.transaction },
+				{
+					title: 'Signature required',
+					status: 'success',
+					type: StageType.approve,
+				},
+				{
+					title: 'Withdrawal in progress...',
+					status: 'pending',
+					type: StageType.transaction,
+				},
 			],
 		})
 
@@ -77,7 +108,10 @@ export async function handleWithdrawal(
 			console.error('Allowance error:', error)
 		} else {
 			console.error(error)
-			poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+			poolDispatch({
+				type: PoolActionType.SET_SWAP_STAGE,
+				payload: PoolCardStage.failed,
+			})
 			poolDispatch({
 				type: PoolActionType.APPEND_SWAP_STEP,
 				payload: {
@@ -93,7 +127,11 @@ export async function handleWithdrawal(
 	}
 }
 
-const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Dispatch<PoolAction>) => {
+const checkTxStatus = async (
+	txHash: Hash,
+	publicClient: any,
+	poolDispatch: Dispatch<PoolAction>,
+) => {
 	const receipt = await publicClient.waitForTransactionReceipt({
 		hash: txHash,
 		timeout: 0,
@@ -108,7 +146,11 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 		})
 		poolDispatch({
 			type: PoolActionType.APPEND_SWAP_STEP,
-			payload: { title: 'Withdrawal failed', body: 'Something went wrong', status: 'error' },
+			payload: {
+				title: 'Withdrawal failed',
+				body: 'Something went wrong',
+				status: 'error',
+			},
 		})
 
 		trackEvent({
@@ -120,12 +162,23 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 		return
 	}
 
-	poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.success })
+	poolDispatch({
+		type: PoolActionType.SET_SWAP_STAGE,
+		payload: PoolCardStage.success,
+	})
 	poolDispatch({
 		type: PoolActionType.SET_SWAP_STEPS,
 		payload: [
-			{ title: 'Signature required', status: 'success', type: StageType.approve },
-			{ title: 'Withdrawal in progress...', status: 'success', type: StageType.transaction },
+			{
+				title: 'Signature required',
+				status: 'success',
+				type: StageType.approve,
+			},
+			{
+				title: 'Withdrawal in progress...',
+				status: 'success',
+				type: StageType.transaction,
+			},
 		],
 	})
 
@@ -137,7 +190,10 @@ const checkTxStatus = async (txHash: Hash, publicClient: any, poolDispatch: Disp
 	})
 }
 
-export const retryWithdrawal = async (address: Address, client: WalletClient): Promise<TransactionStatus> => {
+export const retryWithdrawal = async (
+	address: Address,
+	client: WalletClient,
+): Promise<TransactionStatus> => {
 	await client.switchChain({ id: chain.id })
 
 	const hash = await client.writeContract({

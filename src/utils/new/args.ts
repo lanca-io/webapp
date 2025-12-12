@@ -27,7 +27,10 @@ import { LibZip } from 'solady'
  * @param user - The user's address (receiver).
  * @returns IInputRouteData with srcSwapData, bridgeData, and dstSwapData arrays.
  */
-export function buildRouteData(route: IRouteType, address: Address): IInputRouteData {
+export function buildRouteData(
+	route: IRouteType,
+	address: Address,
+): IInputRouteData {
 	let bridge: IBridgeData | null = null
 	const src: IInputSwapData[] = []
 	const dst: IInputSwapData[] = []
@@ -42,7 +45,10 @@ export function buildRouteData(route: IRouteType, address: Address): IInputRoute
 				receiver: address,
 				compressedDstSwapData: '0x',
 			}
-		} else if (step.type === StepType.SRC_SWAP || step.type === StepType.DST_SWAP) {
+		} else if (
+			step.type === StepType.SRC_SWAP ||
+			step.type === StepType.DST_SWAP
+		) {
 			for (const s of (step as IRouteStep).internalSteps) {
 				const swap = buildSwapData(s)
 				bridge ? dst.push(swap) : src.push(swap)
@@ -61,7 +67,12 @@ export function buildRouteData(route: IRouteType, address: Address): IInputRoute
  */
 export function buildSwapData(step: IRouteInternalStep): IInputSwapData {
 	const { tool, from, to } = step
-	if (!tool?.data || !from?.token?.address || !to?.token?.address || !tool.amountOutMin) {
+	if (
+		!tool?.data ||
+		!from?.token?.address ||
+		!to?.token?.address ||
+		!tool.amountOutMin
+	) {
 		throw new Error('Invalid swap step data')
 	}
 	const { dexCallData, dexRouter } = tool.data
@@ -82,7 +93,9 @@ export function buildSwapData(step: IRouteInternalStep): IInputSwapData {
  * @param swapDataArray - Array of swap data objects to encode and compress.
  * @returns A compressed hex string representing the encoded swap data.
  */
-export function encodeAndCompressSwapData(swapDataArray: IInputSwapData[]): string {
+export function encodeAndCompressSwapData(
+	swapDataArray: IInputSwapData[],
+): string {
 	const encoded = encodeAbiParameters([swapDataAbi], [swapDataArray])
 	return LibZip.cdCompress(encoded) as string
 }
@@ -109,7 +122,8 @@ export function prepareTxArgs(
 	let txName: TxName = 'swap'
 
 	if (bridgeData) {
-		const compressed = dstSwapData.length > 0 ? encodeAndCompressSwapData(dstSwapData) : '0x'
+		const compressed =
+			dstSwapData.length > 0 ? encodeAndCompressSwapData(dstSwapData) : '0x'
 		bridgeData.compressedDstSwapData = compressed as Address
 		args = [bridgeData, integration]
 		if (srcSwapData.length > 0) {
@@ -143,7 +157,13 @@ export function getPreparedTxArgs(
 	const firstSwapStep = route.steps.find(
 		s => s.type === StepType.SRC_SWAP || s.type === StepType.BRIDGE,
 	) as IRouteStep
-	return prepareTxArgs(routeData, userAddress, firstSwapStep, integratorAddress, feeBps)
+	return prepareTxArgs(
+		routeData,
+		userAddress,
+		firstSwapStep,
+		integratorAddress,
+		feeBps,
+	)
 }
 
 /**
@@ -165,7 +185,10 @@ export type AllowanceAccessListResult = {
 	accessList: ReadonlyArray<AllowanceAccessListEntry>
 }
 export type AllowanceOverrideClient = {
-	createAccessList: (params: { to: Address; data: Hex }) => Promise<AllowanceAccessListResult>
+	createAccessList: (params: {
+		to: Address
+		data: Hex
+	}) => Promise<AllowanceAccessListResult>
 }
 
 export async function makeAllowanceOverride(
@@ -175,8 +198,16 @@ export async function makeAllowanceOverride(
 	amount: bigint,
 	client: AllowanceOverrideClient,
 ): Promise<StateOverride> {
-	const balData = encodeFunctionData({ abi: erc20Abi, functionName: 'balanceOf', args: [owner] })
-	const allowData = encodeFunctionData({ abi: erc20Abi, functionName: 'allowance', args: [owner, spender] })
+	const balData = encodeFunctionData({
+		abi: erc20Abi,
+		functionName: 'balanceOf',
+		args: [owner],
+	})
+	const allowData = encodeFunctionData({
+		abi: erc20Abi,
+		functionName: 'allowance',
+		args: [owner, spender],
+	})
 
 	const [balList, allowList] = await Promise.all([
 		client.createAccessList({ to: token, data: balData }),
@@ -202,7 +233,9 @@ export async function makeAllowanceOverride(
 		throw new Error('No allowance storage key found')
 	}
 
-	const encodedAmount = encodeAbiParameters(parseAbiParameters('uint256'), [amount]) as Hex
+	const encodedAmount = encodeAbiParameters(parseAbiParameters('uint256'), [
+		amount,
+	]) as Hex
 	const stateDiff = allowanceSlots.map(slot => ({ slot, value: encodedAmount }))
 
 	return [{ address: token, stateDiff }]

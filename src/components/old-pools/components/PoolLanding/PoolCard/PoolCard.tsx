@@ -19,7 +19,13 @@ interface PoolCardProps {
 	icon: React.ReactNode
 }
 
-const PoolStatus = ({ isDisabled, isPoolFilled }: { isDisabled: boolean; isPoolFilled: boolean }) => (
+const PoolStatus = ({
+	isDisabled,
+	isPoolFilled,
+}: {
+	isDisabled: boolean
+	isPoolFilled: boolean
+}) => (
 	<div className={classNames.poolStatus}>
 		{!isDisabled ? (
 			isPoolFilled ? (
@@ -115,9 +121,22 @@ const PoolStats = ({
 	</div>
 )
 
-export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.Element => {
-	const { poolLiquidity, maxCap, isLoading: isLiquidityLoading } = useGetLiquidity()
-	const { apy, totalRewards, isLoading: isMetricsLoading } = usePoolMetrics(fees, poolLiquidity, isLiquidityLoading)
+export const PoolCard = ({
+	title,
+	fees,
+	icon,
+	isDisabled,
+}: PoolCardProps): JSX.Element => {
+	const {
+		poolLiquidity,
+		maxCap,
+		isLoading: isLiquidityLoading,
+	} = useGetLiquidity()
+	const {
+		apy,
+		totalRewards,
+		isLoading: isMetricsLoading,
+	} = usePoolMetrics(fees, poolLiquidity, isLiquidityLoading)
 
 	const isPoolFilled = poolLiquidity >= maxCap
 
@@ -127,7 +146,13 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 		<Card className={`w-full ${classNames.container}`}>
 			<div className={classNames.content}>
 				<PoolStatus isDisabled={isDisabled} isPoolFilled={isPoolFilled} />
-				<GeneralInfo title={title} icon={icon} isDisabled={isDisabled} isLoading={isLoading} apy={apy} />
+				<GeneralInfo
+					title={title}
+					icon={icon}
+					isDisabled={isDisabled}
+					isLoading={isLoading}
+					apy={apy}
+				/>
 				<PoolStats
 					poolLiquidity={poolLiquidity}
 					maxCap={maxCap}

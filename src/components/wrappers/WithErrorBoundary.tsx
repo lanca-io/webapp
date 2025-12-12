@@ -4,7 +4,9 @@ import { Button } from '../layout/buttons/Button/Button'
 export function FallbackComponent({ error }) {
 	return (
 		<div className="card f1 ac jc">
-			<h5 style={{ color: 'var(--color-text-secondary)' }}>Something went wrong.</h5>
+			<h5 style={{ color: 'var(--color-text-secondary)' }}>
+				Something went wrong.
+			</h5>
 		</div>
 	)
 }
@@ -17,10 +19,17 @@ export function NotFoundFallback() {
 	)
 }
 
-export function FetchingFallback(setError: React.Dispatch<React.SetStateAction<null>>) {
+export function FetchingFallback(
+	setError: React.Dispatch<React.SetStateAction<null>>,
+) {
 	return (
 		<div className="card f1 ac jc">
-			<h5 style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-s)' }}>
+			<h5
+				style={{
+					color: 'var(--color-text-secondary)',
+					marginBottom: 'var(--space-s)',
+				}}
+			>
 				Couldn't fetch data
 			</h5>
 			<Button

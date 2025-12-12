@@ -33,7 +33,9 @@ export const FeesContent: FC<FeesContentProps> = ({ severity }) => {
 
 	return (
 		<div className={`fees_content ${severity}`}>
-			<span className={`fees_content_heading ${isPositive ? 'positive' : ''}`}>{title}</span>
+			<span className={`fees_content_heading ${isPositive ? 'positive' : ''}`}>
+				{title}
+			</span>
 			<div className="fees_content_items">
 				<div className="fees_content_item">
 					<div className="fees_content_message">{message}</div>

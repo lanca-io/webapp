@@ -1,4 +1,9 @@
-import { ColorType, type DeepPartial, type AreaStyleOptions, type SeriesOptionsCommon } from 'lightweight-charts'
+import {
+	ColorType,
+	type DeepPartial,
+	type AreaStyleOptions,
+	type SeriesOptionsCommon,
+} from 'lightweight-charts'
 import { colors } from '../../../../constants/colors'
 
 export const chartOptions = {
@@ -52,7 +57,9 @@ const getBottomColor = () => {
 	return 'rgba(215, 240, 253, 0)'
 }
 
-export const areaSeriesOptions: DeepPartial<AreaStyleOptions & SeriesOptionsCommon> = {
+export const areaSeriesOptions: DeepPartial<
+	AreaStyleOptions & SeriesOptionsCommon
+> = {
 	baseLineVisible: false,
 	lineType: 0,
 	lineWidth: 2,

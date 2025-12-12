@@ -35,10 +35,15 @@ export function UserActions() {
 	const [retryTimeLeft, setRetryTimeLeft] = useState<number>(0)
 	const isMobile = useQuery('ipad')
 
-	const { actions, isLoading, error } = useGetUserActions(address, retryTimeLeft)
+	const { actions, isLoading, error } = useGetUserActions(
+		address,
+		retryTimeLeft,
+	)
 
 	useEffect(() => {
-		const retryPerformedTimestamp = localStorage.getItem('retryPerformedTimestamp')
+		const retryPerformedTimestamp = localStorage.getItem(
+			'retryPerformedTimestamp',
+		)
 		if (!retryPerformedTimestamp) return
 
 		setRetryTimeLeft(getRemainingTime(retryPerformedTimestamp))

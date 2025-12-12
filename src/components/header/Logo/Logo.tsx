@@ -6,7 +6,12 @@ export const Logo = (): JSX.Element => {
 
 	return (
 		<div className="header_logo_container">
-			<img src={imgPath} alt={imgAlt} className="header_logo_img" loading="lazy" />
+			<img
+				src={imgPath}
+				alt={imgAlt}
+				className="header_logo_img"
+				loading="lazy"
+			/>
 		</div>
 	)
 }

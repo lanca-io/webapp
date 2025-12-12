@@ -1,6 +1,12 @@
 export const FooterLogo = () => (
 	<div className="gap-sm row ac">
-		<svg xmlns="http://www.w3.org/2000/svg" width="46" height="31" viewBox="0 0 46 31" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="46"
+			height="31"
+			viewBox="0 0 46 31"
+			fill="none"
+		>
 			<path
 				d="M22.5414 4.76476L22.548 4.75818C22.5527 4.75357 28.2445 -0.994374 33.958 4.70615C28.5672 -0.672374 18.2172 -2.35744 11.0846 4.75818L9.29337 6.53807C12.4468 9.70539 17.5796 9.71395 20.7443 6.55716L21.1284 6.17392C21.8973 5.36135 22.5058 4.79703 22.5408 4.76476H22.5414Z"
 				fill="#D0D5DD"
@@ -18,7 +24,13 @@ export const FooterLogo = () => (
 				fill="#98A2B3"
 			/>
 		</svg>
-		<svg xmlns="http://www.w3.org/2000/svg" width="111" height="23" viewBox="0 0 111 23" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="111"
+			height="23"
+			viewBox="0 0 111 23"
+			fill="none"
+		>
 			<path
 				d="M0.450745 0.987721H3.5715C4.89818 0.987721 5.97333 2.0602 5.97333 3.38272V16.6336H16.5384V19.427C16.5384 20.7496 15.4633 21.822 14.1366 21.822H0.450745V0.987721Z"
 				fill="#D0D5DD"

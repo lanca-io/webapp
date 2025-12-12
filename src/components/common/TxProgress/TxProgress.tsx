@@ -14,7 +14,9 @@ export const TxProgress: FC = memo((): JSX.Element | null => {
 				{steps.map((step, index) => (
 					<Fragment key={`${step.type}-${index}`}>
 						<TxStep step={step.type} status={step.status} />
-						{index < steps.length - 1 && <RightIcon color="var(--color-gray-300)" />}
+						{index < steps.length - 1 && (
+							<RightIcon color="var(--color-gray-300)" />
+						)}
 					</Fragment>
 				))}
 			</>

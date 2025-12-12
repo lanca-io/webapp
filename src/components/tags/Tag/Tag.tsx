@@ -23,11 +23,23 @@ export interface TagProps {
 	title?: string
 }
 
-export const Tag: FC<TagProps> = ({ leftIcon, rightIcon, children, size, color, onClick, title = null }) => {
+export const Tag: FC<TagProps> = ({
+	leftIcon,
+	rightIcon,
+	children,
+	size,
+	color,
+	onClick,
+	title = null,
+}) => {
 	const sizeClass = size ? className[size] : className.xs
 
 	return (
-		<div className={className.container} onClick={onClick || null} style={onClick ? { cursor: 'pointer' } : null}>
+		<div
+			className={className.container}
+			onClick={onClick || null}
+			style={onClick ? { cursor: 'pointer' } : null}
+		>
 			<div className={`${className.tag}  ${sizeClass} ${className[color]}`}>
 				{leftIcon}
 				{children}

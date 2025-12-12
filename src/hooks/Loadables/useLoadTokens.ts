@@ -18,12 +18,22 @@ type FetchTokensParams = {
 
 export const useLoadTokens = () => {
 	const { chains } = useChainsStore()
-	const { fromChain, toChain, isFromAssetModalOpen, isToAssetModalOpen } = useModalsStore()
-	const { searchValue, offset, setTokens, addTokens, setLoading, setOffset, setSearchedTokens, addSearchedTokens } =
-		useTokensStore()
+	const { fromChain, toChain, isFromAssetModalOpen, isToAssetModalOpen } =
+		useModalsStore()
+	const {
+		searchValue,
+		offset,
+		setTokens,
+		addTokens,
+		setLoading,
+		setOffset,
+		setSearchedTokens,
+		addSearchedTokens,
+	} = useTokensStore()
 
 	const activeChain = useMemo(
-		() => (isFromAssetModalOpen ? fromChain : isToAssetModalOpen ? toChain : null),
+		() =>
+			isFromAssetModalOpen ? fromChain : isToAssetModalOpen ? toChain : null,
 		[isFromAssetModalOpen, isToAssetModalOpen, fromChain, toChain],
 	)
 
@@ -37,7 +47,12 @@ export const useLoadTokens = () => {
 			if (!chainId) return []
 
 			try {
-				const tokens: ExtendedToken[] = await handleFetchTokens(String(chainId), offset, limit, searchValue)
+				const tokens: ExtendedToken[] = await handleFetchTokens(
+					String(chainId),
+					offset,
+					limit,
+					searchValue,
+				)
 				const chain = chains[chainId]
 
 				return tokens.map((token: ExtendedToken) => ({
@@ -83,7 +98,15 @@ export const useLoadTokens = () => {
 			}
 			setSearchedTokens([])
 		}
-	}, [data, offset, searchValue, addTokens, setTokens, addSearchedTokens, setSearchedTokens])
+	}, [
+		data,
+		offset,
+		searchValue,
+		addTokens,
+		setTokens,
+		addSearchedTokens,
+		setSearchedTokens,
+	])
 
 	useEffect(() => {
 		if (searchValue && tokensRef.current.length > 0) {

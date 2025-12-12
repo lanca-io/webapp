@@ -6,7 +6,10 @@ import { type Fee } from '../../../../hooks/useGetFees'
 import { createTimeFilters } from '../../../../../../utils/chartTimeFilters'
 import { useGetLiquidity } from '../../../../hooks/useGetLiquidity'
 import { toLocaleNumber } from '../../../../../../utils/formatting'
-import { groupDataByWeeks, getUniqueChatData } from '../../../../../../utils/charts'
+import {
+	groupDataByWeeks,
+	getUniqueChatData,
+} from '../../../../../../utils/charts'
 
 const timeFilters = createTimeFilters()
 
@@ -21,7 +24,9 @@ const apyDescription =
 export const APYCard = ({ fees, isLoading }: Props) => {
 	const { poolLiquidity, isLoading: isLiquidityLoading } = useGetLiquidity()
 	const [apyData, setApyData] = useState<ChartData[]>([])
-	const [activeFilter, setActiveFilter] = useState(timeFilters[timeFilters.length - 1])
+	const [activeFilter, setActiveFilter] = useState(
+		timeFilters[timeFilters.length - 1],
+	)
 	const [commonValue, setCommonValue] = useState<string>('')
 
 	const filteredFeeData = useMemo(() => {
@@ -29,7 +34,10 @@ export const APYCard = ({ fees, isLoading }: Props) => {
 			.filter(fee => {
 				const feeTime = fee.timestamp
 				const { startTime, endTime } = activeFilter
-				return (!startTime || feeTime >= startTime) && (!endTime || feeTime <= endTime)
+				return (
+					(!startTime || feeTime >= startTime) &&
+					(!endTime || feeTime <= endTime)
+				)
 			})
 			.map(fee => ({
 				time: fee.timestamp * 1000,
@@ -39,7 +47,9 @@ export const APYCard = ({ fees, isLoading }: Props) => {
 
 	const handleAPY = useCallback(async () => {
 		try {
-			const groupedWeeklyFees = groupDataByWeeks(getUniqueChatData(filteredFeeData))
+			const groupedWeeklyFees = groupDataByWeeks(
+				getUniqueChatData(filteredFeeData),
+			)
 
 			if (groupedWeeklyFees.length < 2) {
 				console.warn('Not enough data to calculate APY')
@@ -54,15 +64,22 @@ export const APYCard = ({ fees, isLoading }: Props) => {
 					}
 				}
 				const previousWeekFees = groupedWeeklyFees[index - 1].value
-				const apy = poolLiquidity !== 0 ? ((previousWeekFees * 52) / poolLiquidity) * 100 : Infinity
+				const apy =
+					poolLiquidity !== 0
+						? ((previousWeekFees * 52) / poolLiquidity) * 100
+						: Infinity
 				return {
 					time: week.time,
 					value: apy,
 				}
 			})
 
-			const previousWeekFees = groupedWeeklyFees[groupedWeeklyFees.length - 2].value
-			const apy = poolLiquidity !== 0 ? ((previousWeekFees * 52) / poolLiquidity) * 100 : Infinity
+			const previousWeekFees =
+				groupedWeeklyFees[groupedWeeklyFees.length - 2].value
+			const apy =
+				poolLiquidity !== 0
+					? ((previousWeekFees * 52) / poolLiquidity) * 100
+					: Infinity
 
 			if (apy === Infinity) {
 				setCommonValue('Loading...')
@@ -83,7 +100,9 @@ export const APYCard = ({ fees, isLoading }: Props) => {
 	return (
 		<ChartCard
 			description={apyDescription}
-			isLoading={isLoading || isLiquidityLoading || commonValue === 'Loading...'}
+			isLoading={
+				isLoading || isLiquidityLoading || commonValue === 'Loading...'
+			}
 			className={classNames.averageApyCard}
 			setActiveItem={setActiveFilter}
 			activeItem={activeFilter}

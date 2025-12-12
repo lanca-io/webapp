@@ -1,6 +1,12 @@
 export const BridgeIcon = (): JSX.Element => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="18"
+			height="18"
+			viewBox="0 0 18 18"
+			fill="none"
+		>
 			<path
 				d="M3.6 15.3C3.6 14.8029 3.19706 14.4 2.7 14.4C2.20294 14.4 1.8 14.8029 1.8 15.3C1.8 15.7971 2.20294 16.2 2.7 16.2C3.19706 16.2 3.6 15.7971 3.6 15.3ZM5.4 15.3C5.4 16.7912 4.19117 18 2.7 18C1.20883 18 0 16.7912 0 15.3C0 13.8088 1.20883 12.6 2.7 12.6C4.19117 12.6 5.4 13.8088 5.4 15.3Z"
 				fill="#66767D"

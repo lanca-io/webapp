@@ -41,7 +41,12 @@ const format3M = (d: Date, index: number, dataLength: number) => {
 	return ''
 }
 
-const formatAll = (d: Date, index: number, dataLength: number, isMobile: boolean) => {
+const formatAll = (
+	d: Date,
+	index: number,
+	dataLength: number,
+	isMobile: boolean,
+) => {
 	const isEdge = index === 0 || index === dataLength - 1
 
 	if (isEdge) {

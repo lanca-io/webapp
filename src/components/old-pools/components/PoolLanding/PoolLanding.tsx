@@ -14,7 +14,8 @@ import { LPIcon } from '../../../../assets/icons/LPIcon'
 export const PoolLanding = (): JSX.Element => {
 	const { fees, isLoading: feesLoading } = useGetFees()
 	const { lpProviders, isLoading: providersLoading } = useGetLPProvidersCount()
-	const { transactionsCount, isLoading: txCountLoading } = useGetTransactionsCount()
+	const { transactionsCount, isLoading: txCountLoading } =
+		useGetTransactionsCount()
 
 	return (
 		<div className={classNames.container}>
@@ -43,8 +44,18 @@ export const PoolLanding = (): JSX.Element => {
 					<div className="gap-sm">
 						<h6 className={classNames.sectionHeading}>Pools</h6>
 						<div className={classNames.section}>
-							<PoolCard title="USDC" fees={fees} isDisabled={false} icon={<PoolUSDC />} />
-							<PoolCard title="ETH" fees={fees} isDisabled={true} icon={<PoolETH />} />
+							<PoolCard
+								title="USDC"
+								fees={fees}
+								isDisabled={false}
+								icon={<PoolUSDC />}
+							/>
+							<PoolCard
+								title="ETH"
+								fees={fees}
+								isDisabled={true}
+								icon={<PoolETH />}
+							/>
 						</div>
 					</div>
 				</div>

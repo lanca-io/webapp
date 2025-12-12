@@ -19,7 +19,9 @@ export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 							<FormStoreProvider>
 								<ModalsStoreProvider>
 									<RoutesStoreProvider>
-										<TxExecutionStoreProvider>{children}</TxExecutionStoreProvider>
+										<TxExecutionStoreProvider>
+											{children}
+										</TxExecutionStoreProvider>
 									</RoutesStoreProvider>
 								</ModalsStoreProvider>
 							</FormStoreProvider>

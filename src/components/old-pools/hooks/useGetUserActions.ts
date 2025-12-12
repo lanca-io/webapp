@@ -3,7 +3,9 @@ import { type UserTransaction } from '../components/ConceroPool/UserActions/User
 import { config } from '../../../constants/config'
 import { get } from '../../../api/client'
 
-export async function fetchParentPoolActionsByLpAddress(address: string): Promise<UserTransaction[] | []> {
+export async function fetchParentPoolActionsByLpAddress(
+	address: string,
+): Promise<UserTransaction[] | []> {
 	try {
 		const url = config.baseURL + `/userParentPoolActions?lpAddress=${address}`
 		const response = await get(url)
@@ -19,7 +21,10 @@ export async function fetchParentPoolActionsByLpAddress(address: string): Promis
 	}
 }
 
-export const useGetUserActions = (address: string | undefined, retryTimeLeft: number) => {
+export const useGetUserActions = (
+	address: string | undefined,
+	retryTimeLeft: number,
+) => {
 	const [actions, setActions] = useState<UserTransaction[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string | null>(null)

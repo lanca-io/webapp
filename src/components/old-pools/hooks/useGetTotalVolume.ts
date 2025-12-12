@@ -19,7 +19,10 @@ export const useGetTotalVolume = (fees: Fee[], activeFilter: TimeFilter) => {
 			const feeTime = fee.timestamp
 			const { startTime, endTime } = activeFilter
 
-			if ((!startTime || feeTime >= startTime) && (!endTime || feeTime <= endTime)) {
+			if (
+				(!startTime || feeTime >= startTime) &&
+				(!endTime || feeTime <= endTime)
+			) {
 				const feeValue = {
 					time: fee.timestamp * 1000,
 					value: fee.loanGivenOut,

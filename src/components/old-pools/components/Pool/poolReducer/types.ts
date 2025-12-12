@@ -109,14 +109,22 @@ export enum PoolActionType {
 export type PoolAction =
 	| { type: PoolActionType.SET_BALANCE; payload: Balance | null }
 	| { type: PoolActionType.SET_LOADING; payload: boolean }
-	| { type: PoolActionType.SET_TOKEN; direction: ActionDirection; payload: { token: Token } }
+	| {
+			type: PoolActionType.SET_TOKEN
+			direction: ActionDirection
+			payload: { token: Token }
+	  }
 	| {
 			type: PoolActionType.SET_AMOUNT
 			direction: ActionDirection
 			payload: { amount?: string; amount_usd?: number }
 	  }
 	| { type: PoolActionType.RESET_AMOUNTS; direction: ActionDirection }
-	| { type: PoolActionType.SET_ADDRESS; direction: ActionDirection; payload: string }
+	| {
+			type: PoolActionType.SET_ADDRESS
+			direction: ActionDirection
+			payload: string
+	  }
 	| { type: PoolActionType.SET_SWAP_STAGE; payload: PoolCardStage }
 	| { type: PoolActionType.SET_SWAP_STEPS; payload: StageStep[] }
 	| { type: PoolActionType.APPEND_SWAP_STEP; payload: StageStep }

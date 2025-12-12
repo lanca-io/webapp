@@ -8,7 +8,12 @@ interface ToggleProps {
 	checkedClassName?: string
 }
 
-export const Toggle: FC<ToggleProps> = ({ isChecked, onChange, className, checkedClassName = '' }) => {
+export const Toggle: FC<ToggleProps> = ({
+	isChecked,
+	onChange,
+	className,
+	checkedClassName = '',
+}) => {
 	return (
 		<div
 			className={`${classNames.toggleContainer} ${isChecked ? `${classNames.checked} ${checkedClassName}` : ''} ${
@@ -18,7 +23,9 @@ export const Toggle: FC<ToggleProps> = ({ isChecked, onChange, className, checke
 				onChange(!isChecked)
 			}}
 		>
-			<div className={`${classNames.slider} ${isChecked ? classNames.checked : ''}`}></div>
+			<div
+				className={`${classNames.slider} ${isChecked ? classNames.checked : ''}`}
+			></div>
 		</div>
 	)
 }

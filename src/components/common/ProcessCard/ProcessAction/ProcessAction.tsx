@@ -29,8 +29,12 @@ export const ProcessAction: FC = memo((): JSX.Element | null => {
 	const handleShareOnX = useCallback(() => {
 		const time = executionTime ? executionTime : '10.00'
 
-		const fromChainHandle = fromChain?.id ? chainsTwitterMap[Number(fromChain.id)] || fromChain.name : 'ethereum'
-		const toChainHandle = toChain?.id ? chainsTwitterMap[Number(toChain.id)] || toChain.name : 'ethereum'
+		const fromChainHandle = fromChain?.id
+			? chainsTwitterMap[Number(fromChain.id)] || fromChain.name
+			: 'ethereum'
+		const toChainHandle = toChain?.id
+			? chainsTwitterMap[Number(toChain.id)] || toChain.name
+			: 'ethereum'
 		const shareUrl = `https://x.com/intent/tweet?text=Just%20performed%20a%20fully%20decentralised%20swap%20from%20%40${fromChainHandle}%20to%20%40${toChainHandle}%20in%20just%20${time}%20sec%20on%20%40lanca_io!%0A%0ASecured%20by%20%40chainlink%20CCIP%0A%0ATry%20to%20break%20my%20record%20on%20lanca.io%20👇`
 
 		window.open(shareUrl, '_blank', 'noopener,noreferrer')
@@ -67,7 +71,13 @@ export const ProcessAction: FC = memo((): JSX.Element | null => {
 					>
 						Swap again
 					</Button>
-					<Button variant="secondary" size="l" isFull onClick={handleShareOnX} data-testid="share-x-button">
+					<Button
+						variant="secondary"
+						size="l"
+						isFull
+						onClick={handleShareOnX}
+						data-testid="share-x-button"
+					>
 						Share on X
 					</Button>
 				</div>

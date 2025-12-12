@@ -12,7 +12,12 @@ export const Disconnected = (): JSX.Element => {
 	const isTablet: boolean = useIsTablet()
 
 	return (
-		<Button variant="primary" size="m" isLoading={isLoading} onClick={() => open()}>
+		<Button
+			variant="primary"
+			size="m"
+			isLoading={isLoading}
+			onClick={() => open()}
+		>
 			{isMobile || isTablet ? 'Connect' : 'Connect Wallet'}
 		</Button>
 	)

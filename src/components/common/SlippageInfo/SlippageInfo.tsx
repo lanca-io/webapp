@@ -36,9 +36,13 @@ export const SlippageInfo = memo((): JSX.Element => {
 
 		const handleClickOutside = (event: MouseEvent) => {
 			const menuElement = document.querySelector('.slippage_menu')
-			const isInSlippageMenu = menuElement ? menuElement.contains(event.target as Node) : false
+			const isInSlippageMenu = menuElement
+				? menuElement.contains(event.target as Node)
+				: false
 
-			const isInSlippageInfo = slippageRef.current ? slippageRef.current.contains(event.target as Node) : false
+			const isInSlippageInfo = slippageRef.current
+				? slippageRef.current.contains(event.target as Node)
+				: false
 
 			if (!isInSlippageMenu && !isInSlippageInfo) {
 				setIsMenuOpen(false)

@@ -33,7 +33,10 @@ const appKitFeatures = {
 let wagmiAdapter: WagmiAdapter | null = null
 let appKit: ReturnType<typeof createAppKit> | null = null
 
-export function initializeAppKit(chains: ConceroChain[], transports: Record<number, Transport>) {
+export function initializeAppKit(
+	chains: ConceroChain[],
+	transports: Record<number, Transport>,
+) {
 	if (appKit) return { wagmiAdapter, appKit }
 
 	const viemChains = convertToViemChains(chains)
@@ -92,5 +95,9 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
 		return <TechWorksScreen />
 	}
 
-	return <WagmiProvider config={adapter.wagmiConfig as any}>{children}</WagmiProvider>
+	return (
+		<WagmiProvider config={adapter.wagmiConfig as any}>
+			{children}
+		</WagmiProvider>
+	)
 }

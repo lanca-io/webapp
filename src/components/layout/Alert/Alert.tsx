@@ -22,7 +22,9 @@ const svgColorMap: Record<Variant, string> = {
 export const Alert = ({ icon, title, subtitle, variant = 'info' }: Props) => {
 	return (
 		<div className={`${classNames.container} ${classNames[variant]}`}>
-			<div className={classNames.wrapIcon}>{icon || <AlertIcon color={svgColorMap[variant]} />}</div>
+			<div className={classNames.wrapIcon}>
+				{icon || <AlertIcon color={svgColorMap[variant]} />}
+			</div>
 			<div className={`${classNames.content}`}>
 				<h3>{title}</h3>
 				{subtitle && <p className="body4">{subtitle}</p>}

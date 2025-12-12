@@ -6,7 +6,13 @@ type ClockIconProps = {
 
 export const ClockIcon: FC<ClockIconProps> = ({ color = '#9E80F1' }) => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			viewBox="0 0 16 16"
+			fill="none"
+		>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
@@ -14,7 +20,15 @@ export const ClockIcon: FC<ClockIconProps> = ({ color = '#9E80F1' }) => {
 				fill={color}
 			/>
 			<rect x="6.40039" y="8" width="5.6" height="1.6" rx="0.8" fill={color} />
-			<rect x="8" y="4" width="5.6" height="1.6" rx="0.8" transform="rotate(90 8 4)" fill={color} />
+			<rect
+				x="8"
+				y="4"
+				width="5.6"
+				height="1.6"
+				rx="0.8"
+				transform="rotate(90 8 4)"
+				fill={color}
+			/>
 		</svg>
 	)
 }

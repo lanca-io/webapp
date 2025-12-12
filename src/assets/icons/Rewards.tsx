@@ -2,7 +2,13 @@ import type { FC } from 'react'
 
 export const RewardsIcon: FC = () => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			viewBox="0 0 16 16"
+			fill="none"
+		>
 			<path
 				fill-rule="evenodd"
 				clip-rule="evenodd"
@@ -21,8 +27,23 @@ export const RewardsIcon: FC = () => {
 				d="M3.20001 3.19998L2.40001 3.19998C1.95818 3.19998 1.60001 3.55815 1.60001 3.99998L1.60001 7.19998C1.60001 7.6418 1.95818 7.99998 2.40001 7.99998L3.20001 7.99998L3.20001 9.59998L2.40001 9.59998C1.07453 9.59998 1.1983e-05 8.52546 1.20409e-05 7.19998L1.21808e-05 3.99998C1.22387e-05 2.67449 1.07453 1.59998 2.40001 1.59998L3.20001 1.59998L3.20001 3.19998Z"
 				fill="#66767D"
 			/>
-			<rect x="7.20001" y="11.2" width="1.6" height="4.8" rx="0.8" fill="#66767D" />
-			<rect x="12.8" y="14.4" width="1.6" height="9.6" rx="0.8" transform="rotate(90 12.8 14.4)" fill="#66767D" />
+			<rect
+				x="7.20001"
+				y="11.2"
+				width="1.6"
+				height="4.8"
+				rx="0.8"
+				fill="#66767D"
+			/>
+			<rect
+				x="12.8"
+				y="14.4"
+				width="1.6"
+				height="9.6"
+				rx="0.8"
+				transform="rotate(90 12.8 14.4)"
+				fill="#66767D"
+			/>
 		</svg>
 	)
 }

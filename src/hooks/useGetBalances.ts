@@ -8,7 +8,11 @@ type UseGetBalancesResult = {
 }
 
 export const useGetBalances = (chainId?: string): UseGetBalancesResult => {
-	const { balances: allBalances, isLoading, getBalancesByChainId } = useBalancesStore()
+	const {
+		balances: allBalances,
+		isLoading,
+		getBalancesByChainId,
+	} = useBalancesStore()
 	const [balances, setBalances] = useState<ExtendedToken[]>([])
 
 	useEffect(() => {

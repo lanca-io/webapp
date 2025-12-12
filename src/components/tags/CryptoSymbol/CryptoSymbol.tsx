@@ -9,7 +9,12 @@ export interface CryptoSymbolProps {
 	id?: string
 }
 
-export const CryptoSymbol: FC<CryptoSymbolProps> = ({ symbol = null, src = null, size, id }) => {
+export const CryptoSymbol: FC<CryptoSymbolProps> = ({
+	symbol = null,
+	src = null,
+	size,
+	id,
+}) => {
 	return (
 		<div className={classNames.container}>
 			<CryptoIcon src={src ?? null} size={size} id={id} />

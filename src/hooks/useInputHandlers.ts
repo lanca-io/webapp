@@ -31,23 +31,35 @@ export const useInputHandlers = () => {
 	const isInputEmpty = !amountInput.trim()
 
 	const textValidator = useTextInputValidator(debouncedAmountInput, fromToken)
-	const numberValidator = useNumberInputValidator(debouncedAmountInput, fromToken)
-	const percentValidator = usePercentInputValidator(debouncedAmountInput, fromToken)
-	const dollarValidator = useDollarInputValidator(debouncedAmountInput, fromToken)
+	const numberValidator = useNumberInputValidator(
+		debouncedAmountInput,
+		fromToken,
+	)
+	const percentValidator = usePercentInputValidator(
+		debouncedAmountInput,
+		fromToken,
+	)
+	const dollarValidator = useDollarInputValidator(
+		debouncedAmountInput,
+		fromToken,
+	)
 
-	const determineMode = useCallback((input: string, connected: boolean): Mode => {
-		if (!input) return Mode.None
+	const determineMode = useCallback(
+		(input: string, connected: boolean): Mode => {
+			if (!input) return Mode.None
 
-		if (!connected) {
+			if (!connected) {
+				if (input.includes('$')) return Mode.Dollar
+				return Mode.Number
+			}
+
 			if (input.includes('$')) return Mode.Dollar
+			if (/^[a-zA-Z]+$/.test(input)) return Mode.Text
+			if (input.includes('%')) return Mode.Percent
 			return Mode.Number
-		}
-
-		if (input.includes('$')) return Mode.Dollar
-		if (/^[a-zA-Z]+$/.test(input)) return Mode.Text
-		if (input.includes('%')) return Mode.Percent
-		return Mode.Number
-	}, [])
+		},
+		[],
+	)
 
 	const validateInput = useCallback(() => {
 		if (isInputEmpty) {
@@ -122,7 +134,9 @@ export const useInputHandlers = () => {
 
 			if (!isConnected) {
 				if (processedValue.includes('$')) {
-					const sanitizedValue = sanitizeNumbers(processedValue.replace('$', ''))
+					const sanitizedValue = sanitizeNumbers(
+						processedValue.replace('$', ''),
+					)
 					setAmountInput(sanitizedValue + '$')
 				} else {
 					const sanitizedValue = sanitizeNumbers(processedValue)

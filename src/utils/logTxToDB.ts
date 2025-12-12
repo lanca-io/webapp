@@ -8,7 +8,12 @@ interface LogTxToDBParams {
 	tx_data?: any
 }
 
-export function logTxToDB({ tx_id, status, provider, tx_data }: LogTxToDBParams = {}) {
+export function logTxToDB({
+	tx_id,
+	status,
+	provider,
+	tx_data,
+}: LogTxToDBParams = {}) {
 	const session_id = posthog.get_session_id()
 	const replay_id = posthog.get_distinct_id()
 

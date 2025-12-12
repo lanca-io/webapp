@@ -4,7 +4,11 @@ import { toLocaleNumber } from '../../../utils/formatting'
 import { type Fee } from './useGetFees'
 import { type ChartData } from '../../layout/Charts/Chart/Chart'
 
-export const usePoolMetrics = (fees: Fee[], poolLiquidity: number, initialLoading: boolean) => {
+export const usePoolMetrics = (
+	fees: Fee[],
+	poolLiquidity: number,
+	initialLoading: boolean,
+) => {
 	const [apy, setApy] = useState<string>('0')
 	const [totalRewards, setTotalRewards] = useState<string>('0')
 	const [isLoading, setIsLoading] = useState<boolean>(initialLoading)
@@ -29,7 +33,8 @@ export const usePoolMetrics = (fees: Fee[], poolLiquidity: number, initialLoadin
 			return
 		}
 
-		const previousWeekFees = groupedWeeklyFees[groupedWeeklyFees.length - 2].value
+		const previousWeekFees =
+			groupedWeeklyFees[groupedWeeklyFees.length - 2].value
 		const calculatedApy = ((previousWeekFees * 52) / poolLiquidity) * 100
 
 		setApy(toLocaleNumber(calculatedApy).toString())
@@ -45,7 +50,10 @@ export const usePoolMetrics = (fees: Fee[], poolLiquidity: number, initialLoadin
 		}
 	}, [fees, poolLiquidity, handleAPY])
 
-	const memoizedMetrics = useMemo(() => ({ apy, totalRewards, isLoading }), [apy, totalRewards, isLoading])
+	const memoizedMetrics = useMemo(
+		() => ({ apy, totalRewards, isLoading }),
+		[apy, totalRewards, isLoading],
+	)
 
 	return memoizedMetrics
 }

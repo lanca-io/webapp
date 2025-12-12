@@ -3,9 +3,21 @@ import type { TextInputProps } from './types'
 import { forwardRef } from 'react'
 import classNames from './TextInput.module.pcss'
 
-export const TextInput: FC<TextInputProps> = forwardRef<HTMLInputElement, TextInputProps>(
+export const TextInput: FC<TextInputProps> = forwardRef<
+	HTMLInputElement,
+	TextInputProps
+>(
 	(
-		{ value = '', placeholder, onChangeText, icon, isDisabled = false, title, type = 'text', className = '' },
+		{
+			value = '',
+			placeholder,
+			onChangeText,
+			icon,
+			isDisabled = false,
+			title,
+			type = 'text',
+			className = '',
+		},
 		ref,
 	) => {
 		const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

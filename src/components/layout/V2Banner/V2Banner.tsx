@@ -17,7 +17,10 @@ export const V2Banner: FC = () => {
 				<h5 className={classNames.v2_banner_title}>Concero Testnet is live!</h5>
 			</div>
 			<div className={classNames.v2_banner_action}>
-				<Button className={classNames.v2_banner_button} onClick={handleOpenTestnet}>
+				<Button
+					className={classNames.v2_banner_button}
+					onClick={handleOpenTestnet}
+				>
 					Open
 				</Button>
 			</div>

@@ -14,18 +14,36 @@ interface AmountUsdProps {
 	loading?: boolean
 }
 
-export function AmountUSD({ state, balance, selection, direction, handleMaxButtonClick, loading }: AmountUsdProps) {
+export function AmountUSD({
+	state,
+	balance,
+	selection,
+	direction,
+	handleMaxButtonClick,
+	loading,
+}: AmountUsdProps) {
 	const { t } = useTranslation()
 
-	const formatedBalance = numberToFormatString(Number(balance?.amount.rounded), 4, true)
+	const formatedBalance = numberToFormatString(
+		Number(balance?.amount.rounded),
+		4,
+		true,
+	)
 
 	if (direction === 'from') {
 		return (
 			<div className="row jsb">
 				<div className={classNames.amountUsdContainer}>
 					{state.isFocused && !selection.amount && balance ? (
-						<h6 className={classNames.maxButton} onMouseDown={handleMaxButtonClick}>
-							{loading ? <Loader variant="neutral" /> : `Max: ${formatedBalance}`}
+						<h6
+							className={classNames.maxButton}
+							onMouseDown={handleMaxButtonClick}
+						>
+							{loading ? (
+								<Loader variant="neutral" />
+							) : (
+								`Max: ${formatedBalance}`
+							)}
 						</h6>
 					) : !state.isFocused && selection.amount === '' ? (
 						<h6>{t('tokenArea.enterAmount')}</h6>

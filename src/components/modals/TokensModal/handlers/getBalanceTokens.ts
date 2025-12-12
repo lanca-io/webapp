@@ -1,6 +1,9 @@
 import { fetchTokensByBalances } from '../../../../api/concero/fetchTokensByBalances'
 import { type Dispatch } from 'react'
-import { TokenModalActionType, type TokensModalAction } from '../useTokensModalReducer/types'
+import {
+	TokenModalActionType,
+	type TokensModalAction,
+} from '../useTokensModalReducer/types'
 import { type Chain } from '../../../../types/StandardRoute'
 
 export async function getBalanceTokens(
@@ -11,13 +14,25 @@ export async function getBalanceTokens(
 	if (!address) return
 
 	try {
-		tokensModalDispatch({ type: TokenModalActionType.SET_IS_BALANCE_LOADING, isBalanceLoading: true })
+		tokensModalDispatch({
+			type: TokenModalActionType.SET_IS_BALANCE_LOADING,
+			isBalanceLoading: true,
+		})
 		const res = await fetchTokensByBalances(selectedChain?.id, address)
-		tokensModalDispatch({ type: TokenModalActionType.SET_BALANCE_TOKENS, balanceTokens: res })
+		tokensModalDispatch({
+			type: TokenModalActionType.SET_BALANCE_TOKENS,
+			balanceTokens: res,
+		})
 	} catch (error) {
 		console.error(error)
 	} finally {
-		tokensModalDispatch({ type: TokenModalActionType.SET_IS_BALANCE_LOADING, isBalanceLoading: false })
-		tokensModalDispatch({ type: TokenModalActionType.SET_IS_LOADING, isLoading: false })
+		tokensModalDispatch({
+			type: TokenModalActionType.SET_IS_BALANCE_LOADING,
+			isBalanceLoading: false,
+		})
+		tokensModalDispatch({
+			type: TokenModalActionType.SET_IS_LOADING,
+			isLoading: false,
+		})
 	}
 }

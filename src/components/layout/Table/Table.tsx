@@ -31,7 +31,8 @@ export const Table: FC<TableProps> = ({
 	animate = true,
 }) => {
 	const handleScroll = (e: any) => {
-		const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight
+		const bottom =
+			e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight
 		if (bottom && onEndReached && !isLoading) {
 			onEndReached()
 		}
@@ -61,7 +62,10 @@ export const Table: FC<TableProps> = ({
 	})
 
 	return (
-		<div className={classNames.container} onScroll={onEndReached && handleScroll}>
+		<div
+			className={classNames.container}
+			onScroll={onEndReached && handleScroll}
+		>
 			{isLoading ? (
 				<TableSkeleton columns={columns} />
 			) : (
@@ -70,10 +74,20 @@ export const Table: FC<TableProps> = ({
 					<tbody className="striped">
 						{animate
 							? transitions((styles, item) => (
-									<TableRow style={styles} item={item} columns={columns} onClick={onClick} />
+									<TableRow
+										style={styles}
+										item={item}
+										columns={columns}
+										onClick={onClick}
+									/>
 								))
 							: items.map((item, index) => (
-									<TableRow key={index} item={item} columns={columns} onClick={onClick} />
+									<TableRow
+										key={index}
+										item={item}
+										columns={columns}
+										onClick={onClick}
+									/>
 								))}
 					</tbody>
 				</table>

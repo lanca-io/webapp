@@ -96,14 +96,22 @@ export const VolumeChart: FC = () => {
 		}
 	}, [range])
 
-	const totalValue = useMemo(() => chartData.reduce((sum, d) => sum + d.value, 0), [chartData])
+	const totalValue = useMemo(
+		() => chartData.reduce((sum, d) => sum + d.value, 0),
+		[chartData],
+	)
 
 	const heading = useMemo(
-		() => <Heading range={range} total={totalValue} onRangeChange={onRangeChange} />,
+		() => (
+			<Heading range={range} total={totalValue} onRangeChange={onRangeChange} />
+		),
 		[range, totalValue, onRangeChange],
 	)
 
-	const chart = useMemo(() => <Chart data={chartData} range={range} />, [chartData, range])
+	const chart = useMemo(
+		() => <Chart data={chartData} range={range} />,
+		[chartData, range],
+	)
 
 	return (
 		<div className="volume_chart">

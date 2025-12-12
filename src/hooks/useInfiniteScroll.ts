@@ -6,14 +6,19 @@ type ScrollOptions = {
 	threshold?: number
 }
 
-export const useInfiniteScroll = ({ disabled, onLoadMore, threshold = 1 }: ScrollOptions) => {
+export const useInfiniteScroll = ({
+	disabled,
+	onLoadMore,
+	threshold = 1,
+}: ScrollOptions) => {
 	const ref = useRef<HTMLDivElement>(null)
 
 	const checkScroll = useCallback(() => {
 		if (disabled || !ref.current) return
 
 		const el = ref.current
-		const atBottom = Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < threshold
+		const atBottom =
+			Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < threshold
 
 		if (atBottom) {
 			onLoadMore()

@@ -6,13 +6,20 @@ import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScree
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
 
-const PoolScreen = lazy(async () => await import('./pages/Pools').then(module => ({ default: module.PoolsPage })))
+const PoolScreen = lazy(
+	async () =>
+		await import('./pages/Pools').then(module => ({
+			default: module.PoolsPage,
+		})),
+)
 
 const USDCPoolScreen = lazy(
 	async () =>
-		await import('./components/screens/PoolScreen/USDCPoolScreen').then(module => ({
-			default: module.USDCPoolScreen,
-		})),
+		await import('./components/screens/PoolScreen/USDCPoolScreen').then(
+			module => ({
+				default: module.USDCPoolScreen,
+			}),
+		),
 )
 
 const SwapScreen = lazy(

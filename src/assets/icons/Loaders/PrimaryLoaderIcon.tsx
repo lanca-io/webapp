@@ -1,5 +1,11 @@
 export const PrimaryLoaderIcon = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="16"
+		height="16"
+		viewBox="0 0 16 16"
+		fill="none"
+	>
 		<rect y="7.20009" width="5.6" height="1.6" rx="0.8" fill="#7CD4FD" />
 		<rect
 			x="8.80005"
@@ -10,7 +16,14 @@ export const PrimaryLoaderIcon = () => (
 			transform="rotate(90 8.80005 9.15527e-05)"
 			fill="#E0F2FE"
 		/>
-		<rect x="10.4" y="7.20009" width="5.6" height="1.6" rx="0.8" fill="#0BA5EC" />
+		<rect
+			x="10.4"
+			y="7.20009"
+			width="5.6"
+			height="1.6"
+			rx="0.8"
+			fill="#0BA5EC"
+		/>
 		<rect
 			x="8.80005"
 			y="10.4001"

@@ -29,7 +29,8 @@ export const RouteTimer = memo(() => {
 	const { route, isLoading } = useRouteStore()
 	const { timeToRefresh } = useLoadRoute()
 
-	if (!route || (!isLoading && (!timeToRefresh || timeToRefresh > 60))) return null
+	if (!route || (!isLoading && (!timeToRefresh || timeToRefresh > 60)))
+		return null
 
 	const variant = isLoading ? 'branded' : getVariant(timeToRefresh)
 	const iconColor = TIMER_COLORS[variant]

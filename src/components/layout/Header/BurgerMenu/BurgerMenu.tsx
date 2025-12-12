@@ -14,7 +14,8 @@ import { LanguageIcon } from '../../../../assets/icons/LanguageIcon'
 export function BurgerMenu() {
 	const [isMenuOpened, setIsMenuOpened] = useState(false)
 	const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false)
-	const [isContactSupportModalVisible, setIsModalContactSupportModalVisible] = useState(false)
+	const [isContactSupportModalVisible, setIsModalContactSupportModalVisible] =
+		useState(false)
 	const isMobile = useQuery('mobile')
 	const { t } = useTranslation()
 
@@ -68,7 +69,10 @@ export function BurgerMenu() {
 					setIsMenuOpened(false)
 				}}
 			>
-				<animated.div style={fadeAnimation} className={classNames.menuContainer}>
+				<animated.div
+					style={fadeAnimation}
+					className={classNames.menuContainer}
+				>
 					<div>
 						{isMobile ? <MobileBreadcrumbs /> : null}
 						<ul className={classNames.listContainer}>
@@ -99,7 +103,10 @@ export function BurgerMenu() {
 					</Button>
 				</animated.div>
 			</animated.div>
-			<LanguageModal show={isLanguageModalVisible} setShow={setIsLanguageModalVisible} />
+			<LanguageModal
+				show={isLanguageModalVisible}
+				setShow={setIsLanguageModalVisible}
+			/>
 			<ContactSupportModal
 				isShow={isContactSupportModalVisible}
 				setIsShow={setIsModalContactSupportModalVisible}

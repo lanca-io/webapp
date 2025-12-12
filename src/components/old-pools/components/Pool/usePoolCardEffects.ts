@@ -1,6 +1,10 @@
 import { type Dispatch, type MutableRefObject, useEffect } from 'react'
 import { handleFetchBalance } from './handlers/handleFetchBalance'
-import { PoolActionType, type PoolAction, type PoolState } from './poolReducer/types'
+import {
+	PoolActionType,
+	type PoolAction,
+	type PoolState,
+} from './poolReducer/types'
 import { handleSetLpBalance } from './handlers/handleSetLPBalance'
 import { checkLastWithdrawRequest } from './handlers/handleLastWithdrawalRequest'
 import { type Address } from 'viem'
@@ -12,7 +16,12 @@ interface UseSwapCardEffectsProps {
 	typingTimeoutRef: MutableRefObject<ReturnType<typeof setTimeout> | undefined>
 }
 
-export function usePoolCardEffects({ poolState, poolDispatch, address, typingTimeoutRef }: UseSwapCardEffectsProps) {
+export function usePoolCardEffects({
+	poolState,
+	poolDispatch,
+	address,
+	typingTimeoutRef,
+}: UseSwapCardEffectsProps) {
 	const { from, balance } = poolState
 
 	useEffect(() => {
@@ -32,8 +41,16 @@ export function usePoolCardEffects({ poolState, poolDispatch, address, typingTim
 
 	useEffect(() => {
 		if (address) {
-			poolDispatch({ type: PoolActionType.SET_ADDRESS, direction: 'from', payload: address })
-			poolDispatch({ type: PoolActionType.SET_ADDRESS, direction: 'to', payload: address })
+			poolDispatch({
+				type: PoolActionType.SET_ADDRESS,
+				direction: 'from',
+				payload: address,
+			})
+			poolDispatch({
+				type: PoolActionType.SET_ADDRESS,
+				direction: 'to',
+				payload: address,
+			})
 		}
 	}, [address])
 }

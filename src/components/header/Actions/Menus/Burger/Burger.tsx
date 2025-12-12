@@ -68,7 +68,9 @@ export const Burger: FC<BurgerProps> = ({ isOpen, onToggle }) => {
 				type={ItemType.DEFAULT}
 				icon={<RewardsIcon />}
 				tail={<TrailRight />}
-				onAction={() => window.open(externalRoutes.rewards, '_blank', 'noopener,noreferrer')}
+				onAction={() =>
+					window.open(externalRoutes.rewards, '_blank', 'noopener,noreferrer')
+				}
 			/>
 			<div className="header_burger_divider" />
 		</>
@@ -89,7 +91,11 @@ export const Burger: FC<BurgerProps> = ({ isOpen, onToggle }) => {
 			) {
 				return
 			}
-			if (toggleRef.current?.contains(target) || burgerRef.current?.contains(target)) return
+			if (
+				toggleRef.current?.contains(target) ||
+				burgerRef.current?.contains(target)
+			)
+				return
 			onToggle()
 		},
 		[onToggle],
@@ -128,7 +134,9 @@ export const Burger: FC<BurgerProps> = ({ isOpen, onToggle }) => {
 							title="Dark Theme"
 							type={ItemType.DEFAULT}
 							icon={<DarkThemeIcon />}
-							tail={<Switch checked={theme === Theme.DARK} onChange={toggleTheme} />}
+							tail={
+								<Switch checked={theme === Theme.DARK} onChange={toggleTheme} />
+							}
 							onAction={toggleTheme}
 						/>
 						<div className="header_burger_divider" />
@@ -142,7 +150,12 @@ export const Burger: FC<BurgerProps> = ({ isOpen, onToggle }) => {
 					</div>
 				)}
 			</div>
-			{showSupport && <SupportModal isOpen={showSupport} onClose={() => setShowSupport(false)} />}
+			{showSupport && (
+				<SupportModal
+					isOpen={showSupport}
+					onClose={() => setShowSupport(false)}
+				/>
+			)}
 		</>
 	)
 }

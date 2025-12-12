@@ -74,7 +74,8 @@ export const ko = {
 			contractSupport: '고객 지원에 문의',
 			copyDebugInfo: '거래 정보 복사',
 			dropUsAMessage: '메시지 남기기',
-			txFailedMessage: '거래에 문제가 있어 죄송합니다. 문제를 해결하기 위해 최선을 다하겠습니다.',
+			txFailedMessage:
+				'거래에 문제가 있어 죄송합니다. 문제를 해결하기 위해 최선을 다하겠습니다.',
 		},
 		manageModal: {
 			title: '포지션 관리',

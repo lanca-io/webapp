@@ -29,7 +29,11 @@ export function HeaderPopoverMenu() {
 			icon: <IconLogout size={18} color="var(--color-text-secondary)" />,
 			onClick: async () => {
 				disconnect()
-				trackEvent({ category: category.Wallet, action: action.DisconnectWallet, label: 'Disconnect Wallet' })
+				trackEvent({
+					category: category.Wallet,
+					action: action.DisconnectWallet,
+					label: 'Disconnect Wallet',
+				})
 			},
 		},
 	]

@@ -30,10 +30,19 @@ export const useEstimatePriceImpact = () => {
 		if (!ready) return { inUsd: null, outUsd: null }
 
 		const inAmount = formatTokenAmount(fromAmount, fromToken?.decimals ?? 18)
-		const outAmount = formatTokenAmount(route?.to.amount, toToken?.decimals ?? 18)
+		const outAmount = formatTokenAmount(
+			route?.to.amount,
+			toToken?.decimals ?? 18,
+		)
 
-		const inUsdVal = tokenAmountToUsd(new Decimal(inAmount), new Decimal(fromToken?.price_usd || 0))
-		const outUsdVal = tokenAmountToUsd(new Decimal(outAmount), new Decimal(toToken?.price_usd || 0))
+		const inUsdVal = tokenAmountToUsd(
+			new Decimal(inAmount),
+			new Decimal(fromToken?.price_usd || 0),
+		)
+		const outUsdVal = tokenAmountToUsd(
+			new Decimal(outAmount),
+			new Decimal(toToken?.price_usd || 0),
+		)
 
 		return { inUsd: inUsdVal, outUsd: outUsdVal }
 	}, [fromAmount, route?.to?.amount, fromToken, toToken])

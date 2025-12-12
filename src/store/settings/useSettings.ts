@@ -4,7 +4,9 @@ import { SettingsContext } from './SettingsContext'
 export const useSettingsStore = () => {
 	const useStore = useContext(SettingsContext)
 	if (!useStore) {
-		throw new Error(`You forgot to wrap your component in <SettingsStoreProvider>.`)
+		throw new Error(
+			`You forgot to wrap your component in <SettingsStoreProvider>.`,
+		)
 	}
 
 	const slippage = useStore(state => state.slippage)

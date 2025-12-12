@@ -1,10 +1,16 @@
 import { UserActionStatus, type UserTransaction } from '../UserActions'
-import { TransactionStatus, retryWithdrawal } from '../../../Pool/poolExecution/withdrawal'
+import {
+	TransactionStatus,
+	retryWithdrawal,
+} from '../../../Pool/poolExecution/withdrawal'
 import { type Dispatch, type SetStateAction } from 'react'
 import { useAccount, useWalletClient } from 'wagmi'
 import { Button } from '../../../../../layout/buttons/Button/Button'
 import { trackEvent } from '../../../../../../hooks/useTracking'
-import { action as trackingAction, category } from '../../../../../../constants/tracking'
+import {
+	action as trackingAction,
+	category,
+} from '../../../../../../constants/tracking'
 import { getRemainingTime } from '../timeCalculation'
 
 interface Props {
@@ -14,16 +20,25 @@ interface Props {
 	setRetryTimeLeft: Dispatch<SetStateAction<number>>
 }
 
-export const ManageWithdrawalButton = ({ action, status, setStatus, setRetryTimeLeft }: Props) => {
+export const ManageWithdrawalButton = ({
+	action,
+	status,
+	setStatus,
+	setRetryTimeLeft,
+}: Props) => {
 	const { address } = useAccount()
 	const { data: client } = useWalletClient()
-	const isRetryRequestWithdraw = action.status === UserActionStatus.WithdrawRetryNeeded
+	const isRetryRequestWithdraw =
+		action.status === UserActionStatus.WithdrawRetryNeeded
 	const isTxFailed = status === TransactionStatus.FAILED
 	const isPending = status === TransactionStatus.PENDING
 	const isSuccess = status === TransactionStatus.SUCCESS
 
-	const retryPerformedTimestamp = localStorage.getItem('retryPerformedTimestamp')
-	const isRetryPerformed = retryPerformedTimestamp && getRemainingTime(retryPerformedTimestamp) > 0
+	const retryPerformedTimestamp = localStorage.getItem(
+		'retryPerformedTimestamp',
+	)
+	const isRetryPerformed =
+		retryPerformedTimestamp && getRemainingTime(retryPerformedTimestamp) > 0
 
 	const handleRetryWithdrawal = async () => {
 		try {
@@ -60,7 +75,11 @@ export const ManageWithdrawalButton = ({ action, status, setStatus, setRetryTime
 
 	if (isRetryRequestWithdraw || isTxFailed) {
 		return (
-			<Button size="sm" variant="secondaryColor" onClick={handleRetryWithdrawal}>
+			<Button
+				size="sm"
+				variant="secondaryColor"
+				onClick={handleRetryWithdrawal}
+			>
 				Retry
 			</Button>
 		)

@@ -17,66 +17,91 @@ type TokenProps = {
 	isLoading?: boolean
 }
 
-export const Token = memo(({ token, showBalance = false, onClick }: TokenProps): JSX.Element => {
-	const { chains } = useChainsStore()
+export const Token = memo(
+	({ token, showBalance = false, onClick }: TokenProps): JSX.Element => {
+		const { chains } = useChainsStore()
 
-	const explorer = useMemo(() => chains[Number(token.chain_id)]?.explorer, [chains, token.chain_id])
+		const explorer = useMemo(
+			() => chains[Number(token.chain_id)]?.explorer,
+			[chains, token.chain_id],
+		)
 
-	const native = useMemo(() => isNative(token.address as Address), [token.address])
+		const native = useMemo(
+			() => isNative(token.address as Address),
+			[token.address],
+		)
 
-	const [symbol, name, address] = useMemo(
-		() => [truncate(token.symbol, 20), truncate(token.name, 15), truncateAddress(token.address)],
-		[token.symbol, token.name, token.address],
-	)
+		const [symbol, name, address] = useMemo(
+			() => [
+				truncate(token.symbol, 20),
+				truncate(token.name, 15),
+				truncateAddress(token.address),
+			],
+			[token.symbol, token.name, token.address],
+		)
 
-	const explorerUrl = useMemo(
-		() => (explorer ? `${explorer}/token/${token.address}` : null),
-		[explorer, token.address],
-	)
+		const explorerUrl = useMemo(
+			() => (explorer ? `${explorer}/token/${token.address}` : null),
+			[explorer, token.address],
+		)
 
-	const handleClick = useCallback(() => onClick?.(), [onClick])
-	const handleLinkClick = useCallback((e: React.MouseEvent) => e.stopPropagation(), [])
+		const handleClick = useCallback(() => onClick?.(), [onClick])
+		const handleLinkClick = useCallback(
+			(e: React.MouseEvent) => e.stopPropagation(),
+			[],
+		)
 
-	const badge = useMemo(
-		() => <Badge tokenLogoSrc={token.logo_url} chainLogoSrc={token.chainLogoURI || ''} size="l" />,
-		[token.logo_url, token.chainLogoURI],
-	)
+		const badge = useMemo(
+			() => (
+				<Badge
+					tokenLogoSrc={token.logo_url}
+					chainLogoSrc={token.chainLogoURI || ''}
+					size="l"
+				/>
+			),
+			[token.logo_url, token.chainLogoURI],
+		)
 
-	const balance = useMemo(
-		() =>
-			showBalance ? (
-				<Balance balance={token.balance || '0'} decimals={token.decimals} price={Number(token.price_usd)} />
-			) : null,
-		[showBalance, token.balance, token.decimals, token.price_usd],
-	)
+		const balance = useMemo(
+			() =>
+				showBalance ? (
+					<Balance
+						balance={token.balance || '0'}
+						decimals={token.decimals}
+						price={Number(token.price_usd)}
+					/>
+				) : null,
+			[showBalance, token.balance, token.decimals, token.price_usd],
+		)
 
-	return (
-		<div className="token" onClick={handleClick}>
-			<div className="token_content">
-				{badge}
-				<div className="token_description">
-					<div className="token_symbols">
-						<h4 className="token_symbol">{symbol}</h4>
-						<NativeInfo isVisible={native} />
-					</div>
-					<div className="token_information">
-						<p className="token_name">{name}</p>
-						{explorerUrl && (
-							<a
-								href={explorerUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								onClick={handleLinkClick}
-								className="token_address_container"
-							>
-								<p className="token_address">{`(${address})`}</p>
-								<LinkIcon />
-							</a>
-						)}
+		return (
+			<div className="token" onClick={handleClick}>
+				<div className="token_content">
+					{badge}
+					<div className="token_description">
+						<div className="token_symbols">
+							<h4 className="token_symbol">{symbol}</h4>
+							<NativeInfo isVisible={native} />
+						</div>
+						<div className="token_information">
+							<p className="token_name">{name}</p>
+							{explorerUrl && (
+								<a
+									href={explorerUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+									onClick={handleLinkClick}
+									className="token_address_container"
+								>
+									<p className="token_address">{`(${address})`}</p>
+									<LinkIcon />
+								</a>
+							)}
+						</div>
 					</div>
 				</div>
+				{balance}
 			</div>
-			{balance}
-		</div>
-	)
-})
+		)
+	},
+)

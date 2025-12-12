@@ -18,14 +18,23 @@ type BalanceProps = {
 }
 
 export const TokenBalances = memo(
-	({ chain, items, onTokenSelect, isSearchActive = false }: BalanceProps): JSX.Element | null => {
+	({
+		chain,
+		items,
+		onTokenSelect,
+		isSearchActive = false,
+	}: BalanceProps): JSX.Element | null => {
 		const { address, isConnected } = useAccount()
 		const { balances, isLoading } = useGetBalances(chain?.id?.toString())
 		const { fromToken, toToken } = useFormStore()
 		const { allSearchValue, searchValue } = useTokensStore()
 		const [shown, setShown] = useState(items)
 
-		const activeSearchValue = isSearchActive ? (chain ? searchValue : allSearchValue) : ''
+		const activeSearchValue = isSearchActive
+			? chain
+				? searchValue
+				: allSearchValue
+			: ''
 		const baseFilteredBalances = useMemo(
 			() =>
 				balances.filter(
@@ -34,7 +43,10 @@ export const TokenBalances = memo(
 							token.address === fromToken?.address &&
 							Number(token.chain_id) === Number(fromToken?.chain_id)
 						) &&
-						!(token.address === toToken?.address && Number(token.chain_id) === Number(toToken?.chain_id)),
+						!(
+							token.address === toToken?.address &&
+							Number(token.chain_id) === Number(toToken?.chain_id)
+						),
 				),
 			[balances, fromToken, toToken],
 		)
@@ -76,7 +88,9 @@ export const TokenBalances = memo(
 			<div className="token_balances" role="region" aria-label="Your tokens">
 				<h2 className="token_balances_title">{'Your Tokens'}</h2>
 				{isLoading
-					? Array.from({ length: items }).map((_, i) => <TokenSkeleton key={i} />)
+					? Array.from({ length: items }).map((_, i) => (
+							<TokenSkeleton key={i} />
+						))
 					: filteredBalances
 							.slice(0, shown)
 							.map(token => (

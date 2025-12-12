@@ -21,7 +21,14 @@ export const Button: FC<ExtendedButtonProps> = ({
 	isFull,
 	textColor,
 }) => {
-	const buttonClasses = getButtonClasses(size, variant, isLoading, isDisabled, isFull, className)
+	const buttonClasses = getButtonClasses(
+		size,
+		variant,
+		isLoading,
+		isDisabled,
+		isFull,
+		className,
+	)
 
 	return (
 		<button
@@ -33,7 +40,9 @@ export const Button: FC<ExtendedButtonProps> = ({
 			style={{ color: textColor }}
 		>
 			{!isLoading && leftIcon}
-			<span className={classNames.innerButton}>{isLoading ? <Loader /> : children}</span>
+			<span className={classNames.innerButton}>
+				{isLoading ? <Loader /> : children}
+			</span>
 			{!isLoading && rightIcon}
 		</button>
 	)

@@ -20,9 +20,16 @@ export const ProcessHeading: FC = memo(() => {
 	}, [reset, clearInputs])
 
 	return (
-		<div className={`process_card_heading ${!isTerminalStage ? 'process_card_heading_no_button' : ''}`}>
+		<div
+			className={`process_card_heading ${!isTerminalStage ? 'process_card_heading_no_button' : ''}`}
+		>
 			{isTerminalStage && (
-				<IconButton onClick={handleReset} variant="secondary" size="m" aria-label="Back to swap">
+				<IconButton
+					onClick={handleReset}
+					variant="secondary"
+					size="m"
+					aria-label="Back to swap"
+				>
 					<LeftIcon />
 				</IconButton>
 			)}

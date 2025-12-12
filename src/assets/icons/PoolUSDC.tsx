@@ -1,5 +1,11 @@
 export const PoolUSDC = () => (
-	<svg width="65" height="64" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="65"
+		height="64"
+		viewBox="0 0 65 64"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
 		<g clipPath="url(#clip0_1881_22251)">
 			<path
 				d="M59.1667 0H5.83333C2.88781 0 0.5 2.38781 0.5 5.33333V58.6667C0.5 61.6122 2.88781 64 5.83333 64H59.1667C62.1122 64 64.5 61.6122 64.5 58.6667V5.33333C64.5 2.38781 62.1122 0 59.1667 0Z"

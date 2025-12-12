@@ -15,12 +15,27 @@ type PoolHeadingProps = {
 	chainLabel?: string
 }
 
-export const Heading = ({ token, chain, isActive, isFull, tokenLabel, chainLabel }: PoolHeadingProps): JSX.Element => {
+export const Heading = ({
+	token,
+	chain,
+	isActive,
+	isFull,
+	tokenLabel,
+	chainLabel,
+}: PoolHeadingProps): JSX.Element => {
 	return (
 		<div className="pool_card_heading">
 			<div className="pool_card_heading_logos">
-				<img src={token.src} alt={token.alt} className="pool_card_heading_logo_token" />
-				<img src={chain.src} alt={chain.alt} className="pool_card_heading_logo_chain" />
+				<img
+					src={token.src}
+					alt={token.alt}
+					className="pool_card_heading_logo_token"
+				/>
+				<img
+					src={chain.src}
+					alt={chain.alt}
+					className="pool_card_heading_logo_chain"
+				/>
 			</div>
 			<div className="pool_card_heading_description">
 				<div className="pool_card_title_container">

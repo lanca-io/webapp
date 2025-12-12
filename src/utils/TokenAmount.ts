@@ -27,20 +27,32 @@ export class TokenAmount {
 
 	public plus(amount: string | TokenAmount): TokenAmount {
 		if (typeof amount === 'string') {
-			return new TokenAmount(new BigNumber(this.formatted).plus(amount).toString(), this.decimals)
+			return new TokenAmount(
+				new BigNumber(this.formatted).plus(amount).toString(),
+				this.decimals,
+			)
 		}
 
 		this.toCommonDecimals(this, amount)
-		return new TokenAmount(new BigNumber(this.rawAmount).plus(amount.rawAmount).toString(), this.decimals)
+		return new TokenAmount(
+			new BigNumber(this.rawAmount).plus(amount.rawAmount).toString(),
+			this.decimals,
+		)
 	}
 
 	public minus(amount: string | TokenAmount): TokenAmount {
 		if (typeof amount === 'string') {
-			return new TokenAmount(new BigNumber(this.formatted).minus(amount).toString(), this.decimals)
+			return new TokenAmount(
+				new BigNumber(this.formatted).minus(amount).toString(),
+				this.decimals,
+			)
 		}
 
 		this.toCommonDecimals(this, amount)
-		return new TokenAmount(new BigNumber(this.rawAmount).minus(amount.rawAmount).toString(), this.decimals)
+		return new TokenAmount(
+			new BigNumber(this.rawAmount).minus(amount.rawAmount).toString(),
+			this.decimals,
+		)
 	}
 
 	public get raw(): string {

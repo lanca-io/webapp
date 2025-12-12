@@ -5,7 +5,10 @@ import { preciseMultiply, preciseDivide } from '../utils/new/operations'
 import { useAccount } from 'wagmi'
 import { Decimal } from 'decimal.js'
 
-export const useDollarInputValidator = (input: string, token: ExtendedToken | null) => {
+export const useDollarInputValidator = (
+	input: string,
+	token: ExtendedToken | null,
+) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const { isConnected } = useAccount()
 	const price = token?.price_usd ?? 0
@@ -19,7 +22,11 @@ export const useDollarInputValidator = (input: string, token: ExtendedToken | nu
 		}
 
 		if (!/^\$?\d*\.?\d*\$?$/.test(input)) {
-			return { valid: false, error: 'Please enter a valid dollar amount', machineAmt: null }
+			return {
+				valid: false,
+				error: 'Please enter a valid dollar amount',
+				machineAmt: null,
+			}
 		}
 
 		try {
@@ -27,11 +34,19 @@ export const useDollarInputValidator = (input: string, token: ExtendedToken | nu
 			const usdDec = new Decimal(cleanInput)
 
 			if (cleanInput.startsWith('-')) {
-				return { valid: false, error: 'Dollar amount cannot be negative', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Dollar amount cannot be negative',
+					machineAmt: null,
+				}
 			}
 
 			if (usdDec.lte(0)) {
-				return { valid: false, error: 'Amount must be greater than $0', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Amount must be greater than $0',
+					machineAmt: null,
+				}
 			}
 
 			const tokenAmount = preciseDivide(usdDec, new Decimal(price))
@@ -51,7 +66,11 @@ export const useDollarInputValidator = (input: string, token: ExtendedToken | nu
 			}
 
 			if (machineInt === 0n && usdDec.gt(0)) {
-				return { valid: false, error: 'Amount too small to convert', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Amount too small to convert',
+					machineAmt: null,
+				}
 			}
 
 			if (usdDec.lt(0.25)) {

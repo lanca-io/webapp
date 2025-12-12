@@ -25,7 +25,10 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 	extensionClassName = '',
 }) => {
 	const handleClose = useCallback(() => onClose(), [onClose])
-	const header = useMemo(() => <ModalHeader title={title} onClose={handleClose} />, [title, handleClose])
+	const header = useMemo(
+		() => <ModalHeader title={title} onClose={handleClose} />,
+		[title, handleClose],
+	)
 
 	const handleBackdropClick = useCallback(
 		(e: MouseEvent<HTMLDivElement>) => {
@@ -49,7 +52,9 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 				{children}
 			</div>
 			{modalExtension && (
-				<div className={`modal modal_secondary${extensionClassName ? ` ${extensionClassName}` : ''}`}>
+				<div
+					className={`modal modal_secondary${extensionClassName ? ` ${extensionClassName}` : ''}`}
+				>
 					{modalExtension}
 				</div>
 			)}

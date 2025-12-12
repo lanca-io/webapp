@@ -5,7 +5,10 @@ import { preciseMultiply } from '../utils/new/operations'
 import { useAccount } from 'wagmi'
 import Decimal from 'decimal.js'
 
-export const useNumberInputValidator = (input: string, token: ExtendedToken | null) => {
+export const useNumberInputValidator = (
+	input: string,
+	token: ExtendedToken | null,
+) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const { isConnected } = useAccount()
 	const balanceStr = token?.balance ?? '0'

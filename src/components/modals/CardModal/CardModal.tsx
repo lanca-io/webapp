@@ -1,4 +1,10 @@
-import { type MutableRefObject, type ReactNode, useEffect, useRef, useState } from 'react'
+import {
+	type MutableRefObject,
+	type ReactNode,
+	useEffect,
+	useRef,
+	useState,
+} from 'react'
 import classNames from './CardModal.module.pcss'
 import { animated, useSpring } from '@react-spring/web'
 import { easeCubicInOut, easeQuadInOut } from 'd3-ease'
@@ -13,8 +19,15 @@ interface CardModalProps {
 	className?: string
 }
 
-export function CardModal({ isOpen, setIsOpen, children, title = '', className }: CardModalProps) {
-	const contentContainerRef: MutableRefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
+export function CardModal({
+	isOpen,
+	setIsOpen,
+	children,
+	title = '',
+	className,
+}: CardModalProps) {
+	const contentContainerRef: MutableRefObject<HTMLDivElement | null> =
+		useRef<HTMLDivElement>(null)
 	const [contentHeight, setContentHeight] = useState<number>(0)
 
 	const contentContainerAnimation = useSpring({

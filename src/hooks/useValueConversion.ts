@@ -2,7 +2,12 @@ import { useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { Mode } from '../store/form/types'
 import { formatTokenAmount } from '../utils/new/tokens'
-import { tokenAmountToUsd, percentOfBalanceToUsd, textCommandToUsd, usdToTokenAmount } from '../utils/new/input'
+import {
+	tokenAmountToUsd,
+	percentOfBalanceToUsd,
+	textCommandToUsd,
+	usdToTokenAmount,
+} from '../utils/new/input'
 import { Decimal } from 'decimal.js'
 
 type ConversionResult = {
@@ -17,7 +22,10 @@ export const useValueConversion = (): ConversionResult => {
 	const { amountInput, amountInputMode, fromToken } = useFormStore()
 
 	const { balance, price } = useMemo(() => {
-		const b = formatTokenAmount(fromToken?.balance ?? '0', fromToken?.decimals ?? 18)
+		const b = formatTokenAmount(
+			fromToken?.balance ?? '0',
+			fromToken?.decimals ?? 18,
+		)
 		const p = new Decimal(fromToken?.price_usd ?? 0)
 		return {
 			balance: b,

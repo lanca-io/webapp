@@ -55,7 +55,11 @@ export const CardSwitcher = (): JSX.Element => {
 	}, [setupObserver])
 
 	return (
-		<div className="card_switcher" style={{ top: `${top}px` }} role="presentation">
+		<div
+			className="card_switcher"
+			style={{ top: `${top}px` }}
+			role="presentation"
+		>
 			<IconButton
 				size="s"
 				variant="secondary"

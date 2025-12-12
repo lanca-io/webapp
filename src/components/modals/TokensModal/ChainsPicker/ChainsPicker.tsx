@@ -14,7 +14,10 @@ interface TokensModalHeaderProps {
 	setSelectedChain: (param: Chain | null) => void
 }
 
-export function ChainsPicker({ selectedChain, setSelectedChain }: TokensModalHeaderProps) {
+export function ChainsPicker({
+	selectedChain,
+	setSelectedChain,
+}: TokensModalHeaderProps) {
 	const { getChains, chains } = useContext(DataContext)
 	const [searchValue, setSearchValue] = useState<string>('')
 	const [isChainsModalOpen, setIsChainsModalOpen] = useState<boolean>(false)
@@ -68,7 +71,11 @@ export function ChainsPicker({ selectedChain, setSelectedChain }: TokensModalHea
 				) : null}
 			</div>
 
-			<CardModal isOpen={isChainsModalOpen} setIsOpen={handleOpenChainsModal} title={t('tokensModal.chains')}>
+			<CardModal
+				isOpen={isChainsModalOpen}
+				setIsOpen={handleOpenChainsModal}
+				title={t('tokensModal.chains')}
+			>
 				<TextInput
 					value={searchValue}
 					onChangeText={(value: string) => {

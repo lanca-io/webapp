@@ -1,6 +1,9 @@
 import { type FC, useRef } from 'react'
 import { type TokenAreaProps } from './types'
-import { handleAmountChange, handleAreaClick } from '../handlers/handleTokenArea'
+import {
+	handleAmountChange,
+	handleAreaClick,
+} from '../handlers/handleTokenArea'
 import { useTokenAreaReducer } from './tokenAreaReducer/useTokenAreaReducer'
 import { isFloatInput } from '../../../../../utils/validation'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +12,11 @@ import { config } from '../../../../../constants/config'
 import { AmountUSD } from './AmountUSD'
 import { InputError } from '../SwapInput/InputError/InputError'
 import { SelectTokenShape } from './SelectTokenShape/SelectTokenShape'
-import { ErrorCategory, errorTextMap, errorTypeMap } from '../../../config/errors/ErrorType'
+import {
+	ErrorCategory,
+	errorTextMap,
+	errorTypeMap,
+} from '../../../config/errors/ErrorType'
 import { TextInput } from '../../../../layout/input/TextInput'
 import { PoolActionType } from '../poolReducer/types'
 
@@ -28,14 +35,18 @@ export const TokenArea: FC<TokenAreaProps> = ({
 	const inputRef = useRef<HTMLInputElement | null>(null)
 	const { t } = useTranslation()
 
-	const isTransactionError = error ? errorTypeMap[error] === ErrorCategory.input : false
+	const isTransactionError = error
+		? errorTypeMap[error] === ErrorCategory.input
+		: false
 	const isError = error && isTransactionError
 
 	const onChangeText = (value: string) => {
 		poolDispatch({ type: PoolActionType.SET_INPUT_ERROR, payload: null })
 
-		if (value && !isFloatInput(value)) tokenAreaDispatch({ type: 'SET_SHAKE', payload: true })
-		if (direction === 'from') handleAmountChange({ value, state, dispatch: poolDispatch, direction })
+		if (value && !isFloatInput(value))
+			tokenAreaDispatch({ type: 'SET_SHAKE', payload: true })
+		if (direction === 'from')
+			handleAmountChange({ value, state, dispatch: poolDispatch, direction })
 	}
 
 	const handleMaxButtonClick = () => {
@@ -43,7 +54,12 @@ export const TokenArea: FC<TokenAreaProps> = ({
 		const { amount } = balance
 		if (!Number(amount.formatted)) return
 
-		handleAmountChange({ value: amount.formatted, state, dispatch: poolDispatch, direction: 'from' })
+		handleAmountChange({
+			value: amount.formatted,
+			state,
+			dispatch: poolDispatch,
+			direction: 'from',
+		})
 	}
 
 	return (
@@ -54,7 +70,9 @@ export const TokenArea: FC<TokenAreaProps> = ({
 			}}
 		>
 			<div className={classNames.tokenSelectInput}>
-				<p className={`body2 ${classNames.tokenRowHeader}`}>{t(`tokenArea.${direction}`)}</p>
+				<p className={`body2 ${classNames.tokenRowHeader}`}>
+					{t(`tokenArea.${direction}`)}
+				</p>
 				<div className={classNames.tokenInput}>
 					<div className={classNames.tokenRow}>
 						<TextInput
@@ -82,7 +100,10 @@ export const TokenArea: FC<TokenAreaProps> = ({
 								tokenLogoSrc={selection.token.logoURI}
 								chainLogoSrc={`${config.CONCERO_ASSETS_URI}/icons/chains/filled/${selection.chain.id}.svg`}
 							/>
-							<SelectTokenShape symbol={selection.token.symbol} chainName={selection.chain.name} />
+							<SelectTokenShape
+								symbol={selection.token.symbol}
+								chainName={selection.chain.name}
+							/>
 						</div>
 					</div>
 					<AmountUSD
@@ -97,7 +118,10 @@ export const TokenArea: FC<TokenAreaProps> = ({
 			</div>
 
 			{isError && direction === 'from' && (
-				<InputError color="var(--color-danger-700)" errorText={errorTextMap[error]} />
+				<InputError
+					color="var(--color-danger-700)"
+					errorText={errorTextMap[error]}
+				/>
 			)}
 		</div>
 	)

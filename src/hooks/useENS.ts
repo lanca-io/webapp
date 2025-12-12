@@ -24,7 +24,12 @@ export function useENS(input?: string | Address): ENSResult {
 
 			try {
 				if (!input) {
-					setResult({ name: null, address: null, isLoading: false, error: null })
+					setResult({
+						name: null,
+						address: null,
+						isLoading: false,
+						error: null,
+					})
 					return
 				}
 

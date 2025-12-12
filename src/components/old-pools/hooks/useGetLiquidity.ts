@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
-import { type IPoolConfig, isPoolFullAbi, poolConfigs, poolLoansInUseAbiITem } from '../config/poolConfig'
+import {
+	type IPoolConfig,
+	isPoolFullAbi,
+	poolConfigs,
+	poolLoansInUseAbiITem,
+} from '../config/poolConfig'
 import { getPublicClient } from '../../../providers/Web3Provider/Web3Provider'
 import { erc20Abi, formatUnits } from 'viem'
 import { usdcDecimals } from '../config/usdcTokenAddresses'
@@ -31,22 +36,34 @@ export const getLiquidityOnChain = async (poolConfig: IPoolConfig) => {
 
 		return Number(loansInUse) + Number(usdcBalance)
 	} catch (error) {
-		console.error(`Error fetching liquidity on chain for ${conceroContract}:`, error)
+		console.error(
+			`Error fetching liquidity on chain for ${conceroContract}:`,
+			error,
+		)
 		return 0
 	}
 }
 
 export const getPoolLiquidity = async (childrenOnly = false) => {
 	try {
-		const formattedPoolConfigs = poolConfigs.filter(poolConfig => (childrenOnly ? !poolConfig.isParent : true))
-
-		const totalValuesOnChain = await Promise.all(
-			formattedPoolConfigs.map(async config => await getLiquidityOnChain(config)),
+		const formattedPoolConfigs = poolConfigs.filter(poolConfig =>
+			childrenOnly ? !poolConfig.isParent : true,
 		)
 
-		const totalLiquidity = totalValuesOnChain.reduce((acc, value) => acc + value, 0)
+		const totalValuesOnChain = await Promise.all(
+			formattedPoolConfigs.map(
+				async config => await getLiquidityOnChain(config),
+			),
+		)
 
-		return childrenOnly ? BigInt(totalLiquidity) : Number(formatUnits(BigInt(totalLiquidity), usdcDecimals))
+		const totalLiquidity = totalValuesOnChain.reduce(
+			(acc, value) => acc + value,
+			0,
+		)
+
+		return childrenOnly
+			? BigInt(totalLiquidity)
+			: Number(formatUnits(BigInt(totalLiquidity), usdcDecimals))
 	} catch (error) {
 		console.error('Error fetching pool liquidity:', error)
 		return childrenOnly ? 0n : 0
@@ -55,7 +72,9 @@ export const getPoolLiquidity = async (childrenOnly = false) => {
 
 export const isPoolFilled = async () => {
 	const chainId = config.IS_TESTNET ? baseSepolia.id : base.id
-	const contractAddress = config.IS_TESTNET ? parentPoolBaseSepolia : parentPoolBase
+	const contractAddress = config.IS_TESTNET
+		? parentPoolBaseSepolia
+		: parentPoolBase
 
 	try {
 		const client = getPublicClient(chainId)

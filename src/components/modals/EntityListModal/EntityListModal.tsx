@@ -33,7 +33,11 @@ export const EntityListModal: FC<EntityListModalProps> = ({
 	const [value, setValue] = useState<string>('')
 
 	useEffect(() => {
-		const newData = value ? data.filter(chain => chain.symbol.toLowerCase().includes(value.toLowerCase())) : data
+		const newData = value
+			? data.filter(chain =>
+					chain.symbol.toLowerCase().includes(value.toLowerCase()),
+				)
+			: data
 
 		setFilteredData(newData.slice(0, entitiesVisible))
 	}, [data, entitiesVisible, value])
@@ -49,7 +53,10 @@ export const EntityListModal: FC<EntityListModalProps> = ({
 		} else {
 			const startIndex = filteredData.length
 			const endIndex = startIndex + entitiesVisible
-			setFilteredData(prevData => [...prevData, ...data.slice(startIndex, endIndex)])
+			setFilteredData(prevData => [
+				...prevData,
+				...data.slice(startIndex, endIndex),
+			])
 		}
 	}
 

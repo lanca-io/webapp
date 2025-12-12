@@ -15,16 +15,36 @@ type MenuProps = {
 }
 
 export const TokenMenu = memo(
-	({ chain, tokens, searchedTokens, isLoading, isSearchActive, onTokenSelect }: MenuProps): JSX.Element => {
+	({
+		chain,
+		tokens,
+		searchedTokens,
+		isLoading,
+		isSearchActive,
+		onTokenSelect,
+	}: MenuProps): JSX.Element => {
 		const hasSearchResults = searchedTokens.length > 0
 
 		return (
 			<>
-				<TokenBalances chain={chain} items={4} onTokenSelect={onTokenSelect} isSearchActive={isSearchActive} />
+				<TokenBalances
+					chain={chain}
+					items={4}
+					onTokenSelect={onTokenSelect}
+					isSearchActive={isSearchActive}
+				/>
 				{isSearchActive && hasSearchResults ? (
-					<SearchedTokens tokens={searchedTokens} isLoading={isLoading} onTokenSelect={onTokenSelect} />
+					<SearchedTokens
+						tokens={searchedTokens}
+						isLoading={isLoading}
+						onTokenSelect={onTokenSelect}
+					/>
 				) : (
-					<PopularTokens tokens={tokens} isLoading={isLoading} onTokenSelect={onTokenSelect} />
+					<PopularTokens
+						tokens={tokens}
+						isLoading={isLoading}
+						onTokenSelect={onTokenSelect}
+					/>
 				)}
 			</>
 		)

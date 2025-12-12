@@ -1,6 +1,12 @@
 import { type Dispatch, type FC, useEffect, useState } from 'react'
 import { TransactionStep } from './TransactionStep/TransactionStep'
-import { type PoolAction, PoolActionType, PoolCardStage, type PoolState, StageType } from '../poolReducer/types'
+import {
+	type PoolAction,
+	PoolActionType,
+	PoolCardStage,
+	type PoolState,
+	StageType,
+} from '../poolReducer/types'
 import { Separator } from '../../../../layout/Separator/Separator'
 import { Alert } from '../../../../layout/Alert/Alert'
 import { Loader } from '../../../../layout/Loader/Loader'
@@ -37,7 +43,11 @@ const statusColorMap = {
 	negative: 'var(--color-danger-700)',
 }
 
-export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, handleGoBack }) => {
+export const SwapProgress: FC<SwapProgressProps> = ({
+	poolState,
+	poolDispatch,
+	handleGoBack,
+}) => {
 	const [time, setTime] = useState(60)
 	const { to, from, stage, steps, poolMode } = poolState
 
@@ -47,11 +57,18 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 	const isAwait = currentStep && currentStep.status === 'await'
 
 	const isDeposit = poolMode === 'deposit'
-	const isDepositRequested = steps[1] ? steps[1].type === StageType.requestTx && steps[1].status === 'success' : false
-	const isDepositTxSigned = steps[2] ? steps[2].type === StageType.transactionSigned : false
+	const isDepositRequested = steps[1]
+		? steps[1].type === StageType.requestTx && steps[1].status === 'success'
+		: false
+	const isDepositTxSigned = steps[2]
+		? steps[2].type === StageType.transactionSigned
+		: false
 
 	const cancelTransaction = () => {
-		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STAGE,
+			payload: PoolCardStage.failed,
+		})
 		poolDispatch({
 			type: PoolActionType.APPEND_SWAP_STEP,
 			payload: {
@@ -128,7 +145,8 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 
 	const title: Record<string, string> | Record<string, null> = {
 		[PoolCardStage.progress]:
-			currentStep?.type === StageType.transaction || currentStep?.type === StageType.requestTx
+			currentStep?.type === StageType.transaction ||
+			currentStep?.type === StageType.requestTx
 				? `${isDeposit ? 'Deposit' : 'Withdrawal'}...`
 				: `Preparing ${isDeposit ? 'deposit' : 'withdrawal'}...`,
 		[PoolCardStage.failed]: `${isDeposit ? 'Deposit' : 'Withdrawal'} failed`,
@@ -159,11 +177,17 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 				<TrailRight />
 				{isDeposit && (
 					<>
-						<TransactionStep status={requestTxStatus ?? 'idle'} title="Request" />
+						<TransactionStep
+							status={requestTxStatus ?? 'idle'}
+							title="Request"
+						/>
 						<TrailRight />
 					</>
 				)}
-				<TransactionStep status={transactionStatus ?? 'idle'} title={isDeposit ? 'Deposit' : 'Withdrawal'} />
+				<TransactionStep
+					status={transactionStatus ?? 'idle'}
+					title={isDeposit ? 'Deposit' : 'Withdrawal'}
+				/>
 			</div>
 
 			{isDepositRequested && time > 0 && !isDepositTxSigned && !isFailed && (
@@ -182,7 +206,9 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 						<PencilIcon />
 					</div>
 					<h4 className={classNames.messageTitle}>Signature required</h4>
-					<p className={classNames.messageSubtitle}>Please open your wallet and sign the transaction</p>
+					<p className={classNames.messageSubtitle}>
+						Please open your wallet and sign the transaction
+					</p>
 				</div>
 			)}
 
@@ -190,7 +216,13 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 				<Alert
 					title={currentStep.title}
 					variant={isFailed ? 'error' : 'neutral'}
-					icon={isFailed ? <InfoIcon color="var(--color-danger-700)" /> : <Loader variant="neutral" />}
+					icon={
+						isFailed ? (
+							<InfoIcon color="var(--color-danger-700)" />
+						) : (
+							<Loader variant="neutral" />
+						)
+					}
 				/>
 			)}
 		</>
@@ -201,13 +233,22 @@ export const SwapProgress: FC<SwapProgressProps> = ({ poolState, poolDispatch, h
 			<div className={classNames.header}>
 				<h3>{title[stage] ?? ''}</h3>
 				{(isSuccess || isFailed) && (
-					<IconButton onClick={handleGoBack} className={classNames.closeButton} variant="secondary" size="md">
+					<IconButton
+						onClick={handleGoBack}
+						className={classNames.closeButton}
+						variant="secondary"
+						size="md"
+					>
 						<CrossIcon />
 					</IconButton>
 				)}
 			</div>
 
-			{isSuccess ? <FinishTxInfo isDeposit={isDeposit} to={to} /> : progressDetails}
+			{isSuccess ? (
+				<FinishTxInfo isDeposit={isDeposit} to={to} />
+			) : (
+				progressDetails
+			)}
 
 			{renderButtons[stage] ?? null}
 		</div>

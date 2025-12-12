@@ -35,7 +35,9 @@ export const Header: FC<HeaderProps> = ({ children }) => {
 							<Button className={getButtonClass(routes.home)}>Swap</Button>
 						</a>
 						<a className={classNames.link} href={routes.pools} rel="noreferrer">
-							<Button className={getButtonClass(routes.pools)}>Provide Liquidity</Button>
+							<Button className={getButtonClass(routes.pools)}>
+								Provide Liquidity
+							</Button>
 						</a>
 					</ul>
 				)}

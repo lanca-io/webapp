@@ -1,4 +1,10 @@
-import { StageType, type PoolAction, type PoolState, PoolActionType, PoolCardStage } from '../poolReducer/types'
+import {
+	StageType,
+	type PoolAction,
+	type PoolState,
+	PoolActionType,
+	PoolCardStage,
+} from '../poolReducer/types'
 import { type Address, erc20Abi, parseUnits, type WalletClient } from 'viem'
 import { type Dispatch } from 'react'
 import { parentPoolBase } from '../../../config/poolMainnetAddresses'
@@ -56,25 +62,45 @@ export async function handleAllowance(
 
 		if (status === 'reverted') {
 			poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
-			poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+			poolDispatch({
+				type: PoolActionType.SET_SWAP_STAGE,
+				payload: PoolCardStage.failed,
+			})
 			poolDispatch({
 				type: PoolActionType.SET_SWAP_STEPS,
-				payload: [{ title: 'Approval failed', status: 'error', type: StageType.approve }],
+				payload: [
+					{
+						title: 'Approval failed',
+						status: 'error',
+						type: StageType.approve,
+					},
+				],
 			})
 			throw new Error('Approve transaction reverted')
 		}
 
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Pending approval', status: 'pending', type: StageType.approve }],
+			payload: [
+				{
+					title: 'Pending approval',
+					status: 'pending',
+					type: StageType.approve,
+				},
+			],
 		})
 	} catch (error: any) {
 		console.error('Error during allowance handling:', error)
 		poolDispatch({ type: PoolActionType.SET_LOADING, payload: false })
-		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.failed })
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STAGE,
+			payload: PoolCardStage.failed,
+		})
 		poolDispatch({
 			type: PoolActionType.SET_SWAP_STEPS,
-			payload: [{ title: 'Approval failed', status: 'error', type: StageType.approve }],
+			payload: [
+				{ title: 'Approval failed', status: 'error', type: StageType.approve },
+			],
 		})
 		throw new Error(`AllowanceError: ${error.message}`)
 	}

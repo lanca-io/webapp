@@ -11,5 +11,9 @@ type AccountProps = {
 export const Account: FC<AccountProps> = ({ isActive }) => {
 	const { isConnected } = useAccount()
 
-	return <div className="header_account">{isConnected ? <Connected isActive={isActive} /> : <Disconnected />}</div>
+	return (
+		<div className="header_account">
+			{isConnected ? <Connected isActive={isActive} /> : <Disconnected />}
+		</div>
+	)
 }

@@ -10,8 +10,14 @@ type ExtendedTxStep = ITxStep & {
 	txHash?: Hash
 }
 
-function hasHashes(execution: Partial<ITxStep> | undefined): execution is Partial<ExtendedTxStep> {
-	return !!execution && (('srcTxHash' in execution && 'dstTxHash' in execution) || 'txHash' in execution)
+function hasHashes(
+	execution: Partial<ITxStep> | undefined,
+): execution is Partial<ExtendedTxStep> {
+	return (
+		!!execution &&
+		(('srcTxHash' in execution && 'dstTxHash' in execution) ||
+			'txHash' in execution)
+	)
 }
 
 export const useExecutionListener = () => {
@@ -23,7 +29,10 @@ export const useExecutionListener = () => {
 			state.steps.forEach(step => {
 				if (step.execution && step.execution.status) {
 					setStepStatus(step.type, step.execution.status)
-					if (step.execution.status === Status.SUCCESS && hasHashes(step.execution)) {
+					if (
+						step.execution.status === Status.SUCCESS &&
+						hasHashes(step.execution)
+					) {
 						if (step.execution.txHash) {
 							setSrcHash(step.execution.txHash)
 						}

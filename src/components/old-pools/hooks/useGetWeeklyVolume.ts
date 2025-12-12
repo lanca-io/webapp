@@ -11,12 +11,18 @@ export interface TimeFilter {
 	endTime: number | null | undefined
 }
 
-const filterFeesByTime = (fees: Fee[], activeFilter: TimeFilter): ChartData[] => {
+const filterFeesByTime = (
+	fees: Fee[],
+	activeFilter: TimeFilter,
+): ChartData[] => {
 	return fees.reduce<ChartData[]>((acc, fee) => {
 		const feeTime = fee.timestamp
 		const { startTime, endTime } = activeFilter
 
-		if ((!startTime || feeTime >= startTime) && (!endTime || feeTime <= endTime)) {
+		if (
+			(!startTime || feeTime >= startTime) &&
+			(!endTime || feeTime <= endTime)
+		) {
 			const feeValue = {
 				time: fee.timestamp * 1000,
 				value: fee.feeMade,

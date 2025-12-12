@@ -6,7 +6,11 @@ import { useRouteStore } from '../store/route/useRouteStore'
 import { useAccount } from 'wagmi'
 import { zeroAddress, maxUint256 } from 'viem'
 import { getPublicClient } from '../providers/Web3Provider/Web3Provider'
-import { buildRouteData, prepareTxArgs, makeAllowanceOverride } from '../utils/new/args'
+import {
+	buildRouteData,
+	prepareTxArgs,
+	makeAllowanceOverride,
+} from '../utils/new/args'
 import { useChainsStore } from '../store/chains/useChainsStore'
 import { conceroOrchestratorAbi } from '../assets/abi/ConceroOrchestrator'
 import { handleFetchTokens } from '../handlers/tokens'
@@ -19,7 +23,13 @@ type GasEstimation = {
 
 async function getNativeTokenUsdPrice(chainId: string): Promise<number | null> {
 	try {
-		const response = await handleFetchTokens(chainId, 0, 1, undefined, zeroAddress as Address)
+		const response = await handleFetchTokens(
+			chainId,
+			0,
+			1,
+			undefined,
+			zeroAddress as Address,
+		)
 		return response?.[0]?.price_usd ? Number(response[0].price_usd) : null
 	} catch (error) {
 		return null
@@ -35,7 +45,10 @@ export const useEstimateGas = () => {
 	const [estimate, setEstimate] = useState<GasEstimation | null>(null)
 
 	const step = useMemo(
-		() => route?.steps.find(s => s.type === StepType.SRC_SWAP || s.type === StepType.BRIDGE),
+		() =>
+			route?.steps.find(
+				s => s.type === StepType.SRC_SWAP || s.type === StepType.BRIDGE,
+			),
 		[route?.steps],
 	)
 
@@ -52,9 +65,16 @@ export const useEstimateGas = () => {
 				getPublicClient(Number(route.from.chain.id)),
 			])
 
-			const contractAddress = chains[Number(route.from.chain.id)]?.contracts.orchestrator as Address
+			const contractAddress = chains[Number(route.from.chain.id)]?.contracts
+				.orchestrator as Address
 
-			const preparedArgs = prepareTxArgs(routeData, address, step as IRouteStep, zeroAddress, 0n)
+			const preparedArgs = prepareTxArgs(
+				routeData,
+				address,
+				step as IRouteStep,
+				zeroAddress,
+				0n,
+			)
 
 			const isERC20 = !isNative(route.from.token.address)
 			const stateOverride = isERC20

@@ -17,7 +17,11 @@ const request = async (options: AxiosRequestConfig): Promise<any> => {
 	}
 }
 
-export const get = async (url: string, params?: any, headers?: any): Promise<any> =>
+export const get = async (
+	url: string,
+	params?: any,
+	headers?: any,
+): Promise<any> =>
 	await request({
 		url,
 		method: 'GET',
@@ -25,7 +29,11 @@ export const get = async (url: string, params?: any, headers?: any): Promise<any
 		headers,
 	})
 
-export const post = async (url: string, data: any, headers?: any): Promise<any> =>
+export const post = async (
+	url: string,
+	data: any,
+	headers?: any,
+): Promise<any> =>
 	await request({
 		url,
 		method: 'POST',

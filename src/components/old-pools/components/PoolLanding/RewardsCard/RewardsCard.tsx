@@ -32,7 +32,9 @@ export const RewardsCard = ({
 	showTooltip = true,
 }: Props) => {
 	const timeFilters = useMemo(() => createTimeFilters(), [])
-	const [activeFilter, setActiveFilter] = useState(timeFilters[timeFilters.length - 1])
+	const [activeFilter, setActiveFilter] = useState(
+		timeFilters[timeFilters.length - 1],
+	)
 
 	const {
 		groupedVolumeData,

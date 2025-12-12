@@ -7,7 +7,10 @@ interface AvatarProps {
 	className?: string
 }
 
-const getClasses = (size: AvatarProps['size'], className: AvatarProps['className']) => {
+const getClasses = (
+	size: AvatarProps['size'],
+	className: AvatarProps['className'],
+) => {
 	const baseClasses = [classNames.container]
 	const sizeClass = size ? classNames[size] : ''
 	const additionalClasses = className?.split(' ')

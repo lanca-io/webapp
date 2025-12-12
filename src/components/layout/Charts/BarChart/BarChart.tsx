@@ -1,4 +1,11 @@
-import { Bar, BarChart as ReBarChart, Cell, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import {
+	Bar,
+	BarChart as ReBarChart,
+	Cell,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+} from 'recharts'
 import { type FC, useMemo } from 'react'
 import { type ChartData } from '../Chart/Chart'
 import dayjs from 'dayjs'
@@ -38,7 +45,11 @@ export const BarChart: FC<BarChartProps> = ({ data, height = 200 }) => {
 
 	return (
 		<ResponsiveContainer width="100%" height={height}>
-			<ReBarChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }} width={150} data={formattedData}>
+			<ReBarChart
+				margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+				width={150}
+				data={formattedData}
+			>
 				<defs>
 					<linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
 						<stop offset="0%" stopColor="#ACE1FB" stopOpacity={1} />

@@ -1,4 +1,10 @@
-import { type FC, type KeyboardEvent, type MouseEvent, type ReactNode, useEffect } from 'react'
+import {
+	type FC,
+	type KeyboardEvent,
+	type MouseEvent,
+	type ReactNode,
+	useEffect,
+} from 'react'
 import { animated, useSpring, useTransition } from '@react-spring/web'
 import classNames from './Modal.module.pcss'
 import { ModalHeader } from './ModalHeader'
@@ -93,7 +99,10 @@ export const Modal: FC<ModalProps> = ({
 					) : null,
 				)}
 				{popup && (
-					<animated.div className={`${className}`} style={{ marginTop: '16px' }}>
+					<animated.div
+						className={`${className}`}
+						style={{ marginTop: '16px' }}
+					>
 						{popup}
 					</animated.div>
 				)}

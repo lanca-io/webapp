@@ -1,7 +1,15 @@
 import { handleBeforeUnload } from '../../../../../utils/leavingPageEvents'
-import { type PoolMode, type PoolAction, type PoolState, PoolActionType } from './types'
+import {
+	type PoolMode,
+	type PoolAction,
+	type PoolState,
+	PoolActionType,
+} from './types'
 
-export const poolActions: Record<PoolActionType, (state: PoolState, action: PoolAction) => PoolState> = {
+export const poolActions: Record<
+	PoolActionType,
+	(state: PoolState, action: PoolAction) => PoolState
+> = {
 	[PoolActionType.SET_BALANCE]: (state, action) => {
 		if (action.type === PoolActionType.SET_BALANCE) {
 			return { ...state, balance: action.payload ?? state.balance }
@@ -18,7 +26,10 @@ export const poolActions: Record<PoolActionType, (state: PoolState, action: Pool
 		if (action.type === PoolActionType.SET_TOKEN) {
 			return {
 				...state,
-				[action.direction]: { ...state[action.direction], token: action.payload.token },
+				[action.direction]: {
+					...state[action.direction],
+					token: action.payload.token,
+				},
 			}
 		}
 		return state
@@ -30,9 +41,13 @@ export const poolActions: Record<PoolActionType, (state: PoolState, action: Pool
 				[action.direction]: {
 					...state[action.direction],
 					...(action.payload.amount !== undefined &&
-						action.payload.amount !== null && { amount: action.payload.amount }),
+						action.payload.amount !== null && {
+							amount: action.payload.amount,
+						}),
 					...(action.payload.amount_usd !== undefined &&
-						action.payload.amount_usd !== null && { amount_usd: action.payload.amount_usd }),
+						action.payload.amount_usd !== null && {
+							amount_usd: action.payload.amount_usd,
+						}),
 				},
 			}
 		}
@@ -42,7 +57,11 @@ export const poolActions: Record<PoolActionType, (state: PoolState, action: Pool
 		if (action.type === PoolActionType.RESET_AMOUNTS) {
 			return {
 				...state,
-				[action.direction]: { ...state[action.direction], amount: '', amount_usd: 0.0 },
+				[action.direction]: {
+					...state[action.direction],
+					amount: '',
+					amount_usd: 0.0,
+				},
 			}
 		}
 		return state
@@ -51,7 +70,10 @@ export const poolActions: Record<PoolActionType, (state: PoolState, action: Pool
 		if (action.type === PoolActionType.SET_ADDRESS) {
 			return {
 				...state,
-				[action.direction]: { ...state[action.direction], address: action.payload },
+				[action.direction]: {
+					...state[action.direction],
+					address: action.payload,
+				},
 			}
 		}
 		return state
@@ -149,7 +171,10 @@ const switchDirections = (state: PoolState, action: { payload: PoolMode }) => {
 function updateLastSwapState(state: PoolState): PoolState {
 	const lastStep = state.steps[state.steps.length - 1]
 	if (lastStep?.status === 'pending' || lastStep?.status === 'await') {
-		return { ...state, steps: [...state.steps.slice(0, state.steps.length - 1)] }
+		return {
+			...state,
+			steps: [...state.steps.slice(0, state.steps.length - 1)],
+		}
 	}
 	return state
 }

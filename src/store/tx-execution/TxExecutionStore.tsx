@@ -19,5 +19,9 @@ export function TxExecutionStoreProvider({ children }: PropsWithChildren<{}>) {
 		}
 	}, [route])
 
-	return <TxExecutionContext.Provider value={storeRef.current}>{children}</TxExecutionContext.Provider>
+	return (
+		<TxExecutionContext.Provider value={storeRef.current}>
+			{children}
+		</TxExecutionContext.Provider>
+	)
 }

@@ -22,14 +22,23 @@ export const useLoadRoute = () => {
 	const { isBridge, checkLiquidity } = useCheckLiquidity()
 	const { slippage } = useSettingsStore()
 	const { setRoute, setIsLoading, setError } = useRouteStore()
-	const { fromChain, toChain, fromToken, toToken, fromAmount, toAddress, amountInputError } = useFormStore()
+	const {
+		fromChain,
+		toChain,
+		fromToken,
+		toToken,
+		fromAmount,
+		toAddress,
+		amountInputError,
+	} = useFormStore()
 	const { overallStatus } = useTxExecutionStore()
 	const sdk = useLancaSDK()
 
 	const [refreshTime, setRefreshTime] = useState<number>(0)
 
 	const receiver = useMemo(
-		() => (state === SplitSubvariantType.SEND && toAddress ? toAddress : address),
+		() =>
+			state === SplitSubvariantType.SEND && toAddress ? toAddress : address,
 		[state, toAddress, address],
 	)
 
@@ -40,7 +49,14 @@ export const useLoadRoute = () => {
 	}, [fromAmount, amountInputError])
 
 	const hasParams = useMemo(
-		() => Boolean(fromChain && toChain && fromToken?.address && toToken?.address && !amountInputError),
+		() =>
+			Boolean(
+				fromChain &&
+					toChain &&
+					fromToken?.address &&
+					toToken?.address &&
+					!amountInputError,
+			),
 		[fromChain, toChain, fromToken, toToken, amountInputError],
 	)
 
@@ -132,7 +148,15 @@ export const useLoadRoute = () => {
 				receiver,
 			},
 		],
-		[fromChain?.id, toChain?.id, fromToken?.address, toToken?.address, fromAmount, slippage, receiver],
+		[
+			fromChain?.id,
+			toChain?.id,
+			fromToken?.address,
+			toToken?.address,
+			fromAmount,
+			slippage,
+			receiver,
+		],
 	)
 
 	const {
@@ -168,7 +192,15 @@ export const useLoadRoute = () => {
 			return
 		}
 		setIsLoading(isLoading || isFetching)
-	}, [hasParams, validAmount, isLoading, isFetching, setIsLoading, setRoute, setError])
+	}, [
+		hasParams,
+		validAmount,
+		isLoading,
+		isFetching,
+		setIsLoading,
+		setRoute,
+		setError,
+	])
 
 	useEffect(() => {
 		if (overallStatus !== Status.NOT_STARTED || !route || !dataUpdatedAt) {

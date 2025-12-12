@@ -6,6 +6,10 @@ type SkeletonLoaderProps = {
 	height: number
 }
 
-export function SkeletonLoader({ className, width, height }: SkeletonLoaderProps) {
+export function SkeletonLoader({
+	className,
+	width,
+	height,
+}: SkeletonLoaderProps) {
 	return <div style={{ width, height }} className={`line ${className}`} />
 }

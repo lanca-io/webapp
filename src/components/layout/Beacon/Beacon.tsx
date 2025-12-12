@@ -19,7 +19,9 @@ export const Beacon: FC<BeaconProps> = ({ isOn, color }) => {
 	}
 	return (
 		<div className={classNames.container}>
-			<div className={`${classNames.beacon} ${isOn && beaconClassName(color)}`} />
+			<div
+				className={`${classNames.beacon} ${isOn && beaconClassName(color)}`}
+			/>
 		</div>
 	)
 }

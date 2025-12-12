@@ -14,7 +14,12 @@ type TokenSearchProps = {
 }
 
 export const TokenSearch = memo(
-	({ tokens, setSearchValue, onSearchActive, onSearchResults }: TokenSearchProps): JSX.Element => {
+	({
+		tokens,
+		setSearchValue,
+		onSearchActive,
+		onSearchResults,
+	}: TokenSearchProps): JSX.Element => {
 		const [input, setInput] = useState('')
 		const debouncedInputValue = useDebounce(input, 500)
 
@@ -25,7 +30,13 @@ export const TokenSearch = memo(
 			setSearchValue(debouncedInputValue)
 			onSearchResults(hasResults)
 			onSearchActive(isActive)
-		}, [debouncedInputValue, tokens.length, setSearchValue, onSearchResults, onSearchActive])
+		}, [
+			debouncedInputValue,
+			tokens.length,
+			setSearchValue,
+			onSearchResults,
+			onSearchActive,
+		])
 
 		const handleChange = useCallback((value: string) => {
 			setInput(value)

@@ -7,10 +7,18 @@ interface CategoryTagProps {
 	isSelected?: boolean
 }
 
-export function CategoryTag({ category, isSelected = false }: CategoryTagProps) {
+export function CategoryTag({
+	category,
+	isSelected = false,
+}: CategoryTagProps) {
 	return (
-		<Tag leftIcon={getCategoryIconByTitle(category, isSelected)} color={isSelected ? 'mainDarker' : 'grey'}>
-			<p className={`body1 ${isSelected ? classNames.selectedText : ''}`}>{category}</p>
+		<Tag
+			leftIcon={getCategoryIconByTitle(category, isSelected)}
+			color={isSelected ? 'mainDarker' : 'grey'}
+		>
+			<p className={`body1 ${isSelected ? classNames.selectedText : ''}`}>
+				{category}
+			</p>
 		</Tag>
 	)
 }

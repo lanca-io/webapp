@@ -11,7 +11,13 @@ interface TokenBadgeProps {
 const placeholder =
 	'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="gray"%3E%3Crect width="100%" height="100%"%3E%3C/rect%3E%3C/svg%3E'
 
-export const Badge = ({ tokenLogoSrc, chainLogoSrc, borderSmall, borderMedium, size = 'm' }: TokenBadgeProps) => {
+export const Badge = ({
+	tokenLogoSrc,
+	chainLogoSrc,
+	borderSmall,
+	borderMedium,
+	size = 'm',
+}: TokenBadgeProps) => {
 	const handleImgError = (e: any) => {
 		e.target.src = placeholder
 	}
@@ -24,7 +30,13 @@ export const Badge = ({ tokenLogoSrc, chainLogoSrc, borderSmall, borderMedium, s
 				alt="Token image"
 				onError={handleImgError}
 			/>
-			{chainLogoSrc && <img src={chainLogoSrc} className={classNames.chain} alt="Chain image" />}
+			{chainLogoSrc && (
+				<img
+					src={chainLogoSrc}
+					className={classNames.chain}
+					alt="Chain image"
+				/>
+			)}
 		</div>
 	)
 }

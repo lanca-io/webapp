@@ -1,7 +1,10 @@
 import type { TokenBalance } from '../api/concero/types'
 import { get } from '../api/client'
 
-export async function handleFetchBalances(chainId: string, address: string): Promise<TokenBalance | null> {
+export async function handleFetchBalances(
+	chainId: string,
+	address: string,
+): Promise<TokenBalance | null> {
 	if (!address) return null
 
 	const url = `https://api.v2.concero.io/api/v1/balances`

@@ -27,19 +27,40 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 	minValue = 0,
 	maxValue,
 }) => {
-	const { floatRef, lineRef, marginQuery, percent } = useProgressBar(isLoading, currentValue, maxValue)
+	const { floatRef, lineRef, marginQuery, percent } = useProgressBar(
+		isLoading,
+		currentValue,
+		maxValue,
+	)
 
 	const progressValue = useMemo(
-		() => <ProgressValue isLoading={isLoading} currentValue={currentValue} maxValue={maxValue} type={type} />,
+		() => (
+			<ProgressValue
+				isLoading={isLoading}
+				currentValue={currentValue}
+				maxValue={maxValue}
+				type={type}
+			/>
+		),
 		[isLoading, currentValue, maxValue, type],
 	)
 
 	const progressLine = useMemo(
-		() => <ProgressLine isLoading={isLoading} width={width} percent={percent} lineRef={lineRef} />,
+		() => (
+			<ProgressLine
+				isLoading={isLoading}
+				width={width}
+				percent={percent}
+				lineRef={lineRef}
+			/>
+		),
 		[isLoading, width, percent],
 	)
 
-	const progressRange = useMemo(() => <ProgressRange minValue={minValue} maxValue={maxValue} />, [minValue, maxValue])
+	const progressRange = useMemo(
+		() => <ProgressRange minValue={minValue} maxValue={maxValue} />,
+		[minValue, maxValue],
+	)
 
 	const renderBigOrMedium = () => (
 		<div className="gap-sm">
@@ -55,7 +76,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 				<SkeletonLoader width={64} height={34} />
 			) : (
 				<div className={classNames.currentValueWrapper}>
-					<div className={classNames.currentValue} ref={floatRef} style={{ marginLeft: marginQuery }}>
+					<div
+						className={classNames.currentValue}
+						ref={floatRef}
+						style={{ marginLeft: marginQuery }}
+					>
 						<Tag size="md" variant="branded">
 							{toLocaleNumber(currentValue)}
 							{symbol}
@@ -68,5 +93,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 		</div>
 	)
 
-	return type === 'big' || type === 'medium' ? renderBigOrMedium() : renderFloat()
+	return type === 'big' || type === 'medium'
+		? renderBigOrMedium()
+		: renderFloat()
 }

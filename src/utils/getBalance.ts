@@ -1,5 +1,8 @@
 import { type Dispatch } from 'react'
-import { SwapActionType, type SwapAction } from '../components/cards/SwapCard/swapReducer/types'
+import {
+	SwapActionType,
+	type SwapAction,
+} from '../components/cards/SwapCard/swapReducer/types'
 import { getPublicClient } from '../providers/Web3Provider/Web3Provider'
 import { TokenAmount } from './TokenAmount'
 import { type Address, getContract } from 'viem'
@@ -29,7 +32,11 @@ const handleError = (dispatch: Dispatch<SwapAction>) => {
 	dispatch({ type: SwapActionType.SET_BALANCE, payload: null })
 }
 
-export async function getBalance({ dispatch, from, address }: HandleBalanceProps) {
+export async function getBalance({
+	dispatch,
+	from,
+	address,
+}: HandleBalanceProps) {
 	if (!from || !address) {
 		handleError(dispatch)
 		return
@@ -50,7 +57,9 @@ export async function getBalance({ dispatch, from, address }: HandleBalanceProps
 				address: address as Address,
 			})
 		} else {
-			userBalanceAmount = (await tokenFromContract.read.balanceOf([address])) as bigint
+			userBalanceAmount = (await tokenFromContract.read.balanceOf([
+				address,
+			])) as bigint
 		}
 
 		dispatch({

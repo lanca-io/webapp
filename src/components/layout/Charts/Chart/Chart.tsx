@@ -1,5 +1,9 @@
 import { type FC, useEffect, useRef, useCallback, useMemo } from 'react'
-import { createChart, type IChartApi, type ISeriesApi } from 'lightweight-charts'
+import {
+	createChart,
+	type IChartApi,
+	type ISeriesApi,
+} from 'lightweight-charts'
 import { animated, useSpring } from '@react-spring/web'
 import { areaSeriesOptions, chartOptions } from './chartOptions'
 import { createTooltip, updateTooltip } from './Tooltip'
@@ -87,7 +91,13 @@ export const Chart: FC<ChartProps> = ({ data, symbol = 'dollar' }) => {
 		window.addEventListener('resize', handleResize)
 		chart.subscribeCrosshairMove(param => {
 			if (tooltipRef.current)
-				updateTooltip(param, seriesRef.current!, tooltipRef.current, chartRef.current!, symbol)
+				updateTooltip(
+					param,
+					seriesRef.current!,
+					tooltipRef.current,
+					chartRef.current!,
+					symbol,
+				)
 		})
 
 		return () => {

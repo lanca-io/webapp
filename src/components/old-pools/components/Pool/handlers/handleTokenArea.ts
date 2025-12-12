@@ -1,10 +1,16 @@
 import { isFloatInput } from '../../../../../utils/validation'
-import { PoolActionType, PoolCardStage, type PoolAction } from '../poolReducer/types'
+import {
+	PoolActionType,
+	PoolCardStage,
+	type PoolAction,
+} from '../poolReducer/types'
 import type { ForwardedRef, MutableRefObject, Dispatch } from 'react'
 import { type TokenAreaState } from '../TokenArea/tokenAreaReducer/types'
 
 export const handleAreaClick = (
-	inputRef: MutableRefObject<ForwardedRef<HTMLInputElement> | HTMLInputElement | null>,
+	inputRef: MutableRefObject<
+		ForwardedRef<HTMLInputElement> | HTMLInputElement | null
+	>,
 	stage: PoolCardStage,
 ): void => {
 	if (stage === PoolCardStage.review) {
@@ -22,7 +28,12 @@ interface HandleAmountChangeProps {
 	direction: 'from' | 'to'
 }
 
-export const handleAmountChange = ({ value, state, dispatch, direction }: HandleAmountChangeProps): void => {
+export const handleAmountChange = ({
+	value,
+	state,
+	dispatch,
+	direction,
+}: HandleAmountChangeProps): void => {
 	if (value === '') {
 		dispatch({
 			type: PoolActionType.RESET_AMOUNTS,
@@ -33,7 +44,9 @@ export const handleAmountChange = ({ value, state, dispatch, direction }: Handle
 
 	if (!isFloatInput(value)) return
 
-	const amountUSD = parseFloat((state.currentTokenPriceUSD * parseFloat(value)).toFixed(2))
+	const amountUSD = parseFloat(
+		(state.currentTokenPriceUSD * parseFloat(value)).toFixed(2),
+	)
 
 	dispatch({
 		type: PoolActionType.SET_AMOUNT,

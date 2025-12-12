@@ -10,7 +10,10 @@ type FeesDropdownProps = {
 }
 
 export const FeesDropdown = memo(({ severity }: FeesDropdownProps) => {
-	const tooltipContent = useMemo(() => <FeesContent severity={severity} />, [severity])
+	const tooltipContent = useMemo(
+		() => <FeesContent severity={severity} />,
+		[severity],
+	)
 
 	return (
 		<Tooltip

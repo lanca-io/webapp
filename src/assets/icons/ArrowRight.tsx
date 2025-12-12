@@ -4,7 +4,13 @@ interface IconProps {
 
 export const ArrowRight = ({ color = '#026AA2' }: IconProps) => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="14"
+			height="14"
+			viewBox="0 0 14 14"
+			fill="none"
+		>
 			<rect y="6.29999" width="13.02" height="1.4" rx="0.7" fill={color} />
 			<path
 				fillRule="evenodd"

@@ -39,7 +39,10 @@ export const sanitizeText = (value: string): string => {
  * @param tokenPrice - The USD price per token.
  * @returns The equivalent USD value as a string, or null if conversion fails.
  */
-export const tokenAmountToUsd = (tokenAmount: Decimal.Value, tokenPrice: Decimal.Value): string | null => {
+export const tokenAmountToUsd = (
+	tokenAmount: Decimal.Value,
+	tokenPrice: Decimal.Value,
+): string | null => {
 	try {
 		const amountDec = new Decimal(tokenAmount)
 		const priceDec = new Decimal(tokenPrice)
@@ -57,7 +60,10 @@ export const tokenAmountToUsd = (tokenAmount: Decimal.Value, tokenPrice: Decimal
  * @param tokenPrice - The USD price per token.
  * @returns The equivalent token amount as a string, or null if conversion fails.
  */
-export const usdToTokenAmount = (usdAmount: Decimal.Value, tokenPrice: Decimal.Value): string | null => {
+export const usdToTokenAmount = (
+	usdAmount: Decimal.Value,
+	tokenPrice: Decimal.Value,
+): string | null => {
 	try {
 		let amountStr: string
 		if (typeof usdAmount === 'string') {
@@ -95,7 +101,8 @@ export const percentOfBalanceToUsd = (
 		const balanceDec = new Decimal(balanceString)
 		const priceDec = new Decimal(tokenPrice)
 
-		if (percentDec.isNaN() || balanceDec.isNaN() || priceDec.isNaN()) return null
+		if (percentDec.isNaN() || balanceDec.isNaN() || priceDec.isNaN())
+			return null
 
 		const tokenAmt = preciseMultiply(balanceDec, percentDec.div(100))
 		const usdVal = preciseMultiply(tokenAmt, priceDec)
@@ -136,7 +143,10 @@ export const textCommandToUsd = (
  * @param balance - The token balance as Decimal.
  * @returns The calculated token amount as Decimal, or null if the keyword is not recognized.
  */
-export const textToAmount = (text: string, balance: Decimal): Decimal | null => {
+export const textToAmount = (
+	text: string,
+	balance: Decimal,
+): Decimal | null => {
 	const t = text.toLowerCase()
 	switch (t) {
 		case 'max':
@@ -165,7 +175,9 @@ export function normalizeSlippageInput(input: string): string {
 	let cleaned = input.replace(/[^0-9.%]/g, '')
 	const firstPercent = cleaned.indexOf('%')
 	if (firstPercent !== -1) {
-		cleaned = cleaned.slice(0, firstPercent + 1) + cleaned.slice(firstPercent + 1).replace(/%/g, '')
+		cleaned =
+			cleaned.slice(0, firstPercent + 1) +
+			cleaned.slice(firstPercent + 1).replace(/%/g, '')
 	}
 	return cleaned
 }

@@ -6,7 +6,10 @@ interface ProgressRangeProps {
 	maxValue: number
 }
 
-export const ProgressRange: React.FC<ProgressRangeProps> = ({ minValue, maxValue }) => (
+export const ProgressRange: React.FC<ProgressRangeProps> = ({
+	minValue,
+	maxValue,
+}) => (
 	<div className="row jsb ac">
 		<p className="body1">{`$${toLocaleNumber(minValue)}`}</p>
 		<p className="body1">{`$${toLocaleNumber(maxValue)}`}</p>

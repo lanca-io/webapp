@@ -11,7 +11,12 @@ type HeaderProps = {
 	onClose: MouseEventHandler<HTMLButtonElement>
 }
 
-export const Header = ({ title, hasBack = false, onBack, onClose }: HeaderProps): ReactElement => (
+export const Header = ({
+	title,
+	hasBack = false,
+	onBack,
+	onClose,
+}: HeaderProps): ReactElement => (
 	<div className="support_modal_header">
 		{hasBack ? (
 			<IconButton

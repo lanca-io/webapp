@@ -41,22 +41,52 @@ enum ContactOptions {
 export const FeedbackModal: FC<FeedbackModalProps> = ({ show, setShow }) => {
 	const [selectedTag, setSelectedTag] = useState<FeedbackTags | null>(null)
 	const [message, setMessage] = useState<string>('')
-	const [contactOption, setContactOption] = useState<ContactOptions | null>(null)
+	const [contactOption, setContactOption] = useState<ContactOptions | null>(
+		null,
+	)
 	const [username, setUsername] = useState<string>('')
 	const { addNotification } = useContext(NotificationsContext)
 	const { t } = useTranslation()
 
 	const feedbackOptions = [
-		{ label: t('tagTitle.question'), value: FeedbackTags.QUESTION, icon: <IconQuestionMark size={16} /> },
-		{ label: t('tagTitle.issue'), value: FeedbackTags.ISSUE, icon: <IconAlertHexagon size={16} /> },
-		{ label: t('tagTitle.suggestion'), value: FeedbackTags.SUGGESTION, icon: <IconMessageChatbot size={16} /> },
+		{
+			label: t('tagTitle.question'),
+			value: FeedbackTags.QUESTION,
+			icon: <IconQuestionMark size={16} />,
+		},
+		{
+			label: t('tagTitle.issue'),
+			value: FeedbackTags.ISSUE,
+			icon: <IconAlertHexagon size={16} />,
+		},
+		{
+			label: t('tagTitle.suggestion'),
+			value: FeedbackTags.SUGGESTION,
+			icon: <IconMessageChatbot size={16} />,
+		},
 	]
 
 	const contactOptions = [
-		{ label: t('socialMedia.discord'), value: ContactOptions.DISCORD, icon: <IconBrandDiscord size={16} /> },
-		{ label: t('socialMedia.twitter'), value: ContactOptions.TWITTER, icon: <IconBrandTwitter size={16} /> },
-		{ label: t('socialMedia.telegram'), value: ContactOptions.TELEGRAM, icon: <IconBrandTelegram size={16} /> },
-		{ label: t('socialMedia.email'), value: ContactOptions.EMAIL, icon: <IconMessage size={16} /> },
+		{
+			label: t('socialMedia.discord'),
+			value: ContactOptions.DISCORD,
+			icon: <IconBrandDiscord size={16} />,
+		},
+		{
+			label: t('socialMedia.twitter'),
+			value: ContactOptions.TWITTER,
+			icon: <IconBrandTwitter size={16} />,
+		},
+		{
+			label: t('socialMedia.telegram'),
+			value: ContactOptions.TELEGRAM,
+			icon: <IconBrandTelegram size={16} />,
+		},
+		{
+			label: t('socialMedia.email'),
+			value: ContactOptions.EMAIL,
+			icon: <IconMessage size={16} />,
+		},
 	]
 
 	const handleSubmit = async () => {
@@ -104,7 +134,9 @@ export const FeedbackModal: FC<FeedbackModalProps> = ({ show, setShow }) => {
 					}}
 					placeholder={t('placeholder.explainYourFeedback')}
 				/>
-				<h5 className={classNames.sectionTitle}>{t('modal.howCanWeReachOut')}</h5>
+				<h5 className={classNames.sectionTitle}>
+					{t('modal.howCanWeReachOut')}
+				</h5>
 				<div className={classNames.tagContainer}>
 					{contactOptions.map(option => (
 						<Button

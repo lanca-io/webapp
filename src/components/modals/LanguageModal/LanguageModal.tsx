@@ -52,7 +52,9 @@ export function LanguageModal({ setShow, show }: LanguageModalProps) {
 
 	async function handleSelectLanguage(item: any): Promise<void> {
 		await i18n.changeLanguage(item.id)
-		const newLanguage = languages.find((language: Language) => language.id === item.id)
+		const newLanguage = languages.find(
+			(language: Language) => language.id === item.id,
+		)
 		setSelectedItems([newLanguage])
 		setShow(false)
 		setItem('language', item.id)

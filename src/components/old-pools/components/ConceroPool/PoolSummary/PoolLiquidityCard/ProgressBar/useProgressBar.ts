@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 
-export const useProgressBar = (isLoading: boolean, currentValue: number, maxValue: number) => {
+export const useProgressBar = (
+	isLoading: boolean,
+	currentValue: number,
+	maxValue: number,
+) => {
 	const floatRef = useRef<HTMLDivElement | null>(null)
 	const lineRef = useRef<HTMLDivElement | null>(null)
 	const [floatValueWidth, setFloatValueWidth] = useState(0)
 	const [progressLineWidth, setProgressLineWidth] = useState(0)
 
-	const floatValueMargin = useMemo(() => (floatValueWidth === 0 ? 0 : floatValueWidth / 2), [floatValueWidth])
+	const floatValueMargin = useMemo(
+		() => (floatValueWidth === 0 ? 0 : floatValueWidth / 2),
+		[floatValueWidth],
+	)
 
 	useEffect(() => {
 		if (floatRef.current) {
@@ -20,7 +27,10 @@ export const useProgressBar = (isLoading: boolean, currentValue: number, maxValu
 		}
 	}, [isLoading, currentValue])
 
-	const percent = useMemo(() => (currentValue / maxValue) * 100, [currentValue, maxValue])
+	const percent = useMemo(
+		() => (currentValue / maxValue) * 100,
+		[currentValue, maxValue],
+	)
 
 	const marginQuery = useMemo(() => {
 		if (percent === 0) return 0

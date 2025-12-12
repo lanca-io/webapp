@@ -25,7 +25,9 @@ export function toScientific(value: number): string {
  */
 export function toPercentage(value: number, decimalPlaces?: number): string {
 	const percentageValue = value * 100
-	return decimalPlaces ? percentageValue.toFixed(decimalPlaces) + '%' : percentageValue.toString() + '%'
+	return decimalPlaces
+		? percentageValue.toFixed(decimalPlaces) + '%'
+		: percentageValue.toString() + '%'
 }
 
 /**
@@ -35,7 +37,11 @@ export function toPercentage(value: number, decimalPlaces?: number): string {
  * @param decimalPlaces - The number of decimal places to include.
  * @returns The formatted currency value as a string.
  */
-export function toCurrency(value: number, currencySymbol: string = '$', decimalPlaces: number = 2): string {
+export function toCurrency(
+	value: number,
+	currencySymbol: string = '$',
+	decimalPlaces: number = 2,
+): string {
 	return currencySymbol + value.toFixed(decimalPlaces)
 }
 
@@ -49,7 +55,11 @@ export function toCurrency(value: number, currencySymbol: string = '$', decimalP
  * @param decimalPlaces - The number of decimal places to include.
  * @returns The formatted number as a string.
  */
-export function format(value: number, decimalPlaces: number = 2, symbol?: string): string {
+export function format(
+	value: number,
+	decimalPlaces: number = 2,
+	symbol?: string,
+): string {
 	if (value === 0) return '0'
 
 	const absValue = Math.abs(value)
@@ -69,7 +79,11 @@ export function format(value: number, decimalPlaces: number = 2, symbol?: string
  * @param decimalPlaces - The number of decimal places to include.
  * @returns The formatted number as a string.
  */
-export function formatWithoutThreshold(value: number, decimalPlaces: number = 2, symbol?: string): string {
+export function formatWithoutThreshold(
+	value: number,
+	decimalPlaces: number = 2,
+	symbol?: string,
+): string {
 	if (value === 0) return '0'
 
 	return `${symbol || ''}${value.toFixed(decimalPlaces).replace(/\.?0+$/, '')}`

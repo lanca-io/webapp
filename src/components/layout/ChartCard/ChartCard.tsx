@@ -57,7 +57,11 @@ export const ChartCard = ({
 }: BarChartCardProps) => {
 	const isSmall = size === 'S'
 
-	const chart = isBar ? <BarChart height={height} data={data} /> : <Chart data={data} symbol={symbol} />
+	const chart = isBar ? (
+		<BarChart height={height} data={data} />
+	) : (
+		<Chart data={data} symbol={symbol} />
+	)
 
 	const title =
 		commonValue && isSmall ? (
@@ -76,7 +80,9 @@ export const ChartCard = ({
 						) : (
 							<h4 className={classNames.smallTitle}>{titleCard}</h4>
 						)}
-						{description && showTooltip && <InfoTooltip description={description} tooltipId={titleCard} />}
+						{description && showTooltip && (
+							<InfoTooltip description={description} tooltipId={titleCard} />
+						)}
 					</div>
 					<div className="row gap-xs">
 						{setActiveItem &&
@@ -98,9 +104,21 @@ export const ChartCard = ({
 					</div>
 				</div>
 
-				{isLoading ? <SkeletonLoader className={classNames.value} width={150} height={32} /> : title}
+				{isLoading ? (
+					<SkeletonLoader
+						className={classNames.value}
+						width={150}
+						height={32}
+					/>
+				) : (
+					title
+				)}
 
-				{subtitle && isLoading ? <SkeletonLoader width={105} height={20} /> : <p>{subtitle}</p>}
+				{subtitle && isLoading ? (
+					<SkeletonLoader width={105} height={20} />
+				) : (
+					<p>{subtitle}</p>
+				)}
 			</div>
 
 			{isLoading ? (

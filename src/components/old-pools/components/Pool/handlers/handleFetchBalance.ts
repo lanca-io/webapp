@@ -28,7 +28,11 @@ interface HandleBalanceProps {
 	address: Address | null | undefined
 }
 
-export async function handleFetchBalance({ from, address, dispatch }: HandleBalanceProps) {
+export async function handleFetchBalance({
+	from,
+	address,
+	dispatch,
+}: HandleBalanceProps) {
 	if (!from || !address) {
 		dispatch({ type: PoolActionType.SET_BALANCE, payload: null })
 		return

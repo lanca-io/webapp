@@ -11,8 +11,12 @@ export interface Fee {
 	blockNumber: number
 }
 
-export const fetchFees = async (startTime?: number | null, endTime?: number | null): Promise<Fee[]> => {
-	const filter = startTime && endTime ? `?startTime=${startTime}&endTime=${endTime}` : ''
+export const fetchFees = async (
+	startTime?: number | null,
+	endTime?: number | null,
+): Promise<Fee[]> => {
+	const filter =
+		startTime && endTime ? `?startTime=${startTime}&endTime=${endTime}` : ''
 	const url = `${process.env.CONCERO_API_URL}/bridgeFees${filter}`
 
 	try {
@@ -25,7 +29,10 @@ export const fetchFees = async (startTime?: number | null, endTime?: number | nu
 	}
 }
 
-export const useGetFees = (startTime?: number | null, endTime?: number | null) => {
+export const useGetFees = (
+	startTime?: number | null,
+	endTime?: number | null,
+) => {
 	const [fees, setFees] = useState<Fee[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)

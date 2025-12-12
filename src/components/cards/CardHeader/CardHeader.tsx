@@ -8,12 +8,20 @@ interface CardHeaderProps {
 	isLoading?: boolean
 }
 
-export const CardHeader: FC<CardHeaderProps> = ({ title = null, children, isLoading = false }) => (
+export const CardHeader: FC<CardHeaderProps> = ({
+	title = null,
+	children,
+	isLoading = false,
+}) => (
 	<div className={classNames.cardHeader}>
 		{title ? (
 			<div className={classNames.titleContainer}>
 				<h5 className={'cardHeaderTitle'}>{title}</h5>
-				<div>{isLoading ? <Loader size={13} color={'var(--color-text-secondary)'} /> : null}</div>
+				<div>
+					{isLoading ? (
+						<Loader size={13} color={'var(--color-text-secondary)'} />
+					) : null}
+				</div>
 			</div>
 		) : null}
 		{children}

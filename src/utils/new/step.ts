@@ -58,5 +58,9 @@ export function getToolName(step: IRouteStep | IRouteBaseStep): string {
  * @returns True if the step is a complex step, otherwise false.
  */
 export function isComplexStep(step: any): step is IRouteStep {
-	return 'from' in step && 'to' in step && [StepType.SRC_SWAP, StepType.BRIDGE, StepType.DST_SWAP].includes(step.type)
+	return (
+		'from' in step &&
+		'to' in step &&
+		[StepType.SRC_SWAP, StepType.BRIDGE, StepType.DST_SWAP].includes(step.type)
+	)
 }

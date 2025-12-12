@@ -23,7 +23,9 @@ export const SwapAction = memo((): JSX.Element => {
 	const isLoading = isConnecting || routeLoading || isExecuting
 
 	const hasErrors =
-		state === SplitSubvariantType.SEND ? !!amountInputError || !!addressInputError : !!amountInputError
+		state === SplitSubvariantType.SEND
+			? !!amountInputError || !!addressInputError
+			: !!amountInputError
 
 	const isDisabled = isConnected && (hasErrors || !route || !!error)
 
@@ -38,7 +40,9 @@ export const SwapAction = memo((): JSX.Element => {
 	}, [executeRoute, isConnected, open])
 
 	return (
-		<div className={`swap_action_wrapper ${severity ? ` severity_${severity}` : ''}`}>
+		<div
+			className={`swap_action_wrapper ${severity ? ` severity_${severity}` : ''}`}
+		>
 			<div className="swap_action">
 				<Button
 					variant="primary"

@@ -16,7 +16,11 @@ export const PoolLiquidityCard = (): JSX.Element => {
 				<h4 className={classNames.title}>Pool Liquidity</h4>
 				<InfoTooltip description={description} tooltipId={'pool-liquidity'} />
 			</div>
-			<ProgressBar isLoading={isLoading} currentValue={poolLiquidity} maxValue={maxCap} />
+			<ProgressBar
+				isLoading={isLoading}
+				currentValue={poolLiquidity}
+				maxValue={maxCap}
+			/>
 		</Card>
 	)
 }

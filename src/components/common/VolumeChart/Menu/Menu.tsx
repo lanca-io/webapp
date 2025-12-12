@@ -14,7 +14,10 @@ type MenuProps = {
 	onRangeChange: (range: VolumeRange) => void
 }
 
-export const Menu: FC<MenuProps> = ({ currentRange, onRangeChange }): JSX.Element => {
+export const Menu: FC<MenuProps> = ({
+	currentRange,
+	onRangeChange,
+}): JSX.Element => {
 	return (
 		<div className="volume_chart_menu">
 			{RANGE_OPTIONS.map(option => (

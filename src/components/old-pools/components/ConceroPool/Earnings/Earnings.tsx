@@ -15,9 +15,13 @@ interface EarningsProps {
 	poolDataIsLoading: boolean
 }
 
-export const Earnings = ({ poolIsFilled, poolDataIsLoading }: EarningsProps): JSX.Element => {
+export const Earnings = ({
+	poolIsFilled,
+	poolDataIsLoading,
+}: EarningsProps): JSX.Element => {
 	const { address, isConnected } = useAccount()
-	const { loading: lpBalanceLoading, userHasDeposited } = useGetUserLPBalance(address)
+	const { loading: lpBalanceLoading, userHasDeposited } =
+		useGetUserLPBalance(address)
 	const { userEarnings, loading: earningsLoading } = useGetUserEarnings(address)
 
 	const isLoading = lpBalanceLoading || earningsLoading || poolDataIsLoading
@@ -59,13 +63,23 @@ export const Earnings = ({ poolIsFilled, poolDataIsLoading }: EarningsProps): JS
 			<div className="row afe gap-sm">
 				<div className={classNames.price}>
 					{isLoading || !userEarnings ? (
-						<SkeletonLoader className={classNames.value} width={244} height={68} />
+						<SkeletonLoader
+							className={classNames.value}
+							width={244}
+							height={68}
+						/>
 					) : (
-						<h1>${toLocaleNumber(userEarnings.earnings + userEarnings.deposit, 2)}</h1>
+						<h1>
+							${toLocaleNumber(userEarnings.earnings + userEarnings.deposit, 2)}
+						</h1>
 					)}
 
 					{isLoading || !userEarnings ? (
-						<SkeletonLoader className={classNames.value} width={149} height={32} />
+						<SkeletonLoader
+							className={classNames.value}
+							width={149}
+							height={32}
+						/>
 					) : (
 						<Tag variant="positive" size="md">
 							<ArrowUpIcon />

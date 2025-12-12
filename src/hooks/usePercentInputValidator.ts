@@ -4,7 +4,10 @@ import { ExtendedToken } from '../store/tokens/types'
 import { preciseDivide, preciseMultiply } from '../utils/new/operations'
 import { Decimal } from 'decimal.js'
 
-export const usePercentInputValidator = (input: string, token: ExtendedToken | null) => {
+export const usePercentInputValidator = (
+	input: string,
+	token: ExtendedToken | null,
+) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balanceStr = token?.balance ?? '0'
 	const price = token?.price_usd ?? 0
@@ -20,15 +23,27 @@ export const usePercentInputValidator = (input: string, token: ExtendedToken | n
 			const percent = new Decimal(cleanInput)
 
 			if (percent.isNaN()) {
-				return { valid: false, error: 'Input is not a valid number', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Input is not a valid number',
+					machineAmt: null,
+				}
 			}
 
 			if (percent.lt(0)) {
-				return { valid: false, error: 'Percentage cannot be negative', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Percentage cannot be negative',
+					machineAmt: null,
+				}
 			}
 
 			if (percent.gt(100)) {
-				return { valid: false, error: 'Percentage cannot exceed 100%', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Percentage cannot exceed 100%',
+					machineAmt: null,
+				}
 			}
 
 			const bps = preciseMultiply(percent, 100)
@@ -41,7 +56,10 @@ export const usePercentInputValidator = (input: string, token: ExtendedToken | n
 				return { valid: false, error: 'Amount too small', machineAmt: null }
 			}
 
-			const amtDec = preciseDivide(new Decimal(amtInt.toString()), new Decimal(10).pow(decimals))
+			const amtDec = preciseDivide(
+				new Decimal(amtInt.toString()),
+				new Decimal(10).pow(decimals),
+			)
 			const usdVal = preciseMultiply(amtDec, new Decimal(price))
 
 			if (usdVal.lt(0.25)) {
@@ -50,7 +68,11 @@ export const usePercentInputValidator = (input: string, token: ExtendedToken | n
 
 			return { valid: true, error: null, machineAmt: amtInt.toString() }
 		} catch {
-			return { valid: false, error: 'Invalid percentage input', machineAmt: null }
+			return {
+				valid: false,
+				error: 'Invalid percentage input',
+				machineAmt: null,
+			}
 		}
 	}, [input, balanceStr, decimals, price])
 

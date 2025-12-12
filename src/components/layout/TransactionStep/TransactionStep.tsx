@@ -38,7 +38,11 @@ export const TransactionStep: FC<StageProps> = ({ status, title }) => {
 	return (
 		<div className={classNames.step}>
 			{renderIcon()}
-			<h4 className={classNames[statusClassNames[status ?? Status.NOT_STARTED]]}>{title}</h4>
+			<h4
+				className={classNames[statusClassNames[status ?? Status.NOT_STARTED]]}
+			>
+				{title}
+			</h4>
 		</div>
 	)
 }

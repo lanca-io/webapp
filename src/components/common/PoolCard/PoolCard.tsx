@@ -14,7 +14,12 @@ type PoolCardProps = {
 	chainLabel?: string
 }
 
-export const PoolCard: FC<PoolCardProps> = ({ token, chain, tokenLabel = 'USDC', chainLabel = 'ARB' }): JSX.Element => {
+export const PoolCard: FC<PoolCardProps> = ({
+	token,
+	chain,
+	tokenLabel = 'USDC',
+	chainLabel = 'ARB',
+}): JSX.Element => {
 	return (
 		<div className="pool_card">
 			<Heading

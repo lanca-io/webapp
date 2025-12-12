@@ -18,7 +18,8 @@ export const CreateTokensStore = () =>
 
 			setTokens: (tokens: ExtendedToken[] | []) => set({ tokens }),
 
-			addTokens: (tokens: ExtendedToken[] | []) => set(state => ({ tokens: [...state.tokens, ...tokens] })),
+			addTokens: (tokens: ExtendedToken[] | []) =>
+				set(state => ({ tokens: [...state.tokens, ...tokens] })),
 
 			setLoading: (isLoading: boolean) => set({ isLoading }),
 
@@ -28,30 +29,39 @@ export const CreateTokensStore = () =>
 
 			clearTokens: () => set({ tokens: [] }),
 
-			setSearchedTokens: (tokens: ExtendedToken[] | []) => set({ searchedTokens: tokens }),
+			setSearchedTokens: (tokens: ExtendedToken[] | []) =>
+				set({ searchedTokens: tokens }),
 
 			addSearchedTokens: (tokens: ExtendedToken[] | []) =>
-				set(state => ({ searchedTokens: [...state.searchedTokens, ...tokens] })),
+				set(state => ({
+					searchedTokens: [...state.searchedTokens, ...tokens],
+				})),
 
 			clearSearchedTokens: () => set({ searchedTokens: [] }),
 
-			setAllTokens: (tokens: ExtendedToken[] | []) => set({ allTokens: tokens }),
+			setAllTokens: (tokens: ExtendedToken[] | []) =>
+				set({ allTokens: tokens }),
 
 			addAllTokens: (tokens: ExtendedToken[] | []) =>
 				set(state => ({ allTokens: [...state.allTokens, ...tokens] })),
 
-			setAllTokensLoading: (isLoading: boolean) => set({ allTokensLoading: isLoading }),
+			setAllTokensLoading: (isLoading: boolean) =>
+				set({ allTokensLoading: isLoading }),
 
-			setAllSearchValue: (searchValue: string) => set({ allSearchValue: searchValue }),
+			setAllSearchValue: (searchValue: string) =>
+				set({ allSearchValue: searchValue }),
 
 			setAllOffset: (offset: number) => set({ allOffset: offset }),
 
 			clearAllTokens: () => set({ allTokens: [] }),
 
-			setAllSearchedTokens: (tokens: ExtendedToken[] | []) => set({ allSearchedTokens: tokens }),
+			setAllSearchedTokens: (tokens: ExtendedToken[] | []) =>
+				set({ allSearchedTokens: tokens }),
 
 			addAllSearchedTokens: (tokens: ExtendedToken[] | []) =>
-				set(state => ({ allSearchedTokens: [...state.allSearchedTokens, ...tokens] })),
+				set(state => ({
+					allSearchedTokens: [...state.allSearchedTokens, ...tokens],
+				})),
 
 			clearAllSearchedTokens: () => set({ allSearchedTokens: [] }),
 		}),

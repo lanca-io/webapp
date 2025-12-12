@@ -34,7 +34,8 @@ export const en = {
 			clickToOpenDetails: 'Click to open details',
 			routeDetails: 'Route details',
 			message: {
-				lowGas: 'You need at least {{amount}} {{tokenSymbol}} on {{chainName}} to safely proceed with transaction.',
+				lowGas:
+					'You need at least {{amount}} {{tokenSymbol}} on {{chainName}} to safely proceed with transaction.',
 			},
 		},
 		header: {

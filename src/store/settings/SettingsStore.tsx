@@ -11,5 +11,9 @@ export function SettingsStoreProvider({ children }: PropsWithChildren) {
 		storeRef.current = CreateSettingsStore()
 	}
 
-	return <SettingsContext.Provider value={storeRef.current}>{children}</SettingsContext.Provider>
+	return (
+		<SettingsContext.Provider value={storeRef.current}>
+			{children}
+		</SettingsContext.Provider>
+	)
 }

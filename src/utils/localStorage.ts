@@ -12,12 +12,14 @@ export const removeItem = (key: string): void => {
 	localStorage.removeItem(key)
 }
 
-export const isItemSet = (key: string): boolean => localStorage.getItem(key) !== null
+export const isItemSet = (key: string): boolean =>
+	localStorage.getItem(key) !== null
 
 export const clearStorage = (): void => {
 	localStorage.clear()
 }
 
-export const getStorageLength = (): number => JSON.stringify(localStorage).length
+export const getStorageLength = (): number =>
+	JSON.stringify(localStorage).length
 
 export const getStorageRemaining = (): number => 5242880 - getStorageLength()

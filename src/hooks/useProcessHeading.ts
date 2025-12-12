@@ -27,7 +27,9 @@ export const useProcessHeading = () => {
 
 	const heading = useMemo(() => {
 		if (txStatus === Status.PENDING && currentStep !== null) {
-			const pendingHeadings = headingMap[Status.PENDING] as Partial<Record<StepType, string>>
+			const pendingHeadings = headingMap[Status.PENDING] as Partial<
+				Record<StepType, string>
+			>
 			return pendingHeadings[currentStep] || 'Initializing...'
 		}
 		return headingMap[txStatus] as string

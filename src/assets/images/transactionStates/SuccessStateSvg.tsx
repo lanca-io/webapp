@@ -1,5 +1,11 @@
 export const SuccessStateSvg = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 110 110" fill="none">
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="110"
+		height="110"
+		viewBox="0 0 110 110"
+		fill="none"
+	>
 		<g filter="url(#filter0_f_557_11449)">
 			<path
 				opacity="0.7"
@@ -33,8 +39,16 @@ export const SuccessStateSvg = () => (
 				colorInterpolationFilters="sRGB"
 			>
 				<feFlood floodOpacity="0" result="BackgroundImageFix" />
-				<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-				<feGaussianBlur stdDeviation="1.5" result="effect1_foregroundBlur_557_11449" />
+				<feBlend
+					mode="normal"
+					in="SourceGraphic"
+					in2="BackgroundImageFix"
+					result="shape"
+				/>
+				<feGaussianBlur
+					stdDeviation="1.5"
+					result="effect1_foregroundBlur_557_11449"
+				/>
 			</filter>
 			<linearGradient
 				id="paint0_linear_557_11449"

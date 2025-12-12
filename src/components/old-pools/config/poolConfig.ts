@@ -1,7 +1,13 @@
 import type { Address, Chain } from 'viem'
 import { config } from '../../../constants/config'
 import { arbitrum, avalanche, base, polygon, optimism } from 'viem/chains'
-import { baseUSDC, arbitrumUSDC, polygonUSDC, avalancheUSDC, optimismUSDC } from './usdcTokenAddresses'
+import {
+	baseUSDC,
+	arbitrumUSDC,
+	polygonUSDC,
+	avalancheUSDC,
+	optimismUSDC,
+} from './usdcTokenAddresses'
 import {
 	parentPoolBase,
 	childPoolArbitrum,
@@ -9,7 +15,11 @@ import {
 	childPoolAvalanche,
 	childPoolOptimism,
 } from './poolMainnetAddresses'
-import { parentPoolBaseSepolia, childPoolArbitrumSepolia, childPoolAvalancheFuji } from './poolTestnetAddresses'
+import {
+	parentPoolBaseSepolia,
+	childPoolArbitrumSepolia,
+	childPoolAvalancheFuji,
+} from './poolTestnetAddresses'
 
 export interface IPoolConfig {
 	isParent: boolean
@@ -18,7 +28,11 @@ export interface IPoolConfig {
 	usdcContract: Address
 }
 
-const getConceroContract = (isTestnet: boolean, mainnetAddress: Address, testnetAddress: Address): Address => {
+const getConceroContract = (
+	isTestnet: boolean,
+	mainnetAddress: Address,
+	testnetAddress: Address,
+): Address => {
 	return isTestnet ? testnetAddress : mainnetAddress
 }
 
@@ -26,13 +40,21 @@ export const poolConfigs: IPoolConfig[] = [
 	{
 		isParent: true,
 		chain: base,
-		conceroContract: getConceroContract(config.IS_TESTNET, parentPoolBase, parentPoolBaseSepolia),
+		conceroContract: getConceroContract(
+			config.IS_TESTNET,
+			parentPoolBase,
+			parentPoolBaseSepolia,
+		),
 		usdcContract: baseUSDC,
 	},
 	{
 		isParent: false,
 		chain: arbitrum,
-		conceroContract: getConceroContract(config.IS_TESTNET, childPoolArbitrum, childPoolArbitrumSepolia),
+		conceroContract: getConceroContract(
+			config.IS_TESTNET,
+			childPoolArbitrum,
+			childPoolArbitrumSepolia,
+		),
 		usdcContract: arbitrumUSDC,
 	},
 	{
@@ -44,7 +66,11 @@ export const poolConfigs: IPoolConfig[] = [
 	{
 		isParent: false,
 		chain: avalanche,
-		conceroContract: getConceroContract(config.IS_TESTNET, childPoolAvalanche, childPoolAvalancheFuji),
+		conceroContract: getConceroContract(
+			config.IS_TESTNET,
+			childPoolAvalanche,
+			childPoolAvalancheFuji,
+		),
 		usdcContract: avalancheUSDC,
 	},
 	{

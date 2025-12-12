@@ -3,7 +3,10 @@ import { withErrorBoundary } from '../../wrappers/WithErrorBoundary'
 import { SwapCard } from '../../cards/SwapCard/SwapCard'
 import classNames from './SwapScreen.module.pcss'
 import { useSwapReducer } from '../../cards/SwapCard/swapReducer/swapReducer'
-import { ErrorCategory, errorTypeMap } from '../../cards/SwapCard/SwapButton/constants'
+import {
+	ErrorCategory,
+	errorTypeMap,
+} from '../../cards/SwapCard/SwapButton/constants'
 import { getPriceImpact } from '../../cards/SwapCard/SwapDetails/FeeDropdown/getPriceImpact'
 import { type SwapCardStage } from '../../cards/SwapCard/swapReducer/types'
 import { config } from '../../../constants/config'
@@ -14,7 +17,9 @@ const Swap = memo(withErrorBoundary(SwapCard))
 
 export const SwapScreen = () => {
 	const [swapState, swapDispatch] = useSwapReducer()
-	const [backgroundTheme, setBackgroundTheme] = useState<SwapCardStage | string>(swapState.stage)
+	const [backgroundTheme, setBackgroundTheme] = useState<
+		SwapCardStage | string
+	>(swapState.stage)
 
 	useEffect(() => {
 		if (!swapState.selectedRoute) {
@@ -34,7 +39,10 @@ export const SwapScreen = () => {
 	}, [swapState.selectedRoute])
 
 	useEffect(() => {
-		if (swapState.inputError && errorTypeMap[swapState.inputError] === ErrorCategory.transaction) {
+		if (
+			swapState.inputError &&
+			errorTypeMap[swapState.inputError] === ErrorCategory.transaction
+		) {
 			setBackgroundTheme('failed')
 		} else {
 			setBackgroundTheme(swapState.stage)

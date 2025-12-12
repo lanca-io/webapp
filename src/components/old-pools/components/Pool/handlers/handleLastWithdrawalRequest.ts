@@ -33,7 +33,8 @@ export async function fetchParentPoolActionsByLpAddress(lpAddress: string) {
 export const parentPoolEventNamesMap: Record<ParentPoolEventType, string> = {
 	[ParentPoolEventType.DepositInitiated]: 'Deposit Initiated',
 	[ParentPoolEventType.DepositCompleted]: 'Deposit Completed',
-	[ParentPoolEventType.WithdrawalRequestInitiated]: 'Withdrawal Request Initiated',
+	[ParentPoolEventType.WithdrawalRequestInitiated]:
+		'Withdrawal Request Initiated',
 	[ParentPoolEventType.WithdrawalCompleted]: 'Withdrawal Completed',
 	[ParentPoolEventType.CLFRequestError]: 'CLF Request Error',
 }

@@ -5,7 +5,13 @@ type GasIconProps = {
 }
 
 export const GasIcon: FC<GasIconProps> = ({ color = '#667085' }) => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="16"
+		height="16"
+		viewBox="0 0 16 16"
+		fill="none"
+	>
 		<rect y="14.4001" width="12.8" height="1.6" rx="0.8" fill={color} />
 		<rect
 			x="8.7998"
@@ -25,7 +31,15 @@ export const GasIcon: FC<GasIconProps> = ({ color = '#667085' }) => (
 			transform="rotate(-90 7.2002 8.00009)"
 			fill={color}
 		/>
-		<rect x="4" y="8.00009" width="4.8" height="1.6" rx="0.8" transform="rotate(-90 4 8.00009)" fill={color} />
+		<rect
+			x="4"
+			y="8.00009"
+			width="4.8"
+			height="1.6"
+			rx="0.8"
+			transform="rotate(-90 4 8.00009)"
+			fill={color}
+		/>
 		<rect
 			x="8.7998"
 			y="8.00009"

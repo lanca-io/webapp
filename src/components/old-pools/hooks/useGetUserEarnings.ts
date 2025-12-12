@@ -8,7 +8,9 @@ export interface UserEarnings {
 	deposit: number
 }
 
-export const fetchUserEarnings = async (address: Address): Promise<UserEarnings> => {
+export const fetchUserEarnings = async (
+	address: Address,
+): Promise<UserEarnings> => {
 	const url = `${process.env.CONCERO_API_URL}/userPoolEarnings?address=${address}`
 
 	try {

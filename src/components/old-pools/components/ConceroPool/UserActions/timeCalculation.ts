@@ -6,7 +6,8 @@ export const getWithdrawalDate = (timestampInMillis: number) => {
 
 	const timestampInSeconds = Math.floor(timestampInMillis / 1000)
 	const additionalTimeInSeconds = 597600 + (config.IS_TESTNET ? 0 : 3600)
-	const withdrawalDeadlineInSeconds = timestampInSeconds + additionalTimeInSeconds
+	const withdrawalDeadlineInSeconds =
+		timestampInSeconds + additionalTimeInSeconds
 
 	const withdrawalDeadline = dayjs.unix(withdrawalDeadlineInSeconds)
 	const currentTime = dayjs()
@@ -31,6 +32,9 @@ export const getRemainingTime = (time: string | number): number => {
 	const endTime = new Date(Number(time) + 30 * 60 * 1000)
 
 	const currentTime = new Date()
-	const timeDifferenceInSeconds = Math.max(0, Math.floor((endTime.getTime() - currentTime.getTime()) / 1000))
+	const timeDifferenceInSeconds = Math.max(
+		0,
+		Math.floor((endTime.getTime() - currentTime.getTime()) / 1000),
+	)
 	return timeDifferenceInSeconds < 0 ? 0 : timeDifferenceInSeconds
 }

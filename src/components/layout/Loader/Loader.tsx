@@ -8,6 +8,8 @@ interface Props {
 
 export function Loader({ variant = 'primary' }: Props) {
 	return (
-		<div className={classNames.loader}>{variant === 'primary' ? <PrimaryLoaderIcon /> : <NeutralLoaderIcon />}</div>
+		<div className={classNames.loader}>
+			{variant === 'primary' ? <PrimaryLoaderIcon /> : <NeutralLoaderIcon />}
+		</div>
 	)
 }

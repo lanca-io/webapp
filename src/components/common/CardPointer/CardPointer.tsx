@@ -57,8 +57,17 @@ export const CardPointer = (): JSX.Element => {
 	}, [setupObserver])
 
 	return (
-		<div className="card_pointer" style={{ top: `${top}px` }} role="presentation">
-			<IconButton size="s" variant="secondary" className="card_pointer_icon" aria-label="Swap chains and tokens">
+		<div
+			className="card_pointer"
+			style={{ top: `${top}px` }}
+			role="presentation"
+		>
+			<IconButton
+				size="s"
+				variant="secondary"
+				className="card_pointer_icon"
+				aria-label="Swap chains and tokens"
+			>
 				<ArrowDown aria-hidden="true" />
 			</IconButton>
 		</div>

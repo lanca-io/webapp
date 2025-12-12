@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Menu } from '../Menu'
 import { VolumeRange } from '../types'
-import { InfoTooltip } from './InfoTooltip'
+import { InfoTip } from '../../InfoTip'
 import { useCompactNumber } from '@/hooks'
 import './Heading.pcss'
 
@@ -19,7 +19,11 @@ export const Heading: FC<HeadingProps> = ({ range, total, onRangeChange }) => {
 			<div className="volume_chart_toolbar">
 				<div className="volume_chart_description">
 					<span className="volume_chart_label">Pools volume</span>
-					<InfoTooltip />
+					<InfoTip
+						id="volume_chart_info_tip"
+						title="Total Volume"
+						description=" Cumulative volume across all pools over the selected time period"
+					/>
 				</div>
 				<Menu currentRange={range} onRangeChange={onRangeChange} />
 			</div>

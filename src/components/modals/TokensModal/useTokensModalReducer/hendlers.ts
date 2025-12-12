@@ -1,7 +1,15 @@
-import type { SET_BALANCE_TOKENS, SET_TOKENS, TokensModalState, UPSERT_TOKENS } from './types'
+import type {
+	SET_BALANCE_TOKENS,
+	SET_TOKENS,
+	TokensModalState,
+	UPSERT_TOKENS,
+} from './types'
 import type { Token } from '../../../../api/concero/types'
 
-export function setBalanceTokens(state: TokensModalState, action: SET_BALANCE_TOKENS): TokensModalState {
+export function setBalanceTokens(
+	state: TokensModalState,
+	action: SET_BALANCE_TOKENS,
+): TokensModalState {
 	if (action.balanceTokens === null) return state
 
 	const { selectedChain } = state
@@ -11,7 +19,9 @@ export function setBalanceTokens(state: TokensModalState, action: SET_BALANCE_TO
 			return tokens.filter(
 				(token: Token) =>
 					token.name.toLowerCase().includes(state.searchValue.toLowerCase()) ||
-					token.symbol.toLowerCase().includes(state.searchValue.toLowerCase()) ||
+					token.symbol
+						.toLowerCase()
+						.includes(state.searchValue.toLowerCase()) ||
 					token.address.toLowerCase().includes(state.searchValue.toLowerCase()),
 			)
 		}
@@ -25,7 +35,9 @@ export function setBalanceTokens(state: TokensModalState, action: SET_BALANCE_TO
 		}
 		const filteredTokens = state.tokens.filter(
 			(token: Token) =>
-				!balanceTokens?.find((t: Token) => t.address.toLowerCase() === token.address.toLowerCase()),
+				!balanceTokens?.find(
+					(t: Token) => t.address.toLowerCase() === token.address.toLowerCase(),
+				),
 		)
 		return {
 			...state,
@@ -43,15 +55,24 @@ export function setBalanceTokens(state: TokensModalState, action: SET_BALANCE_TO
 		tokensToPaste = searchTokens(tokensToPaste)
 	}
 
-	return { ...state, balanceTokens: action.balanceTokens, tokens: tokensToPaste ?? [] }
+	return {
+		...state,
+		balanceTokens: action.balanceTokens,
+		tokens: tokensToPaste ?? [],
+	}
 }
 
-export function setTokens(state: TokensModalState, action: SET_TOKENS): TokensModalState {
+export function setTokens(
+	state: TokensModalState,
+	action: SET_TOKENS,
+): TokensModalState {
 	const { balanceTokens, selectedChain } = state
 
 	if (!state.selectedChain) {
 		const tokensWithBalance =
-			!!balanceTokens && balanceTokens[selectedChain.id] ? balanceTokens[selectedChain.id] : []
+			!!balanceTokens && balanceTokens[selectedChain.id]
+				? balanceTokens[selectedChain.id]
+				: []
 
 		const totalTokens = [...tokensWithBalance, ...action.tokens]
 
@@ -72,7 +93,10 @@ export function setTokens(state: TokensModalState, action: SET_TOKENS): TokensMo
 	return { ...state, tokens: filteredTokens }
 }
 
-export function upsertTokens(state: TokensModalState, action: UPSERT_TOKENS): TokensModalState {
+export function upsertTokens(
+	state: TokensModalState,
+	action: UPSERT_TOKENS,
+): TokensModalState {
 	if (!state.selectedChain || !state.balanceTokens) {
 		return { ...state, tokens: [...state.tokens, ...action.tokens] }
 	}

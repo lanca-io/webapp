@@ -25,7 +25,10 @@ export const useLoadAllTokens = () => {
 
 	const chainsArray = useMemo(() => Object.values(chains), [chains])
 
-	const chainIdsKey = useMemo(() => Object.keys(chains).sort().join(','), [chains])
+	const chainIdsKey = useMemo(
+		() => Object.keys(chains).sort().join(','),
+		[chains],
+	)
 
 	const fetchTokens = useCallback(
 		async (offset: number, search: string): Promise<ExtendedToken[]> => {
@@ -34,7 +37,12 @@ export const useLoadAllTokens = () => {
 			try {
 				const results = await Promise.all(
 					chainsArray.map(async chain => {
-						const tokens = await handleFetchTokens(String(chain.id), offset, TOKENS_PER_CHAIN, search)
+						const tokens = await handleFetchTokens(
+							String(chain.id),
+							offset,
+							TOKENS_PER_CHAIN,
+							search,
+						)
 						return tokens.map((token: ExtendedToken) => ({
 							...token,
 							chainLogoURI: chain.logo || null,
@@ -50,7 +58,10 @@ export const useLoadAllTokens = () => {
 		[chainsArray],
 	)
 
-	const queryKey = useMemo(() => ['allTokens', chainIdsKey, offset, search], [chainIdsKey, offset, search])
+	const queryKey = useMemo(
+		() => ['allTokens', chainIdsKey, offset, search],
+		[chainIdsKey, offset, search],
+	)
 
 	const { data: tokens, isFetching: isLoading } = useQuery({
 		queryKey,
@@ -78,7 +89,9 @@ export const useLoadAllTokens = () => {
 					},
 		}
 
-		const handler = isSearching ? updateStrategies.search : updateStrategies.default
+		const handler = isSearching
+			? updateStrategies.search
+			: updateStrategies.default
 		handler(tokens)
 
 		if (!isSearching) {

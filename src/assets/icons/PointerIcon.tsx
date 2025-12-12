@@ -1,6 +1,19 @@
 export const PointerIcon = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-		<rect x="8.80005" width="14.88" height="1.6" rx="0.8" transform="rotate(90 8.80005 0)" fill="#84949B" />
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="16"
+		height="16"
+		viewBox="0 0 16 16"
+		fill="none"
+	>
+		<rect
+			x="8.80005"
+			width="14.88"
+			height="1.6"
+			rx="0.8"
+			transform="rotate(90 8.80005 0)"
+			fill="#84949B"
+		/>
 		<path
 			fullrule="evenodd"
 			clipRule="evenodd"

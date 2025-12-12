@@ -9,7 +9,12 @@ interface ProgressLineProps {
 	lineRef: React.RefObject<HTMLDivElement>
 }
 
-export const ProgressLine: React.FC<ProgressLineProps> = ({ isLoading, width, percent, lineRef }) => {
+export const ProgressLine: React.FC<ProgressLineProps> = ({
+	isLoading,
+	width,
+	percent,
+	lineRef,
+}) => {
 	const progressLineStyle = useMemo(
 		() => ({
 			maxWidth: width,
@@ -29,8 +34,15 @@ export const ProgressLine: React.FC<ProgressLineProps> = ({ isLoading, width, pe
 	return isLoading ? (
 		<SkeletonLoader height={8} />
 	) : (
-		<div ref={lineRef} className={classNames.progressBar} style={progressBarStyle}>
-			<span className={classNames.progressLine} style={progressLineStyle}></span>
+		<div
+			ref={lineRef}
+			className={classNames.progressBar}
+			style={progressBarStyle}
+		>
+			<span
+				className={classNames.progressLine}
+				style={progressLineStyle}
+			></span>
 		</div>
 	)
 }

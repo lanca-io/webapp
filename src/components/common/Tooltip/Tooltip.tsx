@@ -35,7 +35,12 @@ export const Tooltip = ({
 	return (
 		<div>
 			<div data-tooltip-id={tooltipId}>{children}</div>
-			<TooltipWrapper place={place} id={tooltipId} opacity={1} className={`tooltip ${className}`}>
+			<TooltipWrapper
+				place={place}
+				id={tooltipId}
+				opacity={1}
+				className={`tooltip ${className}`}
+			>
 				{tooltipContent}
 			</TooltipWrapper>
 		</div>

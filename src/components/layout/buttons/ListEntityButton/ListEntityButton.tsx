@@ -11,7 +11,11 @@ interface ChainSelectionRowProps {
 	onSelect: (item: any) => void
 }
 
-export const ListEntityButton: FC<ChainSelectionRowProps> = ({ item, isSelected, onSelect }) => (
+export const ListEntityButton: FC<ChainSelectionRowProps> = ({
+	item,
+	isSelected,
+	onSelect,
+}) => (
 	<Button
 		key={item.id}
 		variant={isSelected ? 'filled' : 'black'}
@@ -23,7 +27,10 @@ export const ListEntityButton: FC<ChainSelectionRowProps> = ({ item, isSelected,
 			<div className={classNames.infoContainer}>
 				<CryptoIcon src={item.logoURI} />
 				<h5>{item.name}</h5>
-				<h5 className="body1" style={isSelected ? { color: colors.primary.light } : null}>
+				<h5
+					className="body1"
+					style={isSelected ? { color: colors.primary.light } : null}
+				>
 					{item.symbol}
 				</h5>
 			</div>

@@ -6,6 +6,10 @@
 	overflow-x: hidden;
 	background: var(
 		--background_desktop_neutral,
-		linear-gradient(180deg, var(--color-gray-25, #fcfcfd) 8%, var(--color-gray-50, #f3f5f6) 22%)
+		linear-gradient(
+			180deg,
+			var(--color-gray-25, #fcfcfd) 8%,
+			var(--color-gray-50, #f3f5f6) 22%
+		)
 	);
 }

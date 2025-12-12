@@ -1,8 +1,17 @@
 import type { Dispatch, MutableRefObject } from 'react'
 import { formatUnits, parseUnits } from 'viem'
 import { getInputError } from './handleInputError'
-import { calculateLpAmount, calculateWithdrawableAmount } from './handleFetchLpInfo'
-import { type PoolAction, PoolCardStage, type PoolState, PoolActionType, type PoolMode } from '../poolReducer/types'
+import {
+	calculateLpAmount,
+	calculateWithdrawableAmount,
+} from './handleFetchLpInfo'
+import {
+	type PoolAction,
+	PoolCardStage,
+	type PoolState,
+	PoolActionType,
+	type PoolMode,
+} from '../poolReducer/types'
 
 export const handleSetLpBalance = async (
 	poolState: PoolState,
@@ -12,7 +21,10 @@ export const handleSetLpBalance = async (
 	const { poolMode, from, to } = poolState
 
 	if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
-	swapDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.input })
+	swapDispatch({
+		type: PoolActionType.SET_SWAP_STAGE,
+		payload: PoolCardStage.input,
+	})
 
 	const typingTimeoutId = setTimeout(async () => {
 		const error = getInputError(poolState)
@@ -26,7 +38,11 @@ export const handleSetLpBalance = async (
 		const amountInDecimals = parseUnits(from.amount, from.token.decimals)
 		swapDispatch({ type: PoolActionType.SET_LOADING, payload: true })
 
-		const currentBalance = await calculateBalance(poolMode, amountInDecimals, to.token.decimals)
+		const currentBalance = await calculateBalance(
+			poolMode,
+			amountInDecimals,
+			to.token.decimals,
+		)
 
 		swapDispatch({
 			type: PoolActionType.SET_AMOUNT,
@@ -38,7 +54,10 @@ export const handleSetLpBalance = async (
 		})
 
 		swapDispatch({ type: PoolActionType.SET_LOADING, payload: false })
-		swapDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.review })
+		swapDispatch({
+			type: PoolActionType.SET_SWAP_STAGE,
+			payload: PoolCardStage.review,
+		})
 	}, 700)
 
 	typingTimeoutRef.current = typingTimeoutId

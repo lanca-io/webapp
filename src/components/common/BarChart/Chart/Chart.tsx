@@ -17,7 +17,12 @@ export const Chart: FC<ChartProps> = ({ data, range }): JSX.Element => {
 		<div className="rewards_chart_visual">
 			<ResponsiveContainer height="100%" width="100%">
 				<BarChart data={data}>
-					<Bar dataKey="value" fill="var(--color-accent-100)" radius={[8, 8, 8, 8]} barSize={40} />
+					<Bar
+						dataKey="value"
+						fill="var(--color-accent-100)"
+						radius={[8, 8, 8, 8]}
+						barSize={40}
+					/>
 					<XAxis
 						dataKey="time"
 						type="category"

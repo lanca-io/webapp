@@ -4,7 +4,13 @@ interface IconProps {
 
 export const RefreshIcon = ({ color = '#097BB3' }: IconProps) => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+		>
 			<g clipPath="url(#clip0)">
 				<path
 					fillRule="evenodd"

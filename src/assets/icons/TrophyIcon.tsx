@@ -6,8 +6,20 @@ interface TrophyIconProps extends SVGProps<SVGSVGElement> {
 	color?: string
 }
 
-export const TrophyIcon = ({ width = 24, height = 24, color = '#5925DC', ...props }: TrophyIconProps): JSX.Element => (
-	<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 16 16" fill="none" {...props}>
+export const TrophyIcon = ({
+	width = 24,
+	height = 24,
+	color = '#5925DC',
+	...props
+}: TrophyIconProps): JSX.Element => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width={width}
+		height={height}
+		viewBox="0 0 16 16"
+		fill="none"
+		{...props}
+	>
 		<path
 			fillRule="evenodd"
 			clipRule="evenodd"
@@ -26,7 +38,14 @@ export const TrophyIcon = ({ width = 24, height = 24, color = '#5925DC', ...prop
 			d="M3.19922 3.20012L2.39922 3.20012C1.95739 3.20012 1.59922 3.55829 1.59922 4.00012L1.59922 7.20012C1.59922 7.64195 1.95739 8.00012 2.39922 8.00012L3.19922 8.00012L3.19922 9.60012L2.39922 9.60012C1.07374 9.60012 -0.000781362 8.5256 -0.000781304 7.20012L-0.000781164 4.00012C-0.000781106 2.67464 1.07374 1.60012 2.39922 1.60012L3.19922 1.60012L3.19922 3.20012Z"
 			fill={color}
 		/>
-		<rect x="7.19922" y="11.2001" width="1.6" height="4.8" rx="0.8" fill={color} />
+		<rect
+			x="7.19922"
+			y="11.2001"
+			width="1.6"
+			height="4.8"
+			rx="0.8"
+			fill={color}
+		/>
 		<rect
 			x="12.8008"
 			y="14.4001"

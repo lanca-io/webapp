@@ -15,9 +15,18 @@ export const Actions = (): JSX.Element => {
 	const isTablet: boolean = useIsTablet()
 	const isMobile: boolean = useIsMobile()
 
-	const account: JSX.Element = useMemo(() => <Account isActive={isOpen} />, [isOpen])
-	const rewards: JSX.Element = useMemo(() => <Rewards isOpen={isOpen} />, [isOpen])
-	const divider: JSX.Element = useMemo(() => <div className="header_actions_divider" />, [])
+	const account: JSX.Element = useMemo(
+		() => <Account isActive={isOpen} />,
+		[isOpen],
+	)
+	const rewards: JSX.Element = useMemo(
+		() => <Rewards isOpen={isOpen} />,
+		[isOpen],
+	)
+	const divider: JSX.Element = useMemo(
+		() => <div className="header_actions_divider" />,
+		[],
+	)
 	const dropdown: JSX.Element = useMemo(
 		() => <Dropdown isOpen={isOpen} onToggle={() => setIsOpen(!isOpen)} />,
 		[isOpen, setIsOpen],
@@ -37,7 +46,8 @@ export const Actions = (): JSX.Element => {
 					{isOpen && divider}
 				</>
 			)}
-			{(!isOpen || (isOpen && !isConnected) || (!isOpen && isConnected)) && divider}
+			{(!isOpen || (isOpen && !isConnected) || (!isOpen && isConnected)) &&
+				divider}
 			{!isMobile && dropdown}
 			{isMobile && burger}
 		</div>

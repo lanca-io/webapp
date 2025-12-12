@@ -1,8 +1,15 @@
-import { IconChartPie, IconLayoutGrid, IconRipple, IconSeeding } from '@tabler/icons-react'
+import {
+	IconChartPie,
+	IconLayoutGrid,
+	IconRipple,
+	IconSeeding,
+} from '@tabler/icons-react'
 
 export function getCategoryIconByTitle(title: string, isSelected) {
 	const size = 13
-	const color = isSelected ? 'var(--color-pacific-400)' : 'var(--color-gray-500)'
+	const color = isSelected
+		? 'var(--color-pacific-400)'
+		: 'var(--color-gray-500)'
 
 	switch (title) {
 		case 'Liquid Staking':

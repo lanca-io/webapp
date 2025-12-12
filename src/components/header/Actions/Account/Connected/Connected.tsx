@@ -12,7 +12,9 @@ type ConnectedProps = {
 	isActive: boolean
 }
 
-export const Connected: FC<ConnectedProps> = ({ isActive }): JSX.Element | null => {
+export const Connected: FC<ConnectedProps> = ({
+	isActive,
+}): JSX.Element | null => {
 	const [isHovered, setIsHovered] = useState<boolean>(false)
 
 	const { address } = useAccount()

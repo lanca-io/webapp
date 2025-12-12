@@ -1,17 +1,23 @@
-.volume_chart_tooltip {
+.info_tooltip {
 	display: flex;
 	flex-direction: column;
 	max-width: 224px;
 	width: 100%;
 	min-height: 102px;
 
-	& .volume_chart_tooltip_content {
+	& .info_tooltip_icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	& .info_tooltip_content {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xxs);
 		width: 100%;
 
-		& .volume_chart_tooltip_title {
+		& .info_tooltip_title {
 			font-size: 1rem;
 			font-weight: 500;
 			color: var(--color-gray-100);
@@ -19,7 +25,7 @@
 			text-align: center;
 		}
 
-		& .volume_chart_tooltip_description {
+		& .info_tooltip_description {
 			font-size: 0.875rem;
 			font-weight: 500;
 			color: var(--color-gray-300);

@@ -16,7 +16,10 @@ export const useTokenSelection = (selectedChain: ConceroChain | null) => {
 		setAllOffset,
 	} = useTokensStore()
 
-	const tokensList = useMemo(() => (selectedChain ? tokens : allTokens), [selectedChain, tokens, allTokens])
+	const tokensList = useMemo(
+		() => (selectedChain ? tokens : allTokens),
+		[selectedChain, tokens, allTokens],
+	)
 
 	const searchResults = useMemo(
 		() => (selectedChain ? searchedTokens : allSearchedTokens),
@@ -28,7 +31,10 @@ export const useTokenSelection = (selectedChain: ConceroChain | null) => {
 		[selectedChain, isLoading, allTokensLoading],
 	)
 
-	const currentPage = useMemo(() => (selectedChain ? offset : allOffset), [selectedChain, offset, allOffset])
+	const currentPage = useMemo(
+		() => (selectedChain ? offset : allOffset),
+		[selectedChain, offset, allOffset],
+	)
 
 	const setPage = useMemo(
 		() => (newOffset: number) => {

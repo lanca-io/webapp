@@ -13,7 +13,12 @@ type StatisticsCardProps = {
 	}
 }
 
-export const StatisticsCard: FC<StatisticsCardProps> = ({ title, value, units, tooltip }): JSX.Element => {
+export const StatisticsCard: FC<StatisticsCardProps> = ({
+	title,
+	value,
+	units,
+	tooltip,
+}): JSX.Element => {
 	return (
 		<div className="statistics_card">
 			<div className="statistics_card_heading">
@@ -22,8 +27,12 @@ export const StatisticsCard: FC<StatisticsCardProps> = ({ title, value, units, t
 					tooltipId={`statistics-card-tooltip-${title}`}
 					tooltipContent={
 						<div className="statistics_card_tooltip_content">
-							<span className="statistics_card_tooltip_title">{tooltip.title}</span>
-							<span className="statistics_card_tooltip_description">{tooltip.description}</span>
+							<span className="statistics_card_tooltip_title">
+								{tooltip.title}
+							</span>
+							<span className="statistics_card_tooltip_description">
+								{tooltip.description}
+							</span>
 						</div>
 					}
 					place="bottom"

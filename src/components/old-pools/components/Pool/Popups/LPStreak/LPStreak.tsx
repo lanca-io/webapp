@@ -11,9 +11,15 @@ export const LPStreak = (): JSX.Element => {
 				<div className="flex flex-col gap-sm">
 					<div className={classNames.text}>
 						<p className={classNames.header}>Earn 2x CERs!</p>
-						<p className={classNames.subheader}>Hold LP for one month to double your rewards</p>
+						<p className={classNames.subheader}>
+							Hold LP for one month to double your rewards
+						</p>
 					</div>
-					<a href={'https://app.concero.io/rewards'} target="_blank" rel="noreferrer">
+					<a
+						href={'https://app.concero.io/rewards'}
+						target="_blank"
+						rel="noreferrer"
+					>
 						<Button size="md" className={classNames.actionButton}>
 							Track LP streak
 						</Button>

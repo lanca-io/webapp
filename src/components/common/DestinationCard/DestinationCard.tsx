@@ -27,13 +27,22 @@ export const DestinationCard = memo(() => {
 	}, [route?.to?.amount, toToken?.decimals])
 
 	return (
-		<div className={`destination_card_wrapper ${severity ? ` severity_${severity}` : ''}`}>
+		<div
+			className={`destination_card_wrapper ${severity ? ` severity_${severity}` : ''}`}
+		>
 			<div
 				className="destination_card"
-				style={{ paddingBottom: state === SplitSubvariantType.SEND && route ? '32px' : '16px' }}
+				style={{
+					paddingBottom:
+						state === SplitSubvariantType.SEND && route ? '32px' : '16px',
+				}}
 			>
 				<RouteTimer />
-				<AssetSelection token={toToken} chain={toChain} openModal={openToAssetModal} />
+				<AssetSelection
+					token={toToken}
+					chain={toChain}
+					openModal={openToAssetModal}
+				/>
 				<DestinationPanel amount={amount || '0'} isLoading={isLoading} />
 			</div>
 		</div>

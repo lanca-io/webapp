@@ -1,7 +1,20 @@
 export const ArrowDown = () => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-			<rect x="8.80078" width="14.88" height="1.6" rx="0.8" transform="rotate(90 8.80078 0)" fill="#66767D" />
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			viewBox="0 0 16 16"
+			fill="none"
+		>
+			<rect
+				x="8.80078"
+				width="14.88"
+				height="1.6"
+				rx="0.8"
+				transform="rotate(90 8.80078 0)"
+				fill="#66767D"
+			/>
 			<path
 				fullrule="evenodd"
 				clipRule="evenodd"

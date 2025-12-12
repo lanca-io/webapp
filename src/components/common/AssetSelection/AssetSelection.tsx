@@ -14,7 +14,12 @@ type AssetSelectionProps = {
 }
 
 export const AssetSelection = memo(
-	({ token, chain, openModal, disabled = false }: AssetSelectionProps): JSX.Element => {
+	({
+		token,
+		chain,
+		openModal,
+		disabled = false,
+	}: AssetSelectionProps): JSX.Element => {
 		const isDisabled = disabled || !openModal
 		const hasInteractiveElement = !isDisabled
 

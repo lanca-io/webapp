@@ -4,8 +4,14 @@ import { config } from '../../../../../constants/config'
 import { getPoolLiquidity } from './handleFetchPoolLiquidity'
 import { abi as ParentPool } from '../../../config/abi/ParentPool.json'
 import { getPublicClient } from '../../../../../providers/Web3Provider/Web3Provider'
-import { lpTokenBase, parentPoolBase } from '../../../config/poolMainnetAddresses'
-import { lpTokenBaseSepolia, parentPoolBaseSepolia } from '../../../config/poolTestnetAddresses'
+import {
+	lpTokenBase,
+	parentPoolBase,
+} from '../../../config/poolMainnetAddresses'
+import {
+	lpTokenBaseSepolia,
+	parentPoolBaseSepolia,
+} from '../../../config/poolTestnetAddresses'
 
 const chainId = config.IS_TESTNET ? baseSepolia.id : base.id
 const lpAddress = config.IS_TESTNET ? lpTokenBaseSepolia : lpTokenBase
@@ -13,7 +19,9 @@ const parentPool = config.IS_TESTNET ? parentPoolBaseSepolia : parentPoolBase
 const client = getPublicClient(chainId)
 const lpTokenDecimals = 18
 
-export const getUserLpTokens = async (userAddress: Address): Promise<number> => {
+export const getUserLpTokens = async (
+	userAddress: Address,
+): Promise<number> => {
 	const lpTokens = await client.readContract({
 		address: lpAddress,
 		abi: erc20Abi,
@@ -34,7 +42,9 @@ export const getLpTotalSupply = async () => {
 	return Number(formatUnits(totalSupply, lpTokenDecimals))
 }
 
-export const calculateLpAmount = async (amountToDeposit: bigint): Promise<bigint> => {
+export const calculateLpAmount = async (
+	amountToDeposit: bigint,
+): Promise<bigint> => {
 	const childPoolsBalance = await getPoolLiquidity(true)
 
 	return (await client.readContract({
@@ -45,7 +55,9 @@ export const calculateLpAmount = async (amountToDeposit: bigint): Promise<bigint
 	})) as bigint
 }
 
-export const calculateWithdrawableAmount = async (clpAmount: bigint): Promise<bigint> => {
+export const calculateWithdrawableAmount = async (
+	clpAmount: bigint,
+): Promise<bigint> => {
 	const childPoolsBalance = await getPoolLiquidity(true)
 
 	return (await client.readContract({

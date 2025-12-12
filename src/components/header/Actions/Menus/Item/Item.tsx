@@ -16,7 +16,13 @@ type ItemProps = {
 	onAction: () => void
 }
 
-export const Item: FC<ItemProps> = ({ title, icon, tail, type = ItemType.DEFAULT, onAction }) => {
+export const Item: FC<ItemProps> = ({
+	title,
+	icon,
+	tail,
+	type = ItemType.DEFAULT,
+	onAction,
+}) => {
 	const isDefault = type === ItemType.DEFAULT
 	const isExpanded = type === ItemType.EXPANDED
 	const isProfile = type === ItemType.PROFILE
@@ -55,7 +61,11 @@ export const Item: FC<ItemProps> = ({ title, icon, tail, type = ItemType.DEFAULT
 	)
 
 	return (
-		<div className={rootClassName} data-has-expanded-icon={isExpanded} onClick={onAction}>
+		<div
+			className={rootClassName}
+			data-has-expanded-icon={isExpanded}
+			onClick={onAction}
+		>
 			<div className={descriptionClassName}>
 				{iconElement}
 				<span className={labelClassName}>{title}</span>

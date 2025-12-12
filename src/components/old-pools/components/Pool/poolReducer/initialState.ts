@@ -1,12 +1,20 @@
 import { config } from '../../../../../constants/config'
-import { parentPoolBase, lpTokenBase } from '../../../config/poolMainnetAddresses'
-import { parentPoolBaseSepolia, lpTokenBaseSepolia } from '../../../config/poolTestnetAddresses'
+import {
+	parentPoolBase,
+	lpTokenBase,
+} from '../../../config/poolMainnetAddresses'
+import {
+	parentPoolBaseSepolia,
+	lpTokenBaseSepolia,
+} from '../../../config/poolTestnetAddresses'
 import { ErrorType } from '../../../config/errors/ErrorType'
 import { type PoolMode, PoolCardStage } from './types'
 
 const createTokenConfig = (isTestnet: boolean) => {
 	const chainId = isTestnet ? '84532' : '8453'
-	const explorerURI = isTestnet ? 'https://sepolia.basescan.org' : 'https://basescan.org'
+	const explorerURI = isTestnet
+		? 'https://sepolia.basescan.org'
+		: 'https://basescan.org'
 	const logoURI = isTestnet
 		? 'https://api.concero.io/static/icons/chains/8453.svg'
 		: 'https://api.concero.io/static/icons/chains/filled/8453.svg'

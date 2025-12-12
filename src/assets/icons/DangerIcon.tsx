@@ -1,6 +1,12 @@
 export const DangerIcon = (): JSX.Element => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+		>
 			<path
 				fill-rule="evenodd"
 				clip-rule="evenodd"
@@ -16,7 +22,15 @@ export const DangerIcon = (): JSX.Element => {
 				transform="rotate(-90 10.8 14.4)"
 				fill="#E80C0C"
 			/>
-			<rect x="10.8" y="18" width="2.4" height="2.4" rx="1.2" transform="rotate(-90 10.8 18)" fill="#E80C0C" />
+			<rect
+				x="10.8"
+				y="18"
+				width="2.4"
+				height="2.4"
+				rx="1.2"
+				transform="rotate(-90 10.8 18)"
+				fill="#E80C0C"
+			/>
 		</svg>
 	)
 }

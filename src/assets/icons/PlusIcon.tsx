@@ -1,5 +1,11 @@
 export const PlusIcon = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none">
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="15"
+		height="14"
+		viewBox="0 0 15 14"
+		fill="none"
+	>
 		<g clipPath="url(#clip0_494_722)">
 			<path
 				fillRule="evenodd"

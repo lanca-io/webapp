@@ -24,7 +24,8 @@ export const WidgetInput = memo(
 		className = '',
 	}: WidgetInputProps): JSX.Element => {
 		const inputClass = value && value !== '0' ? 'input has_value' : 'input'
-		const containerClass = `widget_input_container ${disabled ? 'disabled' : ''} ${className}`.trim()
+		const containerClass =
+			`widget_input_container ${disabled ? 'disabled' : ''} ${className}`.trim()
 
 		return (
 			<div className={containerClass}>

@@ -5,7 +5,10 @@ import { ExtendedToken } from '../store/tokens/types'
 import { preciseDivide, preciseMultiply } from '../utils/new/operations'
 import { Decimal } from 'decimal.js'
 
-export const useTextInputValidator = (input: string, token: ExtendedToken | null) => {
+export const useTextInputValidator = (
+	input: string,
+	token: ExtendedToken | null,
+) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balanceStr = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
@@ -24,7 +27,11 @@ export const useTextInputValidator = (input: string, token: ExtendedToken | null
 
 			const humanAmt = textToAmount(input, balanceDec)
 			if (!humanAmt) {
-				return { valid: false, error: 'Invalid amount format', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Invalid amount format',
+					machineAmt: null,
+				}
 			}
 
 			const humanDec = new Decimal(humanAmt.toString())

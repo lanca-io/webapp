@@ -16,7 +16,8 @@ export const Rewards: FC<RewardsProps> = ({ isOpen }): JSX.Element => {
 		<div className="rewards_tooltip_content">
 			<span className="rewards_tooltip_title">Rewards Portal</span>
 			<span className="rewards_tooltip_description">
-				Get rewarded for every swap and bridge — check your rewards in the portal.
+				Get rewarded for every swap and bridge — check your rewards in the
+				portal.
 			</span>
 		</div>
 	)
@@ -32,7 +33,9 @@ export const Rewards: FC<RewardsProps> = ({ isOpen }): JSX.Element => {
 			<IconButton
 				variant="tetrary"
 				size="m"
-				onClick={() => window.open(externalRoutes.rewards, '_blank', 'noopener,noreferrer')}
+				onClick={() =>
+					window.open(externalRoutes.rewards, '_blank', 'noopener,noreferrer')
+				}
 			>
 				<RewardsIcon />
 			</IconButton>

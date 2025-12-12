@@ -1,4 +1,10 @@
-import { fallback, FallbackTransportConfig, http, HttpTransport, isAddress } from 'viem'
+import {
+	fallback,
+	FallbackTransportConfig,
+	http,
+	HttpTransport,
+	isAddress,
+} from 'viem'
 import { defineChain } from 'viem'
 import { Transport } from 'wagmi'
 
@@ -112,7 +118,9 @@ export const getChains = async (isTestnet = false) => {
 	const response = await fetch(url.toString())
 
 	if (!response.ok) {
-		throw new Error(`[Concero] Failed to fetch chain configuration: ${response.status} ${response.statusText}`)
+		throw new Error(
+			`[Concero] Failed to fetch chain configuration: ${response.status} ${response.statusText}`,
+		)
 	}
 
 	return response.json()
@@ -125,7 +133,10 @@ export const getChains = async (isTestnet = false) => {
  * @param type - The deployment type to find
  * @returns The deployment address if found, undefined otherwise
  */
-const findDeploymentAddress = (deployments: ApiChainDeployment[], type: DeploymentType): string | undefined => {
+const findDeploymentAddress = (
+	deployments: ApiChainDeployment[],
+	type: DeploymentType,
+): string | undefined => {
 	return deployments.find(d => d.type === type)?.address
 }
 
@@ -158,7 +169,10 @@ const sanitizeRpcUrls = (rpcs: string[]): string[] => {
  * }
  */
 export const toConceroChain = (config: ChainConfig): ConceroChain | null => {
-	const orchestrator = findDeploymentAddress(config.deployments, DeploymentType.orchestrator)
+	const orchestrator = findDeploymentAddress(
+		config.deployments,
+		DeploymentType.orchestrator,
+	)
 	const validRpcs = sanitizeRpcUrls(config.chain.rpcs)
 
 	if (!orchestrator || validRpcs.length === 0) return null
@@ -169,7 +183,9 @@ export const toConceroChain = (config: ChainConfig): ConceroChain | null => {
 	return {
 		id: Number(config.chain.id),
 		name: displayName,
-		selector: config.chain.ccip_selector ? BigInt(config.chain.ccip_selector) : 0n,
+		selector: config.chain.ccip_selector
+			? BigInt(config.chain.ccip_selector)
+			: 0n,
 		logo: `${CHAIN_LOGO_BASE_URL}/${config.chain.id}.svg`,
 		nativeCurrency: {
 			name: config.chain.native_currency_name,
@@ -247,7 +263,9 @@ export const convertToViemChain = (chain: ConceroChain) => {
  * const viemChains = convertToViemChains(conceroChains)
  * const wagmiConfig = createConfig({ chains: viemChains })
  */
-export const convertToViemChains = (chains: ConceroChain[]): ReturnType<typeof defineChain>[] => {
+export const convertToViemChains = (
+	chains: ConceroChain[],
+): ReturnType<typeof defineChain>[] => {
 	return chains.map(chain =>
 		defineChain({
 			id: chain.id,
@@ -288,7 +306,10 @@ const createHTTP = (url: string): HttpTransport => {
  * @param options - Optional transport configuration overrides
  * @returns Configured fallback transport
  */
-const createFallback = (urls: string[], options?: Partial<FallbackTransportConfig>): Transport => {
+const createFallback = (
+	urls: string[],
+	options?: Partial<FallbackTransportConfig>,
+): Transport => {
 	return fallback(
 		urls.map(url => createHTTP(url)),
 		{
@@ -310,7 +331,9 @@ const createFallback = (urls: string[], options?: Partial<FallbackTransportConfi
  * const transports = createTransports(conceroChains)
  * const config = createConfig({ chains: viemChains, transports })
  */
-export const createTransports = (chains: ConceroChain[]): Record<number, Transport> => {
+export const createTransports = (
+	chains: ConceroChain[],
+): Record<number, Transport> => {
 	return chains.reduce<Record<number, Transport>>((transports, chain) => {
 		transports[chain.id] = createFallback(chain.rpcUrls.default.http)
 		return transports

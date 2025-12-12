@@ -8,10 +8,18 @@ import './ReviewSection.pcss'
 
 export const ReviewSection = memo(
 	(): JSX.Element => (
-		<div className="review_section" role="region" aria-label="Transaction review details">
+		<div
+			className="review_section"
+			role="region"
+			aria-label="Transaction review details"
+		>
 			<RouteTimer />
 			<RouteInfo />
-			<div className="review_section_parameters" role="group" aria-label="Transaction parameters">
+			<div
+				className="review_section_parameters"
+				role="group"
+				aria-label="Transaction parameters"
+			>
 				<SlippageInfo />
 				<GasInfo />
 				<ETAInfo />

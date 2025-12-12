@@ -6,7 +6,11 @@ import './RouteInfo.pcss'
 
 export const RouteInfo = memo(
 	(): JSX.Element => (
-		<div className="route_info" role="region" aria-label="Transaction route details">
+		<div
+			className="route_info"
+			role="region"
+			aria-label="Transaction route details"
+		>
 			<SourceInfo />
 			<PointerIcon aria-hidden="true" />
 			<DestinationInfo />

@@ -11,7 +11,10 @@ import { Decimal } from 'decimal.js'
  * @param decimals - Number of decimal places the token uses
  * @returns Human-readable amount as string (e.g. "1.234568")
  */
-export function formatTokenAmount(amount: string | undefined | null, decimals: number): string {
+export function formatTokenAmount(
+	amount: string | undefined | null,
+	decimals: number,
+): string {
 	if (!amount) return '0'
 	try {
 		const rawInt = scientificToBigInt(amount)
@@ -31,12 +34,20 @@ export function formatTokenAmount(amount: string | undefined | null, decimals: n
  * @param decimals - Token decimals for amount conversion
  * @returns USD value as number with maximum precision
  */
-export function formatTokenPrice(amount?: string, price?: string | number, decimals?: number): number {
+export function formatTokenPrice(
+	amount?: string,
+	price?: string | number,
+	decimals?: number,
+): number {
 	if (!amount || !price) return 0
 
 	try {
-		const amountHuman = decimals !== undefined ? formatTokenAmount(amount, decimals) : amount
-		const usdValue = preciseMultiply(new Decimal(amountHuman), new Decimal(price))
+		const amountHuman =
+			decimals !== undefined ? formatTokenAmount(amount, decimals) : amount
+		const usdValue = preciseMultiply(
+			new Decimal(amountHuman),
+			new Decimal(price),
+		)
 		// Convert Decimal to number safely, consider rounding if needed
 		return usdValue.toNumber()
 	} catch (error) {

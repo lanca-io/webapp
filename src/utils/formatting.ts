@@ -34,16 +34,23 @@ export function isValidNumber(number: string | number) {
 
 // Date and time formatting
 
-export const formatDateTime = (date: string | Date, format = 'YYYY-MM-DD HH:mm'): string => dayjs(date).format(format)
+export const formatDateTime = (
+	date: string | Date,
+	format = 'YYYY-MM-DD HH:mm',
+): string => dayjs(date).format(format)
 
-export const formatTime = (date: string | Date, format = 'HH:mm'): string => dayjs(date).format(format)
+export const formatTime = (date: string | Date, format = 'HH:mm'): string =>
+	dayjs(date).format(format)
 
 export const fromNow = (date: string | Date): string => dayjs(date).fromNow()
 
-export const unixtimeFromNow = (unixtime: number): string => dayjs.unix(unixtime).fromNow()
+export const unixtimeFromNow = (unixtime: number): string =>
+	dayjs.unix(unixtime).fromNow()
 
-export const unixTimeFormat = (unixtime: number, format = 'YYYY-MM-DD HH:mm'): string =>
-	dayjs.unix(unixtime).format(format)
+export const unixTimeFormat = (
+	unixtime: number,
+	format = 'YYYY-MM-DD HH:mm',
+): string => dayjs.unix(unixtime).format(format)
 
 // Number and currency formatting
 // export const formatNumber = (num: number, decimalPlaces = 2): string => num.toFixed(decimalPlaces)
@@ -56,10 +63,15 @@ export const formatCurrency = (amount: number, currency = 'USD'): string =>
 
 // String formatting
 export const toTitleCase = (str: string): string =>
-	str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+	str.replace(
+		/\w\S*/g,
+		txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(),
+	)
 
 export const toCamelCase = (str: string): string =>
-	str.replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''))
+	str.replace(/([-_][a-z])/g, group =>
+		group.toUpperCase().replace('-', '').replace('_', ''),
+	)
 
 export const toSnakeCase = (str: string): string =>
 	str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`).replace(/^-/, '')
@@ -74,24 +86,31 @@ export const slugify = (str: string): string =>
 export const getHostname = (url: string): string => new URL(url).hostname
 
 // turns 'https://cointelegraph.com/abcd' into cointelegraph
-export const getDomain = (url: string): string => getHostname(url).replace('www.', '').split('.')[0]
+export const getDomain = (url: string): string =>
+	getHostname(url).replace('www.', '').split('.')[0]
 // String manipulation
 
 export const truncate = (str: string, length = 100, ending = '...'): string =>
 	str.length > length ? str.substring(0, length - ending.length) + ending : str
 
 // trucate wallet address to 6 characters on the end
-export const truncateWallet = (str: string): string => `${str.slice(0, 6)}...${str.slice(-4)}`
+export const truncateWallet = (str: string): string =>
+	`${str.slice(0, 6)}...${str.slice(-4)}`
 
-export const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1)
+export const capitalize = (str: string): string =>
+	str.charAt(0).toUpperCase() + str.slice(1)
 
 export const removeWhitespace = (str: string): string => str.replace(/\s/g, '')
 
 export const removeNonNumeric = (str: string): string => str.replace(/\D/g, '')
 
-export const removeNonAlphaNumeric = (str: string): string => str.replace(/\W/g, '')
+export const removeNonAlphaNumeric = (str: string): string =>
+	str.replace(/\W/g, '')
 
-export function addingAmountDecimals(number: number | string, decimals: number): string | null {
+export function addingAmountDecimals(
+	number: number | string,
+	decimals: number,
+): string | null {
 	if (!isValidNumber(number) || !isValidNumber(decimals)) return null
 	let bNumber = new BigNumber(number)
 
@@ -109,7 +128,11 @@ export const secondsConverter = (seconds: number): string => {
 	return `${seconds} sec.`
 }
 
-export const numberToFormatString = (number: number, decimals = 4, isTransformNeeded = false): string | null => {
+export const numberToFormatString = (
+	number: number,
+	decimals = 4,
+	isTransformNeeded = false,
+): string | null => {
 	if (number === undefined || number === null) return null
 	const result = parseFloat(number.toFixed(decimals))
 
@@ -119,7 +142,10 @@ export const numberToFormatString = (number: number, decimals = 4, isTransformNe
 	return result?.toString()
 }
 
-export function roundNumberByDecimals(number: number | string | undefined | null, decimals = 4): string | null {
+export function roundNumberByDecimals(
+	number: number | string | undefined | null,
+	decimals = 4,
+): string | null {
 	if (!isValidNumber(number) || !isValidNumber(decimals)) return null
 	const bigNumber = new BigNumber(number)
 	const decimalPart = bigNumber.toString().split('.')[1]
@@ -135,25 +161,55 @@ export function roundNumberByDecimals(number: number | string | undefined | null
 		.replace(/\.?0*$/, '')
 }
 
-export function roundDownNumberAndFormat(number: string | number, decimals = 4, isTransformNeeded = false) {
+export function roundDownNumberAndFormat(
+	number: string | number,
+	decimals = 4,
+	isTransformNeeded = false,
+) {
 	if (!number || !isValidNumber(number)) return null
-	const bigNumber = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
+	const bigNumber = new BigNumber(number).decimalPlaces(
+		decimals,
+		BigNumber.ROUND_DOWN,
+	)
 
-	if (bigNumber.toNumber() <= 0.0001 && bigNumber.toNumber() > 0 && isTransformNeeded) return '< 0.01'
-	if (bigNumber.toNumber() <= 0.0001 && bigNumber.toNumber() > 0 && !isTransformNeeded) return number
+	if (
+		bigNumber.toNumber() <= 0.0001 &&
+		bigNumber.toNumber() > 0 &&
+		isTransformNeeded
+	)
+		return '< 0.01'
+	if (
+		bigNumber.toNumber() <= 0.0001 &&
+		bigNumber.toNumber() > 0 &&
+		!isTransformNeeded
+	)
+		return number
 
 	return bigNumber.toString()
 }
 
-export function roundDownDecimals(value: number | string, decimals: number): string {
-	const number = new BigNumber(value).dividedBy(BigNumber(10).pow(decimals)).toString()
-	const roundedValue = new BigNumber(number).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
+export function roundDownDecimals(
+	value: number | string,
+	decimals: number,
+): string {
+	const number = new BigNumber(value)
+		.dividedBy(BigNumber(10).pow(decimals))
+		.toString()
+	const roundedValue = new BigNumber(number).decimalPlaces(
+		decimals,
+		BigNumber.ROUND_DOWN,
+	)
 	return roundedValue.toString()
 }
 
-export function addingTokenDecimals(amount: number | string, decimals: number): string | null {
+export function addingTokenDecimals(
+	amount: number | string,
+	decimals: number,
+): string | null {
 	if (!isValidNumber(amount) || !isValidNumber(decimals)) return null
-	const number = new BigNumber(amount).dividedBy(BigNumber(10).pow(decimals)).toString()
+	const number = new BigNumber(amount)
+		.dividedBy(BigNumber(10).pow(decimals))
+		.toString()
 	return roundNumberByDecimals(number, 4)
 }
 
@@ -170,8 +226,17 @@ interface FormatNumberOptions {
 	disableUnit?: boolean
 }
 
-export function formatNumber(num: number, options: FormatNumberOptions = {}): string {
-	let { decimals = 10, decimalPlaces = 6, separator, minDigits = 1, disableUnit = false } = options
+export function formatNumber(
+	num: number,
+	options: FormatNumberOptions = {},
+): string {
+	let {
+		decimals = 10,
+		decimalPlaces = 6,
+		separator,
+		minDigits = 1,
+		disableUnit = false,
+	} = options
 	if (num === undefined || num === null) return ''
 
 	const op = num < 0 ? '-' : ''
@@ -207,9 +272,12 @@ export function formatNumber(num: number, options: FormatNumberOptions = {}): st
 
 	let formattedNumber = num / factor
 	const roundingFactor = 10 ** decimals
-	formattedNumber = Math.round(formattedNumber * roundingFactor) / roundingFactor
+	formattedNumber =
+		Math.round(formattedNumber * roundingFactor) / roundingFactor
 
-	let [intPart, decPart] = formattedNumber.toFixed(decimalPlaces ?? decimals).split('.')
+	let [intPart, decPart] = formattedNumber
+		.toFixed(decimalPlaces ?? decimals)
+		.split('.')
 
 	if (separator && !unit) {
 		const regex = /\B(?=(\d{3})+(?!\d))/g
@@ -240,7 +308,10 @@ export const toLocaleNumber = (num: number | string, fixed = 0) => {
 	if (!num) return 0
 
 	const number = Number(num)
-	const formattedNumber = number % 1 === 0 ? number.toString() : roundToPrecision(number, fixed).toString()
+	const formattedNumber =
+		number % 1 === 0
+			? number.toString()
+			: roundToPrecision(number, fixed).toString()
 
 	return formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }

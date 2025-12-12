@@ -48,7 +48,11 @@ export async function apiRequest(response) {
 		if (response.status >= 200 && response.status < 300) {
 			ok = true
 		} else {
-			err = response?.data?.error || response?.data?.message || response?.data || response
+			err =
+				response?.data?.error ||
+				response?.data?.message ||
+				response?.data ||
+				response
 		}
 	} else {
 		err = 'No response object. Likely a network error.'

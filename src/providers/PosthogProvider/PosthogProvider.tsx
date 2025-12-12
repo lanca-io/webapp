@@ -3,7 +3,11 @@ import { PostHogProvider as PHProvider, usePostHog } from 'posthog-js/react'
 import { type PostHogConfig, type PostHog } from 'posthog-js'
 import { config } from '../../constants/config'
 
-const initializePostHog = (posthog: PostHog, apiKey: string, options: Partial<PostHogConfig>) => {
+const initializePostHog = (
+	posthog: PostHog,
+	apiKey: string,
+	options: Partial<PostHogConfig>,
+) => {
 	posthog.init(apiKey, options)
 }
 
@@ -22,7 +26,10 @@ const setPersonProperties = (posthog: PostHog) => {
 	}
 }
 
-const useInitializePostHog = (apiKey: string, options: Partial<PostHogConfig>) => {
+const useInitializePostHog = (
+	apiKey: string,
+	options: Partial<PostHogConfig>,
+) => {
 	const posthog = usePostHog()
 
 	useEffect(() => {

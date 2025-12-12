@@ -13,10 +13,18 @@ export const Navigation = (): JSX.Element => {
 
 	return (
 		<div className="header_navigation">
-			<Button variant={isHome ? 'secondary' : 'tetrary'} size="m" onClick={() => navigate(routes.home)}>
+			<Button
+				variant={isHome ? 'secondary' : 'tetrary'}
+				size="m"
+				onClick={() => navigate(routes.home)}
+			>
 				Swap & Bridge
 			</Button>
-			<Button variant={isPools ? 'secondary' : 'tetrary'} size="m" onClick={() => navigate(routes.pools)}>
+			<Button
+				variant={isPools ? 'secondary' : 'tetrary'}
+				size="m"
+				onClick={() => navigate(routes.pools)}
+			>
 				Provide Liquidity
 			</Button>
 		</div>

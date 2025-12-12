@@ -31,7 +31,9 @@ export interface TxExecutionActions {
 }
 
 export type TxExecutionStateAndActions = TxExecutionState & TxExecutionActions
-export type TxExecutionStore = UseBoundStoreWithEqualityFn<StoreApi<TxExecutionStateAndActions>>
+export type TxExecutionStore = UseBoundStoreWithEqualityFn<
+	StoreApi<TxExecutionStateAndActions>
+>
 
 export const STATUS_PRIORITY = {
 	[Status.REJECTED]: 0,

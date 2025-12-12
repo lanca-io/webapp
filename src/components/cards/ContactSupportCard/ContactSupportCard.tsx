@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import classNames from './ContactSupportCard.module.pcss'
 import { Button } from '../../layout/buttons/Button/Button'
-import { IconArrowLeft, IconBrandDiscord, IconCheck, IconCopy, IconMail } from '@tabler/icons-react'
+import {
+	IconArrowLeft,
+	IconBrandDiscord,
+	IconCheck,
+	IconCopy,
+	IconMail,
+} from '@tabler/icons-react'
 import { copyToClipboard } from '../../../utils/copyToClipboard'
 import { useTranslation } from 'react-i18next'
 
@@ -10,7 +16,10 @@ interface ContactSupportProps {
 	handleGoBackClick?: () => void
 }
 
-export function ContactSupportCard({ infoToCopy, handleGoBackClick }: ContactSupportProps) {
+export function ContactSupportCard({
+	infoToCopy,
+	handleGoBackClick,
+}: ContactSupportProps) {
 	const [isCopied, setIsCopied] = useState(false)
 	const { t } = useTranslation()
 
@@ -33,11 +42,15 @@ export function ContactSupportCard({ infoToCopy, handleGoBackClick }: ContactSup
 				<p className={'body1'}>{t('contactSupportCard.txFailedMessage')}</p>
 			</div>
 			<div className={classNames.stepBlock}>
-				<h4 className={classNames.title}>1. {t('contactSupportCard.copyDebugInfo')}</h4>
+				<h4 className={classNames.title}>
+					1. {t('contactSupportCard.copyDebugInfo')}
+				</h4>
 				<div className={classNames.alightStart}>
 					<Button
 						variant={'primary'}
-						leftIcon={isCopied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+						leftIcon={
+							isCopied ? <IconCheck size={16} /> : <IconCopy size={16} />
+						}
 						onClick={handleCopy}
 					>
 						{t('contactSupportCard.copyDebugInfo')}
@@ -45,7 +58,9 @@ export function ContactSupportCard({ infoToCopy, handleGoBackClick }: ContactSup
 				</div>
 			</div>
 			<div className={classNames.stepBlock}>
-				<h4 className={classNames.title}>2. {t('contactSupportCard.dropUsAMessage')}</h4>
+				<h4 className={classNames.title}>
+					2. {t('contactSupportCard.dropUsAMessage')}
+				</h4>
 				<div className={classNames.buttonContainer}>
 					<Button
 						leftIcon={<IconBrandDiscord size={16} />}
@@ -71,7 +86,9 @@ export function ContactSupportCard({ infoToCopy, handleGoBackClick }: ContactSup
 				</div>
 				{handleGoBackClick ? (
 					<Button
-						leftIcon={<IconArrowLeft size={18} color={'var(--color-pacific-400)'} />}
+						leftIcon={
+							<IconArrowLeft size={18} color={'var(--color-pacific-400)'} />
+						}
 						onClick={() => {
 							handleGoBackClick()
 						}}

@@ -13,19 +13,32 @@ export const SourceInfo = memo((): JSX.Element => {
 
 	const tokenAmount = useMemo(() => {
 		if (!fromAmount) return '0'
-		return fromToken?.decimals ? formatTokenAmount(fromAmount, fromToken.decimals) : fromAmount
+		return fromToken?.decimals
+			? formatTokenAmount(fromAmount, fromToken.decimals)
+			: fromAmount
 	}, [fromAmount, fromToken?.decimals])
 
 	const formattedUsd = useMemo(() => {
 		if (isLoading) return '-'
 		if (!fromToken?.price_usd) return '-'
-		const usdValue = tokenAmountToUsd(Number(tokenAmount), Number(fromToken.price_usd))
+		const usdValue = tokenAmountToUsd(
+			Number(tokenAmount),
+			Number(fromToken.price_usd),
+		)
 		return usdValue ? `= $${format(Number(usdValue), 2)}` : '-'
 	}, [isLoading, tokenAmount, fromToken?.price_usd])
 
 	return (
-		<div className="route_info_source" role="region" aria-label="Source information">
-			<AssetSelection token={fromToken} chain={fromChain} aria-label="Source asset selection" />
+		<div
+			className="route_info_source"
+			role="region"
+			aria-label="Source information"
+		>
+			<AssetSelection
+				token={fromToken}
+				chain={fromChain}
+				aria-label="Source asset selection"
+			/>
 			<span className="route_info_amount" aria-label="Token amount">
 				{format(Number(tokenAmount), 2)}
 			</span>

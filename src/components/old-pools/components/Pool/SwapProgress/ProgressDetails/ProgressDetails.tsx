@@ -15,7 +15,11 @@ export const ProgressDetails = memo(({ stage, steps, from, to }: Props) => {
 	const currentStep = steps[steps.length - 1]
 
 	const showTokenTransfer = useMemo(() => {
-		return currentStep && (currentStep.type === StageType.transaction || currentStep.type === StageType.requestTx)
+		return (
+			currentStep &&
+			(currentStep.type === StageType.transaction ||
+				currentStep.type === StageType.requestTx)
+		)
 	}, [currentStep])
 
 	const imageSrc = useMemo(() => {
@@ -28,15 +32,29 @@ export const ProgressDetails = memo(({ stage, steps, from, to }: Props) => {
 	return (
 		<div className="row ac gap-sm">
 			{imageSrc ? (
-				<img src={imageSrc} alt={stage} className="icon" width={160} height={160} />
+				<img
+					src={imageSrc}
+					alt={stage}
+					className="icon"
+					width={160}
+					height={160}
+				/>
 			) : (
 				<>
 					<div className={classNames.tokenBox}>
-						<Badge size="xl" tokenLogoSrc={from.token.logoURI} chainLogoSrc={from.chain.logoURI} />
+						<Badge
+							size="xl"
+							tokenLogoSrc={from.token.logoURI}
+							chainLogoSrc={from.chain.logoURI}
+						/>
 					</div>
 					<TrailRight />
 					<div className={classNames.tokenBox}>
-						<Badge size="xl" tokenLogoSrc={to.token.logoURI} chainLogoSrc={to.chain.logoURI} />
+						<Badge
+							size="xl"
+							tokenLogoSrc={to.token.logoURI}
+							chainLogoSrc={to.chain.logoURI}
+						/>
 					</div>
 				</>
 			)}

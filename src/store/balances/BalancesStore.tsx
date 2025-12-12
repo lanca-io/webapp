@@ -9,5 +9,9 @@ export function BalancesStoreProvider({ children }: PropsWithChildren<{}>) {
 	if (!storeRef.current) {
 		storeRef.current = CreateBalancesStore()
 	}
-	return <BalancesContext.Provider value={storeRef.current}>{children}</BalancesContext.Provider>
+	return (
+		<BalancesContext.Provider value={storeRef.current}>
+			{children}
+		</BalancesContext.Provider>
+	)
 }

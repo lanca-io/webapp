@@ -15,7 +15,10 @@ type ListModalAction =
 	| { type: 'SET_DATA'; payload: Entity[] }
 	| { type: 'SET_ENTITY'; payload: Entity }
 
-const listModalReducer = (state: ListModalState, action: ListModalAction): ListModalState => {
+const listModalReducer = (
+	state: ListModalState,
+	action: ListModalAction,
+): ListModalState => {
 	switch (action.type) {
 		case 'SET_SHOW':
 			return { ...state, show: action.payload }
@@ -37,4 +40,5 @@ const initialModalState: ListModalState = {
 	data: [],
 }
 
-export const useListModalReducer = () => useReducer(listModalReducer, initialModalState)
+export const useListModalReducer = () =>
+	useReducer(listModalReducer, initialModalState)

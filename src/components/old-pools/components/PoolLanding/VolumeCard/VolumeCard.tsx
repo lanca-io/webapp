@@ -11,11 +11,17 @@ interface VolumeCardProps {
 	isLoading: boolean
 }
 
-const description = 'Total volume of cross-chain transactions using the liquidity of the pool'
+const description =
+	'Total volume of cross-chain transactions using the liquidity of the pool'
 
-export const VolumeCard = ({ fees, isLoading }: VolumeCardProps): JSX.Element => {
+export const VolumeCard = ({
+	fees,
+	isLoading,
+}: VolumeCardProps): JSX.Element => {
 	const timeFilters = useMemo(() => createTimeFilters(), [])
-	const [activeFilter, setActiveFilter] = useState(timeFilters[timeFilters.length - 1])
+	const [activeFilter, setActiveFilter] = useState(
+		timeFilters[timeFilters.length - 1],
+	)
 	const { totalVolume, volumeData } = useGetTotalVolume(fees, activeFilter)
 
 	return (

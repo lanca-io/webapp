@@ -8,7 +8,12 @@ export const Failure: FC = memo((): JSX.Element => {
 
 	return (
 		<div className="failure_content">
-			<img src={imageSrc} alt={altText} className="failure_content_image" data-testid="failure-image" />
+			<img
+				src={imageSrc}
+				alt={altText}
+				className="failure_content_image"
+				data-testid="failure-image"
+			/>
 		</div>
 	)
 })

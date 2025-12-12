@@ -30,7 +30,11 @@ export const TxFromTo: FC<TxFromToProps> = ({ from, to, type }) => {
 		<div className={className.container}>
 			<p style={styles.text}>{from.amount}</p>
 			<p style={styles.text}>{from.symbol}</p>
-			{type === 'sell' ? <IconArrowRight size={18} color={color} /> : <IconArrowLeft size={18} color={color} />}
+			{type === 'sell' ? (
+				<IconArrowRight size={18} color={color} />
+			) : (
+				<IconArrowLeft size={18} color={color} />
+			)}
 			<p style={styles.text}>{to.amount}</p>
 			<p style={styles.text}>{to.symbol}</p>
 		</div>

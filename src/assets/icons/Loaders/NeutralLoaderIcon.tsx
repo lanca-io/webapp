@@ -1,5 +1,11 @@
 export const NeutralLoaderIcon = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="16"
+		height="16"
+		viewBox="0 0 16 16"
+		fill="none"
+	>
 		<rect y="7.19991" width="5.6" height="1.6" rx="0.8" fill="#98A2B3" />
 		<rect
 			x="8.7998"
@@ -10,7 +16,14 @@ export const NeutralLoaderIcon = () => (
 			transform="rotate(90 8.7998 -9.15527e-05)"
 			fill="#475467"
 		/>
-		<rect x="10.4004" y="7.19991" width="5.6" height="1.6" rx="0.8" fill="#EAECF0" />
+		<rect
+			x="10.4004"
+			y="7.19991"
+			width="5.6"
+			height="1.6"
+			rx="0.8"
+			fill="#EAECF0"
+		/>
 		<rect
 			x="8.7998"
 			y="10.3999"

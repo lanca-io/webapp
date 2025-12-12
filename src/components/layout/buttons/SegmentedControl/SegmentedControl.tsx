@@ -13,7 +13,11 @@ interface Item {
 	value: string
 }
 
-export const SegmentedControl: FC<SegmentedControlProps> = ({ data, selectedItem, setSelectedItem }) => (
+export const SegmentedControl: FC<SegmentedControlProps> = ({
+	data,
+	selectedItem,
+	setSelectedItem,
+}) => (
 	<div className={classNames.container}>
 		{data.map((item: Item) => (
 			<Button

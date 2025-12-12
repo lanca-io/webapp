@@ -8,7 +8,11 @@
  * @param decimalPlaces - The number of decimal places to include.
  * @returns The formatted number as a string.
  */
-export function format(value: number, decimalPlaces: number = 2, symbol?: string): string {
+export function format(
+	value: number,
+	decimalPlaces: number = 2,
+	symbol?: string,
+): string {
 	if (value === 0) return '0'
 
 	const absValue = Math.abs(value)
@@ -29,7 +33,10 @@ export function format(value: number, decimalPlaces: number = 2, symbol?: string
  * @param maxDecimals - Maximum number of decimals to show (default: 3).
  * @returns The formatted string.
  */
-export function formatToMaxDecimals(value: string, maxDecimals: number = 3): string {
+export function formatToMaxDecimals(
+	value: string,
+	maxDecimals: number = 3,
+): string {
 	if (!value) return ''
 	const num = Number(value)
 	if (isNaN(num)) return value

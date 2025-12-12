@@ -21,7 +21,8 @@ interface Props {
 	userHasDeposited?: boolean
 }
 
-const poolDescription = 'The pool has reached its max capacity and you cannot deposit money into it.'
+const poolDescription =
+	'The pool has reached its max capacity and you cannot deposit money into it.'
 
 export const PoolCard = ({
 	isDepositOnly = false,
@@ -36,12 +37,17 @@ export const PoolCard = ({
 	const { open } = useAppKit()
 
 	const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
-	const isInputStages = poolState.stage === PoolCardStage.input || poolState.stage === PoolCardStage.review
+	const isInputStages =
+		poolState.stage === PoolCardStage.input ||
+		poolState.stage === PoolCardStage.review
 
 	const handleGoBack = useCallback(() => {
 		poolDispatch({ type: PoolActionType.RESET_AMOUNTS, direction: 'from' })
 		poolDispatch({ type: PoolActionType.RESET_AMOUNTS, direction: 'to' })
-		poolDispatch({ type: PoolActionType.SET_SWAP_STAGE, payload: PoolCardStage.input })
+		poolDispatch({
+			type: PoolActionType.SET_SWAP_STAGE,
+			payload: PoolCardStage.input,
+		})
 		poolDispatch({ type: PoolActionType.SET_SWAP_STEPS, payload: [] })
 	}, [poolDispatch])
 
@@ -64,7 +70,12 @@ export const PoolCard = ({
 					</div>
 				}
 			>
-				<Button className={depositButtonClasses} isFull isDisabled={true} size="lg">
+				<Button
+					className={depositButtonClasses}
+					isFull
+					isDisabled={true}
+					size="lg"
+				>
 					Deposit
 				</Button>
 			</TooltipWrapper>
@@ -97,14 +108,24 @@ export const PoolCard = ({
 				size="lg"
 				isFull
 				onClick={() => {
-					poolDispatch({ type: PoolActionType.TOGGLE_POOL_MODE, payload: 'deposit' })
+					poolDispatch({
+						type: PoolActionType.TOGGLE_POOL_MODE,
+						payload: 'deposit',
+					})
 					setIsOpen(true)
 				}}
 			>
 				Deposit
 			</Button>
 		)
-	}, [poolIsFilled, isConnected, depositButtonClasses, disabledDepositButton, open, poolDispatch])
+	}, [
+		poolIsFilled,
+		isConnected,
+		depositButtonClasses,
+		disabledDepositButton,
+		open,
+		poolDispatch,
+	])
 
 	const withdrawalButton = useMemo(
 		() => (
@@ -112,7 +133,10 @@ export const PoolCard = ({
 				isDisabled={!address || !userHasDeposited}
 				className={withdrawalButtonClasses}
 				onClick={() => {
-					poolDispatch({ type: PoolActionType.TOGGLE_POOL_MODE, payload: 'withdraw' })
+					poolDispatch({
+						type: PoolActionType.TOGGLE_POOL_MODE,
+						payload: 'withdraw',
+					})
 					setIsOpen(true)
 				}}
 				size="lg"
@@ -125,9 +149,16 @@ export const PoolCard = ({
 	)
 
 	const showPopup = useMemo(() => {
-		if (poolState.stage === PoolCardStage.input && poolState.poolMode === 'deposit' && poolState.inputError === 2) {
+		if (
+			poolState.stage === PoolCardStage.input &&
+			poolState.poolMode === 'deposit' &&
+			poolState.inputError === 2
+		) {
 			return <LancaSwap />
-		} else if (poolState.stage === PoolCardStage.success && poolState.poolMode === 'deposit') {
+		} else if (
+			poolState.stage === PoolCardStage.success &&
+			poolState.poolMode === 'deposit'
+		) {
 			return <LPStreak />
 		}
 		return null
@@ -153,9 +184,17 @@ export const PoolCard = ({
 				popup={showPopup}
 			>
 				{isInputStages ? (
-					<SwapInput onClose={handleClose} poolState={poolState} poolDispatch={poolDispatch} />
+					<SwapInput
+						onClose={handleClose}
+						poolState={poolState}
+						poolDispatch={poolDispatch}
+					/>
 				) : (
-					<SwapProgress poolState={poolState} poolDispatch={poolDispatch} handleGoBack={handleGoBack} />
+					<SwapProgress
+						poolState={poolState}
+						poolDispatch={poolDispatch}
+						handleGoBack={handleGoBack}
+					/>
 				)}
 			</Modal>
 		</>

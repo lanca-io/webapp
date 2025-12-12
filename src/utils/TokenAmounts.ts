@@ -16,7 +16,9 @@ export class TokenAmounts {
 
 	public format(decimalPlaces?: number): string {
 		const parsedAmount = this.toParsedAmount()
-		return decimalPlaces !== undefined ? format(Number(parsedAmount), decimalPlaces) : parsedAmount
+		return decimalPlaces !== undefined
+			? format(Number(parsedAmount), decimalPlaces)
+			: parsedAmount
 	}
 
 	public get amount(): string {

@@ -8,7 +8,10 @@ export const initialState = () => ({
 	shake: false,
 })
 
-export function tokenAreaReducer(state: TokenAreaState, action: TokenAreaAction) {
+export function tokenAreaReducer(
+	state: TokenAreaState,
+	action: TokenAreaAction,
+) {
 	switch (action.type) {
 		case 'SET_SHOW_TOKENS_MODAL':
 			return { ...state, showTokensModal: action.payload }
@@ -23,7 +26,10 @@ export function tokenAreaReducer(state: TokenAreaState, action: TokenAreaAction)
 	}
 }
 
-export const useTokenAreaReducer = (): [TokenAreaState, Dispatch<TokenAreaAction>] => {
+export const useTokenAreaReducer = (): [
+	TokenAreaState,
+	Dispatch<TokenAreaAction>,
+] => {
 	const [state, dispatch] = useReducer(tokenAreaReducer, initialState())
 	return [state, dispatch]
 }

@@ -18,7 +18,12 @@ function ChainIcon({ src }: { src: string }) {
 	)
 }
 
-export function ChainListItem({ chain, isSelected, onSelect, isTestnet }: ChainItemProps) {
+export function ChainListItem({
+	chain,
+	isSelected,
+	onSelect,
+	isTestnet,
+}: ChainItemProps) {
 	return (
 		<div
 			className={`${classNames.container} ${isSelected ? classNames.selected : null}`}
@@ -33,7 +38,11 @@ export function ChainListItem({ chain, isSelected, onSelect, isTestnet }: ChainI
 					}.svg`}
 				/>
 			</div>
-			<p className={`${classNames.name} ${isSelected ? classNames.selectedName : null}`}>{chain.name}</p>
+			<p
+				className={`${classNames.name} ${isSelected ? classNames.selectedName : null}`}
+			>
+				{chain.name}
+			</p>
 		</div>
 	)
 }
