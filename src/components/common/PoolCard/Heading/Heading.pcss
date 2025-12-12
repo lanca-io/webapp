@@ -1,0 +1,66 @@
+.pool_card_heading {
+	display: flex;
+	max-width: 305px;
+	width: 100%;
+	min-height: 44px;
+	align-items: center;
+	gap: var(--space-s);
+	flex: 1 0 0;
+
+	& .pool_card_heading_logos {
+		display: flex;
+		width: 76px;
+		height: 44px;
+		flex-shrink: 0;
+		position: relative;
+
+		& .pool_card_heading_logo_chain {
+			width: 40px;
+			height: 40px;
+			border-radius: 16px;
+			transform: rotate(15deg);
+			margin-left: -5px;
+			z-index: 1;
+		}
+
+		& .pool_card_heading_logo_token {
+			width: 40px;
+			height: 40px;
+			transform: rotate(-15deg);
+			z-index: 2;
+		}
+	}
+
+	& .pool_card_heading_description {
+		display: flex;
+		max-width: 154px;
+		align-items: center;
+		gap: var(--space-xs);
+		flex: 1 0 0;
+
+		& .pool_card_title_container {
+			display: flex;
+			gap: var(--space-xxs);
+
+			& .pool_card_title_token {
+				font-size: 1.125rem;
+				font-weight: 500;
+				color: var(--color-gray-700);
+				line-height: 1.375rem;
+			}
+
+			& .pool_card_title_chain {
+				font-size: 1.125rem;
+				font-weight: 500;
+				color: var(--color-gray-500);
+				line-height: 1.375rem;
+			}
+		}
+
+		& .pool_card_indicators {
+			display: flex;
+			align-items: center;
+			gap: var(--space-xxs);
+		}
+	}
+}
