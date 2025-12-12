@@ -1,5 +1,6 @@
 import { VolumeChart } from '../VolumeChart/VolumeChart'
 import { StatisticsCard } from '../StatisticsCard/StatisticsCard'
+import { BarChart } from '../BarChart/BarChart'
 import './PoolsDashboard.pcss'
 
 export const PoolsDashboard = (): JSX.Element => {
@@ -7,6 +8,7 @@ export const PoolsDashboard = (): JSX.Element => {
 		<div className="pools_dashboard">
 			<div className="pools_analytics">
 				<VolumeChart />
+				<BarChart />
 				<div className="pools_statistics">
 					<StatisticsCard
 						title="TXs"

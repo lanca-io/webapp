@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-export const useFormatVolume = (): { format: (value: number) => string } => {
+export const useCompactNumber = (): { format: (value: number) => string } => {
 	const format = useCallback((value: number): string => {
 		if (value >= 1_000_000_000) {
 			return (

@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { ChartData } from '../types'
 import { VolumeRange } from '../types'
-import { useFormatTick } from './useFormatTick'
+import { useTickDates } from '@/hooks'
 import { AreaChart, Area, ResponsiveContainer, XAxis } from 'recharts'
 import './Chart.pcss'
 
@@ -11,7 +11,7 @@ type ChartProps = {
 }
 
 export const Chart: FC<ChartProps> = ({ data, range }): JSX.Element => {
-	const { formatTick } = useFormatTick(range, data.length)
+	const { formatTick } = useTickDates(range, data.length)
 
 	return (
 		<div className="volume_chart_visual">
@@ -37,7 +37,7 @@ export const Chart: FC<ChartProps> = ({ data, range }): JSX.Element => {
 						axisLine={false}
 						tickLine={false}
 						tickMargin={12}
-						interval="preserveStartEnd"
+						minTickGap={0}
 						tickFormatter={formatTick}
 						tick={{ fontSize: 12, fill: 'var(--color-gray-500)' }}
 					/>

@@ -1,6 +1,11 @@
 import { useCallback } from 'react'
-import { VolumeRange } from '../types'
 import { useIsMobile } from '@/hooks'
+
+enum VolumeRange {
+	ONE_MONTH = '1M',
+	THREE_MONTHS = '3M',
+	ALL = 'ALL',
+}
 
 const fmtDayMonth = (d: Date) => {
 	const day = d.getDate()
@@ -9,12 +14,25 @@ const fmtDayMonth = (d: Date) => {
 }
 
 const format1M = (d: Date, index: number, dataLength: number) => {
-	const isEdge = index === 0 || index === dataLength - 1
-	if (isEdge) return fmtDayMonth(d)
-	if (index % 7 === 0) return fmtDayMonth(d)
+	const isFirst = index === 0
+	const isLast = index === dataLength - 1
+
+	// Always show first and last date
+	if (isFirst || isLast) {
+		return fmtDayMonth(d)
+	}
+
+	// Show every 7th point counting from the first index
+	const step = 7
+	const offsetIndex = index - 0 // here first is 0, but keeping explicit
+	const isAnchor = offsetIndex % step === 0
+
+	if (isAnchor) {
+		return fmtDayMonth(d)
+	}
+
 	return ''
 }
-
 const format3M = (d: Date, index: number, dataLength: number) => {
 	const isEdge = index === 0 || index === dataLength - 1
 	const day = d.getDate()
@@ -45,7 +63,7 @@ const formatAll = (d: Date, index: number, dataLength: number, isMobile: boolean
 	return d.toLocaleDateString('en-US', { month: 'short' })
 }
 
-export const useFormatTick = (range: VolumeRange, dataLength: number) => {
+export const useTickDates = (range: VolumeRange, dataLength: number) => {
 	const isMobile = useIsMobile()
 
 	const formatTick = useCallback(

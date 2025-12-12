@@ -18,7 +18,7 @@ export const Heading: FC<HeadingProps> = ({ range, total, onRangeChange }) => {
 		<div className="volume_chart_heading">
 			<div className="volume_chart_toolbar">
 				<div className="volume_chart_description">
-					<span className="volume_chart_label">Pools volume</span>
+					<span className="volume_chart_label">Total rewards</span>
 					<InfoTooltip />
 				</div>
 				<Menu currentRange={range} onRangeChange={onRangeChange} />
