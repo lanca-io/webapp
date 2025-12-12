@@ -1,5 +1,5 @@
 import { Card } from '../../../../cards/Card/Card'
-import { SkeletonLoader } from '../../../../layout/SkeletonLoader/SkeletonLoader'
+import { SkeletonLoader } from '../../../../common/SkeletonLoader/SkeletonLoader'
 import { toLocaleNumber } from '../../../../../utils/formatting'
 
 import classNames from './StatCard.module.pcss'

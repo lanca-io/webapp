@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import { WidgetInput } from '../WidgetInput/WidgetInput'
-import { SkeletonLoader } from '../../layout/SkeletonLoader/SkeletonLoader'
+import { SkeletonLoader } from '../SkeletonLoader/SkeletonLoader'
 import { BalanceInfo } from '../BalanceInfo/BalanceInfo'
 import { useFormStore } from '../../../store/form/useFormStore'
 import { ETAInfo } from '../ETAInfo/ETAInfo'

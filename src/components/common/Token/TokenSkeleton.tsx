@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { SkeletonLoader } from '../../layout/SkeletonLoader/SkeletonLoader'
+import { SkeletonLoader } from '../SkeletonLoader/SkeletonLoader'
 import './Token.pcss'
 
 type SkeletonProps = {

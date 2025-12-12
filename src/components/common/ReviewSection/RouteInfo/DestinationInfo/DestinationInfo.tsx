@@ -5,7 +5,7 @@ import { format } from '../../../../../utils/new/format'
 import { tokenAmountToUsd } from '../../../../../utils/new/input'
 import { useFormStore } from '../../../../../store/form/useFormStore'
 import { useRouteStore } from '../../../../../store/route/useRouteStore'
-import { SkeletonLoader } from '../../../../layout/SkeletonLoader/SkeletonLoader'
+import { SkeletonLoader } from '../../../SkeletonLoader/SkeletonLoader'
 import './DestinationInfo.pcss'
 
 export const DestinationInfo = memo((): JSX.Element => {

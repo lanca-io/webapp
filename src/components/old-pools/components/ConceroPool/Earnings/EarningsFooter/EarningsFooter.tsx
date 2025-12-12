@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { SkeletonLoader } from '../../../../../layout/SkeletonLoader/SkeletonLoader'
+import { SkeletonLoader } from '../../../../../common/SkeletonLoader/SkeletonLoader'
 import { PoolCard } from '../../../Pool/Pool'
 
 import classNames from './EarningsFooter.module.pcss'

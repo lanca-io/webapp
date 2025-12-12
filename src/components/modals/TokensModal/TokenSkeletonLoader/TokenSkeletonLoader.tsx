@@ -1,5 +1,5 @@
 import classNames from './TokenSkeletonLoader.module.pcss'
-import { SkeletonLoader } from '../../../layout/SkeletonLoader/SkeletonLoader'
+import { SkeletonLoader } from '../../../common/SkeletonLoader/SkeletonLoader'
 
 interface TokenSkeletonLoaderProps {
 	count?: number
