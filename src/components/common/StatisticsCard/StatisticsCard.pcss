@@ -1,0 +1,79 @@
+.statistics_card {
+	display: flex;
+	flex-direction: column;
+	padding: var(--space-m);
+	max-width: 138px;
+	width: 100%;
+	align-items: flex-start;
+	gap: var(--space-m);
+	border-radius: 24px;
+	background-color: var(--color-gray-25);
+
+	& .statistics_card_heading {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: var(--space-xs);
+		width: 100%;
+
+		& .statistics_card_title {
+			font-size: 1.125rem;
+			font-weight: 500;
+			color: var(--color-gray-600);
+			line-height: 1.375rem;
+		}
+
+		& .statistics_card_tooltip {
+			display: flex;
+			flex-direction: column;
+			max-width: 224px;
+			width: 100%;
+
+			& .statistics_card_tooltip_content {
+				display: flex;
+				flex-direction: column;
+				gap: var(--space-xxs);
+				width: 100%;
+
+				& .statistics_card_tooltip_title {
+					font-size: 1rem;
+					font-weight: 500;
+					color: var(--color-gray-100);
+					line-height: 1.25rem;
+					text-align: center;
+				}
+
+				& .statistics_card_tooltip_description {
+					font-size: 0.875rem;
+					font-weight: 500;
+					color: var(--color-gray-300);
+					line-height: 1.125rem;
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	& .statistics_card_value_content {
+		display: flex;
+		align-items: flex-end;
+		width: 100%;
+		gap: var(--space-xxs);
+
+		& .statistics_card_value {
+			font-size: 2rem;
+			font-weight: 500;
+			color: var(--color-gray-700);
+			line-height: 2.25rem;
+		}
+
+		& .statistics_card_value_unit {
+			display: flex;
+			align-items: flex-end;
+			font-size: 1rem;
+			font-weight: 500;
+			color: var(--color-gray-500);
+			line-height: 1.8rem;
+		}
+	}
+}
