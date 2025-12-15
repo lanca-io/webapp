@@ -1,10 +1,11 @@
 import type { FC } from 'react'
+import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts'
 import type { Data } from '../BarChart'
-import { ChartRange } from '../../ChartMenu'
-import { memo } from 'react'
-import { useTickDates } from '@/hooks'
 import { Spinner } from '@concero/ui-kit'
-import { ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts'
+import { ChartRange } from '../../ChartMenu'
+import { useChartDate } from '@/hooks'
+import { memo } from 'react'
+import { ChartTooltip } from '../../ChartTooltip'
 import './Chart.pcss'
 
 type ChartProps = {
@@ -14,7 +15,7 @@ type ChartProps = {
 }
 
 export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
-	const { formatTick } = useTickDates(range, data.length)
+	const { formatDate, interval, ticks } = useChartDate(range, data)
 
 	return (
 		<div className="rewards_chart_visual">
@@ -24,12 +25,21 @@ export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
 				</div>
 			) : (
 				<ResponsiveContainer height="100%" width="100%">
-					<BarChart data={data}>
+					<BarChart
+						data={data}
+						style={{
+							paddingTop: 0,
+							paddingBottom: 16,
+							paddingLeft: 8,
+							paddingRight: 8,
+						}}
+					>
 						<Bar
 							dataKey="value"
 							fill="var(--color-accent-100)"
 							radius={[8, 8, 8, 8]}
 							barSize={40}
+							activeBar={{ fill: 'var(--color-accent-500)' }}
 						/>
 						<XAxis
 							dataKey="time"
@@ -37,9 +47,17 @@ export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
 							axisLine={false}
 							tickLine={false}
 							tickMargin={12}
-							interval="preserveStartEnd"
-							tickFormatter={formatTick}
+							minTickGap={7}
+							tickFormatter={formatDate}
+							interval={interval}
+							ticks={ticks}
+							padding={{ left: 8, right: 8 }}
 							tick={{ fontSize: 12, fill: 'var(--color-gray-500)' }}
+						/>
+
+						<Tooltip
+							content={<ChartTooltip />}
+							cursor={{ fill: 'transparent', strokeDasharray: '' }}
 						/>
 					</BarChart>
 				</ResponsiveContainer>

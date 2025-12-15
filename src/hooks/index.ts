@@ -1,3 +1,3 @@
 export * from './useMediaQuery'
-export * from './useTickDates'
+export * from './useChartDate'
 export * from './useCompactNumber'
