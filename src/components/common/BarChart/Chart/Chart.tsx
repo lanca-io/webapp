@@ -16,38 +16,34 @@ type ChartProps = {
 export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
 	const { formatTick } = useTickDates(range, data.length)
 
-	if (isLoading) {
-		return (
-			<div className="rewards_chart_visual">
+	return (
+		<div className="rewards_chart_visual">
+			{isLoading ? (
 				<div className="rewards_chart_loader">
 					<Spinner type="gray" />
 				</div>
-			</div>
-		)
-	}
-
-	return (
-		<div className="rewards_chart_visual">
-			<ResponsiveContainer height="100%" width="100%">
-				<BarChart data={data}>
-					<Bar
-						dataKey="value"
-						fill="var(--color-accent-100)"
-						radius={[8, 8, 8, 8]}
-						barSize={40}
-					/>
-					<XAxis
-						dataKey="time"
-						type="category"
-						axisLine={false}
-						tickLine={false}
-						tickMargin={12}
-						interval="preserveStartEnd"
-						tickFormatter={formatTick}
-						tick={{ fontSize: 12, fill: 'var(--color-gray-500)' }}
-					/>
-				</BarChart>
-			</ResponsiveContainer>
+			) : (
+				<ResponsiveContainer height="100%" width="100%">
+					<BarChart data={data}>
+						<Bar
+							dataKey="value"
+							fill="var(--color-accent-100)"
+							radius={[8, 8, 8, 8]}
+							barSize={40}
+						/>
+						<XAxis
+							dataKey="time"
+							type="category"
+							axisLine={false}
+							tickLine={false}
+							tickMargin={12}
+							interval="preserveStartEnd"
+							tickFormatter={formatTick}
+							tick={{ fontSize: 12, fill: 'var(--color-gray-500)' }}
+						/>
+					</BarChart>
+				</ResponsiveContainer>
+			)}
 		</div>
 	)
 })
