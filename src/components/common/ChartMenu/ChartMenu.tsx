@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import './Menu.pcss'
+import './ChartMenu.pcss'
 
 export enum ChartRange {
 	ONE_MONTH = '1M',

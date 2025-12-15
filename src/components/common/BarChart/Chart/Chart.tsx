@@ -1,17 +1,30 @@
 import type { FC } from 'react'
-import type { ChartData } from '../types'
-import { VolumeRange } from '../types'
+import type { Data } from '../BarChart'
+import { ChartRange } from '../../ChartMenu'
+import { memo } from 'react'
 import { useTickDates } from '@/hooks'
+import { Spinner } from '@concero/ui-kit'
 import { ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts'
 import './Chart.pcss'
 
 type ChartProps = {
-	data: ChartData
-	range: VolumeRange
+	data: Data
+	range: ChartRange
+	isLoading: boolean
 }
 
-export const Chart: FC<ChartProps> = ({ data, range }): JSX.Element => {
+export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
 	const { formatTick } = useTickDates(range, data.length)
+
+	if (isLoading) {
+		return (
+			<div className="rewards_chart_visual">
+				<div className="rewards_chart_loader">
+					<Spinner type="gray" />
+				</div>
+			</div>
+		)
+	}
 
 	return (
 		<div className="rewards_chart_visual">
@@ -37,4 +50,4 @@ export const Chart: FC<ChartProps> = ({ data, range }): JSX.Element => {
 			</ResponsiveContainer>
 		</div>
 	)
-}
+})

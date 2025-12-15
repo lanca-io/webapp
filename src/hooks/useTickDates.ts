@@ -1,11 +1,6 @@
 import { useCallback } from 'react'
 import { useIsMobile } from '@/hooks'
-
-enum VolumeRange {
-	ONE_MONTH = '1M',
-	THREE_MONTHS = '3M',
-	ALL = 'ALL',
-}
+import { ChartRange } from '@/components/common/ChartMenu'
 
 const fmtDayMonth = (d: Date) => {
 	const day = d.getDate()
@@ -68,7 +63,7 @@ const formatAll = (
 	return d.toLocaleDateString('en-US', { month: 'short' })
 }
 
-export const useTickDates = (range: VolumeRange, dataLength: number) => {
+export const useTickDates = (range: ChartRange, dataLength: number) => {
 	const isMobile = useIsMobile()
 
 	const formatTick = useCallback(
@@ -77,11 +72,11 @@ export const useTickDates = (range: VolumeRange, dataLength: number) => {
 			if (Number.isNaN(d.getTime())) return String(value)
 
 			switch (range) {
-				case VolumeRange.ONE_MONTH:
+				case ChartRange.ONE_MONTH:
 					return format1M(d, index, dataLength)
-				case VolumeRange.THREE_MONTHS:
+				case ChartRange.THREE_MONTHS:
 					return format3M(d, index, dataLength)
-				case VolumeRange.ALL:
+				case ChartRange.ALL:
 					return formatAll(d, index, dataLength, isMobile)
 				default:
 					return fmtDayMonth(d)
