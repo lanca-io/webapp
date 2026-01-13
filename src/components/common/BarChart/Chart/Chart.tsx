@@ -1,10 +1,8 @@
 import type { FC } from 'react'
 import type { Data } from '../BarChart'
-import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts'
-import { ChartTooltip } from '../../ChartTooltip'
+import { ResponsiveContainer, BarChart, Bar } from 'recharts'
 import { Spinner } from '@concero/ui-kit'
 import { ChartRange } from '../../ChartMenu'
-import { useChartDate } from '@/hooks'
 import { memo } from 'react'
 import './Chart.pcss'
 
@@ -14,9 +12,7 @@ type ChartProps = {
 	isLoading: boolean
 }
 
-export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
-	const { formatDate, interval, ticks } = useChartDate(range, data)
-
+export const Chart: FC<ChartProps> = memo(({ data, isLoading }) => {
 	return (
 		<div className="rewards_chart_visual">
 			{isLoading ? (
@@ -27,6 +23,8 @@ export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
 				<ResponsiveContainer height="100%" width="100%">
 					<BarChart
 						data={data}
+						barCategoryGap={8}
+						maxBarSize={86.6}
 						style={{
 							paddingTop: 0,
 							paddingBottom: 16,
@@ -36,28 +34,10 @@ export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
 					>
 						<Bar
 							dataKey="value"
-							fill="var(--color-accent-100)"
+							fill="var(--color-gray-50)"
 							radius={[8, 8, 8, 8]}
 							barSize={74}
-							activeBar={{ fill: 'var(--color-accent-500)' }}
-						/>
-						<XAxis
-							dataKey="time"
-							type="category"
-							axisLine={false}
-							tickLine={false}
-							tickMargin={12}
-							minTickGap={7}
-							tickFormatter={formatDate}
-							interval={interval}
-							ticks={ticks}
-							padding={{ left: 8, right: 8 }}
-							tick={{ fontSize: 12, fill: 'var(--color-gray-500)' }}
-						/>
-
-						<Tooltip
-							content={<ChartTooltip />}
-							cursor={{ fill: 'transparent', strokeDasharray: '' }}
+							activeBar={{ fill: 'var(--color-gray-100)' }}
 						/>
 					</BarChart>
 				</ResponsiveContainer>

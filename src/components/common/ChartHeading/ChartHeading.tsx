@@ -3,7 +3,6 @@ import { SkeletonLoader } from '../SkeletonLoader'
 import { ChartMenu, ChartRange } from '../ChartMenu'
 import { useMemo } from 'react'
 import { InfoTip } from '../InfoTip'
-import { useCompactNumber } from '@/hooks'
 import './ChartHeading.pcss'
 
 type HeadingProps = {
@@ -19,14 +18,19 @@ export const ChartHeading: FC<HeadingProps> = ({
 	title,
 	range,
 	tip: { id, heading, description },
-	value: { amount, symbol = '$' },
+	value: { symbol = '$' },
 	onChange,
 	isLoading = false,
 }) => {
-	const { format } = useCompactNumber()
-
 	const info = useMemo(
-		() => <InfoTip id={id} title={heading} description={description} />,
+		() => (
+			<InfoTip
+				id={id}
+				title={heading}
+				description={description}
+				place="bottom"
+			/>
+		),
 		[],
 	)
 
@@ -56,7 +60,7 @@ export const ChartHeading: FC<HeadingProps> = ({
 				) : (
 					<>
 						<span className="chart_total_symbol">{symbol}</span>
-						<span className="chart_total_value">{format(amount)}</span>
+						<span className="chart_total_value">{'-'}</span>
 					</>
 				)}
 			</div>
