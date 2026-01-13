@@ -46,6 +46,7 @@ export const Info: FC<InfoProps> = memo(
 						<InfoTip
 							id={`${label}_chart_info_tip`}
 							description={tooltip.description}
+							alignment="left"
 						/>
 					)}
 				</div>
