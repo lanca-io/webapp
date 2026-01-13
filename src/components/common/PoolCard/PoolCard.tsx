@@ -10,6 +10,8 @@ type Logo = {
 type PoolCardProps = {
 	token: Logo
 	chain: Logo
+	isFull: boolean
+	isActive: boolean
 	tokenLabel?: string
 	chainLabel?: string
 }
@@ -17,6 +19,8 @@ type PoolCardProps = {
 export const PoolCard: FC<PoolCardProps> = ({
 	token,
 	chain,
+	isActive,
+	isFull,
 	tokenLabel = 'USDC',
 	chainLabel = 'ARB',
 }): JSX.Element => {
@@ -25,8 +29,8 @@ export const PoolCard: FC<PoolCardProps> = ({
 			<Heading
 				token={token}
 				chain={chain}
-				isActive={true}
-				isFull={true}
+				isActive={isActive}
+				isFull={isFull}
 				tokenLabel={tokenLabel}
 				chainLabel={chainLabel}
 			/>
