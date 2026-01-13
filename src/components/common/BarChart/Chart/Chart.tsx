@@ -1,11 +1,11 @@
 import type { FC } from 'react'
-import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts'
 import type { Data } from '../BarChart'
+import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts'
+import { ChartTooltip } from '../../ChartTooltip'
 import { Spinner } from '@concero/ui-kit'
 import { ChartRange } from '../../ChartMenu'
 import { useChartDate } from '@/hooks'
 import { memo } from 'react'
-import { ChartTooltip } from '../../ChartTooltip'
 import './Chart.pcss'
 
 type ChartProps = {
@@ -38,7 +38,7 @@ export const Chart: FC<ChartProps> = memo(({ data, range, isLoading }) => {
 							dataKey="value"
 							fill="var(--color-accent-100)"
 							radius={[8, 8, 8, 8]}
-							barSize={40}
+							barSize={74}
 							activeBar={{ fill: 'var(--color-accent-500)' }}
 						/>
 						<XAxis

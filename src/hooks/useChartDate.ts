@@ -89,7 +89,7 @@ const createAll = (data: Data): string[] => {
 	return firstOfEachMonth.filter(t => {
 		const d = new Date(t)
 		const idx = d.getFullYear() * 12 + d.getMonth()
-		return (idx - firstIndex) % 3 === 0
+		return (idx - firstIndex) % 6 === 0
 	})
 }
 
