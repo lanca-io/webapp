@@ -6,14 +6,28 @@ import './InfoTip.pcss'
 
 type InfoTipProps = {
 	id: string
-	title: string
+	title?: string
 	description: string
+	place?:
+		| 'top'
+		| 'top-start'
+		| 'top-end'
+		| 'right'
+		| 'right-start'
+		| 'right-end'
+		| 'bottom'
+		| 'bottom-start'
+		| 'bottom-end'
+		| 'left'
+		| 'left-start'
+		| 'left-end'
 }
 
 export const InfoTip: FC<InfoTipProps> = ({
 	id,
 	title,
 	description,
+	place,
 }): JSX.Element => {
 	const content: JSX.Element = useMemo(
 		() => (
@@ -38,7 +52,7 @@ export const InfoTip: FC<InfoTipProps> = ({
 		<Tooltip
 			tooltipId={id}
 			tooltipContent={content}
-			place="bottom"
+			place={place}
 			className="info_tooltip"
 		>
 			{icon}

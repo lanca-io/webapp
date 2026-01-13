@@ -1,5 +1,7 @@
 import type { FC } from 'react'
+import { memo } from 'react'
 import { Heading } from './Heading/Heading'
+import { Button } from '@concero/ui-kit'
 import { Info } from './Info/Info'
 import './PoolCard.pcss'
 
@@ -13,19 +15,25 @@ type PoolCardProps = {
 	chain: Logo
 	isFull: boolean
 	isActive: boolean
+	isConnected: boolean
 	tokenLabel?: string
 	chainLabel?: string
+	tvl: number
+	deposited: number
 }
 
-export const PoolCard: FC<PoolCardProps> = ({
-	token,
-	chain,
-	isActive,
-	isFull,
-	tokenLabel = 'USDC',
-	chainLabel = 'ARB',
-}): JSX.Element => {
-	return (
+export const PoolCard: FC<PoolCardProps> = memo(
+	({
+		token,
+		chain,
+		isActive,
+		isFull,
+		isConnected,
+		tokenLabel = 'USDC',
+		chainLabel = 'ARB',
+		tvl,
+		deposited,
+	}) => (
 		<div className="pool_card">
 			<Heading
 				token={token}
@@ -35,15 +43,46 @@ export const PoolCard: FC<PoolCardProps> = ({
 				tokenLabel={tokenLabel}
 				chainLabel={chainLabel}
 			/>
-			<Info value={4} label="APY" symbolRight="%" isLoading={false} />
-			<Info value={7890} label="Total Loans" symbolLeft="$" isLoading={false} />
 			<Info
-				value={12.34}
-				label="Utilization Rate"
-				symbolRight="%"
+				value="-"
+				label="APY"
 				isLoading={false}
+				tooltip={{
+					show: true,
+					description:
+						'APY (Annual Percentage Yield) shows your potential annual return from rewards. It starts accruing only after your deposit is executed.',
+				}}
 			/>
-			<Info value={5.67} label="APY" symbolRight="%" isLoading={false} />
+			<Info
+				value={tvl}
+				label="TVL"
+				symbolLeft="$"
+				isLoading={false}
+				tooltip={{
+					show: true,
+					description:
+						'Total Value Locked (TVL) is the amount of liquidity currently held in this pool by all users.',
+				}}
+			/>
+			{isConnected && (
+				<>
+					<Info
+						value={deposited ?? 0}
+						label="Deposited"
+						symbolLeft="$"
+						isLoading={false}
+					/>
+					<Info value="-" label="Earned" isLoading={false} />
+				</>
+			)}
+			<div className="pool_card_actions">
+				<Button variant="secondary_color" size="m" isDisabled={isFull}>
+					Deposit
+				</Button>
+				<Button variant="secondary" size="m" isDisabled={isFull}>
+					Open
+				</Button>
+			</div>
 		</div>
-	)
-}
+	),
+)

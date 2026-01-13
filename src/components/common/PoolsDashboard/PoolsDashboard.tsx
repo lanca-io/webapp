@@ -21,9 +21,7 @@ export const PoolsDashboard: FC = () => {
 	)
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setIsLoading(false)
-		}, 1200)
+		const timer = setTimeout(() => setIsLoading(false), 1200)
 		return () => clearTimeout(timer)
 	}, [])
 
@@ -42,6 +40,27 @@ export const PoolsDashboard: FC = () => {
 		setRange(newRange)
 	}, [])
 
+	const poolProps = useMemo(
+		() => ({
+			token: {
+				src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+				alt: 'USDC Logo',
+			},
+			chain: {
+				src: 'https://api.v2.concero.io/static/chains/42161.svg',
+				alt: 'Arbitrum Logo',
+			},
+			isActive: true,
+			isFull: true,
+			isConnected: true,
+			tokenLabel: 'USDC',
+			chainLabel: 'ARB',
+			tvl: 7890,
+			deposited: 100,
+		}),
+		[],
+	)
+
 	return (
 		<div className="pools_dashboard">
 			<div className="pools_analytics">
@@ -58,20 +77,7 @@ export const PoolsDashboard: FC = () => {
 			</div>
 			<div className="pools_list">
 				<span className="pools_list_title">Pools</span>
-				<PoolCard
-					token={{
-						src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
-						alt: 'USDC Logo',
-					}}
-					chain={{
-						src: 'https://api.v2.concero.io/static/chains/42161.svg',
-						alt: 'Arbitrum Logo',
-					}}
-					isActive={true}
-					isFull={false}
-					tokenLabel="USDC"
-					chainLabel="ARB"
-				/>
+				<PoolCard {...poolProps} />
 			</div>
 		</div>
 	)
