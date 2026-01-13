@@ -4,7 +4,7 @@ import { ChartRange } from '../ChartMenu'
 import { VolumeChart } from '../VolumeChart/VolumeChart'
 import { BarChart } from '../BarChart/BarChart'
 import { REWARDS_DATA, VOLUME_DATA } from './mock'
-import { PoolCard } from '../PoolCard/PoolCard'
+import { PoolCompact } from '../PoolCompact/PoolCompact'
 import './PoolsDashboard.pcss'
 
 export const PoolsDashboard: FC = () => {
@@ -53,7 +53,7 @@ export const PoolsDashboard: FC = () => {
 			</div>
 			<div className="pools_list">
 				<span className="pools_list_title">Pools</span>
-				<PoolCard
+				<PoolCompact
 					token={{
 						src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
 						alt: 'USDC Logo',
@@ -67,8 +67,8 @@ export const PoolsDashboard: FC = () => {
 					isConnected={true}
 					tokenLabel="USDC"
 					chainLabel="ARB"
-					tvl={7890}
-					deposited={100}
+					tvl={120000}
+					deposited={50000}
 				/>
 			</div>
 		</div>

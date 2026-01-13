@@ -3,14 +3,14 @@ import { memo } from 'react'
 import { Heading } from './Heading/Heading'
 import { Button } from '@concero/ui-kit'
 import { Info } from './Info/Info'
-import './PoolCard.pcss'
+import './PoolExtended.pcss'
 
 type Logo = {
 	src: string
 	alt: string
 }
 
-type PoolCardProps = {
+type PoolExtendedProps = {
 	token: Logo
 	chain: Logo
 	isFull: boolean
@@ -22,7 +22,7 @@ type PoolCardProps = {
 	deposited: number
 }
 
-export const PoolCard: FC<PoolCardProps> = memo(
+export const PoolExtended: FC<PoolExtendedProps> = memo(
 	({
 		token,
 		chain,
@@ -34,7 +34,7 @@ export const PoolCard: FC<PoolCardProps> = memo(
 		tvl,
 		deposited,
 	}) => (
-		<div className="pool_card">
+		<div className="pool_extended">
 			<Heading
 				token={token}
 				chain={chain}
@@ -75,7 +75,7 @@ export const PoolCard: FC<PoolCardProps> = memo(
 					<Info value="-" label="Earned" isLoading={false} />
 				</>
 			)}
-			<div className="pool_card_actions">
+			<div className="pool_extended_actions">
 				<Button variant="secondary_color" size="m" isDisabled={isFull}>
 					Deposit
 				</Button>

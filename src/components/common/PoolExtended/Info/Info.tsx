@@ -22,26 +22,26 @@ type InfoProps = {
 export const Info: FC<InfoProps> = memo(
 	({ value, label, isLoading, symbolLeft, symbolRight, tooltip }) =>
 		isLoading ? (
-			<div className="pool_card_info">
+			<div className="pool_extended_info">
 				<SkeletonLoader width={'100%'} height={36} />
 			</div>
 		) : (
-			<div className="pool_card_info">
-				<div className="pool_card_info_value">
+			<div className="pool_extended_info">
+				<div className="pool_extended_info_value">
 					{symbolLeft && (
-						<span className="pool_card_info_value_symbol_left">
+						<span className="pool_extended_info_value_symbol_left">
 							{symbolLeft}
 						</span>
 					)}
-					<span className="pool_card_info_value_number">{value}</span>
+					<span className="pool_extended_info_value_number">{value}</span>
 					{symbolRight && (
-						<span className="pool_card_info_value_symbol_right">
+						<span className="pool_extended_info_value_symbol_right">
 							{symbolRight}
 						</span>
 					)}
 				</div>
-				<div className="pool_card_info_description">
-					<span className="pool_card_info_label">{label}</span>
+				<div className="pool_extended_info_description">
+					<span className="pool_extended_info_label">{label}</span>
 					{tooltip?.show && (
 						<InfoTip
 							id={`${label}_chart_info_tip`}

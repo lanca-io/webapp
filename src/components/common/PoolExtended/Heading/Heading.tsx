@@ -25,25 +25,25 @@ export const Heading: FC<PoolHeadingProps> = ({
 	tokenLabel,
 	chainLabel,
 }) => (
-	<div className="pool_card_heading">
-		<div className="pool_card_heading_logos">
+	<div className="pool_extended_heading">
+		<div className="pool_extended_heading_logos">
 			<img
 				src={token.src}
 				alt={token.alt}
-				className="pool_card_heading_logo_token"
+				className="pool_extended_heading_logo_token"
 			/>
 			<img
 				src={chain.src}
 				alt={chain.alt}
-				className="pool_card_heading_logo_chain"
+				className="pool_extended_heading_logo_chain"
 			/>
 		</div>
-		<div className="pool_card_heading_description">
-			<div className="pool_card_title_container">
-				<span className="pool_card_title_token">{tokenLabel}</span>
-				<span className="pool_card_title_chain">{chainLabel}</span>
+		<div className="pool_extended_heading_description">
+			<div className="pool_extended_title_container">
+				<span className="pool_extended_title_token">{tokenLabel}</span>
+				<span className="pool_extended_title_chain">{chainLabel}</span>
 			</div>
-			<div className="pool_card_indicators">
+			<div className="pool_extended_indicators">
 				{isActive && (
 					<Tag size="s" variant="branded">
 						Active

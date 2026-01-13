@@ -1,0 +1,46 @@
+.pool_compact {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+
+	& .pool_compact_content {
+		display: flex;
+		padding: var(--space-m);
+		flex-direction: column;
+		gap: var(--space-m);
+		align-items: center;
+		width: 100%;
+		border-radius: 24px;
+		background-color: var(--color-gray-25);
+
+		& .pool_compact_data {
+			display: flex;
+			align-items: center;
+			gap: var(--space-m);
+			height: 62px;
+			width: 100%;
+			border-radius: 16px;
+			background-color: var(--color-gray-50);
+		}
+	}
+
+	& .pool_compact_actions {
+		display: flex;
+		padding: var(--space-m);
+		flex-direction: row;
+		gap: var(--space-m);
+		align-items: center;
+		width: 100%;
+		border-radius: 24px;
+		border-top: 1px solid var(--color-gray-100);
+		background-color: var(--color-gray-25);
+
+		& > * {
+			display: flex;
+			justify-content: center;
+			flex: 1;
+			min-width: 0;
+		}
+	}
+}
