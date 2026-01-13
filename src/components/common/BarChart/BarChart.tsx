@@ -24,9 +24,8 @@ export const BarChart: FC<BarChartProps> = memo(
 					range={range}
 					tip={{
 						id: 'bar_chart_info_tip',
-						heading: 'Total Rewards',
 						description:
-							'Cumulative amount of rewards distributed to LP providers.',
+							'Total rewards distributed to liquidity providers across all pools.',
 					}}
 					value={{ amount: total, symbol: '$' }}
 					onChange={onRangeChange}

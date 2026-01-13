@@ -23,9 +23,8 @@ export const VolumeChart: FC<VolumeChartProps> = memo(
 				range={range}
 				tip={{
 					id: 'volume_chart_info_tip',
-					heading: 'Total Volume',
-					description:
-						'Cumulative volume across all pools over the selected time period.',
+
+					description: 'Total trading volume across all liquidity pools.',
 				}}
 				value={{ amount: total, symbol: '$' }}
 				onChange={onRangeChange}

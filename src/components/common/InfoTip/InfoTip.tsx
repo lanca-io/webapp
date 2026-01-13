@@ -8,6 +8,7 @@ type InfoTipProps = {
 	id: string
 	title?: string
 	description: string
+	alignment?: 'left' | 'center' | 'right'
 	place?:
 		| 'top'
 		| 'top-start'
@@ -26,14 +27,22 @@ type InfoTipProps = {
 export const InfoTip: FC<InfoTipProps> = ({
 	id,
 	title,
+	alignment = 'center',
 	description,
 	place,
 }): JSX.Element => {
 	const content: JSX.Element = useMemo(
 		() => (
 			<div className="info_tooltip_content">
-				<span className="info_tooltip_title">{title}</span>
-				<span className="info_tooltip_description">{description}</span>
+				<span className="info_tooltip_title" style={{ textAlign: alignment }}>
+					{title}
+				</span>
+				<span
+					className="info_tooltip_description"
+					style={{ textAlign: alignment }}
+				>
+					{description}
+				</span>
 			</div>
 		),
 		[title, description],

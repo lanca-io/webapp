@@ -8,7 +8,7 @@ import './ChartHeading.pcss'
 type HeadingProps = {
 	title: string
 	range: ChartRange
-	tip: { id: string; heading: string; description: string }
+	tip: { id: string; heading?: string; description: string }
 	value: { amount: number; symbol?: string }
 	onChange: (range: ChartRange) => void
 	isLoading?: boolean
@@ -29,6 +29,7 @@ export const ChartHeading: FC<HeadingProps> = ({
 				title={heading}
 				description={description}
 				place="bottom"
+				alignment="left"
 			/>
 		),
 		[],
