@@ -4,9 +4,7 @@ export enum VolumeRange {
 	ALL = 'ALL',
 }
 
-export type ChartDataPoint = {
+export type DataPoint = {
 	time: string
 	value: number
 }
-
-export type ChartData = ChartDataPoint[]
