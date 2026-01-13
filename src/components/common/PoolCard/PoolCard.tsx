@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { Heading } from './Heading/Heading'
+import { Info } from './Info/Info'
 import './PoolCard.pcss'
 
 type Logo = {
@@ -34,6 +35,15 @@ export const PoolCard: FC<PoolCardProps> = ({
 				tokenLabel={tokenLabel}
 				chainLabel={chainLabel}
 			/>
+			<Info value={4} label="APY" symbolRight="%" isLoading={false} />
+			<Info value={7890} label="Total Loans" symbolLeft="$" isLoading={false} />
+			<Info
+				value={12.34}
+				label="Utilization Rate"
+				symbolRight="%"
+				isLoading={false}
+			/>
+			<Info value={5.67} label="APY" symbolRight="%" isLoading={false} />
 		</div>
 	)
 }

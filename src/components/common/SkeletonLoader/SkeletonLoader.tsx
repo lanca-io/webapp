@@ -2,8 +2,8 @@ import './SkeletonLoader.pcss'
 
 type SkeletonLoaderProps = {
 	className?: string
-	width?: number
-	height: number
+	width?: number | string
+	height: number | string
 }
 
 export function SkeletonLoader({
