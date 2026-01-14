@@ -1,0 +1,76 @@
+.token_badge_container {
+	height: fit-content;
+	width: fit-content;
+	position: relative;
+}
+
+.token_badge_token {
+	border-radius: 50%;
+}
+
+.token_badge_border_small {
+	border-radius: var(--space-xxs) !important;
+}
+
+.token_badge_border_medium {
+	border-radius: var(--space-xs) !important;
+}
+
+.token_badge_chain {
+	background-color: var(--color-gray-25);
+	border-radius: var(--space-xxs);
+	box-shadow:
+		0 0 6px 0 rgba(52, 64, 84, 0.3),
+		0 2px 3px 0 rgba(52, 64, 84, 0.15);
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.token_badge_xs {
+	width: var(--space-s);
+	height: var(--space-s);
+}
+
+.token_badge_xs + .token_badge_chain {
+	display: none;
+}
+
+.token_badge_s {
+	width: var(--space-m);
+	height: var(--space-m);
+}
+
+.token_badge_s + .token_badge_chain {
+	display: none;
+}
+
+.token_badge_m {
+	width: var(--space-l);
+	height: var(--space-l);
+}
+
+.token_badge_m + .token_badge_chain {
+	width: var(--space-s);
+	height: var(--space-s);
+}
+
+.token_badge_l {
+	width: var(--space-xxl);
+	height: var(--space-xxl);
+}
+
+.token_badge_l + .token_badge_chain {
+	width: var(--space-m);
+	height: var(--space-m);
+}
+
+.token_badge_xl {
+	width: var(--space-xxxl);
+	height: var(--space-xxxl);
+}
+
+.token_badge_xl + .token_badge_chain {
+	width: var(--space-l);
+	height: var(--space-l);
+}

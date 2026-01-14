@@ -1,19 +1,18 @@
 import { type Address, formatEther } from 'viem'
-import { config } from '../../constants/config'
-import { type Token } from '../../api/concero/types'
 import { gasUsedMap } from './gasPriceMap'
 import { type IRouteType, StepType, type TxName } from '@lanca/sdk'
 import { handleFetchTokens } from '../../handlers/tokens'
 import { getPublicClient } from '../../providers/Web3Provider/Web3Provider'
+import { zeroAddress } from 'viem'
 
-const getUsdPrice = async (chainId: string): Promise<Token | null> => {
+const getUsdPrice = async (chainId: string) => {
 	try {
 		const response = await handleFetchTokens(
 			chainId,
 			0,
 			1,
 			undefined,
-			config.NULL_ADDRESS,
+			zeroAddress,
 		)
 		return response[0]
 	} catch (error) {

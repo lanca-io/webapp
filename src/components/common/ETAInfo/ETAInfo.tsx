@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { TimeIcon } from '../../../assets/icons/TimeIcon'
+import { TimeIcon } from '@/assets/TimeIcon'
 import { useRouteStore } from '../../../store/route/useRouteStore'
 import './ETAInfo.pcss'
 

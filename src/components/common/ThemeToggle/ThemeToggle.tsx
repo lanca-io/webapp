@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
-import type { Theme } from '@/store/settings/types'
-import { DarkThemeIcon } from '@/assets/icons/DarkThemeIcon'
+import { Theme } from '@/store/settings/types'
+import { DarkThemeIcon } from '@/assets/DarkThemeIcon'
 import { useSettingsStore } from '@/store/settings/useSettings'
 import { useMemo } from 'react'
 import { Switch } from '@concero/ui-kit'
@@ -10,11 +10,11 @@ export const ThemeToggle = (): JSX.Element => {
 	const { theme, setTheme } = useSettingsStore()
 
 	const toggleTheme = (): void => {
-		const theme: Theme = isDark ? 'light' : 'dark'
+		const theme: Theme = isDark ? Theme.LIGHT : Theme.DARK
 		setTheme(theme)
 	}
 
-	const isDark: boolean = theme === 'dark'
+	const isDark: boolean = theme === Theme.DARK
 	const icon: ReactElement = useMemo(() => <DarkThemeIcon />, [])
 	const switcher: ReactElement = useMemo(
 		() => <Switch checked={isDark} onChange={toggleTheme} />,

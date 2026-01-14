@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { Badge } from '../../../layout/Badge/Badge'
+import { Badge } from '../../Badge/Badge'
 import './TokenSelection.pcss'
 
 interface TokenSelectionProps {
@@ -15,7 +15,7 @@ export const TokenSelection = memo(
 		}, [onClick])
 
 		const badge = useMemo(
-			() => <Badge tokenLogoSrc={logoURI || ''} size="m" />,
+			() => <Badge logoURL={logoURI || ''} size="m" />,
 			[logoURI],
 		)
 

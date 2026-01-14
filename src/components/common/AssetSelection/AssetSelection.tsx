@@ -2,7 +2,7 @@ import type { ExtendedToken } from '../../../store/tokens/types'
 import { memo } from 'react'
 import { TokenSelection } from './TokenSelection/TokenSelection'
 import { ChainSelection } from './ChainSelection/ChainSelection'
-import { TrailRight } from '@/assets/icons/TrailRight'
+import { TrailRight } from '@/assets/TrailRight'
 import { ConceroChain } from '../../../store/chains/types'
 import './AssetSelection.pcss'
 

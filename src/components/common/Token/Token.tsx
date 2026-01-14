@@ -1,10 +1,10 @@
 import type { ExtendedToken } from '../../../store/tokens/types'
 import type { Address } from 'viem'
 import { memo, useCallback, useMemo } from 'react'
-import { Badge } from '../../layout/Badge/Badge'
+import { TokenBadge } from '../TokenBadge/TokenBadge'
 import { Balance } from '../Balance/Balance'
 import { truncate, truncateAddress } from '../../../utils/new/truncate'
-import { LinkIcon } from '../../../assets/icons/LinkIcon'
+import { LinkIcon } from '@/assets/LinkIcon'
 import { useChainsStore } from '../../../store/chains/useChainsStore'
 import { NativeInfo } from './NativeInfo/NativeInfo'
 import { isNative } from '@lanca/sdk'
@@ -53,7 +53,7 @@ export const Token = memo(
 
 		const badge = useMemo(
 			() => (
-				<Badge
+				<TokenBadge
 					tokenLogoSrc={token.logo_url}
 					chainLogoSrc={token.chainLogoURI || ''}
 					size="l"

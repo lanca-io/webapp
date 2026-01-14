@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Tag } from '@concero/ui-kit'
 import { Tooltip } from '../../Tooltip/Tooltip'
-import { InfoIcon } from '../../../../assets/icons/InfoIcon'
+import { InfoIcon } from '@/assets/InfoIcon'
 import './NativeInfo.pcss'
 
 type NativeTokenBadgeProps = {

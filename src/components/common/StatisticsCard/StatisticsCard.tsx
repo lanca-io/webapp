@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { InfoIcon } from '@/assets/icons/InfoIcon'
+import { InfoIcon } from '@/assets/InfoIcon'
 import './StatisticsCard.pcss'
 
 type StatisticsCardProps = {

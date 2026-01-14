@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useMemo, memo } from 'react'
 import { useFormStore } from '../../../../../store/form/useFormStore'
-import { RightIcon } from '../../../../../assets/icons/RightIcon'
+import { RightIcon } from '@/assets/RightIcon'
 import './Transaction.pcss'
 
 export const Transaction: FC = memo(() => {

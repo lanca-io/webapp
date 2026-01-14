@@ -3,8 +3,8 @@ import { memo, useMemo } from 'react'
 import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'
 import { Status, StepType } from '@lanca/sdk'
 import { Alert } from '../../Alert/Alert'
-import { SignIcon } from '../../../../assets/icons/SignIcon'
-import { DangerIcon } from '../../../../assets/icons/DangerIcon'
+import { SignIcon } from '@/assets/SignIcon'
+import { DangerIcon } from '@/assets/DangerIcon'
 import './ProcessInfo.pcss'
 
 export type FailureStep =

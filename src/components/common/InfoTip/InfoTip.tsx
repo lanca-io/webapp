@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { InfoIcon } from '@/assets/icons/InfoIcon'
+import { InfoIcon } from '@/assets/InfoIcon'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { useMemo } from 'react'
 import './InfoTip.pcss'

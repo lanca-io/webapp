@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import { ArrowDown } from '../../../assets/icons/ArrowDown'
+import { ArrowDown } from '@/assets/ArrowDown'
 import { useIsMobile, useIsTablet } from '../../../hooks/useMediaQuery'
 import './CardPointer.pcss'
 

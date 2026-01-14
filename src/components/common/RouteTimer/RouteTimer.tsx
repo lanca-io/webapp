@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Tag } from '@concero/ui-kit'
-import { TimeIcon } from '../../../assets/icons/TimeIcon'
+import { TimeIcon } from '@/assets/TimeIcon'
 import { useLoadRoute } from '../../../hooks/Loadables/useLoadRoute'
 import { useRouteStore } from '../../../store/route/useRouteStore'
 import './RouteTimer.pcss'

@@ -12,7 +12,7 @@ import {
 	makeAllowanceOverride,
 } from '../utils/new/args'
 import { useChainsStore } from '../store/chains/useChainsStore'
-import { conceroOrchestratorAbi } from '../assets/abi/ConceroOrchestrator'
+import { conceroOrchestratorAbi } from '@/abi/ConceroOrchestrator'
 import { handleFetchTokens } from '../handlers/tokens'
 import { isNative } from '@lanca/sdk'
 

@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { useState, useEffect } from 'react'
-import { MetricsIcon } from '@/assets/icons/MetricsIcon'
+import { MetricsIcon } from '@/assets/MetricsIcon'
 import { Button } from '@concero/ui-kit'
 import './MetricsBanner.pcss'
 

@@ -1,6 +1,6 @@
 import { useMemo, type FC } from 'react'
 import { Button } from '@concero/ui-kit'
-import { RewardIcon } from '../../../assets/icons/RewardIcon'
+import { RewardIcon } from '@/assets/RewardIcon'
 import './RewardsWidget.pcss'
 
 export const RewardsWidget: FC = (): JSX.Element => {

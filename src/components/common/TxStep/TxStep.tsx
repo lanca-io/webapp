@@ -3,8 +3,8 @@ import { memo, useMemo } from 'react'
 import { capitalizeFirstLetter } from '../../../utils/new/format'
 import { StepType, Status } from '@lanca/sdk'
 import { Spinner } from '@concero/ui-kit'
-import { SuccessIcon } from '../../../assets/icons/SuccessIcon'
-import { DangerIcon } from '../../../assets/icons/DangerIcon'
+import { SuccessIcon } from '@/assets/SuccessIcon'
+import { DangerIcon } from '@/assets/DangerIcon'
 import './TxStep.pcss'
 
 type TxStepProps = {

@@ -1,5 +1,5 @@
 import { FC, memo, useMemo, Fragment } from 'react'
-import { RightIcon } from '../../../assets/icons/RightIcon'
+import { RightIcon } from '@/assets/RightIcon'
 import { TxStep } from '../TxStep/TxStep'
 import { useTxExecutionStore } from '../../../store/tx-execution/useTxExecutionStore'
 import { Status } from '@lanca/sdk'

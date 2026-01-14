@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { memo, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import { LeftIcon } from '../../../../assets/icons/LeftIcon'
+import { LeftIcon } from '@/assets/LeftIcon'
 import { useTxProcess } from '../../../../hooks/useTxProcess'
 import { useProcessHeading } from '../../../../hooks/useProcessHeading'
 import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'

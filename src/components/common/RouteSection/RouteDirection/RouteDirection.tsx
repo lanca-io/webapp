@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { memo, useMemo } from 'react'
-import { Badge } from '../../../layout/Badge/Badge'
+import { Badge } from '../../Badge/Badge'
 import { formatTokenAmount } from '../../../../utils/new/tokens'
 import { config } from '../../../../constants/config'
 import { format } from '../../../../utils/new/format'
@@ -33,7 +33,7 @@ export const RouteDirection: FC<RouteDirectionProps> = memo(
 				<p className="route_direction_heading">{heading}:</p>
 				<div className="route_direction_content">
 					<div className="route_direction_token">
-						<Badge size="m" tokenLogoSrc={tokenLogo} borderMedium />
+						<Badge size="m" logoURL={tokenLogo} />
 						<div className="route_direction_details">
 							<span className="route_direction_amount">
 								{format(Number(displayAmount), 3)}
@@ -45,7 +45,7 @@ export const RouteDirection: FC<RouteDirectionProps> = memo(
 					</div>
 					<span className="route_direction_pointer">on</span>
 					<div className="route_direction_chain">
-						<Badge size="m" tokenLogoSrc={chainLogo} borderMedium />
+						<Badge size="m" logoURL={chainLogo} />
 						<span className="route_direction_chain">{data.chain.name}</span>
 					</div>
 				</div>

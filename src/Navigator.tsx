@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Header } from './components/header/Header'
 import { routes } from './constants/routes'
-import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
+import { FullScreenLoader } from '@/components/common/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
 

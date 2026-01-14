@@ -8,9 +8,9 @@ import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useLoadChains } from '../../hooks/Loadables/useLoadChains'
 import { WagmiProvider } from 'wagmi'
 import { config } from '../../constants/config'
-import { FullScreenLoader } from '../../components/layout/FullScreenLoader/FullScreenLoader'
-import { TechWorksScreen } from '../../components/screens/TechWorksScreen/TechWorksScreen'
+import { FullScreenLoader } from '@/components/common/FullScreenLoader/FullScreenLoader'
 import { getPublicClient as getWagmiPublicClient } from '@wagmi/core'
+import { Maintenance } from '@/components/maintenance/Maintenance'
 
 const metadata = {
 	name: 'Concero',
@@ -92,7 +92,7 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
 	}
 
 	if (!adapter || chains.length === 0) {
-		return <TechWorksScreen />
+		return <Maintenance />
 	}
 
 	return (

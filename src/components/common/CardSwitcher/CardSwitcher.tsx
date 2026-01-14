@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import { SwapIcon } from '../../../assets/icons/SwapIcon'
+import { SwapIcon } from '@/assets/SwapIcon'
 import { useFormStore } from '../../../store/form/useFormStore'
 import { useIsMobile, useIsTablet } from '../../../hooks/useMediaQuery'
 import './CardSwitcher.pcss'

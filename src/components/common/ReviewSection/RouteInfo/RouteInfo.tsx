@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { PointerIcon } from '../../../../assets/icons/PointerIcon'
+import { PointerIcon } from '@/assets/PointerIcon'
 import { SourceInfo } from './SourceInfo/SourceInfo'
 import { DestinationInfo } from './DestinationInfo/DestinationInfo'
 import './RouteInfo.pcss'

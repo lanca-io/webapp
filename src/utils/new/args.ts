@@ -13,7 +13,7 @@ import type {
 import type { Address, Hex, StateOverride } from 'viem'
 import { chainSelectors } from '../../configuration/selectors'
 import { StepType } from '@lanca/sdk'
-import { swapDataAbi } from '../../assets/abi/SwapData'
+import { swapDataAbi } from '@/abi/SwapData'
 import { encodeAbiParameters, zeroAddress } from 'viem'
 import { parseAbiParameters } from 'viem'
 import { encodeFunctionData } from 'viem'

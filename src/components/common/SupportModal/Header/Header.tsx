@@ -1,7 +1,7 @@
 import type { ReactElement, MouseEventHandler } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import { ArrowLeftIcon } from '@/assets/icons/ArrowLeftIcon'
-import { CloseIcon } from '@/assets/icons/CloseIcon'
+import { ArrowLeftIcon } from '@/assets/ArrowLeftIcon'
+import { CloseIcon } from '@/assets/CloseIcon'
 import './Header.pcss'
 
 type HeaderProps = {

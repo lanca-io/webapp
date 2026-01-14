@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Tooltip } from '@/components/common/Tooltip/Tooltip'
 import { IconButton } from '@concero/ui-kit'
-import { RewardsIcon } from '@/assets/icons/Rewards'
+import { RewardsIcon } from '@/assets/Rewards'
 import { externalRoutes } from '@/constants'
 import './Rewards.pcss'
 
