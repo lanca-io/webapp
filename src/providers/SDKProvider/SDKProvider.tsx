@@ -8,7 +8,7 @@ import { createContext } from 'react'
 import { LancaClient } from '@lanca/sdk'
 import { fallback, http } from 'viem'
 import { useChainsStore } from '../../store/chains/useChainsStore'
-import { convertToViemChains } from '../../utils/new/chains'
+import { convertToViemChains } from '../../utils/chains'
 
 export type SDKContext = {
 	client: Client

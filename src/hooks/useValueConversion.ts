@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
 import { Mode } from '../store/form/types'
-import { formatTokenAmount } from '../utils/new/tokens'
+import { formatTokenAmount } from '../utils/tokens'
 import {
 	tokenAmountToUsd,
 	percentOfBalanceToUsd,
 	textCommandToUsd,
 	usdToTokenAmount,
-} from '../utils/new/input'
+} from '../utils/input'
 import { Decimal } from 'decimal.js'
 
 type ConversionResult = {

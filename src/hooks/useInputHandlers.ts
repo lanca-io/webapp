@@ -1,6 +1,6 @@
 import type { ChangeEvent, FocusEvent } from 'react'
 import { useCallback, useEffect } from 'react'
-import { sanitizeNumbers, sanitizeText } from '../utils/new/input'
+import { sanitizeNumbers, sanitizeText } from '../utils/input'
 import { Mode } from '../store/form/types'
 import { useFormStore } from '../store/form/useFormStore'
 import { useTextInputValidator } from './useTextInputValidator'

@@ -1,7 +1,7 @@
 import type { ExtendedToken } from '../store/tokens/types'
 import { useCallback, useMemo } from 'react'
 import { useFormStore } from '../store/form/useFormStore'
-import { preciseMultiply } from '../utils/new/operations'
+import { preciseMultiply } from '../utils/operations'
 import { useAccount } from 'wagmi'
 import Decimal from 'decimal.js'
 

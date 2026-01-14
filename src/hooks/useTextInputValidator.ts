@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { textToAmount } from '../utils/new/input'
+import { textToAmount } from '../utils/input'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
-import { preciseDivide, preciseMultiply } from '../utils/new/operations'
+import { preciseDivide, preciseMultiply } from '../utils/operations'
 import { Decimal } from 'decimal.js'
 
 export const useTextInputValidator = (

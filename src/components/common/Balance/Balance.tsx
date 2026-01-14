@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { format } from '../../../utils/new/format'
-import { formatTokenAmount } from '../../../utils/new/tokens'
+import { format } from '../../../utils/format'
+import { formatTokenAmount } from '../../../utils/tokens'
 import './Balance.pcss'
 
 type BalanceProps = {

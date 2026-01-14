@@ -11,7 +11,7 @@ import type {
 	TxName,
 } from '@lanca/sdk'
 import type { Address, Hex, StateOverride } from 'viem'
-import { chainSelectors } from '../../configuration/selectors'
+import { chainSelectors } from '@/configuration/selectors'
 import { StepType } from '@lanca/sdk'
 import { swapDataAbi } from '@/abi/SwapData'
 import { encodeAbiParameters, zeroAddress } from 'viem'

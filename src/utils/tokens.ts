@@ -1,4 +1,4 @@
-import type { ExtendedToken } from '../../store/tokens/types'
+import type { ExtendedToken } from '../store/tokens/types'
 import { formatUnits } from 'viem'
 import { preciseMultiply, scientificToBigInt } from './operations'
 import { Decimal } from 'decimal.js'

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { defaultSlippage } from '../store/settings/CreateSettingsStore'
-import { normalizeSlippageInput } from '../utils/new/input'
+import { normalizeSlippageInput } from '../utils/input'
 import { useDebounce } from './useDebounce'
 import { useSettingsStore } from '../store/settings/useSettings'
 import { useFormStore } from '../store/form/useFormStore'

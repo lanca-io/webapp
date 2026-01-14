@@ -1,7 +1,7 @@
 import type { ExtendedToken } from '../../../store/tokens/types'
 import { memo, useCallback, useMemo } from 'react'
-import { format } from '../../../utils/new/format'
-import { formatTokenAmount } from '../../../utils/new/tokens'
+import { format } from '../../../utils/format'
+import { formatTokenAmount } from '../../../utils/tokens'
 import { useFormStore } from '../../../store/form/useFormStore'
 import './BalanceInfo.pcss'
 

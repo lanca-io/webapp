@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { AddressMode } from '../../../store/form/types'
 import { useFormStore } from '../../../store/form/useFormStore'
-import { truncateAddress } from '../../../utils/new/truncate'
+import { truncateAddress } from '../../../utils/truncate'
 import './AddressInfo.pcss'
 
 export const AddressInfo: FC = () => {

@@ -1,9 +1,9 @@
 import { useMemo, useEffect } from 'react'
 import { useRouteStore } from '../store/route/useRouteStore'
 import { useFormStore } from '../store/form/useFormStore'
-import { format } from '../utils/new/format'
-import { formatTokenAmount } from '../utils/new/tokens'
-import { tokenAmountToUsd } from '../utils/new/input'
+import { format } from '../utils/format'
+import { formatTokenAmount } from '../utils/tokens'
+import { tokenAmountToUsd } from '../utils/input'
 import { Decimal } from 'decimal.js'
 
 export enum ImpactSeverity {

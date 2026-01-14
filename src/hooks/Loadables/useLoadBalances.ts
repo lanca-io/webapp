@@ -8,7 +8,7 @@ import { useAccount } from 'wagmi'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 import { useTxProcess } from '../useTxProcess'
 import { Status } from '@lanca/sdk'
-import { areTokensEqual } from '../../utils/new/tokens'
+import { areTokensEqual } from '../../utils/tokens'
 
 const REFRESH_INTERVAL_MS = 300_000
 const MAX_RETRIES = 2

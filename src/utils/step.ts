@@ -1,6 +1,20 @@
 import type { IRouteStep, IRouteBaseStep } from '@lanca/sdk'
 import { StepType } from '@lanca/sdk'
-import { toTitleCase } from '../formatting'
+
+/**
+ * Converts a string to title case (first letter of each word capitalized, rest lowercase).
+ *
+ * @param str - The input string.
+ * @returns Title-cased string.
+ */
+export function toTitleCase(str: string): string {
+	return str
+		.toLowerCase()
+		.replace(
+			/\w\S*/g,
+			text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
+		)
+}
 
 /**
  * Returns a human-readable title for the given step type.

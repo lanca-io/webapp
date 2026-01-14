@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { memo, useMemo } from 'react'
-import { capitalizeFirstLetter } from '../../../utils/new/format'
+import { capitalizeFirstLetter } from '../../../utils/format'
 import { StepType, Status } from '@lanca/sdk'
 import { Spinner } from '@concero/ui-kit'
 import { SuccessIcon } from '@/assets/SuccessIcon'

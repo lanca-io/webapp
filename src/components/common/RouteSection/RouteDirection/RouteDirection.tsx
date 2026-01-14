@@ -1,9 +1,9 @@
 import type { FC } from 'react'
 import { memo, useMemo } from 'react'
 import { Badge } from '../../Badge/Badge'
-import { formatTokenAmount } from '../../../../utils/new/tokens'
+import { formatTokenAmount } from '../../../../utils/tokens'
 import { config } from '../../../../constants/config'
-import { format } from '../../../../utils/new/format'
+import { format } from '../../../../utils/format'
 import './RouteDirection.pcss'
 
 type RouteDirectionProps = {
