@@ -15,11 +15,9 @@ const PoolScreen = lazy(
 
 const USDCPoolScreen = lazy(
 	async () =>
-		await import('./components/screens/PoolScreen/USDCPoolScreen').then(
-			module => ({
-				default: module.USDCPoolScreen,
-			}),
-		),
+		await import('./pages/USDCPool').then(module => ({
+			default: module.USDCPoolPage,
+		})),
 )
 
 const SwapScreen = lazy(
