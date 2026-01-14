@@ -8,7 +8,7 @@ import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useLoadChains } from '../../hooks/Loadables/useLoadChains'
 import { WagmiProvider } from 'wagmi'
 import { config } from '../../constants/config'
-import { FullScreenLoader } from '@/components/common/ScreenLoader/ScreenLoader'
+import { ScreenLoader } from '@/components/common/ScreenLoader/ScreenLoader'
 import { getPublicClient as getWagmiPublicClient } from '@wagmi/core'
 import { Maintenance } from '@/components/maintenance/Maintenance'
 
@@ -88,7 +88,7 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
 	}, [chains, adapter])
 
 	if (loading) {
-		return <FullScreenLoader />
+		return <ScreenLoader />
 	}
 
 	if (!adapter || chains.length === 0) {
