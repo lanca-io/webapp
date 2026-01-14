@@ -7,6 +7,7 @@ import { REWARDS_DATA, VOLUME_DATA } from './mock'
 import { useIsTablet, useIsMobile } from '@/hooks'
 import { PoolCompact } from '../PoolCompact/PoolCompact'
 import { PoolExtended } from '../PoolExtended/PoolExtended'
+import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
 import './PoolsDashboard.pcss'
 
 export const PoolsDashboard: FC = () => {
@@ -40,6 +41,7 @@ export const PoolsDashboard: FC = () => {
 
 	return (
 		<div className="pools_dashboard">
+			<MetricsBanner />
 			<div className="pools_analytics">
 				<div className="pools_charts">
 					<VolumeChart
