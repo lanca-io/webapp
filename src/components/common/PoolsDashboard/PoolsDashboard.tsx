@@ -63,19 +63,19 @@ export const PoolsDashboard: FC = () => {
 				{showCompact ? (
 					<PoolCompact
 						isLoading={false}
-						isConnected={false}
+						isConnected={true}
 						cap={150000}
-						tvl={110000}
-						deposited={50000}
+						tvl={150000}
+						deposited={0}
 						earned={123.45}
 					/>
 				) : (
 					<PoolExtended
-						isLoading={true}
+						isLoading={false}
 						isConnected={true}
 						cap={150000}
-						tvl={110000}
-						deposited={50000}
+						tvl={150000}
+						deposited={0}
 						earned={123.45}
 					/>
 				)}
