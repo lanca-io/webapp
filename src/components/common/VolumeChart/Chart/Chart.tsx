@@ -11,7 +11,15 @@ export const Chart: FC<ChartProps> = ({ data }): JSX.Element => {
 	return (
 		<div className="volume_chart_visual">
 			<ResponsiveContainer height="100%" width="100%">
-				<AreaChart data={data}>
+				<AreaChart
+					data={data}
+					style={{
+						paddingTop: 0,
+						paddingBottom: 16,
+						paddingLeft: 8,
+						paddingRight: 8,
+					}}
+				>
 					<defs>
 						<linearGradient
 							id="volumeGradient"
