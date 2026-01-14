@@ -1,8 +1,8 @@
 import type { FC } from 'react'
 import { RaceBy } from '@uiball/loaders'
-import './FullScreenLoader.pcss'
+import './ScreenLoader.pcss'
 
-export const FullScreenLoader: FC = () => {
+export const ScreenLoader: FC = () => {
 	return (
 		<div
 			className="fullscreen_loader"

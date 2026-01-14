@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Header } from './components/header/Header'
 import { routes } from './constants/routes'
-import { FullScreenLoader } from '@/components/common/FullScreenLoader/FullScreenLoader'
+import { ScreenLoader } from '@/components/common/ScreenLoader/ScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
 
@@ -42,7 +42,7 @@ export const Navigator = () => {
 				<Route
 					path={routes.home}
 					element={
-						<Suspense fallback={<FullScreenLoader />}>
+						<Suspense fallback={<ScreenLoader />}>
 							<SwapScreen />
 						</Suspense>
 					}
@@ -50,7 +50,7 @@ export const Navigator = () => {
 				<Route
 					path={routes.pools}
 					element={
-						<Suspense fallback={<FullScreenLoader />}>
+						<Suspense fallback={<ScreenLoader />}>
 							<PoolScreen />
 						</Suspense>
 					}
@@ -58,7 +58,7 @@ export const Navigator = () => {
 				<Route
 					path={routes.usdcPools}
 					element={
-						<Suspense fallback={<FullScreenLoader />}>
+						<Suspense fallback={<ScreenLoader />}>
 							<USDCPoolScreen />
 						</Suspense>
 					}

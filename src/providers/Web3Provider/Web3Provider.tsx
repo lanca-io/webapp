@@ -8,7 +8,7 @@ import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useLoadChains } from '../../hooks/Loadables/useLoadChains'
 import { WagmiProvider } from 'wagmi'
 import { config } from '../../constants/config'
-import { FullScreenLoader } from '@/components/common/FullScreenLoader/FullScreenLoader'
+import { FullScreenLoader } from '@/components/common/ScreenLoader/ScreenLoader'
 import { getPublicClient as getWagmiPublicClient } from '@wagmi/core'
 import { Maintenance } from '@/components/maintenance/Maintenance'
 
