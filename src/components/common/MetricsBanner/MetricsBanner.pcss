@@ -39,4 +39,30 @@
 			}
 		}
 	}
+
+	& .metrics_banner_action {
+		display: flex;
+		align-items: center;
+		width: auto;
+	}
+}
+
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+	.metrics_banner {
+		max-width: 100%;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.metrics_banner {
+		display: flex;
+		flex-direction: column;
+		max-width: 100%;
+
+		& .metrics_banner_action {
+			align-items: start;
+			padding-left: 56px;
+			width: 100%;
+		}
+	}
 }

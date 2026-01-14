@@ -8,7 +8,7 @@ const KEY = 'lanca_metrics_banner'
 const TTL = 6 * 60 * 60 * 1000
 
 export const MetricsBanner = (): ReactElement | null => {
-	const [show, setShow] = useState(false)
+	const [show, setShow] = useState<boolean>(false)
 
 	useEffect(() => {
 		const ts = localStorage.getItem(KEY)
@@ -41,9 +41,11 @@ export const MetricsBanner = (): ReactElement | null => {
 					</span>{' '}
 				</span>
 			</div>
-			<Button variant="primary" size="m" onClick={close}>
-				Close
-			</Button>
+			<div className="metrics_banner_action">
+				<Button variant="primary" size="m" onClick={close}>
+					Close
+				</Button>
+			</div>
 		</div>
 	)
 }
