@@ -1,4 +1,5 @@
-import { memo, type FC } from 'react'
+import type { FC } from 'react'
+import { memo } from 'react'
 import { USDCPool } from '@/components/usdc-pool/USDCPool'
 
 export const USDCPoolPage: FC = memo((): JSX.Element => {
