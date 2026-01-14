@@ -1,5 +1,5 @@
-import type { FC, ReactNode } from 'react'
-import { memo } from 'react'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 import { SkeletonLoader } from '../../SkeletonLoader'
 import { InfoTip } from '../../InfoTip'
 import './Info.pcss'
@@ -13,30 +13,51 @@ type InfoProps = {
 	value: number | string
 	label: string
 	isLoading: boolean
-	symbolLeft?: string
-	symbolRight?: string
+	isHighlighted?: boolean
+	prefix?: string
+	suffix?: string
 	tooltip?: TooltipConfig
-	children?: ReactNode
 }
 
-export const Info: FC<InfoProps> = memo(
-	({ value, label, isLoading, symbolLeft, symbolRight, tooltip }) =>
-		isLoading ? (
+export const Info: FC<InfoProps> = ({
+	value,
+	label,
+	isLoading,
+	isHighlighted = false,
+	prefix,
+	suffix,
+	tooltip,
+}) => {
+	const skeleton = useMemo(
+		() => (
 			<div className="pool_extended_info">
-				<SkeletonLoader width={'100%'} height={36} />
+				<SkeletonLoader width="100%" height={38} />
 			</div>
-		) : (
-			<div className="pool_extended_info">
+		),
+		[],
+	)
+
+	const content = useMemo(
+		() => (
+			<div
+				className={`pool_extended_info ${isHighlighted ? 'pool_extended_info--highlighted' : ''}`}
+			>
 				<div className="pool_extended_info_value">
-					{symbolLeft && (
-						<span className="pool_extended_info_value_symbol_left">
-							{symbolLeft}
+					{prefix && (
+						<span
+							className={`pool_extended_info_value_symbol_left ${isHighlighted ? 'pool_extended_info_value_symbol_left_highlighted' : ''}`}
+						>
+							{prefix}
 						</span>
 					)}
-					<span className="pool_extended_info_value_number">{value}</span>
-					{symbolRight && (
+					<span
+						className={`pool_extended_info_value_number ${isHighlighted ? 'pool_extended_info_value_number_highlighted' : ''}`}
+					>
+						{value}
+					</span>
+					{suffix && (
 						<span className="pool_extended_info_value_symbol_right">
-							{symbolRight}
+							{suffix}
 						</span>
 					)}
 				</div>
@@ -52,4 +73,8 @@ export const Info: FC<InfoProps> = memo(
 				</div>
 			</div>
 		),
-)
+		[value, label, prefix, suffix, tooltip, isHighlighted],
+	)
+
+	return isLoading ? skeleton : content
+}

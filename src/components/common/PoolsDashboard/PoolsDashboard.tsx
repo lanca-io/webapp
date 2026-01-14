@@ -71,21 +71,12 @@ export const PoolsDashboard: FC = () => {
 					/>
 				) : (
 					<PoolExtended
-						token={{
-							src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
-							alt: 'USDC Logo',
-						}}
-						chain={{
-							src: 'https://api.v2.concero.io/static/chains/42161.svg',
-							alt: 'Arbitrum Logo',
-						}}
-						isActive={true}
-						isFull={true}
+						isLoading={true}
 						isConnected={true}
-						tokenLabel="USDC"
-						chainLabel="ARB"
-						tvl={120000}
+						cap={150000}
+						tvl={110000}
 						deposited={50000}
+						earned={123.45}
 					/>
 				)}
 			</div>
