@@ -1,4 +1,5 @@
 import type { FC, ReactElement } from 'react'
+import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
 import { useMemo } from 'react'
 import './PoolOverview.pcss'
 
@@ -40,9 +41,13 @@ export const PoolOverview: FC = (): ReactElement => {
 		[],
 	)
 
+	const metrics = useMemo(() => <MetricsBanner />, [])
 	return (
 		<div className="pool_overview">
-			<div className="pool_overview_content">{heading}</div>
+			<div className="pool_overview_content">
+				{heading}
+				{metrics}
+			</div>
 		</div>
 	)
 }
