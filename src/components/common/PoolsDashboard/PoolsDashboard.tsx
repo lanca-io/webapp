@@ -4,12 +4,19 @@ import { ChartRange } from '../ChartMenu'
 import { VolumeChart } from '../VolumeChart/VolumeChart'
 import { BarChart } from '../BarChart/BarChart'
 import { REWARDS_DATA, VOLUME_DATA } from './mock'
+import { useIsTablet, useIsMobile } from '@/hooks'
 import { PoolCompact } from '../PoolCompact/PoolCompact'
+import { PoolExtended } from '../PoolExtended/PoolExtended'
 import './PoolsDashboard.pcss'
 
 export const PoolsDashboard: FC = () => {
 	const [volumeRange, setVolumeRange] = useState(ChartRange.ALL)
 	const [barRange, setBarRange] = useState(ChartRange.ALL)
+
+	const isMobile: boolean = useIsMobile()
+	const isTablet: boolean = useIsTablet()
+
+	const showCompact = isMobile || isTablet
 
 	const volumeTotal = useMemo(
 		() => VOLUME_DATA.reduce((sum, d) => sum + d.value, 0),
@@ -53,23 +60,34 @@ export const PoolsDashboard: FC = () => {
 			</div>
 			<div className="pools_list">
 				<span className="pools_list_title">Pools</span>
-				<PoolCompact
-					token={{
-						src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
-						alt: 'USDC Logo',
-					}}
-					chain={{
-						src: 'https://api.v2.concero.io/static/chains/42161.svg',
-						alt: 'Arbitrum Logo',
-					}}
-					isActive={true}
-					isFull={true}
-					isConnected={true}
-					tokenLabel="USDC"
-					chainLabel="ARB"
-					tvl={120000}
-					deposited={50000}
-				/>
+				{showCompact ? (
+					<PoolCompact
+						isLoading={false}
+						isConnected={false}
+						cap={150000}
+						tvl={110000}
+						deposited={50000}
+						earned={123.45}
+					/>
+				) : (
+					<PoolExtended
+						token={{
+							src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+							alt: 'USDC Logo',
+						}}
+						chain={{
+							src: 'https://api.v2.concero.io/static/chains/42161.svg',
+							alt: 'Arbitrum Logo',
+						}}
+						isActive={true}
+						isFull={true}
+						isConnected={true}
+						tokenLabel="USDC"
+						chainLabel="ARB"
+						tvl={120000}
+						deposited={50000}
+					/>
+				)}
 			</div>
 		</div>
 	)
