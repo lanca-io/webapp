@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useState, useMemo, useCallback } from 'react'
 import { ChartRange } from '../ChartMenu'
-import { VolumeChart } from '../VolumeChart/VolumeChart'
+import { AreaChart } from '../AreaChart/AreaChart'
 import { BarChart } from '../BarChart/BarChart'
 import { REWARDS_DATA, VOLUME_DATA } from './mock'
 import { useIsTablet, useIsMobile } from '@/hooks'
@@ -12,11 +12,10 @@ import './PoolsDashboard.pcss'
 
 export const PoolsDashboard: FC = () => {
 	const [volumeRange, setVolumeRange] = useState(ChartRange.ALL)
-	const [barRange, setBarRange] = useState(ChartRange.ALL)
+	const [rewardsRange, setRewardsRange] = useState(ChartRange.ALL)
 
-	const isMobile: boolean = useIsMobile()
-	const isTablet: boolean = useIsTablet()
-
+	const isMobile = useIsMobile()
+	const isTablet = useIsTablet()
 	const showCompact = isMobile || isTablet
 
 	const volumeTotal = useMemo(
@@ -28,15 +27,15 @@ export const PoolsDashboard: FC = () => {
 		[],
 	)
 
-	const volumeData = VOLUME_DATA
-	const barData = REWARDS_DATA
+	const volumeData = useMemo(() => VOLUME_DATA, [])
+	const rewardsData = useMemo(() => REWARDS_DATA, [])
 
-	const handleVolumeRangeChange = useCallback((newRange: ChartRange) => {
-		setVolumeRange(newRange)
+	const handleVolumeRange = useCallback((range: ChartRange) => {
+		setVolumeRange(range)
 	}, [])
 
-	const handleBarRangeChange = useCallback((newRange: ChartRange) => {
-		setBarRange(newRange)
+	const handleRewardsRange = useCallback((range: ChartRange) => {
+		setRewardsRange(range)
 	}, [])
 
 	return (
@@ -44,19 +43,32 @@ export const PoolsDashboard: FC = () => {
 			<MetricsBanner />
 			<div className="pools_analytics">
 				<div className="pools_charts">
-					<VolumeChart
-						data={volumeData}
+					<AreaChart
+						title="Pools volume"
 						total={volumeTotal}
+						symbol="$"
+						data={volumeData}
 						range={volumeRange}
 						isLoading={false}
-						onRangeChange={handleVolumeRangeChange}
+						onRangeChange={handleVolumeRange}
+						tip={{
+							id: 'volume_tip',
+							description: 'Total trading volume across all liquidity pools.',
+						}}
 					/>
 					<BarChart
-						data={barData}
+						title="Total rewards"
 						total={rewardsTotal}
-						range={barRange}
+						symbol="$"
+						data={rewardsData}
+						range={rewardsRange}
 						isLoading={false}
-						onRangeChange={handleBarRangeChange}
+						onRangeChange={handleRewardsRange}
+						tip={{
+							id: 'rewards_tip',
+							description:
+								'Total rewards distributed to liquidity providers across all pools.',
+						}}
 					/>
 				</div>
 			</div>

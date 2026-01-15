@@ -3,11 +3,11 @@ import { memo } from 'react'
 import { ChartHeading } from '../ChartHeading'
 import { ChartRange } from '../ChartMenu'
 import { Chart } from './Chart/Chart'
-import './BarChart.pcss'
+import './AreaChart.pcss'
 
 export type Data = Array<{ time: string; value: number }>
 
-export type BarChartProps = {
+export type AreaChartProps = {
 	data: Data
 	range?: ChartRange
 	isLoading: boolean
@@ -23,7 +23,7 @@ export type BarChartProps = {
 	}
 }
 
-export const BarChart: FC<BarChartProps> = memo(
+export const AreaChart: FC<AreaChartProps> = memo(
 	({
 		title,
 		total,
@@ -31,11 +31,11 @@ export const BarChart: FC<BarChartProps> = memo(
 		data,
 		range,
 		isLoading,
+		showMenu = true,
 		onRangeChange,
 		tip,
-		showMenu = true,
 	}) => (
-		<div className="bar_chart">
+		<div className="area_chart">
 			<ChartHeading
 				title={title}
 				range={range}
@@ -45,7 +45,7 @@ export const BarChart: FC<BarChartProps> = memo(
 				isLoading={isLoading}
 				showMenu={showMenu}
 			/>
-			<Chart data={data} isLoading={isLoading} />
+			<Chart data={data} />
 		</div>
 	),
 )

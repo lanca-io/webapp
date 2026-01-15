@@ -2,13 +2,11 @@ import type { FC } from 'react'
 import type { Data } from '../BarChart'
 import { ResponsiveContainer, BarChart, Bar } from 'recharts'
 import { Spinner } from '@concero/ui-kit'
-import { ChartRange } from '../../ChartMenu'
 import { memo } from 'react'
 import './Chart.pcss'
 
 type ChartProps = {
 	data: Data
-	range: ChartRange
 	isLoading: boolean
 }
 

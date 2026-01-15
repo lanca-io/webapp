@@ -1,7 +1,11 @@
 import type { FC, ReactElement } from 'react'
+import { useState, useMemo, useCallback } from 'react'
+import { ChartRange } from '../ChartMenu'
+import { AreaChart } from '../AreaChart/AreaChart'
+import { BarChart } from '../BarChart/BarChart'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
 import { UserPoolHoldings } from '../UserPoolHoldings/UserPoolHoldings'
-import { useMemo } from 'react'
+import { REWARDS_DATA, VOLUME_DATA } from './mock'
 import './PoolOverview.pcss'
 
 const USDC_TOKEN = {
@@ -16,7 +20,22 @@ const ARB_CHAIN = {
 	label: 'ARB',
 } as const
 
-export const PoolOverview: FC = (): ReactElement => {
+type PoolOverviewProps = {
+	usdBalance: number
+	lpBalance: number
+	principal: number
+	isLoading: boolean
+}
+
+export const PoolOverview: FC<PoolOverviewProps> = ({
+	usdBalance,
+	lpBalance,
+	principal,
+	isLoading,
+}): ReactElement => {
+	const [volumeRange, setVolumeRange] = useState(ChartRange.ALL)
+	const [rewardsRange, setRewardsRange] = useState(ChartRange.ALL)
+
 	const heading = useMemo(
 		() => (
 			<div className="pool_overview_content_heading">
@@ -44,17 +63,80 @@ export const PoolOverview: FC = (): ReactElement => {
 
 	const metrics = useMemo(() => <MetricsBanner />, [])
 
+	const holdings = useMemo(
+		() => (
+			<UserPoolHoldings
+				usdBalance={105.3}
+				lpBalance={0.3455}
+				principal={100}
+				isLoading={isLoading}
+			/>
+		),
+		[usdBalance, lpBalance, principal, isLoading],
+	)
+
+	const volumeTotal = useMemo(
+		() => VOLUME_DATA.reduce((sum, d) => sum + d.value, 0),
+		[],
+	)
+	const rewardsTotal = useMemo(
+		() => REWARDS_DATA.reduce((sum, d) => sum + d.value, 0),
+		[],
+	)
+
+	const handleVolumeRange = useCallback((range: ChartRange) => {
+		setVolumeRange(range)
+	}, [])
+
+	const handleRewardsRange = useCallback((range: ChartRange) => {
+		setRewardsRange(range)
+	}, [])
+
 	return (
 		<div className="pool_overview">
 			<div className="pool_overview_content">
 				{heading}
-				<UserPoolHoldings
-					usdBalance={10023.232343242}
-					lpBalance={0.1234}
-					principal={1000}
-					isLoading={false}
-				/>
+				{holdings}
 				{metrics}
+				<div className="pool_overview_charts">
+					<BarChart
+						title="TVL"
+						total={rewardsTotal}
+						data={REWARDS_DATA}
+						range={rewardsRange}
+						isLoading={false}
+						onRangeChange={handleRewardsRange}
+						tip={{
+							id: 'rewards_tip',
+							description: 'Rewards earned by liquidity providers.',
+						}}
+					/>
+					<BarChart
+						title="Total Rewards"
+						total={rewardsTotal}
+						data={REWARDS_DATA}
+						range={rewardsRange}
+						isLoading={false}
+						onRangeChange={handleRewardsRange}
+						tip={{
+							id: 'rewards_tip',
+							description: 'Rewards earned by liquidity providers.',
+						}}
+					/>
+					<AreaChart
+						title="Weekly APY"
+						total={volumeTotal}
+						data={VOLUME_DATA}
+						range={volumeRange}
+						isLoading={false}
+						showMenu={false}
+						onRangeChange={handleVolumeRange}
+						tip={{
+							id: 'volume_tip',
+							description: 'Trading volume in this pool.',
+						}}
+					/>
+				</div>
 			</div>
 		</div>
 	)

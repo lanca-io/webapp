@@ -7,11 +7,12 @@ import './ChartHeading.pcss'
 
 type HeadingProps = {
 	title: string
-	range: ChartRange
+	range?: ChartRange
 	tip: { id: string; heading?: string; description: string }
 	value: { amount: number; symbol?: string }
-	onChange: (range: ChartRange) => void
+	onChange?: (range: ChartRange) => void
 	isLoading?: boolean
+	showMenu?: boolean
 }
 
 export const ChartHeading: FC<HeadingProps> = ({
@@ -20,6 +21,7 @@ export const ChartHeading: FC<HeadingProps> = ({
 	tip: { id, heading, description },
 	value: { symbol = '$' },
 	onChange,
+	showMenu = true,
 	isLoading = false,
 }) => {
 	const info = useMemo(
@@ -35,9 +37,12 @@ export const ChartHeading: FC<HeadingProps> = ({
 		[],
 	)
 
+	const showChartMenu =
+		showMenu && range !== undefined && onChange !== undefined
 	const menu = useMemo(
-		() => <ChartMenu range={range} onChange={onChange} />,
-		[range, onChange],
+		() =>
+			showChartMenu ? <ChartMenu range={range!} onChange={onChange!} /> : null,
+		[range, onChange, showChartMenu],
 	)
 
 	return (
@@ -53,7 +58,7 @@ export const ChartHeading: FC<HeadingProps> = ({
 						</>
 					)}
 				</div>
-				{isLoading ? <SkeletonLoader width={140} height={32} /> : menu}
+				{isLoading ? <SkeletonLoader width={140} height={32} /> : menu || null}
 			</div>
 			<div className="chart_total">
 				{isLoading ? (
