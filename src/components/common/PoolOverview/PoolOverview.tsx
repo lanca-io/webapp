@@ -1,5 +1,6 @@
 import type { FC, ReactElement } from 'react'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
+import { UserPoolHoldings } from '../UserPoolHoldings/UserPoolHoldings'
 import { useMemo } from 'react'
 import './PoolOverview.pcss'
 
@@ -42,10 +43,17 @@ export const PoolOverview: FC = (): ReactElement => {
 	)
 
 	const metrics = useMemo(() => <MetricsBanner />, [])
+
 	return (
 		<div className="pool_overview">
 			<div className="pool_overview_content">
 				{heading}
+				<UserPoolHoldings
+					usdBalance={10023.232343242}
+					lpBalance={0.1234}
+					principal={1000}
+					isLoading={false}
+				/>
 				{metrics}
 			</div>
 		</div>

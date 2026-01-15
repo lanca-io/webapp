@@ -1,0 +1,155 @@
+.user_pool_holdings {
+	displayu: flex;
+	max-width: 608px;
+	width: 100%;
+
+	& .user_pool_holdings_container {
+		display: flex;
+		flex-direction: column;
+		padding: var(--space-m);
+		width: 100%;
+		align-items: center;
+		gap: var(--space-m);
+		border-radius: 24px;
+		background-color: var(--color-gray-25);
+
+		& .user_pool_holdings_title {
+			color: var(--color-gray-600);
+			font-size: 1.125rem;
+			font-weight: 500;
+			line-height: 1.375rem;
+			text-align: center;
+		}
+
+		& .user_pool_holdings_content {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+			gap: var(--space-xs);
+
+			& .user_pool_holdings_value {
+				display: grid;
+				grid-template-columns: 1fr auto 1fr;
+				justify-content: center;
+				align-items: end;
+				width: 100%;
+				height: 4.25rem;
+				gap: var(--space-xxs);
+
+				& .user_pool_holding_denomination {
+					grid-column: 1;
+					justify-self: end;
+					color: var(--color-gray-600);
+					font-size: 0.875rem;
+					font-weight: 500;
+					line-height: 1.125rem;
+					margin: 0 0 var(--space-xs) 0;
+				}
+
+				& .user_pool_holding_amount {
+					grid-column: 2;
+					justify-self: center;
+					color: var(--color-gray-700);
+					font-size: 4rem;
+					line-height: 4.25rem;
+					letter-spacing: -1.28px;
+					margin: 0;
+				}
+
+				& .user_pool_holdings_tag {
+					grid-column: 3;
+					justify-self: start;
+					align-self: flex-start;
+					font-size: 0.875rem;
+					font-weight: 500;
+					line-height: 1.125rem;
+					margin: 0;
+				}
+
+				& .user_pool_holdings_value_skeleton {
+					display: flex;
+					justify-content: center;
+					width: 100%;
+				}
+			}
+		}
+
+		& .user_pool_holdings_last_action {
+			display: flex;
+			align-items: flex-start;
+			padding: var(--space-s);
+			gap: calc(var(--space-s) - 2px);
+			border-radius: 16px;
+			background: var(--color-gray-50);
+
+			& .user_pool_holding_last_action_timestamp {
+				color: var(--color-gray-500);
+				font-size: 0.875rem;
+				font-weight: 400;
+				line-height: 1.125rem;
+			}
+
+			& .user_pool_holding_last_action_amount {
+				color: var(--color-gray-700);
+				font-size: 0.875rem;
+				font-weight: 500;
+				line-height: 1.125rem;
+			}
+		}
+	}
+
+	& .user_pool_holdings_actions {
+		display: flex;
+		padding: var(--space-m);
+		flex-direction: row;
+		gap: var(--space-m);
+		align-items: center;
+		width: 100%;
+		border-radius: 24px;
+		border-top: 1px solid var(--color-gray-100);
+		background-color: var(--color-gray-25);
+
+		& > * {
+			display: flex;
+			justify-content: center;
+			flex: 1;
+			min-width: 0;
+		}
+	}
+}
+
+.user_pool_holdings_disconnected {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-s);
+	width: 100%;
+
+	& .user_pool_holdings_disconnected_title {
+		color: var(--color-gray-600);
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.125rem;
+		text-align: center;
+	}
+}
+
+@media (min-width: 1025px) and (max-width: 1919px) {
+	.user_pool_holdings {
+		max-width: 394px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+	.user_pool_holdings {
+		max-width: 394px;
+	}
+}
+
+@media (max-width: 640px) {
+	.user_pool_holdings {
+		max-width: 100%;
+	}
+}
