@@ -79,7 +79,6 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 				{holdings}
 				{metrics}
 				<div className="pool_overview_charts">
-					{/* 1st: RangedChart - $5K / $10K */}
 					<RangeChart
 						title="TVL"
 						description="Total Value Locked"
@@ -87,7 +86,6 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 						denomination="$"
 						isLoading={false}
 					/>
-					{/* 2nd: Rewards */}
 					<BarChart
 						data={REWARDS_DATA}
 						title="Rewards"
@@ -99,16 +97,15 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 							denomination: '$',
 						}}
 					/>
-					{/* 3rd: Volume */}
 					<AreaChart
 						data={VOLUME_DATA}
-						title="Volume"
-						description="Trading volume in this pool"
-						total={15000}
+						title="Weekly APY"
+						description="Weekly Annual Percentage Yield"
+						total={0.15}
 						settings={{
 							isLoading: false,
 							isAdvanced: false,
-							denomination: '$',
+							denomination: '%',
 						}}
 					/>
 				</div>
