@@ -1,4 +1,4 @@
-.rewards_chart_visual {
+.bar_chart_visual {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -6,11 +6,29 @@
 	flex: 1 0 0;
 	width: 100%;
 
-	& .rewards_chart_loader {
+	& .bar_chart_loader {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		flex: 1 0 0;
 		width: 100%;
+	}
+}
+
+@media (min-width: 1025px) and (max-width: 1919px) {
+	.bar_chart_visual_compact {
+		height: 144px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+	.bar_chart_visual_compact {
+		height: 102px;
+	}
+}
+
+@media (max-width: 640px) {
+	.bar_chart_visual_compact {
+		height: 78px;
 	}
 }

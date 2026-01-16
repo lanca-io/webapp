@@ -23,9 +23,4 @@ export const REWARDS_DATA = [
 	{ time: '2026-03-01', value: 100000 },
 	{ time: '2026-03-15', value: 100000 },
 	{ time: '2026-04-01', value: 100000 },
-	{ time: '2026-04-15', value: 100000 },
-	{ time: '2026-05-01', value: 100000 },
-	{ time: '2026-05-15', value: 100000 },
-	{ time: '2026-06-01', value: 100000 },
-	{ time: '2026-06-13', value: 100000 },
 ]

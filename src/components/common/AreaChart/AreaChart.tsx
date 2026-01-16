@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { ChartHeading } from '../ChartHeading'
 import { ChartRange } from '../ChartMenu'
 import { Chart } from './Chart/Chart'
@@ -7,45 +7,58 @@ import './AreaChart.pcss'
 
 export type Data = Array<{ time: string; value: number }>
 
-export type AreaChartProps = {
-	data: Data
-	range?: ChartRange
+type Settings = {
 	isLoading: boolean
-	onRangeChange?: (range: ChartRange) => void
+	isAdvanced?: boolean
+	range?: ChartRange
+	denomination?: string
+	suffix?: number | string
+	onChange?: (range: ChartRange) => void
+}
+
+type AreaChartProps = {
+	data: Data
 	title: string
-	total: number
-	symbol?: string
-	showMenu?: boolean
-	tip: {
-		id: string
-		heading?: string
-		description: string
-	}
+	description: string
+	total: number | string
+	settings: Settings
 }
 
 export const AreaChart: FC<AreaChartProps> = memo(
 	({
-		title,
-		total,
-		symbol = '$',
 		data,
-		range,
-		isLoading,
-		showMenu = true,
-		onRangeChange,
-		tip,
-	}) => (
-		<div className="area_chart">
-			<ChartHeading
-				title={title}
-				range={range}
-				tip={tip}
-				value={{ amount: total, symbol }}
-				onChange={onRangeChange}
-				isLoading={isLoading}
-				showMenu={showMenu}
-			/>
-			<Chart data={data} />
-		</div>
-	),
+		title,
+		description,
+		total,
+		settings: {
+			isLoading,
+			isAdvanced = true,
+			range,
+			denomination = '$',
+			suffix = '',
+			onChange,
+		},
+	}) => {
+		const chartClass: string = useMemo(
+			() => `area_chart${!isAdvanced ? ' area_chart_compact' : ''}`,
+			[isAdvanced],
+		)
+
+		return (
+			<div className={chartClass}>
+				<ChartHeading
+					title={title}
+					description={description}
+					total={total}
+					isLoading={isLoading}
+					range={range}
+					isAdvanced={isAdvanced}
+					denomination={denomination}
+					suffix={suffix}
+					onChange={onChange}
+				/>
+				<Chart data={data} isAdvanced={isAdvanced} isLoading={isLoading} />
+			</div>
+		)
+	},
 )

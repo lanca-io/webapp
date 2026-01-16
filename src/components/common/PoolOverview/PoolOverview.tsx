@@ -1,6 +1,6 @@
 import type { FC, ReactElement } from 'react'
-import { useState, useMemo, useCallback } from 'react'
-import { ChartRange } from '../ChartMenu'
+import { useMemo } from 'react'
+import { RangeChart } from '../RangeChart/RangeChart'
 import { AreaChart } from '../AreaChart/AreaChart'
 import { BarChart } from '../BarChart/BarChart'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
@@ -33,9 +33,6 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 	principal,
 	isLoading,
 }): ReactElement => {
-	const [volumeRange, setVolumeRange] = useState(ChartRange.ALL)
-	const [rewardsRange, setRewardsRange] = useState(ChartRange.ALL)
-
 	const heading = useMemo(
 		() => (
 			<div className="pool_overview_content_heading">
@@ -66,31 +63,14 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 	const holdings = useMemo(
 		() => (
 			<UserPoolHoldings
-				usdBalance={105.3}
-				lpBalance={0.3455}
-				principal={100}
+				usdBalance={usdBalance}
+				lpBalance={lpBalance}
+				principal={principal}
 				isLoading={isLoading}
 			/>
 		),
 		[usdBalance, lpBalance, principal, isLoading],
 	)
-
-	const volumeTotal = useMemo(
-		() => VOLUME_DATA.reduce((sum, d) => sum + d.value, 0),
-		[],
-	)
-	const rewardsTotal = useMemo(
-		() => REWARDS_DATA.reduce((sum, d) => sum + d.value, 0),
-		[],
-	)
-
-	const handleVolumeRange = useCallback((range: ChartRange) => {
-		setVolumeRange(range)
-	}, [])
-
-	const handleRewardsRange = useCallback((range: ChartRange) => {
-		setRewardsRange(range)
-	}, [])
 
 	return (
 		<div className="pool_overview">
@@ -99,43 +79,36 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 				{holdings}
 				{metrics}
 				<div className="pool_overview_charts">
-					<BarChart
+					{/* 1st: RangedChart - $5K / $10K */}
+					<RangeChart
 						title="TVL"
-						total={rewardsTotal}
-						data={REWARDS_DATA}
-						range={rewardsRange}
+						description="Total Value Locked"
+						data={{ current: 5000, target: 10000 }}
+						denomination="$"
 						isLoading={false}
-						showMenu={false}
-						onRangeChange={handleRewardsRange}
-						tip={{
-							id: 'rewards_tip',
-							description: 'Rewards earned by liquidity providers.',
-						}}
 					/>
+					{/* 2nd: Rewards */}
 					<BarChart
-						title="Total Rewards"
-						total={rewardsTotal}
 						data={REWARDS_DATA}
-						range={rewardsRange}
-						isLoading={false}
-						showMenu={false}
-						onRangeChange={handleRewardsRange}
-						tip={{
-							id: 'rewards_tip',
-							description: 'Rewards earned by liquidity providers.',
+						title="Rewards"
+						description="Rewards earned by liquidity providers"
+						total={1234.56}
+						settings={{
+							isLoading: false,
+							isAdvanced: false,
+							denomination: '$',
 						}}
 					/>
+					{/* 3rd: Volume */}
 					<AreaChart
-						title="Weekly APY"
-						total={volumeTotal}
 						data={VOLUME_DATA}
-						range={volumeRange}
-						isLoading={false}
-						showMenu={false}
-						onRangeChange={handleVolumeRange}
-						tip={{
-							id: 'volume_tip',
-							description: 'Trading volume in this pool.',
+						title="Volume"
+						description="Trading volume in this pool"
+						total={15000}
+						settings={{
+							isLoading: false,
+							isAdvanced: false,
+							denomination: '$',
 						}}
 					/>
 				</div>

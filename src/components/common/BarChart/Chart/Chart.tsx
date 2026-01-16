@@ -2,26 +2,38 @@ import type { FC } from 'react'
 import type { Data } from '../BarChart'
 import { ResponsiveContainer, BarChart, Bar } from 'recharts'
 import { Spinner } from '@concero/ui-kit'
-import { memo } from 'react'
+import { useMemo } from 'react'
 import './Chart.pcss'
 
 type ChartProps = {
 	data: Data
+	isAdvanced: boolean
 	isLoading: boolean
 }
 
-export const Chart: FC<ChartProps> = memo(({ data, isLoading }) => {
+export const Chart: FC<ChartProps> = ({ data, isAdvanced, isLoading }) => {
+	const containerClass: string = useMemo(
+		() => `bar_chart_visual${!isAdvanced ? ' bar_chart_visual_compact' : ''}`,
+		[isAdvanced],
+	)
+
+	const loader = useMemo(
+		() => (
+			<div className="bar_chart_loader">
+				<Spinner type="gray" />
+			</div>
+		),
+		[],
+	)
+
 	return (
-		<div className="rewards_chart_visual">
+		<div className={containerClass}>
 			{isLoading ? (
-				<div className="rewards_chart_loader">
-					<Spinner type="gray" />
-				</div>
+				loader
 			) : (
 				<ResponsiveContainer height="100%" width="100%">
 					<BarChart
 						data={data}
-						barCategoryGap={8}
 						maxBarSize={86.6}
 						style={{
 							paddingTop: 0,
@@ -42,4 +54,4 @@ export const Chart: FC<ChartProps> = memo(({ data, isLoading }) => {
 			)}
 		</div>
 	)
-})
+}

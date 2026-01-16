@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { ChartHeading } from '../ChartHeading'
 import { ChartRange } from '../ChartMenu'
 import { Chart } from './Chart/Chart'
@@ -7,45 +7,58 @@ import './BarChart.pcss'
 
 export type Data = Array<{ time: string; value: number }>
 
-export type BarChartProps = {
-	data: Data
-	range?: ChartRange
+type Settings = {
 	isLoading: boolean
-	onRangeChange?: (range: ChartRange) => void
+	isAdvanced?: boolean
+	range?: ChartRange
+	denomination?: string
+	suffix?: number | string
+	onChange?: (range: ChartRange) => void
+}
+
+type BarChartProps = {
+	data: Data
 	title: string
-	total: number
-	symbol?: string
-	showMenu?: boolean
-	tip: {
-		id: string
-		heading?: string
-		description: string
-	}
+	description: string
+	total: number | string
+	settings: Settings
 }
 
 export const BarChart: FC<BarChartProps> = memo(
 	({
-		title,
-		total,
-		symbol = '$',
 		data,
-		range,
-		isLoading,
-		onRangeChange,
-		tip,
-		showMenu = true,
-	}) => (
-		<div className="bar_chart">
-			<ChartHeading
-				title={title}
-				range={range}
-				tip={tip}
-				value={{ amount: total, symbol }}
-				onChange={onRangeChange}
-				isLoading={isLoading}
-				showMenu={showMenu}
-			/>
-			<Chart data={data} isLoading={isLoading} />
-		</div>
-	),
+		title,
+		description,
+		total,
+		settings: {
+			isLoading,
+			isAdvanced = true,
+			range,
+			denomination = '$',
+			suffix = '',
+			onChange,
+		},
+	}) => {
+		const chartClass: string = useMemo(
+			() => `bar_chart${!isAdvanced ? ' bar_chart_compact' : ''}`,
+			[isAdvanced],
+		)
+
+		return (
+			<div className={chartClass}>
+				<ChartHeading
+					title={title}
+					description={description}
+					total={total}
+					isLoading={isLoading}
+					range={range}
+					isAdvanced={isAdvanced}
+					denomination={denomination}
+					suffix={suffix}
+					onChange={onChange}
+				/>
+				<Chart data={data} isAdvanced={isAdvanced} isLoading={isLoading} />
+			</div>
+		)
+	},
 )

@@ -44,30 +44,29 @@ export const PoolsDashboard: FC = () => {
 			<div className="pools_analytics">
 				<div className="pools_charts">
 					<AreaChart
-						title="Pools volume"
-						total={volumeTotal}
-						symbol="$"
 						data={volumeData}
-						range={volumeRange}
-						isLoading={false}
-						onRangeChange={handleVolumeRange}
-						tip={{
-							id: 'volume_tip',
-							description: 'Total trading volume across all liquidity pools.',
+						title="Pools volume"
+						description="Total trading volume across all liquidity pools"
+						total={volumeTotal}
+						settings={{
+							isLoading: false,
+							isAdvanced: true,
+							denomination: '$',
+							range: volumeRange,
+							onChange: handleVolumeRange,
 						}}
 					/>
 					<BarChart
-						title="Total rewards"
-						total={rewardsTotal}
-						symbol="$"
 						data={rewardsData}
-						range={rewardsRange}
-						isLoading={false}
-						onRangeChange={handleRewardsRange}
-						tip={{
-							id: 'rewards_tip',
-							description:
-								'Total rewards distributed to liquidity providers across all pools.',
+						title="Total rewards"
+						description="Total rewards distributed to liquidity providers across all pools"
+						total={rewardsTotal}
+						settings={{
+							isLoading: false,
+							isAdvanced: true,
+							denomination: '$',
+							range: rewardsRange,
+							onChange: handleRewardsRange,
 						}}
 					/>
 				</div>

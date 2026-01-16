@@ -7,28 +7,31 @@ import './ChartHeading.pcss'
 
 type HeadingProps = {
 	title: string
+	description: string
+	total: number | string
+	isLoading: boolean
 	range?: ChartRange
-	tip: { id: string; heading?: string; description: string }
-	value: { amount: number; symbol?: string }
+	isAdvanced?: boolean
+	denomination?: string
+	suffix?: number | string
 	onChange?: (range: ChartRange) => void
-	isLoading?: boolean
-	showMenu?: boolean
 }
 
 export const ChartHeading: FC<HeadingProps> = ({
 	title,
+	description,
+	total,
+	isLoading,
 	range,
-	tip: { id, heading, description },
-	value: { symbol = '$' },
+	isAdvanced = true,
+	denomination = '$',
 	onChange,
-	showMenu = true,
-	isLoading = false,
+	suffix,
 }) => {
 	const info = useMemo(
 		() => (
 			<InfoTip
-				id={id}
-				title={heading}
+				id={title}
 				description={description}
 				place="bottom"
 				alignment="left"
@@ -37,12 +40,12 @@ export const ChartHeading: FC<HeadingProps> = ({
 		[],
 	)
 
-	const showChartMenu =
-		showMenu && range !== undefined && onChange !== undefined
 	const menu = useMemo(
 		() =>
-			showChartMenu ? <ChartMenu range={range!} onChange={onChange!} /> : null,
-		[range, onChange, showChartMenu],
+			isAdvanced && range && onChange ? (
+				<ChartMenu range={range} onChange={onChange} />
+			) : null,
+		[range, onChange, isAdvanced],
 	)
 
 	return (
@@ -65,8 +68,13 @@ export const ChartHeading: FC<HeadingProps> = ({
 					<SkeletonLoader width={86} height={36} />
 				) : (
 					<>
-						<span className="chart_total_symbol">{symbol}</span>
-						<span className="chart_total_value">{'-'}</span>
+						<span className="chart_total_symbol">{`${denomination} ${total}`}</span>
+						{suffix && (
+							<>
+								<span className="chart_total_suffix_divider">{'/'}</span>
+								<span className="chart_total_suffix">{`${denomination} ${suffix}`}</span>
+							</>
+						)}
 					</>
 				)}
 			</div>
