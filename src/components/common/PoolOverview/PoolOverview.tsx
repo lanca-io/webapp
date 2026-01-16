@@ -105,6 +105,7 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 						data={REWARDS_DATA}
 						range={rewardsRange}
 						isLoading={false}
+						showMenu={false}
 						onRangeChange={handleRewardsRange}
 						tip={{
 							id: 'rewards_tip',
@@ -117,6 +118,7 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 						data={REWARDS_DATA}
 						range={rewardsRange}
 						isLoading={false}
+						showMenu={false}
 						onRangeChange={handleRewardsRange}
 						tip={{
 							id: 'rewards_tip',
