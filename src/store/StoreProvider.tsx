@@ -8,6 +8,7 @@ import { FormStoreProvider } from './form/FormStore'
 import { BalancesStoreProvider } from './balances/BalancesStore'
 import { ModalsStoreProvider } from './modals/ModalsStore'
 import { TxExecutionStoreProvider } from './tx-execution/TxExecutionStore'
+import { PoolsStoreProvider } from './pools/PoolsStore'
 import { PoolActionExecutionStoreProvider } from './pool-action-execution/PoolActionExecutionStore'
 
 export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
@@ -21,9 +22,11 @@ export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 								<ModalsStoreProvider>
 									<RoutesStoreProvider>
 										<TxExecutionStoreProvider>
-											<PoolActionExecutionStoreProvider>
-												{children}
-											</PoolActionExecutionStoreProvider>
+											<PoolsStoreProvider>
+												<PoolActionExecutionStoreProvider>
+													{children}
+												</PoolActionExecutionStoreProvider>
+											</PoolsStoreProvider>
 										</TxExecutionStoreProvider>
 									</RoutesStoreProvider>
 								</ModalsStoreProvider>

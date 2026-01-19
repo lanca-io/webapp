@@ -45,7 +45,7 @@ export const useLoadAllTokens = () => {
 						)
 						return tokens.map((token: ExtendedToken) => ({
 							...token,
-							chainLogoURI: chain.logo || null,
+							chainLogoURI: chain.logo,
 						}))
 					}),
 				)
