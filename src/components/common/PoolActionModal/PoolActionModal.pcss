@@ -1,0 +1,61 @@
+@keyframes FadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes FadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes ScaleIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes ScaleOut {
+	from {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(20px) scale(0.96);
+	}
+}
+
+.pool_action_modal_overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	width: 100vw;
+	height: 100vh;
+	padding: var(--space-xxxl) 0px;
+	background: rgba(51, 59, 63, 0.5);
+	backdrop-filter: blur(12.5px);
+	z-index: 1000;
+	animation: FadeIn 0.25s ease forwards;
+
+	&--closing {
+		animation: FadeOut 0.25s ease forwards;
+	}
+}
