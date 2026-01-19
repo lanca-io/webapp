@@ -1,0 +1,48 @@
+import type { Address, Client, Chain } from 'viem'
+import { sendTransaction, simulateContract } from 'viem/actions'
+import { waitForConfirmation } from '../receipt'
+import { poolsAbi } from '@/abi/PoolsAbi'
+
+export const queueDeposit = async (
+	client: Client,
+	chain: Chain,
+	pool: Address,
+	amount: bigint,
+): Promise<boolean> => {
+	if (!client.account) throw new Error('[Lanca]: No account')
+
+	try {
+		const { request } = await simulateContract(client, {
+			account: client.account,
+			address: pool,
+			abi: poolsAbi,
+			functionName: 'enterDepositQueue',
+			args: [amount],
+			chain: chain,
+		})
+
+		const txHash = await sendTransaction(client, {
+			...request,
+			to: pool,
+			value: 0n,
+		})
+
+		if (!txHash) throw new Error('[Lanca]: Transaction dropped from mempool')
+
+		const { receipt, reason } = await waitForConfirmation(
+			client,
+			chain.id,
+			txHash,
+		)
+
+		if (!receipt || receipt.status === 'reverted') {
+			throw new Error(
+				`[Lanca]: Deposit queue failed${reason ? ` due to ${reason}` : ''}`,
+			)
+		}
+
+		return true
+	} catch (error) {
+		throw new Error(`[Lanca]: queueDeposit failed: ${error}`)
+	}
+}
