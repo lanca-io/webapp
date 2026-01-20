@@ -1,5 +1,4 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
 import { SkeletonLoader } from '../../SkeletonLoader'
 import { InfoTip } from '../../InfoTip'
 import './Info.pcss'
@@ -28,53 +27,45 @@ export const Info: FC<InfoProps> = ({
 	suffix,
 	tooltip,
 }) => {
-	const skeleton = useMemo(
-		() => (
+	if (isLoading) {
+		return (
 			<div className="pool_compact_info">
 				<SkeletonLoader width="100%" height={36} />
 			</div>
-		),
-		[],
-	)
+		)
+	}
 
-	const content = useMemo(
-		() => (
-			<div
-				className={`pool_compact_info ${isHighlighted ? 'pool_compact_info--highlighted' : ''}`}
-			>
-				<div className="pool_compact_info_value">
-					{prefix && (
-						<span
-							className={`pool_compact_info_value_symbol_left ${isHighlighted ? 'pool_compact_info_value_symbol_left_highlighted' : ''}`}
-						>
-							{prefix}
-						</span>
-					)}
+	return (
+		<div
+			className={`pool_compact_info ${isHighlighted ? 'pool_compact_info--highlighted' : ''}`}
+		>
+			<div className="pool_compact_info_value">
+				{prefix && (
 					<span
-						className={`pool_compact_info_value_number ${isHighlighted ? 'pool_compact_info_value_number_highlighted' : ''}`}
+						className={`pool_compact_info_value_symbol_left ${isHighlighted ? 'pool_compact_info_value_symbol_left_highlighted' : ''}`}
 					>
-						{value}
+						{prefix}
 					</span>
-					{suffix && (
-						<span className="pool_compact_info_value_symbol_right">
-							{suffix}
-						</span>
-					)}
-				</div>
-				<div className="pool_compact_info_description">
-					<span className="pool_compact_info_label">{label}</span>
-					{tooltip?.show && (
-						<InfoTip
-							id={`${label}_chart_info_tip`}
-							description={tooltip.description}
-							alignment="left"
-						/>
-					)}
-				</div>
+				)}
+				<span
+					className={`pool_compact_info_value_number ${isHighlighted ? 'pool_compact_info_value_number_highlighted' : ''}`}
+				>
+					{value}
+				</span>
+				{suffix && (
+					<span className="pool_compact_info_value_symbol_right">{suffix}</span>
+				)}
 			</div>
-		),
-		[value, label, prefix, suffix, tooltip, isHighlighted],
+			<div className="pool_compact_info_description">
+				<span className="pool_compact_info_label">{label}</span>
+				{tooltip?.show && (
+					<InfoTip
+						id={`${label}_chart_info_tip`}
+						description={tooltip.description}
+						alignment="left"
+					/>
+				)}
+			</div>
+		</div>
 	)
-
-	return isLoading ? skeleton : content
 }

@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
+import { abbreviateNumber } from '@/utils/format'
 import { Heading } from './Heading/Heading'
 import { Info } from './Info/Info'
 import { Button } from '@concero/ui-kit'
@@ -9,8 +10,8 @@ import './PoolExtended.pcss'
 type PoolExtendedProps = {
 	isConnected: boolean
 	isLoading: boolean
-	cap: number
-	tvl: number
+	cap: number | null
+	tvl: number | null
 	deposited: number
 	earned?: number
 }
@@ -23,12 +24,7 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 	cap,
 }) => {
 	const isActive = isConnected && deposited > 0
-	const isFull = tvl >= cap
-
-	const heading = useMemo(
-		() => <Heading isLoading={isLoading} isActive={isActive} isFull={isFull} />,
-		[isLoading, isActive, isFull],
-	)
+	const isFull = tvl !== null && cap !== null && tvl >= cap
 
 	const apyInfo = useMemo(
 		() => (
@@ -43,16 +39,16 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 				}}
 			/>
 		),
-		[],
+		[isLoading],
 	)
 
 	const tvlInfo = useMemo(
 		() => (
 			<Info
-				value={tvl}
+				value={abbreviateNumber(tvl ?? 0)}
 				label="TVL"
 				prefix="$"
-				isLoading={isLoading}
+				isLoading={isLoading || tvl === null}
 				isHighlighted={isFull}
 				tooltip={{
 					show: true,
@@ -61,24 +57,24 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 				}}
 			/>
 		),
-		[tvl, isFull],
+		[tvl, isLoading, isFull],
 	)
 
 	const depositedInfo = useMemo(
 		() => (
 			<Info
-				value={deposited ?? 0}
+				value={abbreviateNumber(deposited ?? 0)} // ← Compact $1.2K
 				label="Deposited"
 				prefix="$"
 				isLoading={isLoading}
 			/>
 		),
-		[deposited],
+		[deposited, isLoading],
 	)
 
 	const earnedInfo = useMemo(
 		() => <Info value="-" label="Earned" isLoading={isLoading} />,
-		[],
+		[isLoading],
 	)
 
 	const connectedData = useMemo(
@@ -93,7 +89,12 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 
 	const actions = useMemo(
 		() =>
-			!isLoading ? (
+			isLoading || tvl === null || cap === null ? (
+				<div className="pool_extended_actions">
+					<SkeletonLoader width={90.5} height={38} />
+					<SkeletonLoader width={90.5} height={38} />
+				</div>
+			) : (
 				<div className="pool_extended_actions">
 					<Button variant="secondary_color" size="m" isDisabled={isFull}>
 						Deposit
@@ -102,18 +103,17 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 						Open
 					</Button>
 				</div>
-			) : (
-				<div className="pool_extended_actions">
-					<SkeletonLoader width={90.5} height={38} />
-					<SkeletonLoader width={90.5} height={38} />
-				</div>
 			),
-		[isLoading, isFull],
+		[isLoading, tvl, cap, isFull],
 	)
 
 	return (
 		<div className="pool_extended">
-			{heading}
+			<Heading
+				isLoading={isLoading || tvl === null || cap === null}
+				isActive={isActive}
+				isFull={isFull}
+			/>
 			{apyInfo}
 			{tvlInfo}
 			{isConnected && connectedData}

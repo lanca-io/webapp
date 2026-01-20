@@ -8,11 +8,16 @@ import { useIsTablet, useIsMobile } from '@/hooks'
 import { PoolCompact } from '../PoolCompact/PoolCompact'
 import { PoolExtended } from '../PoolExtended/PoolExtended'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
+import { usePoolsStore } from '@/store/pools/usePoolsStore'
+import { useAccount } from 'wagmi'
 import './PoolsDashboard.pcss'
 
 export const PoolsDashboard: FC = () => {
 	const [volumeRange, setVolumeRange] = useState(ChartRange.ALL)
 	const [rewardsRange, setRewardsRange] = useState(ChartRange.ALL)
+
+	const { cap, tvl, isLoading } = usePoolsStore()
+	const { isConnected } = useAccount()
 
 	const isMobile = useIsMobile()
 	const isTablet = useIsTablet()
@@ -75,19 +80,19 @@ export const PoolsDashboard: FC = () => {
 				<span className="pools_list_title">Pools</span>
 				{showCompact ? (
 					<PoolCompact
-						isLoading={false}
-						isConnected={true}
-						cap={150000}
-						tvl={150000}
+						isLoading={isLoading}
+						isConnected={isConnected}
+						cap={cap}
+						tvl={tvl}
 						deposited={0}
 						earned={123.45}
 					/>
 				) : (
 					<PoolExtended
-						isLoading={false}
-						isConnected={true}
-						cap={150000}
-						tvl={150000}
+						isLoading={isLoading}
+						isConnected={isConnected}
+						cap={cap}
+						tvl={tvl}
 						deposited={0}
 						earned={123.45}
 					/>

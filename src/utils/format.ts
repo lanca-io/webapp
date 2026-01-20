@@ -64,3 +64,38 @@ export const capitalizeFirstLetter = (str: string): string => {
 	}
 	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
+
+/**
+ * Formats large numbers into a compact, human-readable format using K, M, B suffixes.
+ * - 1,234 → "1.2K"
+ * - 1,870,942 → "1.9M"
+ * - 100,000,000 → "100M"
+ * - 456 → "456"
+ *
+ * @param value - The number to format (non-negative).
+ * @returns A formatted string with appropriate suffix (K/M/B) or plain number.
+ */
+export const abbreviateNumber = (value: number): string => {
+	if (value >= 1_000_000_000) {
+		return (
+			(value / 1_000_000_000).toLocaleString('en-US', {
+				maximumFractionDigits: 0,
+			}) + 'B'
+		)
+	}
+	if (value >= 1_000_000) {
+		return (
+			(value / 1_000_000).toLocaleString('en-US', {
+				maximumFractionDigits: 2,
+			}) + 'M'
+		)
+	}
+	if (value >= 1_000) {
+		return (
+			(value / 1_000).toLocaleString('en-US', {
+				maximumFractionDigits: 4,
+			}) + 'K'
+		)
+	}
+	return value.toLocaleString()
+}

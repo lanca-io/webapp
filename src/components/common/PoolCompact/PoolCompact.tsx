@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
+import { abbreviateNumber } from '@/utils/format'
 import { SkeletonLoader } from '../SkeletonLoader'
 import { Heading } from './Heading'
 import { Loader } from './Loader'
@@ -10,8 +11,8 @@ import './PoolCompact.pcss'
 type PoolCompactProps = {
 	isConnected: boolean
 	isLoading: boolean
-	cap: number
-	tvl: number
+	cap: number | null
+	tvl: number | null
 	deposited: number
 	earned?: number
 }
@@ -23,8 +24,8 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 	deposited,
 	cap,
 }) => {
-	const isActive: boolean = isConnected && deposited > 0
-	const isFull: boolean = tvl >= cap
+	const isActive = isConnected && deposited > 0
+	const isFull = tvl !== null && cap !== null && tvl >= cap
 
 	const heading = useMemo(
 		() => <Heading isLoading={isLoading} isActive={isActive} isFull={isFull} />,
@@ -32,7 +33,7 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 	)
 
 	const loader = useMemo(
-		() => <Loader cap={cap} tvl={tvl} isLoading={isLoading} />,
+		() => <Loader cap={cap ?? 0} tvl={tvl ?? 0} isLoading={isLoading} />,
 		[cap, tvl, isLoading],
 	)
 
@@ -62,10 +63,10 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 	const tvlInfo = useMemo(
 		() => (
 			<Info
-				value={tvl}
+				value={abbreviateNumber(tvl ?? 0)}
 				label="TVL"
 				prefix="$"
-				isLoading={false}
+				isLoading={tvl === null}
 				isHighlighted={isFull}
 				tooltip={{
 					show: true,
@@ -80,7 +81,7 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 	const depositedInfo = useMemo(
 		() => (
 			<Info
-				value={deposited ?? 0}
+				value={abbreviateNumber(deposited ?? 0)}
 				label="Deposited"
 				prefix="$"
 				isLoading={false}
@@ -118,12 +119,12 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 			) : (
 				<div className="pool_compact_actions">
 					<SkeletonLoader
-						width={'100%'}
+						width="100%"
 						height={48}
 						className="pool_compact_button_skeleton"
 					/>
 					<SkeletonLoader
-						width={'100%'}
+						width="100%"
 						height={48}
 						className="pool_compact_button_skeleton"
 					/>
@@ -137,7 +138,7 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 			<div className="pool_compact_content">
 				{heading}
 				{loader}
-				{isLoading ? (
+				{isLoading || tvl === null || cap === null ? (
 					dataSkeleton
 				) : (
 					<div className="pool_compact_data">
