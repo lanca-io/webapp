@@ -63,7 +63,7 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 	const depositedInfo = useMemo(
 		() => (
 			<Info
-				value={abbreviateNumber(deposited ?? 0)} // ← Compact $1.2K
+				value={abbreviateNumber(deposited ?? 0)}
 				label="Deposited"
 				prefix="$"
 				isLoading={isLoading}

@@ -1,5 +1,8 @@
 import type { FC } from 'react'
+import { createPortal } from 'react-dom'
 import { PoolActionType } from '@/store/pool-action-execution/types'
+import { InputWidget } from './InputWidget/InputWidget'
+import './PoolActionModal.pcss'
 
 type PoolActionModalProps = {
 	type: PoolActionType
@@ -7,13 +10,14 @@ type PoolActionModalProps = {
 }
 
 export const PoolActionModal: FC<PoolActionModalProps> = ({
+	type,
 	onClose,
-}): JSX.Element => {
-	return (
-		<div
-			className="pool_action_modal_overlay"
-			onClick={onClose}
-			role="presentation"
-		></div>
+}) => {
+	const modal = (
+		<div className="pool_action_modal_overlay" onClick={() => onClose()}>
+			<InputWidget type={type} />
+		</div>
 	)
+
+	return createPortal(modal, document.body)
 }
