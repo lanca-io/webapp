@@ -14,8 +14,8 @@ export const PoolActionModal: FC<PoolActionModalProps> = ({
 	onClose,
 }) => {
 	const modal = (
-		<div className="pool_action_modal_overlay" onClick={() => onClose()}>
-			<InputWidget type={type} />
+		<div className="pool_action_modal_overlay">
+			<InputWidget type={type} onClose={onClose} />
 		</div>
 	)
 
