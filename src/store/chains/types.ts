@@ -20,6 +20,7 @@ export type ConceroChain = {
 	testnet: boolean
 	contracts: {
 		orchestrator: string
+		bridge_lbf?: string
 	}
 }
 

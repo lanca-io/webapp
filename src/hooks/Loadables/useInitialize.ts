@@ -4,6 +4,7 @@ import { useLoadTokens } from './useLoadTokens'
 import { useLoadTxExecutionTime } from './useLoadTxExecutionTime'
 import { useLoadRoute } from './useLoadRoute'
 import { useLoadPoolsData } from './useLoadPoolsData'
+import { useLoadPoolsUserBalances } from './useLoadPoolsUserBalances'
 
 export const InitializeLoadables = (): null => {
 	useLoadAllTokens()
@@ -12,5 +13,6 @@ export const InitializeLoadables = (): null => {
 	useLoadTxExecutionTime()
 	useLoadRoute()
 	useLoadPoolsData()
+	useLoadPoolsUserBalances()
 	return null
 }

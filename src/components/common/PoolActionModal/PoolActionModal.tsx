@@ -1,11 +1,11 @@
 import type { FC } from 'react'
 import { createPortal } from 'react-dom'
-import { PoolActionType } from '@/store/pools-execution/types'
+import { PoolsExecutionType } from '@/store/pools-execution/types'
 import { InputWidget } from './InputWidget/InputWidget'
 import './PoolActionModal.pcss'
 
 type PoolActionModalProps = {
-	type: PoolActionType
+	type: PoolsExecutionType
 	onClose: () => void
 }
 

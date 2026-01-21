@@ -8,7 +8,7 @@ import { useIsTablet, useIsMobile } from '@/hooks'
 import { PoolCompact } from '../PoolCompact/PoolCompact'
 import { PoolExtended } from '../PoolExtended/PoolExtended'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
-import { usePoolsStore } from '@/store/pools-data/usePoolsDataStore'
+import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 import { useAccount } from 'wagmi'
 import './PoolsDashboard.pcss'
 
@@ -16,7 +16,7 @@ export const PoolsDashboard: FC = () => {
 	const [volumeRange, setVolumeRange] = useState(ChartRange.ALL)
 	const [rewardsRange, setRewardsRange] = useState(ChartRange.ALL)
 
-	const { cap, tvl, isLoading } = usePoolsStore()
+	const { cap, tvl, isLoading } = usePoolsDataStore()
 	const { isConnected } = useAccount()
 
 	const isMobile = useIsMobile()

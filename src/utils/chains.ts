@@ -80,6 +80,7 @@ export type ConceroChain = {
 	testnet: boolean
 	contracts: {
 		orchestrator: string
+		bridge_lbf?: string
 	}
 }
 
@@ -111,19 +112,41 @@ export const parseChainName = (chainName: string): string => {
  * @example
  * const chains = await getChains(true)
  */
-export const getChains = async (isTestnet = false) => {
-	const url = new URL('/api/v1/chains/configuration', API_BASE_URL)
-	url.searchParams.set('is_testnet', String(isTestnet))
+export const getChains = async () => {
+	const mainnetUrl = new URL(
+		'/api/v1/chains/configuration?is_testnet=false',
+		API_BASE_URL,
+	)
+	const testnetUrl = new URL(
+		'/api/v1/chains/configuration?is_testnet=true',
+		API_BASE_URL,
+	)
 
-	const response = await fetch(url.toString())
+	const [mainnetResponse, testnetResponse] = await Promise.all([
+		fetch(mainnetUrl.toString()),
+		fetch(testnetUrl.toString()),
+	])
 
-	if (!response.ok) {
+	if (!mainnetResponse.ok) {
 		throw new Error(
-			`[Concero] Failed to fetch chain configuration: ${response.status} ${response.statusText}`,
+			`[Concero] Failed to fetch mainnet chains: ${mainnetResponse.status} ${mainnetResponse.statusText}`,
+		)
+	}
+	if (!testnetResponse.ok) {
+		throw new Error(
+			`[Concero] Failed to fetch testnet chains: ${testnetResponse.status} ${testnetResponse.statusText}`,
 		)
 	}
 
-	return response.json()
+	const mainnetData = await mainnetResponse.json()
+	const testnetData = await testnetResponse.json()
+
+	// SINGLE JSON OBJECT - exactly like original!
+	return {
+		payload: {
+			items: [...mainnetData.payload.items, ...testnetData.payload.items],
+		},
+	}
 }
 
 /**
@@ -168,17 +191,42 @@ const sanitizeRpcUrls = (rpcs: string[]): string[] => {
  *   // Use the normalized chain
  * }
  */
+/**
+ * Transforms raw API chain configuration to normalized ConceroChain format
+ *
+ * Validates that the chain has:
+ * - Orchestrator contract deployment (required)
+ * - At least one valid RPC URL (required)
+ * - Bridge LBF contract deployment (optional)
+ *
+ * @param config - Raw chain configuration from API
+ * @returns Normalized ConceroChain object or null if validation fails
+ */
 export const toConceroChain = (config: ChainConfig): ConceroChain | null => {
 	const orchestrator = findDeploymentAddress(
 		config.deployments,
 		DeploymentType.orchestrator,
+	)
+	const bridgeLbf = findDeploymentAddress(
+		config.deployments,
+		DeploymentType.bridge_lbf,
 	)
 	const validRpcs = sanitizeRpcUrls(config.chain.rpcs)
 
 	if (!orchestrator || validRpcs.length === 0) return null
 	if (!isAddress(orchestrator)) return null
 
+	if (bridgeLbf && !isAddress(bridgeLbf)) return null
+
 	const displayName = parseChainName(config.chain.name)
+
+	const contracts: ConceroChain['contracts'] = {
+		orchestrator: orchestrator,
+	}
+
+	if (bridgeLbf) {
+		contracts.bridge_lbf = bridgeLbf
+	}
 
 	return {
 		id: Number(config.chain.id),
@@ -197,9 +245,7 @@ export const toConceroChain = (config: ChainConfig): ConceroChain | null => {
 		},
 		explorer: config.chain.explorer,
 		testnet: config.chain.is_testnet,
-		contracts: {
-			orchestrator: orchestrator,
-		},
+		contracts,
 	}
 }
 

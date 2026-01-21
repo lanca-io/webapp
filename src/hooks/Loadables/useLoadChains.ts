@@ -16,8 +16,6 @@ export const useLoadChains = () => {
 			const response = await getChains()
 			return toConceroChains(response.payload.items)
 		},
-		staleTime: 30_000,
-
 		retry: 2,
 		refetchOnWindowFocus: false,
 	})

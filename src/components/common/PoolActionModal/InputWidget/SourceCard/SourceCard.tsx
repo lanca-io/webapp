@@ -1,14 +1,14 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
 import { Header } from './Header/Header'
-import { PoolActionType } from '@/store/pools-execution/types'
+import { PoolsExecutionType } from '@/store/pools-execution/types'
 import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { useInputHandler } from '@/hooks/useInputHandler'
 import './SourceCard.pcss'
 
 type SourceCardProps = {
-	type: PoolActionType
+	type: PoolsExecutionType
 	onClose: () => void
 }
 
@@ -17,7 +17,7 @@ export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 	const header = useMemo(
 		() => (
 			<Header
-				title={type === PoolActionType.DEPOSIT ? 'Deposit' : 'Withdrawal'}
+				title={type === PoolsExecutionType.DEPOSIT ? 'Deposit' : 'Withdrawal'}
 				onClose={onClose}
 			/>
 		),

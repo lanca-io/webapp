@@ -1,5 +1,5 @@
 import { type FC, useMemo } from 'react'
-import { PoolActionType } from '@/store/pools-execution/types'
+import { PoolsExecutionType } from '@/store/pools-execution/types'
 import './AssetPanel.pcss'
 
 export enum Direction {
@@ -8,7 +8,7 @@ export enum Direction {
 }
 
 type AssetPanelProps = {
-	type: PoolActionType
+	type: PoolsExecutionType
 	direction: Direction
 }
 
@@ -24,7 +24,7 @@ const TOKEN_CONFIG = {
 } as const
 
 export const AssetPanel: FC<AssetPanelProps> = ({ direction, type }) => {
-	const isDeposit = type === PoolActionType.DEPOSIT
+	const isDeposit = type === PoolsExecutionType.DEPOSIT
 	const isFrom = direction === Direction.From
 
 	const token = useMemo(() => {

@@ -7,7 +7,7 @@ import { SkeletonLoader } from '../SkeletonLoader'
 import { useAppKit } from '@reown/appkit/react'
 import { useAccount } from 'wagmi'
 import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
-import { PoolActionType } from '@/store/pools-execution/types'
+import { PoolsExecutionType } from '@/store/pools-execution/types'
 import './UserPoolHoldings.pcss'
 
 type LastDeposit = {
@@ -32,7 +32,9 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 }) => {
 	const { open } = useAppKit()
 	const { isConnected, isConnecting } = useAccount()
-	const [activeModal, setActiveModal] = useState<PoolActionType | null>(null)
+	const [activeModal, setActiveModal] = useState<PoolsExecutionType | null>(
+		null,
+	)
 
 	const change = useMemo(() => {
 		if (!Number.isFinite(usdBalance) || !Number.isFinite(principal)) return 0
@@ -68,7 +70,7 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 	const lpStr = useMemo(() => `= ${format(lpBalance, 2)} CLP`, [lpBalance])
 	const showChangeTag = Number.isFinite(change) && change !== 0
 
-	const openModal = (type: PoolActionType) => setActiveModal(type)
+	const openModal = (type: PoolsExecutionType) => setActiveModal(type)
 	const closeModal = () => setActiveModal(null)
 
 	if (!isConnected) {
@@ -144,14 +146,14 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 							<Button
 								variant="primary"
 								size="l"
-								onClick={() => openModal(PoolActionType.DEPOSIT)}
+								onClick={() => openModal(PoolsExecutionType.DEPOSIT)}
 							>
 								Add More
 							</Button>
 							<Button
 								variant="secondary_color"
 								size="l"
-								onClick={() => openModal(PoolActionType.WITHDRAWAL)}
+								onClick={() => openModal(PoolsExecutionType.WITHDRAWAL)}
 							>
 								Withdraw
 							</Button>

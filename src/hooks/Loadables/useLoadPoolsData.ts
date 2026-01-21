@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { usePoolsStore } from '@/store/pools-data/usePoolsDataStore'
+import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 
 export const useLoadPoolsData = () => {
-	const { setMetrics, setIsLoading } = usePoolsStore()
+	const { setMetrics, setIsLoading } = usePoolsDataStore()
 
 	const {
 		data,
@@ -27,7 +27,6 @@ export const useLoadPoolsData = () => {
 	useEffect(() => {
 		setIsLoading(queryLoading)
 		if (data) {
-			console.log('Pools payload:', data)
 			setMetrics(data.supply, data.cap, data.tvl)
 		}
 	}, [data, queryLoading, setMetrics, setIsLoading])
