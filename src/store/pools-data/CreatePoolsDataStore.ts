@@ -1,8 +1,8 @@
-import type { PoolsState, PoolsActions, PoolsStore } from './types'
+import type { PoolsDataState, PoolsDataActions, PoolsStore } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-export const CreatePoolsStore = (): PoolsStore =>
-	createWithEqualityFn<PoolsState & PoolsActions>((set, get) => {
+export const CreatePoolsDataStore = (): PoolsStore =>
+	createWithEqualityFn<PoolsDataState & PoolsDataActions>((set, get) => {
 		const computeLpPrice = () => {
 			const { supply, tvl } = get()
 			set({ lpPrice: (tvl ?? 0) / (supply ?? 1) || null })

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { Button } from '@concero/ui-kit'
-import { PoolActionType } from '@/store/pool-action-execution/types'
+import { PoolActionType } from '@/store/pools-execution/types'
 import './ActionCard.pcss'
 
 type ActionCardProps = {

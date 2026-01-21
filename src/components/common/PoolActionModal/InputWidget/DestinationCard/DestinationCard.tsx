@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
-import { PoolActionType } from '@/store/pool-action-execution/types'
+import { PoolActionType } from '@/store/pools-execution/types'
 import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import './DestinationCard.pcss'

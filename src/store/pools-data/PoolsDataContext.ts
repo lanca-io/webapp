@@ -1,4 +1,4 @@
 import type { PoolsStore } from './types'
 import { createContext } from 'react'
 
-export const PoolsContext = createContext<PoolsStore | null>(null)
+export const PoolsDataContext = createContext<PoolsStore | null>(null)

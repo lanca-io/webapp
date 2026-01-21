@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { usePoolsStore } from '@/store/pools/usePoolsStore'
+import { usePoolsStore } from '@/store/pools-data/usePoolsDataStore'
 
 export const useLoadPoolsData = () => {
 	const { setMetrics, setIsLoading } = usePoolsStore()

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { createPortal } from 'react-dom'
-import { PoolActionType } from '@/store/pool-action-execution/types'
+import { PoolActionType } from '@/store/pools-execution/types'
 import { InputWidget } from './InputWidget/InputWidget'
 import './PoolActionModal.pcss'
 

@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import { useMemo } from 'react'
 import { SourceCard } from './SourceCard/SourceCard'
 import { DestinationCard } from './DestinationCard/DestinationCard'
-import { PoolActionType } from '@/store/pool-action-execution/types'
+import { PoolActionType } from '@/store/pools-execution/types'
 import './InputWidget.pcss'
 import { ActionCard } from './ActionCard/ActionCard'
 

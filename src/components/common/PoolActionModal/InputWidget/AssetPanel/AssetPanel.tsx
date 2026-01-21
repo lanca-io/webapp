@@ -1,5 +1,5 @@
 import { type FC, useMemo } from 'react'
-import { PoolActionType } from '@/store/pool-action-execution/types'
+import { PoolActionType } from '@/store/pools-execution/types'
 import './AssetPanel.pcss'
 
 export enum Direction {

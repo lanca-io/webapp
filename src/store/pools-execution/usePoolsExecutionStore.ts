@@ -1,7 +1,8 @@
 import { useContext } from 'react'
-import { PoolActionExecutionContext } from './PoolActionExecutionContext'
-export const usePoolActionExecutionStore = () => {
-	const useStore = useContext(PoolActionExecutionContext)
+import { PoolsExecutionContext } from './PoolsExecutionContext'
+
+export const usePoolsExecutionStore = () => {
+	const useStore = useContext(PoolsExecutionContext)
 	if (!useStore) {
 		throw new Error(
 			`You forgot to wrap your component in <RoutesStoreProvider>.`,

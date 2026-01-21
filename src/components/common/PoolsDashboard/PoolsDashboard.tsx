@@ -8,7 +8,7 @@ import { useIsTablet, useIsMobile } from '@/hooks'
 import { PoolCompact } from '../PoolCompact/PoolCompact'
 import { PoolExtended } from '../PoolExtended/PoolExtended'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
-import { usePoolsStore } from '@/store/pools/usePoolsStore'
+import { usePoolsStore } from '@/store/pools-data/usePoolsDataStore'
 import { useAccount } from 'wagmi'
 import './PoolsDashboard.pcss'
 

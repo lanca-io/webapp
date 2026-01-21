@@ -1,7 +1,7 @@
 import type { UseBoundStoreWithEqualityFn } from 'zustand/traditional'
 import type { StoreApi } from 'zustand/vanilla'
 
-export type PoolsState = {
+export type PoolsDataState = {
 	supply: number | null
 	cap: number | null
 	tvl: number | null
@@ -9,11 +9,11 @@ export type PoolsState = {
 	isLoading: boolean
 }
 
-export type PoolsActions = {
+export type PoolsDataActions = {
 	setMetics: (supply: number, cap: number, tvl: number) => void
 	setIsLoading: (isLoading: boolean) => void
 }
 
 export type PoolsStore = UseBoundStoreWithEqualityFn<
-	StoreApi<PoolsState & PoolsActions>
+	StoreApi<PoolsDataState & PoolsDataActions>
 >

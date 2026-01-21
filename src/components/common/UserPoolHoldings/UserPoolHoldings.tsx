@@ -7,7 +7,7 @@ import { SkeletonLoader } from '../SkeletonLoader'
 import { useAppKit } from '@reown/appkit/react'
 import { useAccount } from 'wagmi'
 import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
-import { PoolActionType } from '@/store/pool-action-execution/types'
+import { PoolActionType } from '@/store/pools-execution/types'
 import './UserPoolHoldings.pcss'
 
 type LastDeposit = {

@@ -1,8 +1,8 @@
 import { useContext } from 'react'
-import { PoolsContext } from './PoolsContext'
+import { PoolsDataContext } from './PoolsDataContext'
 
-export const usePoolsStore = () => {
-	const useStore = useContext(PoolsContext)
+export const usePoolsDataStore = () => {
+	const useStore = useContext(PoolsDataContext)
 	if (!useStore) {
 		throw new Error(`You forgot to wrap your component in <PoolsStoreProvider>`)
 	}
