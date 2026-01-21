@@ -1,0 +1,57 @@
+import { sanitizeNumbers } from '@/utils/input'
+import { parseUnits } from 'viem'
+import { InputState, InputAction, InputActionType } from './types'
+
+export const initialState: InputState = {
+	input: '',
+	rawInput: 0n,
+	isFocused: false,
+	isTouched: false,
+	isValid: false,
+	warning: null,
+	error: null,
+}
+
+export const InputWidgetReducer = (
+	state: InputState = initialState,
+	action: InputAction,
+): InputState => {
+	switch (action.type) {
+		case InputActionType.CHANGE: {
+			const input = sanitizeNumbers(action.payload)
+			const rawInput = parseUnits(input, 6)
+
+			return {
+				...state,
+				input,
+				rawInput,
+				isTouched: true,
+				isValid: rawInput > 0n,
+			}
+		}
+
+		case InputActionType.FOCUS:
+			return { ...state, isFocused: true }
+
+		case InputActionType.BLUR:
+			return { ...state, isFocused: false }
+
+		case InputActionType.SET_WARNING:
+			return { ...state, warning: action.payload }
+
+		case InputActionType.CLEAR_WARNING:
+			return { ...state, warning: null }
+
+		case InputActionType.SET_ERROR:
+			return { ...state, error: action.payload }
+
+		case InputActionType.CLEAR_ERROR:
+			return { ...state, error: null }
+
+		case InputActionType.RESET:
+			return initialState
+
+		default:
+			return state
+	}
+}

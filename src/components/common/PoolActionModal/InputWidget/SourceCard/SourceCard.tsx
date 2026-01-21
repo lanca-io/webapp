@@ -1,10 +1,11 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
+import { useInputWidgetContext } from '../Reducer/Provider'
+import { InputActionType } from '../Reducer/types'
 import { Header } from './Header/Header'
 import { PoolsExecutionType } from '@/store/pools-execution/types'
 import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
-import { useInputHandler } from '@/hooks/useInputHandler'
 import { BalancePanel } from '../BalancePanel/BalancePanel'
 import './SourceCard.pcss'
 
@@ -14,7 +15,8 @@ type SourceCardProps = {
 }
 
 export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
-	const { value, onChange, onFocus, onBlur } = useInputHandler()
+	const { state, dispatch } = useInputWidgetContext()
+
 	const header = useMemo(
 		() => (
 			<Header
@@ -22,7 +24,7 @@ export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 				onClose={onClose}
 			/>
 		),
-		[type],
+		[type, onClose],
 	)
 
 	const panel = useMemo(
@@ -33,14 +35,16 @@ export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 	const input = useMemo(
 		() => (
 			<WidgetInput
-				value={value}
+				value={state.input}
 				placeholder="0"
-				onChange={onChange}
-				onFocus={onFocus}
-				onBlur={onBlur}
+				onChange={e =>
+					dispatch({ type: InputActionType.CHANGE, payload: e.target.value })
+				}
+				onFocus={() => dispatch({ type: InputActionType.FOCUS })}
+				onBlur={() => dispatch({ type: InputActionType.BLUR })}
 			/>
 		),
-		[value, onChange, onFocus, onBlur],
+		[state.input, dispatch],
 	)
 
 	const balance = useMemo(
