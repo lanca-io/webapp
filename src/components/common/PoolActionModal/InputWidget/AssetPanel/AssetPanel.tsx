@@ -4,7 +4,7 @@ import './AssetPanel.pcss'
 
 export enum Direction {
 	From = 'FROM',
-	TO = 'TO',
+	To = 'TO',
 }
 
 type AssetPanelProps = {

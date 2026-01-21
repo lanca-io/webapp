@@ -5,6 +5,7 @@ import { PoolsExecutionType } from '@/store/pools-execution/types'
 import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { useInputHandler } from '@/hooks/useInputHandler'
+import { BalancePanel } from '../BalancePanel/BalancePanel'
 import './SourceCard.pcss'
 
 type SourceCardProps = {
@@ -42,11 +43,17 @@ export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 		[value, onChange, onFocus, onBlur],
 	)
 
+	const balance = useMemo(
+		() => <BalancePanel type={type} direction={Direction.From} />,
+		[type],
+	)
+
 	return (
 		<div className="pool_action_source_card">
 			{header}
 			{panel}
 			{input}
+			{balance}
 		</div>
 	)
 }
