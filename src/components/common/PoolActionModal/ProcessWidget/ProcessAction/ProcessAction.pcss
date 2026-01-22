@@ -1,25 +1,24 @@
-.process_widget {
+.process_action {
 	display: flex;
-	width: 394px;
 	flex-direction: column;
 	align-items: center;
+	width: 394px;
 	border-radius: var(--space-l);
-	padding: var(--space-m);
-	gap: var(--space-m);
 	background-color: var(--color-gray-25);
-	border-bottom: 1px solid var(--color-gray-100);
-	z-index: 2;
+	gap: var(--space-xs);
+	padding: var(--space-m);
 	position: relative;
+	z-index: 5;
 }
 
 @media only screen and (min-width: 641px) and (max-width: 1024px) {
-	.process_widget {
+	.process_action {
 		width: 448px;
 	}
 }
 
 @media only screen and (max-width: 640px) {
-	.process_widget {
+	.process_action {
 		max-width: 100%;
 		width: 100%;
 	}
