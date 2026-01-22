@@ -1,5 +1,5 @@
 import type { AppKitNetwork } from '@reown/appkit/networks'
-import type { Transport, PublicClient } from 'viem'
+import type { Transport, PublicClient, Client } from 'viem'
 import type { ConceroChain } from '../../store/chains/types'
 import { AppKit, createAppKit } from '@reown/appkit/react'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
@@ -10,6 +10,7 @@ import { WagmiProvider } from 'wagmi'
 import { config } from '../../constants/config'
 import { ScreenLoader } from '@/components/common/ScreenLoader/ScreenLoader'
 import { getPublicClient as getWagmiPublicClient } from '@wagmi/core'
+import { getWalletClient as getWagmiWalletClient } from '@wagmi/core'
 
 let adapter: WagmiAdapter | null = null
 let appKit: AppKit | null = null
@@ -62,6 +63,20 @@ export function getPublicClient(chainId: number): PublicClient {
 
 	if (!client) {
 		throw new Error(`Public client for chain ${chainId} could not be created`)
+	}
+
+	return client
+}
+
+export async function getWalletClient(chainId: number): Promise<Client> {
+	if (!adapter) {
+		throw new Error('Adapter is not initialized')
+	}
+
+	const client = await getWagmiWalletClient(adapter.wagmiConfig, { chainId })
+
+	if (!client) {
+		throw new Error(`Wallet client for chain ${chainId} could not be created`)
 	}
 
 	return client
