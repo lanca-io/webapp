@@ -1,11 +1,11 @@
-import type { Address, Client, Chain } from 'viem'
+import type { Address, Client } from 'viem'
 import { sendTransaction, simulateContract } from 'viem/actions'
 import { waitForConfirmation } from '../receipt/waitForConfirmation'
 import { erc20Abi } from 'viem'
 
 export const setAllowance = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	token: Address,
 	spender: Address,
 	amount: bigint,
@@ -19,7 +19,6 @@ export const setAllowance = async (
 			abi: erc20Abi,
 			functionName: 'approve',
 			args: [spender, amount],
-			chain: chain,
 		})
 
 		const txHash = await sendTransaction(client, {
@@ -32,7 +31,7 @@ export const setAllowance = async (
 
 		const { receipt, reason } = await waitForConfirmation(
 			client,
-			chain.id,
+			chainId,
 			txHash,
 		)
 

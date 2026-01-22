@@ -1,10 +1,10 @@
-import type { Address, Client, Chain } from 'viem'
+import type { Address, Client } from 'viem'
 import { getAllowance } from './getAllowance'
 import { setAllowance } from './setAllowance'
 
 export const handleAllowance = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	token: Address,
 	spender: Address,
 	amount: bigint,
@@ -20,7 +20,7 @@ export const handleAllowance = async (
 
 		if (allowance >= amount) return true
 
-		await setAllowance(client, chain, token, spender, amount)
+		await setAllowance(client, chainId, token, spender, amount)
 		const newAllowance = await getAllowance(
 			client,
 			token,

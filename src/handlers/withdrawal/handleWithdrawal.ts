@@ -1,4 +1,4 @@
-import type { Client, Chain, Address } from 'viem'
+import type { Client, Address } from 'viem'
 import { getMinWithdrawal } from './getMinWithdrawal'
 import { queueWithdrawal } from './queueWithdrawal'
 import { handleAllowance } from '../allowance'
@@ -15,7 +15,7 @@ export type DispatchWithdrawalAction = React.Dispatch<{
 
 const onAllowance = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	token: Address,
 	account: Address,
 	amount: bigint,
@@ -29,7 +29,7 @@ const onAllowance = async (
 				status: PoolsActionStatus.PENDING,
 			},
 		})
-		await handleAllowance(client, chain, token, account, amount)
+		await handleAllowance(client, chainId, token, account, amount)
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
@@ -81,7 +81,7 @@ const onMinWithdrawalCheck = async (
 
 const onQueueWithdrawal = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	pool: Address,
 	amount: bigint,
 	dispatch: DispatchWithdrawalAction,
@@ -94,7 +94,7 @@ const onQueueWithdrawal = async (
 				status: PoolsActionStatus.PENDING,
 			},
 		})
-		await queueWithdrawal(client, chain, pool, amount)
+		await queueWithdrawal(client, chainId, pool, amount)
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
@@ -116,7 +116,7 @@ const onQueueWithdrawal = async (
 
 export const handleWithdrawal = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	pool: Address,
 	token: Address,
 	amount: bigint,
@@ -126,14 +126,14 @@ export const handleWithdrawal = async (
 
 	await onAllowance(
 		client,
-		chain,
+		chainId,
 		token,
 		client.account.address,
 		amount,
 		dispatch,
 	)
 	await onMinWithdrawalCheck(client, pool, amount, dispatch)
-	await onQueueWithdrawal(client, chain, pool, amount, dispatch)
+	await onQueueWithdrawal(client, chainId, pool, amount, dispatch)
 
 	return true
 }

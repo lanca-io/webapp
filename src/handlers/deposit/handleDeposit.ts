@@ -1,4 +1,4 @@
-import type { Client, Chain, Address } from 'viem'
+import type { Client, Address } from 'viem'
 import { handleAllowance } from '../allowance'
 import { getMinDeposit } from './getMinDeposit'
 import { queueDeposit } from './queueDeposit'
@@ -15,7 +15,7 @@ export type DispatchDepositAction = React.Dispatch<{
 
 const onAllowance = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	token: Address,
 	account: Address,
 	amount: bigint,
@@ -29,7 +29,7 @@ const onAllowance = async (
 				status: PoolsActionStatus.PENDING,
 			},
 		})
-		await handleAllowance(client, chain, token, account, amount)
+		await handleAllowance(client, chainId, token, account, amount)
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
@@ -88,7 +88,7 @@ const onMinDepositCheck = async (
 
 const onQueue = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	pool: Address,
 	amount: bigint,
 	dispatch: DispatchDepositAction,
@@ -101,7 +101,7 @@ const onQueue = async (
 				status: PoolsActionStatus.PENDING,
 			},
 		})
-		await queueDeposit(client, chain, pool, amount)
+		await queueDeposit(client, chainId, pool, amount)
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
@@ -123,7 +123,7 @@ const onQueue = async (
 
 export const handleDeposit = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	pool: Address,
 	token: Address,
 	amount: bigint,
@@ -133,14 +133,14 @@ export const handleDeposit = async (
 
 	await onAllowance(
 		client,
-		chain,
+		chainId,
 		token,
 		client.account.address,
 		amount,
 		dispatch,
 	)
 	await onMinDepositCheck(client, pool, amount, dispatch)
-	await onQueue(client, chain, pool, amount, dispatch)
+	await onQueue(client, chainId, pool, amount, dispatch)
 
 	return true
 }

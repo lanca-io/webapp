@@ -1,11 +1,11 @@
-import type { Address, Client, Chain } from 'viem'
+import type { Address, Client } from 'viem'
 import { sendTransaction, simulateContract } from 'viem/actions'
 import { waitForConfirmation } from '../receipt'
 import { poolsAbi } from '@/abi/PoolsAbi'
 
 export const queueWithdrawal = async (
 	client: Client,
-	chain: Chain,
+	chainId: number,
 	pool: Address,
 	amount: bigint,
 ): Promise<boolean> => {
@@ -18,7 +18,6 @@ export const queueWithdrawal = async (
 			abi: poolsAbi,
 			functionName: 'enterWithdrawalQueue',
 			args: [amount],
-			chain: chain,
 		})
 
 		const txHash = await sendTransaction(client, {
@@ -31,7 +30,7 @@ export const queueWithdrawal = async (
 
 		const { receipt, reason } = await waitForConfirmation(
 			client,
-			chain.id,
+			chainId,
 			txHash,
 		)
 
