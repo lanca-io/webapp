@@ -9,7 +9,6 @@ import { BalancesStoreProvider } from './balances/BalancesStore'
 import { ModalsStoreProvider } from './modals/ModalsStore'
 import { TxExecutionStoreProvider } from './tx-execution/TxExecutionStore'
 import { PoolsDataStoreProvider } from './pools-data/PoolsDataStore'
-import { PoolsExecutionStoreProvider } from './pools-execution/PoolsExecutionStore'
 import { PoolsUserBalancesStoreProvider } from './pools-user-balances/PoolsUserBalancesStore'
 
 export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
@@ -24,11 +23,9 @@ export const StoreProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 									<RoutesStoreProvider>
 										<TxExecutionStoreProvider>
 											<PoolsDataStoreProvider>
-												<PoolsExecutionStoreProvider>
-													<PoolsUserBalancesStoreProvider>
-														{children}
-													</PoolsUserBalancesStoreProvider>
-												</PoolsExecutionStoreProvider>
+												<PoolsUserBalancesStoreProvider>
+													{children}
+												</PoolsUserBalancesStoreProvider>
 											</PoolsDataStoreProvider>
 										</TxExecutionStoreProvider>
 									</RoutesStoreProvider>

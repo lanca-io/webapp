@@ -1,20 +1,20 @@
 import { useCallback } from 'react'
 import { useInputWidgetContext } from './Reducer/Provider'
 import { InputActionType } from './Reducer/types'
-import { PoolsExecutionType } from '@/store/pools-execution/types'
+import { PoolsActionType } from '../Reducer/types'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 import { usePoolsUserBalancesStore } from '@/store/pools-user-balances/usePoolsUserBalancesStore'
 import { formatUnits } from 'viem'
 
-export const useActionValidation = (type: PoolsExecutionType) => {
+export const useActionValidation = (type: PoolsActionType) => {
 	const { state, dispatch } = useInputWidgetContext()
 	const { tvl, cap } = usePoolsDataStore()
 	const { rawUsd, rawLp } = usePoolsUserBalancesStore()
-	const balance = type === PoolsExecutionType.DEPOSIT ? rawUsd : rawLp
+	const balance = type === PoolsActionType.DEPOSIT ? rawUsd : rawLp
 
 	const checkCap = useCallback(() => {
 		if (!cap || !tvl) return false
-		if (type === PoolsExecutionType.WITHDRAWAL) return false
+		if (type === PoolsActionType.WITHDRAWAL) return false
 
 		const inputDollars = Number(formatUnits(state.rawInput, 6))
 		if (Number(tvl) + inputDollars > Number(cap)) {
@@ -32,7 +32,7 @@ export const useActionValidation = (type: PoolsExecutionType) => {
 		if (state.rawInput > balance) {
 			dispatch({
 				type: InputActionType.SET_ERROR,
-				payload: `You do not have enough ${type === PoolsExecutionType.DEPOSIT ? 'USDC' : 'CLP'} on Arbitrum`,
+				payload: `You do not have enough ${type === PoolsActionType.DEPOSIT ? 'USDC' : 'CLP'} on Arbitrum`,
 			})
 			return true
 		}
@@ -40,7 +40,7 @@ export const useActionValidation = (type: PoolsExecutionType) => {
 	}, [dispatch, state.rawInput, balance, type])
 
 	const checkMinDeposit = useCallback(() => {
-		if (type !== PoolsExecutionType.DEPOSIT) return false
+		if (type !== PoolsActionType.DEPOSIT) return false
 
 		const inputDollars = Number(formatUnits(state.rawInput, 6))
 		if (inputDollars < 100 && inputDollars > 0) {

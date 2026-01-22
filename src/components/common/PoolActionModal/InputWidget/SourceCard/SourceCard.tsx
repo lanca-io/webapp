@@ -3,40 +3,40 @@ import { useEffect, useMemo } from 'react'
 import { useInputWidgetContext } from '../Reducer/Provider'
 import { InputActionType } from '../Reducer/types'
 import { Header } from './Header/Header'
-import { PoolsExecutionType } from '@/store/pools-execution/types'
+import { PoolsActionType } from '../../Reducer/types'
 import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { BalancePanel } from '../BalancePanel/BalancePanel'
 import { useActionValidation } from '../useActionValidation'
 import { ActionIndicator } from '../ActionIndicator/ActionIndicator'
 import { useDebounce } from '@/hooks/useDebounce'
+import { usePoolsActionContext } from '../../Reducer/Provider'
 import './SourceCard.pcss'
 
 type SourceCardProps = {
-	type: PoolsExecutionType
 	onClose: () => void
 }
 
-export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
+export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
+	const { state: poolsState } = usePoolsActionContext()
 	const { state, dispatch } = useInputWidgetContext()
-	const { validate } = useActionValidation(type)
+	const { validate } = useActionValidation(poolsState.type)
 
 	const debouncedInput = useDebounce(state.input, 300)
 
 	const header = useMemo(
 		() => (
 			<Header
-				title={type === PoolsExecutionType.DEPOSIT ? 'Deposit' : 'Withdrawal'}
+				title={
+					poolsState.type === PoolsActionType.DEPOSIT ? 'Deposit' : 'Withdrawal'
+				}
 				onClose={onClose}
 			/>
 		),
-		[type, onClose],
+		[poolsState.type, onClose],
 	)
 
-	const panel = useMemo(
-		() => <AssetPanel type={type} direction={Direction.From} />,
-		[type],
-	)
+	const panel = useMemo(() => <AssetPanel direction={Direction.From} />, [])
 
 	const input = useMemo(
 		() => (
@@ -54,10 +54,10 @@ export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 	)
 
 	const balance = useMemo(
-		() => <BalancePanel type={type} direction={Direction.From} />,
-		[type],
+		() => <BalancePanel direction={Direction.From} />,
+		[poolsState.type],
 	)
-	const indicator = useMemo(() => <ActionIndicator />, [type])
+	const indicator = useMemo(() => <ActionIndicator />, [poolsState.type])
 
 	useEffect(() => {
 		validate()

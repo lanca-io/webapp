@@ -1,5 +1,6 @@
 import { type FC, useMemo } from 'react'
-import { PoolsExecutionType } from '@/store/pools-execution/types'
+import { PoolsActionType } from '../../Reducer/types'
+import { usePoolsActionContext } from '../../Reducer/Provider'
 import './AssetPanel.pcss'
 
 export enum Direction {
@@ -8,7 +9,6 @@ export enum Direction {
 }
 
 type AssetPanelProps = {
-	type: PoolsExecutionType
 	direction: Direction
 }
 
@@ -23,8 +23,9 @@ const TOKEN_CONFIG = {
 	},
 } as const
 
-export const AssetPanel: FC<AssetPanelProps> = ({ direction, type }) => {
-	const isDeposit = type === PoolsExecutionType.DEPOSIT
+export const AssetPanel: FC<AssetPanelProps> = ({ direction }) => {
+	const { state } = usePoolsActionContext()
+	const isDeposit = state.type === PoolsActionType.DEPOSIT
 	const isFrom = direction === Direction.From
 
 	const token = useMemo(() => {

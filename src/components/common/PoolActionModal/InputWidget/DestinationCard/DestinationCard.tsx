@@ -1,20 +1,18 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
 import { useInputWidgetContext } from '../Reducer/Provider'
-import { PoolsExecutionType } from '@/store/pools-execution/types'
+import { PoolsActionType } from '../../Reducer/types'
 import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { BalancePanel } from '../BalancePanel/BalancePanel'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 import { WarningWidget } from './WarningWidget/WarningWidget'
 import { useDebounce } from '@/hooks/useDebounce'
+import { usePoolsActionContext } from '../../Reducer/Provider'
 import './DestinationCard.pcss'
 
-type DestinationCardProps = {
-	type: PoolsExecutionType
-}
-
-export const DestinationCard: FC<DestinationCardProps> = ({ type }) => {
+export const DestinationCard: FC = () => {
+	const { state: poolsState } = usePoolsActionContext()
 	const { state } = useInputWidgetContext()
 	const { lpPrice } = usePoolsDataStore()
 
@@ -35,11 +33,11 @@ export const DestinationCard: FC<DestinationCardProps> = ({ type }) => {
 		const FEE_BPS = 0.00005
 
 		let output
-		switch (type) {
-			case PoolsExecutionType.DEPOSIT:
+		switch (poolsState.type) {
+			case PoolsActionType.DEPOSIT:
 				output = (input / lpPrice) * (1 - FEE_BPS)
 				break
-			case PoolsExecutionType.WITHDRAWAL:
+			case PoolsActionType.WITHDRAWAL:
 				output = input * lpPrice * (1 - FEE_BPS)
 				break
 			default:
@@ -47,19 +45,19 @@ export const DestinationCard: FC<DestinationCardProps> = ({ type }) => {
 		}
 
 		return output.toFixed(6)
-	}, [debouncedInput, lpPrice, type, state.error, state.warning])
+	}, [debouncedInput, lpPrice, poolsState.type, state.error, state.warning])
 
 	const panel = useMemo(
-		() => <AssetPanel type={type} direction={Direction.To} />,
-		[type],
+		() => <AssetPanel direction={Direction.To} />,
+		[poolsState.type],
 	)
 	const input = useMemo(
 		() => <WidgetInput value={amount} placeholder="0" disabled />,
 		[amount],
 	)
 	const balance = useMemo(
-		() => <BalancePanel type={type} direction={Direction.To} />,
-		[type],
+		() => <BalancePanel direction={Direction.To} />,
+		[poolsState.type],
 	)
 	const warning = useMemo(
 		() => (state.warning ? <WarningWidget /> : null),
