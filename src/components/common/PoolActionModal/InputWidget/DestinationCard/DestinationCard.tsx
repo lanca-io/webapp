@@ -6,6 +6,7 @@ import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { BalancePanel } from '../BalancePanel/BalancePanel'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
+import { WarningWidget } from './WarningWidget/WarningWidget'
 import './DestinationCard.pcss'
 
 type DestinationCardProps = {
@@ -17,6 +18,7 @@ export const DestinationCard: FC<DestinationCardProps> = ({ type }) => {
 	const { lpPrice } = usePoolsDataStore()
 
 	const destinationAmount = useMemo(() => {
+		if (state.warning || state.error) return '0'
 		if (!lpPrice || !state.input) return '0'
 
 		const input = parseFloat(state.input)
@@ -35,7 +37,7 @@ export const DestinationCard: FC<DestinationCardProps> = ({ type }) => {
 		}
 
 		return output.toFixed(6)
-	}, [state.input, lpPrice, type])
+	}, [state.input, lpPrice, type, state.error, state.warning])
 
 	const panel = useMemo(
 		() => <AssetPanel type={type} direction={Direction.To} />,
@@ -54,11 +56,19 @@ export const DestinationCard: FC<DestinationCardProps> = ({ type }) => {
 		[type],
 	)
 
+	const warning = useMemo(() => {
+		if (state.warning) {
+			return <WarningWidget />
+		}
+		return null
+	}, [state.warning])
+
 	return (
 		<div className="pool_action_destination_card">
 			{panel}
 			{input}
 			{balance}
+			{warning}
 		</div>
 	)
 }

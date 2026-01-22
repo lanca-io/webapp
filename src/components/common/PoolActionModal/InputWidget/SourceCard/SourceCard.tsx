@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useInputWidgetContext } from '../Reducer/Provider'
 import { InputActionType } from '../Reducer/types'
 import { Header } from './Header/Header'
@@ -7,6 +7,7 @@ import { PoolsExecutionType } from '@/store/pools-execution/types'
 import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { BalancePanel } from '../BalancePanel/BalancePanel'
+import { useActionValidation } from '../useActionValidation'
 import './SourceCard.pcss'
 
 type SourceCardProps = {
@@ -16,6 +17,7 @@ type SourceCardProps = {
 
 export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 	const { state, dispatch } = useInputWidgetContext()
+	const { validate } = useActionValidation(type)
 
 	const header = useMemo(
 		() => (
@@ -51,6 +53,10 @@ export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 		() => <BalancePanel type={type} direction={Direction.From} />,
 		[type],
 	)
+
+	useEffect(() => {
+		validate()
+	}, [state.input, validate])
 
 	return (
 		<div className="pool_action_source_card">

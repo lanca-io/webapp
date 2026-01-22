@@ -19,14 +19,17 @@ export const InputWidgetReducer = (
 	switch (action.type) {
 		case InputActionType.CHANGE: {
 			const input = sanitizeNumbers(action.payload)
-			const rawInput = parseUnits(input, 6)
+			const rawInput = parseUnits(input || '0', 6)
+			const isValid = rawInput > 0n
 
 			return {
 				...state,
 				input,
 				rawInput,
 				isTouched: true,
-				isValid: rawInput > 0n,
+				isValid,
+				warning: null,
+				error: null,
 			}
 		}
 
@@ -37,16 +40,30 @@ export const InputWidgetReducer = (
 			return { ...state, isFocused: false }
 
 		case InputActionType.SET_WARNING:
-			return { ...state, warning: action.payload }
+			return {
+				...state,
+				warning: action.payload,
+			}
 
 		case InputActionType.CLEAR_WARNING:
-			return { ...state, warning: null }
+			return {
+				...state,
+				warning: null,
+			}
 
 		case InputActionType.SET_ERROR:
-			return { ...state, error: action.payload }
+			return {
+				...state,
+				error: action.payload,
+				isValid: false,
+			}
 
 		case InputActionType.CLEAR_ERROR:
-			return { ...state, error: null }
+			return {
+				...state,
+				error: null,
+				isValid: state.rawInput > 0n,
+			}
 
 		case InputActionType.RESET:
 			return initialState
