@@ -3,84 +3,55 @@ import { useInputWidgetContext } from './Reducer/Provider'
 import { InputActionType } from './Reducer/types'
 import { PoolsExecutionType } from '@/store/pools-execution/types'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
+import { usePoolsUserBalancesStore } from '@/store/pools-user-balances/usePoolsUserBalancesStore'
+import { formatUnits } from 'viem'
 
 export const useActionValidation = (type: PoolsExecutionType) => {
 	const { state, dispatch } = useInputWidgetContext()
 	const { tvl, cap } = usePoolsDataStore()
-	// const { usd, lp } = usePoolsUserBalancesStore()
-
-	// const balance = type === PoolsExecutionType.DEPOSIT ? usd : lp
+	const { rawUsd, rawLp } = usePoolsUserBalancesStore()
+	const balance = type === PoolsExecutionType.DEPOSIT ? rawUsd : rawLp
 
 	const checkCap = useCallback(() => {
-		console.log('🔍 checkCap ENTER:', {
-			capExists: !!cap,
-			tvlExists: !!tvl,
-			type,
-			stateInput: state.input,
-			rawInput: state.rawInput.toString(),
-			tvlValue: tvl?.toString(),
-			capValue: cap?.toString(),
-		})
+		if (!cap || !tvl) return false
+		if (type === PoolsExecutionType.WITHDRAWAL) return false
 
-		if (!cap || !tvl) {
-			console.log('⏭️ checkCap: missing cap OR tvl → return false')
-			return false
-		}
-
-		console.log('🔍 checkCap: cap/tvl exist, checking type...')
-		if (type === PoolsExecutionType.WITHDRAWAL) {
-			console.log('⏭️ checkCap: WITHDRAWAL → return false')
-			return false
-		}
-
-		console.log('🔍 checkCap: DEPOSIT, computing tvl + input...')
-		// ❌ PROBLEM: Number(state.input) loses precision + crashes on empty!
-		const inputNum = Number(state.input)
-		const newTvlNum = Number(tvl) + inputNum
-		console.log('🔍 checkCap math:', {
-			inputNum,
-			tvlNum: Number(tvl),
-			newTvlNum,
-			capNum: Number(cap),
-			exceeds: newTvlNum > Number(cap),
-		})
-
-		if (newTvlNum > Number(cap)) {
-			console.log('❌ checkCap: EXCEEDS → SET_WARNING')
+		const inputDollars = Number(formatUnits(state.rawInput, 6))
+		if (Number(tvl) + inputDollars > Number(cap)) {
 			dispatch({
 				type: InputActionType.SET_WARNING,
-				payload: `Pools can only accept up to $${(Number(cap) - Number(tvl)).toFixed(2)}`,
+				payload: `Pools can only accept up to $${Number(cap - tvl).toFixed(2)}`,
 			})
-			console.log('✅ checkCap: dispatched SET_WARNING → return true')
 			return true
 		}
-
-		console.log('✅ checkCap: PASSED → return false')
 		return false
 	}, [dispatch, type, cap, tvl, state.rawInput])
 
-	// const checkBalance = useCallback(() => {
-	//     if (!balance) return false
-	//     if (state.rawInput > balance) {
-	//         dispatch({
-	//             type: InputActionType.SET_ERROR,
-	//             payload: `Insufficient balance. Available: ${formatUnits(balance, 6)}`
-	//         })
-	//         return true
-	//     }
-	//     return false
-	// }, [dispatch, state.rawInput, balance])
+	const checkBalance = useCallback(() => {
+		if (balance === null || balance === undefined) return false
+		if (state.rawInput > balance) {
+			dispatch({
+				type: InputActionType.SET_ERROR,
+				payload: `You do not have enough ${type === PoolsExecutionType.DEPOSIT ? 'USDC' : 'CLP'} on Arbitrum`,
+			})
+			return true
+		}
+		return false
+	}, [dispatch, state.rawInput, balance, type])
 
-	// const checkTvlWarning = useCallback(() => {
-	//     if (!tvl || type !== PoolsExecutionType.DEPOSIT || state.rawInput * 10n <= tvl) {
-	//         dispatch({ type: InputActionType.CLEAR_WARNING })
-	//         return
-	//     }
-	//     dispatch({
-	//         type: InputActionType.SET_WARNING,
-	//         payload: `Large deposit: Increases TVL ${((state.rawInput * 100n / (tvl + state.rawInput)).toString())}%`
-	//     })
-	// }, [dispatch, type, tvl, state.rawInput])
+	const checkMinDeposit = useCallback(() => {
+		if (type !== PoolsExecutionType.DEPOSIT) return false
+
+		const inputDollars = Number(formatUnits(state.rawInput, 6))
+		if (inputDollars < 100 && inputDollars > 0) {
+			dispatch({
+				type: InputActionType.SET_ERROR,
+				payload: `Minimum amount is $100 USDC`,
+			})
+			return true
+		}
+		return false
+	}, [dispatch, state.rawInput, type])
 
 	const clearValidations = useCallback(() => {
 		dispatch({ type: InputActionType.CLEAR_ERROR })
@@ -88,16 +59,21 @@ export const useActionValidation = (type: PoolsExecutionType) => {
 	}, [dispatch])
 
 	const validate = useCallback(() => {
-		console.log('Validating input...', state.input)
 		if (!state.isTouched || state.rawInput === 0n) return
-		console.log('Input is touched and non-zero, proceeding with validations.')
 
 		if (checkCap()) return
-		// if (checkBalance()) return
+		if (checkBalance()) return
+		if (checkMinDeposit()) return
 
-		// checkTvlWarning()
 		clearValidations()
-	}, [state.isTouched, state.rawInput, checkCap, clearValidations])
+	}, [
+		state.isTouched,
+		state.rawInput,
+		checkCap,
+		checkBalance,
+		checkMinDeposit,
+		clearValidations,
+	])
 
-	return { validate, checkCap, clearValidations }
+	return { validate, checkCap, checkBalance, checkMinDeposit, clearValidations }
 }

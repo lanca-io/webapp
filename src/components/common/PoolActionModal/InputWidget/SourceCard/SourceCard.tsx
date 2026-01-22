@@ -8,6 +8,8 @@ import { AssetPanel, Direction } from '../AssetPanel/AssetPanel'
 import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { BalancePanel } from '../BalancePanel/BalancePanel'
 import { useActionValidation } from '../useActionValidation'
+import { ActionIndicator } from '../ActionIndicator/ActionIndicator'
+import { useDebounce } from '@/hooks/useDebounce'
 import './SourceCard.pcss'
 
 type SourceCardProps = {
@@ -18,6 +20,8 @@ type SourceCardProps = {
 export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 	const { state, dispatch } = useInputWidgetContext()
 	const { validate } = useActionValidation(type)
+
+	const debouncedInput = useDebounce(state.input, 300)
 
 	const header = useMemo(
 		() => (
@@ -53,16 +57,18 @@ export const SourceCard: FC<SourceCardProps> = ({ type, onClose }) => {
 		() => <BalancePanel type={type} direction={Direction.From} />,
 		[type],
 	)
+	const indicator = useMemo(() => <ActionIndicator />, [type])
 
 	useEffect(() => {
 		validate()
-	}, [state.input, validate])
+	}, [debouncedInput, validate])
 
 	return (
 		<div className="pool_action_source_card">
 			{header}
 			{panel}
 			{input}
+			{indicator}
 			{balance}
 		</div>
 	)
