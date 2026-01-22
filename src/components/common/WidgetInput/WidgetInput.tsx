@@ -9,6 +9,7 @@ type WidgetInputProps = {
 	placeholder?: string
 	disabled?: boolean
 	type?: string
+	maxLength?: number
 	className?: string
 }
 
@@ -18,6 +19,7 @@ export const WidgetInput = memo(
 		onChange,
 		onFocus,
 		onBlur,
+		maxLength,
 		placeholder = '0',
 		disabled = false,
 		type = 'text',
@@ -31,6 +33,7 @@ export const WidgetInput = memo(
 			<div className={containerClass}>
 				<input
 					type={type}
+					maxLength={maxLength}
 					className={inputClass}
 					placeholder={placeholder}
 					value={value}

@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useMemo } from 'react'
 import { useInputWidgetContext } from '../Reducer/Provider'
 import { InfoIcon } from '@/assets/InfoIcon'
 import './ActionIndicator.pcss'
@@ -6,14 +7,24 @@ import './ActionIndicator.pcss'
 export const ActionIndicator: FC = () => {
 	const { state } = useInputWidgetContext()
 
-	const showError = Boolean(state.error)
-	const showWarning = Boolean(state.warning) && !showError
-	const showPrompt =
-		!state.isTouched || (state.rawInput === 0n && !state.isFocused)
+	const conditions = useMemo(() => {
+		const showError = Boolean(state.error)
+		const showWarning = Boolean(state.warning) && !showError
+		const showPrompt =
+			!state.isTouched || (state.rawInput === 0n && !state.isFocused)
+
+		return { showError, showWarning, showPrompt }
+	}, [
+		state.error,
+		state.warning,
+		state.isTouched,
+		state.rawInput,
+		state.isFocused,
+	])
 
 	return (
 		<div className="pool_action_indicator_container">
-			{showError && (
+			{conditions.showError && (
 				<>
 					<InfoIcon color="var(--color-danger-600)" />
 					<span
@@ -26,7 +37,7 @@ export const ActionIndicator: FC = () => {
 				</>
 			)}
 
-			{showWarning && (
+			{conditions.showWarning && (
 				<>
 					<InfoIcon color="var(--color-warning-600)" />
 					<span
@@ -38,7 +49,7 @@ export const ActionIndicator: FC = () => {
 				</>
 			)}
 
-			{showPrompt && (
+			{conditions.showPrompt && (
 				<span className="pool_action_indicator_title" aria-label="Input prompt">
 					Enter amount
 				</span>

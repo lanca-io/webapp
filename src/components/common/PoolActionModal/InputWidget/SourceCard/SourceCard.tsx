@@ -43,6 +43,7 @@ export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
 			<WidgetInput
 				value={state.input}
 				placeholder="0"
+				maxLength={9}
 				onChange={e =>
 					dispatch({ type: InputActionType.CHANGE, payload: e.target.value })
 				}
