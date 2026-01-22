@@ -4,6 +4,7 @@ import {
 	PoolsStateActions,
 	PoolsActionStatus,
 	PoolsActionType,
+	PoolsActionStages,
 } from './types'
 
 export const initialState: PoolsActionState = {
@@ -24,20 +25,14 @@ export const PoolsActionReducer = (
 	action: PoolsActionAction,
 ): PoolsActionState => {
 	switch (action.type) {
-		case PoolsStateActions.SET_ALLOWANCE:
-			return {
-				...state,
-				allowance: action.payload,
-			}
-
-		case PoolsStateActions.SET_QUEUE:
-			return {
-				...state,
-				queue: action.payload,
-			}
+		case PoolsStateActions.UPDATE_STEP:
+			const { stage, status } = action.payload!
+			return stage === PoolsActionStages.ALLOWANCE
+				? { ...state, allowance: status }
+				: { ...state, queue: status }
 
 		case PoolsStateActions.RESET:
-			return initialState
+			return createInitialState(state.type)
 
 		default:
 			return state

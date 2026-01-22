@@ -17,9 +17,7 @@ export enum PoolsActionStatus {
 }
 
 export enum PoolsStateActions {
-	EXECUTE = 'EXECUTE',
-	SET_ALLOWANCE = 'SET_ALLOWANCE',
-	SET_QUEUE = 'SET_QUEUE',
+	UPDATE_STEP = 'UPDATE_STEP',
 	RESET = 'RESET',
 }
 
@@ -30,8 +28,13 @@ export type PoolsActionState = {
 }
 
 export type PoolsActionAction =
-	| { type: PoolsStateActions.SET_ALLOWANCE; payload: PoolsActionStatus }
-	| { type: PoolsStateActions.SET_QUEUE; payload: PoolsActionStatus }
+	| {
+			type: PoolsStateActions.UPDATE_STEP
+			payload: {
+				stage: PoolsActionStages
+				status: PoolsActionStatus
+			}
+	  }
 	| { type: PoolsStateActions.RESET }
 
 export type PoolsActionContextValue = {
