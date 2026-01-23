@@ -31,7 +31,7 @@ export const ProcessAction: FC = memo(() => {
 		currentStatus === PoolsActionStatus.REJECTED
 	) {
 		return (
-			<div className="process_action">
+			<div className="pool_action_process_action">
 				<Button
 					variant="secondary_color"
 					size="l"

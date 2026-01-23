@@ -3,13 +3,20 @@
 	width: 394px;
 	flex-direction: column;
 	align-items: center;
-	border-radius: var(--space-l);
-	padding: var(--space-m);
-	gap: var(--space-m);
-	background-color: var(--color-gray-25);
-	border-bottom: 1px solid var(--color-gray-100);
 	z-index: 2;
 	position: relative;
+
+	& .process_widget_content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-m);
+		padding: var(--space-m);
+		background-color: var(--color-gray-25);
+		border-bottom: 1px solid var(--color-gray-100);
+		border-radius: var(--space-l);
+		width: 100%;
+	}
 }
 
 @media only screen and (min-width: 641px) and (max-width: 1024px) {

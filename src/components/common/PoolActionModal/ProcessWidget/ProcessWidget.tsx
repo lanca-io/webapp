@@ -21,17 +21,20 @@ export const ProcessWidget: FC = memo(() => {
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
 				stage: PoolsActionStages.ALLOWANCE,
-				status: PoolsActionStatus.PENDING,
+				status: PoolsActionStatus.FAILED,
 			},
 		})
 	}, [])
 
 	return (
-		<div className={`process_widget`}>
-			<ProcessHeading />
-			<ProcessContent />
-			<ProcessStatus />
-			<ProcessInfo />
+		<div className="process_widget">
+			<div className="process_widget_content">
+				<ProcessHeading />
+				<ProcessContent />
+				<ProcessStatus />
+				<ProcessInfo />
+			</div>
+
 			<ProcessAction />
 		</div>
 	)
