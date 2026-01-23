@@ -20,8 +20,8 @@ export const ProcessWidget: FC = memo(() => {
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.ALLOWANCE,
-				status: PoolsActionStatus.FAILED,
+				stage: PoolsActionStages.QUEUE,
+				status: PoolsActionStatus.PENDING,
 			},
 		})
 	}, [])

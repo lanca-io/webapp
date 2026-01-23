@@ -12,41 +12,24 @@ export const ProcessContent: FC = memo(() => {
 	const { state } = usePoolsActionContext()
 	const { allowance, queue } = state
 
-	const txStatus = useMemo((): PoolsActionStatus => {
+	const content = useMemo(() => {
 		if (
 			queue === PoolsActionStatus.FAILED ||
-			allowance === PoolsActionStatus.FAILED
+			queue === PoolsActionStatus.REJECTED
 		)
-			return PoolsActionStatus.FAILED
+			return <Failure />
+		if (queue === PoolsActionStatus.SUCCESS) return <Success />
 		if (
-			queue === PoolsActionStatus.REJECTED ||
+			allowance === PoolsActionStatus.FAILED ||
 			allowance === PoolsActionStatus.REJECTED
 		)
-			return PoolsActionStatus.REJECTED
-		if (queue === PoolsActionStatus.SUCCESS) return PoolsActionStatus.SUCCESS
-		if (
-			queue === PoolsActionStatus.PENDING ||
-			allowance === PoolsActionStatus.PENDING
-		)
-			return PoolsActionStatus.PENDING
-		return PoolsActionStatus.IDLE
-	}, [allowance, queue])
+			return <Failure />
+		if (allowance === PoolsActionStatus.SUCCESS) return <Transaction />
+		if (allowance === PoolsActionStatus.PENDING) return <Approval />
+		if (queue === PoolsActionStatus.PENDING) return <Transaction />
 
-	const content = useMemo(() => {
-		switch (txStatus) {
-			case PoolsActionStatus.FAILED:
-			case PoolsActionStatus.REJECTED:
-				return <Failure />
-			case PoolsActionStatus.SUCCESS:
-				return <Success />
-			case PoolsActionStatus.PENDING:
-				if (allowance === PoolsActionStatus.PENDING) return <Approval />
-				if (queue === PoolsActionStatus.PENDING) return <Transaction />
-				return null
-			default:
-				return null
-		}
-	}, [txStatus, allowance, queue])
+		return null
+	}, [allowance, queue])
 
 	return content ? (
 		<div className="pool_action_process_content">{content}</div>
