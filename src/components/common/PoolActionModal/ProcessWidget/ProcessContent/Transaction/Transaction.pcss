@@ -7,15 +7,17 @@
 	align-self: stretch;
 }
 
-.pool_action_token_with_chain {
+.pool_action_token_with_chain,
+.pool_action_token {
 	position: relative;
-	display: inline-block;
+	display: flex;
 }
 
 .pool_action_transaction_content_from,
 .pool_action_transaction_content_to {
 	display: flex;
 	height: 160px;
+	min-width: 157px;
 	width: 100%;
 	padding: var(--space-xxxl);
 	justify-content: center;
@@ -58,6 +60,31 @@
 	width: 24px;
 	height: 24px;
 	border-radius: var(--space-xs);
+}
+
+& .pool_action_logo_chain {
+	width: 40px;
+	height: 40px;
+	border-radius: 16px;
+	transform: rotate(15deg);
+	margin-left: -5px;
+	z-index: 1;
+}
+
+& .pool_action_token_image {
+	width: 48px;
+	height: 48px;
+	transform: rotate(-15deg);
+	z-index: 1;
+}
+
+& .pool_action_chain_image {
+	width: 48px;
+	height: 48px;
+	border-radius: 16px;
+	transform: rotate(15deg);
+	margin-left: -5px;
+	z-index: 2;
 }
 
 @media only screen and (min-width: 641px) and (max-width: 1024px) {

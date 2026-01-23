@@ -1,13 +1,13 @@
 import type { FC } from 'react'
-import { memo, useEffect } from 'react'
-import { ProcessHeading } from './ProcessHeading/ProcessHeading'
-import { ProcessAction } from './ProcessAction/ProcessAction'
-import { usePoolsActionContext } from '../Reducer/Provider'
 import {
 	PoolsActionStages,
 	PoolsActionStatus,
 	PoolsStateActions,
 } from '../Reducer/types'
+import { memo, useEffect } from 'react'
+import { ProcessHeading } from './ProcessHeading/ProcessHeading'
+import { ProcessAction } from './ProcessAction/ProcessAction'
+import { usePoolsActionContext } from '../Reducer/Provider'
 import { ProcessContent } from './ProcessContent/ProcessContent'
 import { ProcessInfo } from './ProcessInfo/ProcessInfo'
 import { ProcessStatus } from './ProcessStatus/ProcessStatus'
@@ -34,7 +34,6 @@ export const ProcessWidget: FC = memo(() => {
 				<ProcessStatus />
 				<ProcessInfo />
 			</div>
-
 			<ProcessAction />
 		</div>
 	)
