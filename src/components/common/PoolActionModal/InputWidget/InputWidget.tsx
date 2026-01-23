@@ -4,7 +4,6 @@ import { SourceCard } from './SourceCard/SourceCard'
 import { DestinationCard } from './DestinationCard/DestinationCard'
 import { PoolsActionType } from '../Reducer/types'
 import { ActionCard } from './ActionCard/ActionCard'
-import { InputWidgetProvider } from './Reducer/Provider'
 import './InputWidget.pcss'
 
 type InputFormProps = {
@@ -18,12 +17,10 @@ export const InputWidget: FC<InputFormProps> = ({ type, onClose }) => {
 	const action = useMemo(() => <ActionCard type={type} />, [type])
 
 	return (
-		<InputWidgetProvider>
-			<div className="pool_action_input_widget">
-				{source}
-				{destination}
-				{action}
-			</div>
-		</InputWidgetProvider>
+		<div className="pool_action_input_widget">
+			{source}
+			{destination}
+			{action}
+		</div>
 	)
 }

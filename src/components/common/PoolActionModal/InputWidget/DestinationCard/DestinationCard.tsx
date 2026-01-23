@@ -44,7 +44,7 @@ export const DestinationCard: FC = () => {
 				output = 0
 		}
 
-		return output.toFixed(6)
+		return output
 	}, [debouncedInput, lpPrice, poolsState.type, state.error, state.warning])
 
 	const panel = useMemo(
@@ -52,7 +52,7 @@ export const DestinationCard: FC = () => {
 		[poolsState.type],
 	)
 	const input = useMemo(
-		() => <WidgetInput value={amount} placeholder="0" disabled />,
+		() => <WidgetInput value={amount as string} placeholder="0" disabled />,
 		[amount],
 	)
 	const balance = useMemo(

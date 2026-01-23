@@ -2,8 +2,9 @@ import type { FC } from 'react'
 import { createPortal } from 'react-dom'
 import { PoolsActionType } from './Reducer/types'
 import { PoolsActionProvider } from './Reducer/Provider'
-import './PoolActionModal.pcss'
 import { ProcessWidget } from './ProcessWidget/ProcessWidget'
+import { InputWidgetProvider } from './InputWidget/Reducer/Provider'
+import './PoolActionModal.pcss'
 
 type PoolActionModalProps = {
 	type: PoolsActionType
@@ -16,9 +17,11 @@ export const PoolActionModal: FC<PoolActionModalProps> = ({
 }) => {
 	const modal = (
 		<PoolsActionProvider initialType={type}>
-			<div className="pool_action_modal_overlay">
-				<ProcessWidget />
-			</div>
+			<InputWidgetProvider>
+				<div className="pool_action_modal_overlay">
+					<ProcessWidget />
+				</div>
+			</InputWidgetProvider>
 		</PoolsActionProvider>
 	)
 

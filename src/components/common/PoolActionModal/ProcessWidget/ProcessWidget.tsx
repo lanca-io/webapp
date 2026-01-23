@@ -1,13 +1,35 @@
 import type { FC } from 'react'
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { ProcessHeading } from './ProcessHeading/ProcessHeading'
 import { ProcessAction } from './ProcessAction/ProcessAction'
+import { usePoolsActionContext } from '../Reducer/Provider'
+import {
+	PoolsActionStages,
+	PoolsActionStatus,
+	PoolsStateActions,
+} from '../Reducer/types'
+import { ProcessContent } from './ProcessContent/ProcessContent'
+import { ProcessInfo } from './ProcessInfo/ProcessInfo'
 import './ProcessWidget.pcss'
 
 export const ProcessWidget: FC = memo(() => {
+	const { dispatch } = usePoolsActionContext()
+
+	useEffect(() => {
+		dispatch({
+			type: PoolsStateActions.UPDATE_STEP,
+			payload: {
+				stage: PoolsActionStages.ALLOWANCE,
+				status: PoolsActionStatus.PENDING,
+			},
+		})
+	}, [])
+
 	return (
 		<div className={`process_widget`}>
 			<ProcessHeading />
+			<ProcessContent />
+			<ProcessInfo />
 			<ProcessAction />
 		</div>
 	)

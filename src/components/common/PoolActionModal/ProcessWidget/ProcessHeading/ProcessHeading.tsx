@@ -67,7 +67,7 @@ export const ProcessHeading: FC = memo(() => {
 						: 'Withdrawal Rejected',
 			},
 		}),
-		[],
+		[state.type], // Add dep for type-based strings
 	)
 
 	const heading =
@@ -77,7 +77,9 @@ export const ProcessHeading: FC = memo(() => {
 
 	return (
 		<div
-			className={`pool_action_process_heading ${!isFinalStage ? 'pool_action_process_heading_no_button' : ''}`}
+			className={`pool_action_process_heading ${
+				!isFinalStage ? 'pool_action_process_heading_no_button' : ''
+			}`}
 		>
 			<h4 className="pool_action_process_card_title">{heading}</h4>
 			{isFinalStage && (
