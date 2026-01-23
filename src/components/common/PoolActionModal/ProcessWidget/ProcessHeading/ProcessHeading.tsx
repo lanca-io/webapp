@@ -67,7 +67,7 @@ export const ProcessHeading: FC = memo(() => {
 						: 'Withdrawal Rejected',
 			},
 		}),
-		[state.type], // Add dep for type-based strings
+		[state.type],
 	)
 
 	const heading =
