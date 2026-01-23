@@ -1,0 +1,41 @@
+.pools_action_process_step {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--space-xs);
+}
+
+.pools_action_process_step_title {
+	color: var(--color-gray-500);
+	font-size: 0.875rem;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1.125rem;
+}
+
+.pools_action_process_step_IDLE {
+	color: var(--color-gray-500);
+	font-weight: 500;
+}
+
+.pools_action_process_step_PENDING {
+	color: var(--color-gray-700);
+	font-weight: 500;
+}
+
+.pools_action_process_step_SUCCESS {
+	color: var(--color-success-600);
+	font-weight: 500;
+}
+
+.pools_action_process_step_FAILED,
+.pools_action_process_step_REJECTED {
+	color: var(--color-danger-600);
+	font-weight: 500;
+}
+
+.pools_action_process_step svg {
+	width: 16px;
+	height: 16px;
+}

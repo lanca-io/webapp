@@ -10,6 +10,7 @@ import {
 } from '../Reducer/types'
 import { ProcessContent } from './ProcessContent/ProcessContent'
 import { ProcessInfo } from './ProcessInfo/ProcessInfo'
+import { ProcessStatus } from './ProcessStatus/ProcessStatus'
 import './ProcessWidget.pcss'
 
 export const ProcessWidget: FC = memo(() => {
@@ -29,6 +30,7 @@ export const ProcessWidget: FC = memo(() => {
 		<div className={`process_widget`}>
 			<ProcessHeading />
 			<ProcessContent />
+			<ProcessStatus />
 			<ProcessInfo />
 			<ProcessAction />
 		</div>

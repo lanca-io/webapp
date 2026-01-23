@@ -30,7 +30,6 @@ export const ActionCard: FC<ActionCardProps> = ({ type }) => {
 	const onAction = async () => {
 		try {
 			const client = await getWalletClient(CHAIN_ID)
-
 			if (type === PoolsActionType.DEPOSIT) {
 				await handleDeposit(
 					client,
