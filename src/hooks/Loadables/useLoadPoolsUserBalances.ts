@@ -1,14 +1,14 @@
-import type { Address } from 'viem'
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
 import { getPublicClient } from '@/providers/Web3Provider/Web3Provider'
 import { erc20Abi } from 'viem'
 import { usePoolsUserBalancesStore } from '@/store/pools-user-balances/usePoolsUserBalancesStore'
-
-const USDC_ADDRESS: Address = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d'
-const LP_TOKEN_ADDRESS: Address = '0x4aABa0D6A62B9f35BA6B32f159f921a809B7b316'
-const CHAIN_ID = 421614
+import {
+	POOLS_CHAIN_ID,
+	POOLS_LP_TOKEN_ADDRESS,
+	POOLS_USDC_ADDRESS,
+} from '@/configuration/pools'
 
 export const useLoadPoolsUserBalances = () => {
 	const { isConnected, address } = useAccount()
@@ -20,9 +20,9 @@ export const useLoadPoolsUserBalances = () => {
 		error,
 		refetch: refetchBalances,
 	} = useQuery({
-		queryKey: ['poolsUserBalances', address, CHAIN_ID],
+		queryKey: ['poolsUserBalances', address, POOLS_CHAIN_ID],
 		queryFn: async () => {
-			const publicClient = getPublicClient(CHAIN_ID)
+			const publicClient = getPublicClient(POOLS_CHAIN_ID)
 
 			if (!address) {
 				return { rawUsd: 0n, rawLp: 0n }
@@ -30,13 +30,13 @@ export const useLoadPoolsUserBalances = () => {
 
 			const [rawUsd, rawLp] = (await Promise.all([
 				publicClient.readContract({
-					address: USDC_ADDRESS,
+					address: POOLS_USDC_ADDRESS,
 					abi: erc20Abi,
 					functionName: 'balanceOf',
 					args: [address] as const,
 				}),
 				publicClient.readContract({
-					address: LP_TOKEN_ADDRESS,
+					address: POOLS_LP_TOKEN_ADDRESS,
 					abi: erc20Abi,
 					functionName: 'balanceOf',
 					args: [address] as const,

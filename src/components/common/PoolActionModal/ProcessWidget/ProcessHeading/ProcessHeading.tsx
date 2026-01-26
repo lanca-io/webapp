@@ -18,7 +18,11 @@ type HeadingMap = {
 	[PoolsActionStatus.REJECTED]: Record<PoolsActionStages, string>
 }
 
-export const ProcessHeading: FC = memo(() => {
+type ProcessHeadingProps = {
+	onClose: () => void
+}
+
+export const ProcessHeading: FC<ProcessHeadingProps> = memo(({ onClose }) => {
 	const { state } = usePoolsActionContext()
 
 	const currentStage =
@@ -83,7 +87,12 @@ export const ProcessHeading: FC = memo(() => {
 		>
 			<h4 className="pool_action_process_card_title">{heading}</h4>
 			{isFinalStage && (
-				<IconButton variant="secondary" size="m" aria-label="Back to swap">
+				<IconButton
+					variant="secondary"
+					size="m"
+					aria-label="Back to swap"
+					onClick={onClose}
+				>
 					<CloseIcon />
 				</IconButton>
 			)}

@@ -31,8 +31,8 @@ const ApprovalInfo: FC = memo(() => (
 ))
 
 const reasonLabels: Record<FailureReason, string> = {
-	rejected: 'Transaction signature was rejected.',
-	failed: 'Something went wrong.',
+	rejected: 'Transaction signature was rejected',
+	failed: 'Something went wrong',
 }
 
 const reasonVariants: Record<FailureReason, 'warning' | 'error'> = {
