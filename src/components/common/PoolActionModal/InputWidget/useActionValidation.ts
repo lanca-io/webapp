@@ -27,10 +27,7 @@ export const useActionValidation = (type: PoolsActionType) => {
 	}
 
 	const checkBalance = () => {
-		if (balance === null || balance === undefined) {
-			return false
-		}
-
+		if (balance === null || balance === undefined) return false
 		const exceeds = state.rawInput > balance
 
 		if (exceeds) {
