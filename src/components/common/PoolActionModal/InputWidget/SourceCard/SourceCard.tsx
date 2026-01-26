@@ -22,6 +22,9 @@ export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
 	const { state, dispatch } = useInputWidgetContext()
 	const { validate } = useActionValidation(poolsState.type)
 
+	console.log('INPUT:', state.input)
+	console.log('RAW INPUT:', state.rawInput)
+
 	const debouncedInput = useDebounce(state.input, 300)
 
 	const header = useMemo(
@@ -49,6 +52,7 @@ export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
 				}
 				onFocus={() => dispatch({ type: InputActionType.FOCUS })}
 				onBlur={() => dispatch({ type: InputActionType.BLUR })}
+				onKeyDown={e => e.key === ' ' && e.preventDefault()}
 			/>
 		),
 		[state.input, dispatch],

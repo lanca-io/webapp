@@ -32,7 +32,6 @@ export const InputWidgetReducer = (
 				error: null,
 			}
 		}
-
 		case InputActionType.FOCUS:
 			return { ...state, isFocused: true }
 

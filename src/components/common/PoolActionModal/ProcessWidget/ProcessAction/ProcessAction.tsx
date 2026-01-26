@@ -1,30 +1,50 @@
 import type { FC } from 'react'
-import { PoolsActionStatus, PoolsStateActions } from '../../Reducer/types'
 import { memo, useCallback } from 'react'
 import { Button } from '@concero/ui-kit'
 import { usePoolsActionContext } from '../../Reducer/Provider'
+import { PoolsActionStatus, PoolsStateActions } from '../../Reducer/types'
+import { useInputWidgetContext } from '../../InputWidget/Reducer/Provider'
+import { useActionExecution } from '../../InputWidget/useActionExecution'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { routes } from '@/constants'
 import './ProcessAction.pcss'
 
-export const ProcessAction: FC = memo(() => {
-	const { state, dispatch } = usePoolsActionContext()
+type ProcessActionProps = {
+	onClose: () => void
+}
+
+export const ProcessAction: FC<ProcessActionProps> = memo(({ onClose }) => {
+	const navigate = useNavigate()
+	const location = useLocation()
+	const pathname = location.pathname
+
+	const { state: actionState, dispatch } = usePoolsActionContext()
+	const { state: inputState } = useInputWidgetContext()
+	const { execute } = useActionExecution(
+		inputState.rawInput,
+		dispatch,
+		actionState.type,
+	)
 
 	const currentStatus =
-		state.queue !== PoolsActionStatus.IDLE ? state.queue : state.allowance
+		actionState.queue !== PoolsActionStatus.IDLE
+			? actionState.queue
+			: actionState.allowance
 
 	const isFinalStage =
-		state.allowance === PoolsActionStatus.FAILED ||
-		state.allowance === PoolsActionStatus.REJECTED ||
-		state.queue === PoolsActionStatus.FAILED ||
-		state.queue === PoolsActionStatus.REJECTED ||
-		state.queue === PoolsActionStatus.SUCCESS
+		actionState.allowance === PoolsActionStatus.FAILED ||
+		actionState.allowance === PoolsActionStatus.REJECTED ||
+		actionState.queue === PoolsActionStatus.FAILED ||
+		actionState.queue === PoolsActionStatus.REJECTED ||
+		actionState.queue === PoolsActionStatus.SUCCESS
 
 	const handleReset = useCallback(() => {
 		dispatch({ type: PoolsStateActions.RESET })
 	}, [dispatch])
 
-	if (!isFinalStage) {
-		return null
-	}
+	const isPoolPage = pathname === routes.usdcPools
+
+	if (!isFinalStage) return null
 
 	if (
 		currentStatus === PoolsActionStatus.FAILED ||
@@ -36,7 +56,10 @@ export const ProcessAction: FC = memo(() => {
 					variant="secondary_color"
 					size="l"
 					isFull
-					onClick={handleReset}
+					onClick={async () => {
+						handleReset()
+						await execute()
+					}}
 					data-testid="try-again-button"
 				>
 					Try again
@@ -52,8 +75,15 @@ export const ProcessAction: FC = memo(() => {
 					variant="secondary_color"
 					size="l"
 					isFull
-					onClick={handleReset}
-					data-testid="swap-again-button"
+					onClick={() => {
+						handleReset()
+						if (isPoolPage) {
+							onClose()
+						} else {
+							navigate(routes.pools)
+						}
+					}}
+					data-testid="open-pool-button"
 				>
 					Open Pool
 				</Button>

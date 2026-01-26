@@ -20,7 +20,7 @@ export const ProcessWidget: FC<ProcessWidgetProps> = memo(({ onClose }) => {
 				<ProcessStatus />
 				<ProcessInfo />
 			</div>
-			<ProcessAction />
+			<ProcessAction onClose={onClose} />
 		</div>
 	)
 })
