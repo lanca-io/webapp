@@ -30,22 +30,31 @@ const ApprovalInfo: FC = memo(() => (
 	</div>
 ))
 
-const FailureInfo: FC<FailureInfoProps> = memo(({ stage, reason }) => {
-	const stageLabels: Record<FailureStage, string> = {
-		[PoolsActionStages.ALLOWANCE]: 'Approval',
-		[PoolsActionStages.QUEUE]: 'Transaction',
-	}
+const reasonLabels: Record<FailureReason, string> = {
+	rejected: 'Transaction signature was rejected.',
+	failed: 'Something went wrong.',
+}
 
-	const reasonLabels: Record<FailureReason, string> = {
-		rejected: 'Rejected',
-		failed: 'Failed',
-	}
+const reasonVariants: Record<FailureReason, 'warning' | 'error'> = {
+	rejected: 'warning',
+	failed: 'error',
+}
+
+const reasonColors: Record<FailureReason, string> = {
+	rejected: 'var(--color-warning-600)',
+	failed: 'var(--color-danger-600)',
+}
+
+export const FailureInfo: FC<FailureInfoProps> = memo(({ stage, reason }) => {
+	const variant = reasonVariants[reason]
+	const title = reasonLabels[reason]
+	const iconColor = reasonColors[reason]
 
 	return (
 		<Alert
-			variant="error"
-			title={`${stageLabels[stage]} ${reasonLabels[reason]}`}
-			icon={<DangerIcon />}
+			variant={variant}
+			title={title}
+			icon={<DangerIcon color={iconColor} />}
 			data-testid={`failure-alert-${stage}-${reason}`}
 		/>
 	)
