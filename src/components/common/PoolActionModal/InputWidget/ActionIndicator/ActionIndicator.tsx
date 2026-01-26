@@ -10,8 +10,7 @@ export const ActionIndicator: FC = () => {
 	const conditions = useMemo(() => {
 		const showError = Boolean(state.error)
 		const showWarning = Boolean(state.warning) && !showError
-		const showPrompt =
-			!state.isTouched || (state.rawInput === 0n && !state.isFocused)
+		const showPrompt = state.rawInput === 0n
 
 		return { showError, showWarning, showPrompt }
 	}, [

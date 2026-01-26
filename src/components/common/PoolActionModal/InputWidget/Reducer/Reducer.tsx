@@ -18,9 +18,19 @@ export const InputWidgetReducer = (
 ): InputState => {
 	switch (action.type) {
 		case InputActionType.CHANGE: {
+			console.log('CHANGE DEBUG - payload:', `"${action.payload}"`)
 			const input = sanitizeNumbers(action.payload)
+			console.log('Sanitized input:', `"${input}"`)
 			const rawInput = parseUnits(input || '0', 6)
+			console.log('Parsed raw input:', rawInput.toString(), typeof rawInput)
+			console.log('isValid check:', rawInput > 0n)
 			const isValid = rawInput > 0n
+
+			console.log('NEW STATE:', {
+				input,
+				rawInput: rawInput.toString(),
+				isValid,
+			})
 
 			return {
 				...state,
@@ -28,8 +38,6 @@ export const InputWidgetReducer = (
 				rawInput,
 				isTouched: true,
 				isValid,
-				warning: null,
-				error: null,
 			}
 		}
 		case InputActionType.FOCUS:

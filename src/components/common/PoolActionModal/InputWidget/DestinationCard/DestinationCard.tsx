@@ -44,7 +44,11 @@ export const DestinationCard: FC = () => {
 				output = 0
 		}
 
-		return output
+		if (isNaN(output) || output === 0) {
+			return '0'
+		}
+
+		return output.toFixed(9)
 	}, [debouncedInput, lpPrice, poolsState.type, state.error, state.warning])
 
 	const panel = useMemo(

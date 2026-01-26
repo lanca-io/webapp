@@ -9,7 +9,6 @@ import { WidgetInput } from '@/components/common/WidgetInput/WidgetInput'
 import { BalancePanel } from '../BalancePanel/BalancePanel'
 import { useActionValidation } from '../useActionValidation'
 import { ActionIndicator } from '../ActionIndicator/ActionIndicator'
-import { useDebounce } from '@/hooks/useDebounce'
 import { usePoolsActionContext } from '../../Reducer/Provider'
 import './SourceCard.pcss'
 
@@ -20,12 +19,7 @@ type SourceCardProps = {
 export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
 	const { state: poolsState } = usePoolsActionContext()
 	const { state, dispatch } = useInputWidgetContext()
-	const { validate } = useActionValidation(poolsState.type)
-
-	console.log('INPUT:', state.input)
-	console.log('RAW INPUT:', state.rawInput)
-
-	const debouncedInput = useDebounce(state.input, 300)
+	const { validate, clearValidations } = useActionValidation(poolsState.type)
 
 	const header = useMemo(
 		() => (
@@ -47,15 +41,16 @@ export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
 				value={state.input}
 				placeholder="0"
 				maxLength={9}
-				onChange={e =>
+				onChange={e => {
 					dispatch({ type: InputActionType.CHANGE, payload: e.target.value })
-				}
+					validate()
+				}}
 				onFocus={() => dispatch({ type: InputActionType.FOCUS })}
 				onBlur={() => dispatch({ type: InputActionType.BLUR })}
 				onKeyDown={e => e.key === ' ' && e.preventDefault()}
 			/>
 		),
-		[state.input, dispatch],
+		[state.input, dispatch, validate],
 	)
 
 	const balance = useMemo(
@@ -65,8 +60,12 @@ export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
 	const indicator = useMemo(() => <ActionIndicator />, [poolsState.type])
 
 	useEffect(() => {
-		validate()
-	}, [debouncedInput, validate])
+		if (state.isTouched && state.rawInput > 0n) {
+			validate()
+		} else if (state.rawInput === 0n) {
+			clearValidations()
+		}
+	}, [state.rawInput, state.isTouched])
 
 	return (
 		<div className="pool_action_source_card">
