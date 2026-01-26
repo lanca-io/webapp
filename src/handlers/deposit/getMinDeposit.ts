@@ -6,14 +6,10 @@ export const getMinDeposit = async (
 	client: Client,
 	pool: Address,
 ): Promise<bigint> => {
-	try {
-		const result = (await readContract(client, {
-			address: pool,
-			abi: poolsAbi,
-			functionName: 'getMinDepositAmount',
-		})) as bigint
-		return result
-	} catch (e) {
-		throw new Error(`[Lanca]: Error getting minimum deposit amount - ${e}`)
-	}
+	const result = (await readContract(client, {
+		address: pool,
+		abi: poolsAbi,
+		functionName: 'getMinDepositAmount',
+	})) as bigint
+	return result
 }

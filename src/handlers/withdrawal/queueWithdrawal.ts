@@ -11,37 +11,29 @@ export const queueWithdrawal = async (
 ): Promise<boolean> => {
 	if (!client.account) throw new Error('[Lanca]: No account')
 
-	try {
-		const { request } = await simulateContract(client, {
-			account: client.account,
-			address: pool,
-			abi: poolsAbi,
-			functionName: 'enterWithdrawalQueue',
-			args: [amount],
-		})
+	const { request } = await simulateContract(client, {
+		account: client.account,
+		address: pool,
+		abi: poolsAbi,
+		functionName: 'enterWithdrawalQueue',
+		args: [amount],
+	})
 
-		const txHash = await sendTransaction(client, {
-			...request,
-			to: pool,
-			value: 0n,
-		})
+	const txHash = await sendTransaction(client, {
+		...request,
+		to: pool,
+		value: 0n,
+	})
 
-		if (!txHash) throw new Error('[Lanca]: Transaction dropped from mempool')
+	if (!txHash) throw new Error('[Lanca]: Transaction dropped from mempool')
 
-		const { receipt, reason } = await waitForConfirmation(
-			client,
-			chainId,
-			txHash,
+	const { receipt, reason } = await waitForConfirmation(client, chainId, txHash)
+
+	if (!receipt || receipt.status === 'reverted') {
+		throw new Error(
+			`[Lanca]: Withdrawal queue failed${reason ? ` due to ${reason}` : ''}`,
 		)
-
-		if (!receipt || receipt.status === 'reverted') {
-			throw new Error(
-				`[Lanca]: Withdrawal queue failed${reason ? ` due to ${reason}` : ''}`,
-			)
-		}
-
-		return true
-	} catch (error) {
-		throw new Error(`[Lanca]: queueWithdrawal failed: ${error}`)
 	}
+
+	return true
 }

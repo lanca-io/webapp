@@ -8,15 +8,11 @@ export const getAllowance = async (
 	owner: Address,
 	spender: Address,
 ): Promise<bigint> => {
-	try {
-		const result = await readContract(client, {
-			address: token,
-			abi: erc20Abi,
-			functionName: 'allowance',
-			args: [owner, spender],
-		})
-		return result
-	} catch (e) {
-		throw new Error(`[Lanca]: Error getting allowance - ${e}`)
-	}
+	const result = await readContract(client, {
+		address: token,
+		abi: erc20Abi,
+		functionName: 'allowance',
+		args: [owner, spender],
+	})
+	return result
 }

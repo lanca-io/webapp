@@ -3,6 +3,11 @@ import { handleAllowance } from '../allowance'
 import { getMinDeposit } from './getMinDeposit'
 import { queueDeposit } from './queueDeposit'
 import {
+	UserRejectedRequestError,
+	ContractFunctionExecutionError,
+	TransactionExecutionError,
+} from 'viem'
+import {
 	PoolsActionStages,
 	PoolsActionStatus,
 	PoolsStateActions,
@@ -38,6 +43,21 @@ const onAllowance = async (
 			},
 		})
 	} catch (e) {
+		if (
+			e instanceof UserRejectedRequestError ||
+			(e instanceof ContractFunctionExecutionError &&
+				e.message.includes('rejected')) ||
+			(e instanceof TransactionExecutionError && e.message.includes('rejected'))
+		) {
+			dispatch({
+				type: PoolsStateActions.UPDATE_STEP,
+				payload: {
+					stage: PoolsActionStages.ALLOWANCE,
+					status: PoolsActionStatus.REJECTED,
+				},
+			})
+			throw e
+		}
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
@@ -61,24 +81,17 @@ const onMinDepositCheck = async (
 			dispatch({
 				type: PoolsStateActions.UPDATE_STEP,
 				payload: {
-					stage: PoolsActionStages.ALLOWANCE,
+					stage: PoolsActionStages.QUEUE,
 					status: PoolsActionStatus.FAILED,
 				},
 			})
 			throw new Error(`Min deposit ${minDeposit}`)
 		}
-		dispatch({
-			type: PoolsStateActions.UPDATE_STEP,
-			payload: {
-				stage: PoolsActionStages.ALLOWANCE,
-				status: PoolsActionStatus.SUCCESS,
-			},
-		})
 	} catch (e) {
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.ALLOWANCE,
+				stage: PoolsActionStages.QUEUE,
 				status: PoolsActionStatus.FAILED,
 			},
 		})
@@ -110,6 +123,21 @@ const onQueue = async (
 			},
 		})
 	} catch (e) {
+		if (
+			e instanceof UserRejectedRequestError ||
+			(e instanceof ContractFunctionExecutionError &&
+				e.message.includes('rejected')) ||
+			(e instanceof TransactionExecutionError && e.message.includes('rejected'))
+		) {
+			dispatch({
+				type: PoolsStateActions.UPDATE_STEP,
+				payload: {
+					stage: PoolsActionStages.QUEUE,
+					status: PoolsActionStatus.REJECTED,
+				},
+			})
+			throw e
+		}
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {

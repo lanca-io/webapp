@@ -3,6 +3,11 @@ import { getMinWithdrawal } from './getMinWithdrawal'
 import { queueWithdrawal } from './queueWithdrawal'
 import { handleAllowance } from '../allowance'
 import {
+	UserRejectedRequestError,
+	ContractFunctionExecutionError,
+	TransactionExecutionError,
+} from 'viem'
+import {
 	PoolsActionStages,
 	PoolsActionStatus,
 	PoolsStateActions,
@@ -38,6 +43,22 @@ const onAllowance = async (
 			},
 		})
 	} catch (e) {
+		if (
+			e instanceof UserRejectedRequestError ||
+			(e instanceof ContractFunctionExecutionError &&
+				e.message.includes('rejected')) ||
+			(e instanceof TransactionExecutionError && e.message.includes('rejected'))
+		) {
+			dispatch({
+				type: PoolsStateActions.UPDATE_STEP,
+				payload: {
+					stage: PoolsActionStages.ALLOWANCE,
+					status: PoolsActionStatus.REJECTED,
+				},
+			})
+
+			throw e
+		}
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
@@ -61,7 +82,7 @@ const onMinWithdrawalCheck = async (
 			dispatch({
 				type: PoolsStateActions.UPDATE_STEP,
 				payload: {
-					stage: PoolsActionStages.ALLOWANCE,
+					stage: PoolsActionStages.QUEUE,
 					status: PoolsActionStatus.FAILED,
 				},
 			})
@@ -71,7 +92,7 @@ const onMinWithdrawalCheck = async (
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.ALLOWANCE,
+				stage: PoolsActionStages.QUEUE,
 				status: PoolsActionStatus.FAILED,
 			},
 		})
@@ -103,6 +124,22 @@ const onQueueWithdrawal = async (
 			},
 		})
 	} catch (e) {
+		if (
+			e instanceof UserRejectedRequestError ||
+			(e instanceof ContractFunctionExecutionError &&
+				e.message.includes('rejected')) ||
+			(e instanceof TransactionExecutionError && e.message.includes('rejected'))
+		) {
+			dispatch({
+				type: PoolsStateActions.UPDATE_STEP,
+				payload: {
+					stage: PoolsActionStages.QUEUE,
+					status: PoolsActionStatus.REJECTED,
+				},
+			})
+
+			throw e
+		}
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
