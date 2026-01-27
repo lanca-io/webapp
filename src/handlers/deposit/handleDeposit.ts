@@ -22,7 +22,7 @@ const onAllowance = async (
 	client: Client,
 	chainId: number,
 	token: Address,
-	account: Address,
+	address: Address,
 	amount: bigint,
 	dispatch: DispatchDepositAction,
 ): Promise<void> => {
@@ -34,7 +34,7 @@ const onAllowance = async (
 				status: PoolsActionStatus.PENDING,
 			},
 		})
-		await handleAllowance(client, chainId, token, account, amount)
+		await handleAllowance(client, chainId, token, address, amount)
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
@@ -159,14 +159,7 @@ export const handleDeposit = async (
 ): Promise<boolean> => {
 	if (!client.account) throw new Error('[Lanca]: No account')
 
-	await onAllowance(
-		client,
-		chainId,
-		token,
-		client.account.address,
-		amount,
-		dispatch,
-	)
+	await onAllowance(client, chainId, token, pool, amount, dispatch)
 	await onMinDepositCheck(client, pool, amount, dispatch)
 	await onQueue(client, chainId, pool, amount, dispatch)
 

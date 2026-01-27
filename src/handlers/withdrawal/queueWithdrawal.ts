@@ -1,5 +1,10 @@
 import type { Address, Client } from 'viem'
-import { sendTransaction, simulateContract } from 'viem/actions'
+import {
+	estimateContractGas,
+	estimateFeesPerGas,
+	simulateContract,
+	writeContract,
+} from 'viem/actions'
 import { waitForConfirmation } from '../receipt'
 import { poolsAbi } from '@/abi/PoolsAbi'
 
@@ -11,7 +16,7 @@ export const queueWithdrawal = async (
 ): Promise<boolean> => {
 	if (!client.account) throw new Error('[Lanca]: No account')
 
-	const { request } = await simulateContract(client, {
+	await simulateContract(client, {
 		account: client.account,
 		address: pool,
 		abi: poolsAbi,
@@ -19,10 +24,32 @@ export const queueWithdrawal = async (
 		args: [amount],
 	})
 
-	const txHash = await sendTransaction(client, {
-		...request,
-		to: pool,
-		value: 0n,
+	const [gas, gasFees] = await Promise.all([
+		estimateContractGas(client, {
+			account: client.account,
+			address: pool,
+			abi: poolsAbi,
+			functionName: 'enterWithdrawalQueue',
+			args: [amount],
+		}),
+		estimateFeesPerGas(client, {
+			type: 'eip1559',
+			chain: client.chain,
+		}),
+	])
+
+	const gasLimit: bigint = (gas * 13n) / 10n
+
+	const txHash = await writeContract(client, {
+		account: client.account,
+		address: pool,
+		abi: poolsAbi,
+		functionName: 'enterWithdrawalQueue',
+		args: [amount],
+		gas: gasLimit,
+		maxFeePerGas: gasFees.maxFeePerGas,
+		maxPriorityFeePerGas: gasFees.maxPriorityFeePerGas,
+		chain: client.chain,
 	})
 
 	if (!txHash) throw new Error('[Lanca]: Transaction dropped from mempool')

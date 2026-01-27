@@ -1,5 +1,10 @@
 import type { Address, Client } from 'viem'
-import { sendTransaction, simulateContract } from 'viem/actions'
+import {
+	estimateContractGas,
+	estimateFeesPerGas,
+	simulateContract,
+	writeContract,
+} from 'viem/actions'
 import { waitForConfirmation } from '../receipt/waitForConfirmation'
 import { erc20Abi } from 'viem'
 
@@ -9,10 +14,10 @@ export const setAllowance = async (
 	token: Address,
 	spender: Address,
 	amount: bigint,
-): Promise<Boolean> => {
+): Promise<boolean> => {
 	if (!client.account) throw new Error('[Lanca]: No account')
 
-	const { request } = await simulateContract(client, {
+	await simulateContract(client, {
 		account: client.account,
 		address: token,
 		abi: erc20Abi,
@@ -20,10 +25,32 @@ export const setAllowance = async (
 		args: [spender, amount],
 	})
 
-	const txHash = await sendTransaction(client, {
-		...request,
-		to: token,
-		value: 0n,
+	const [gas, gasFees] = await Promise.all([
+		estimateContractGas(client, {
+			account: client.account,
+			address: token,
+			abi: erc20Abi,
+			functionName: 'approve',
+			args: [spender, amount],
+		}),
+		estimateFeesPerGas(client, {
+			type: 'eip1559',
+			chain: client.chain,
+		}),
+	])
+
+	const gasLimit: bigint = (gas * 13n) / 10n
+
+	const txHash = await writeContract(client, {
+		account: client.account,
+		address: token,
+		abi: erc20Abi,
+		functionName: 'approve',
+		args: [spender, amount],
+		gas: gasLimit,
+		maxFeePerGas: gasFees.maxFeePerGas,
+		maxPriorityFeePerGas: gasFees.maxPriorityFeePerGas,
+		chain: client.chain,
 	})
 
 	if (!txHash) throw new Error('[Lanca]: Transaction dropped from mempool')
