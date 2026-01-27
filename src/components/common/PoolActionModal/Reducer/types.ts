@@ -17,6 +17,7 @@ export enum PoolsActionStatus {
 }
 
 export enum PoolsStateActions {
+	CHANGE_TYPE = 'CHANGE_TYPE',
 	UPDATE_STEP = 'UPDATE_STEP',
 	RESET = 'RESET',
 }
@@ -36,6 +37,7 @@ export type PoolsActionAction =
 			}
 	  }
 	| { type: PoolsStateActions.RESET }
+	| { type: PoolsStateActions.CHANGE_TYPE; payload: PoolsActionType }
 
 export type PoolsActionContextValue = {
 	state: PoolsActionState

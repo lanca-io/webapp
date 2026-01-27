@@ -31,6 +31,9 @@ export const PoolsActionReducer = (
 				? { ...state, allowance: status }
 				: { ...state, queue: status }
 
+		case PoolsStateActions.CHANGE_TYPE:
+			return createInitialState(action.payload)
+
 		case PoolsStateActions.RESET:
 			return createInitialState(state.type)
 
