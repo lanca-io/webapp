@@ -1,6 +1,5 @@
 import type { FC } from 'react'
 import { usePoolsActionContext } from './Reducer/Provider'
-import { AnimatePresence, motion } from 'framer-motion'
 import { PoolsActionStatus, PoolsActionType } from './Reducer/types'
 import { ProcessWidget } from './ProcessWidget/ProcessWidget'
 import { InputWidget } from './InputWidget/InputWidget'
@@ -17,33 +16,18 @@ type PoolActionModalProps = {
 const PoolActionContent: FC<PoolActionModalProps> = ({ onClose }) => {
 	const { state } = usePoolsActionContext()
 	const { allowance, queue } = state
+
 	const isProcess =
 		allowance !== PoolsActionStatus.IDLE || queue !== PoolsActionStatus.IDLE
 
 	return (
-		<AnimatePresence mode="wait">
+		<>
 			{isProcess ? (
-				<motion.div
-					key="process"
-					initial={{ opacity: 0, x: 20 }}
-					animate={{ opacity: 1, x: 0 }}
-					exit={{ opacity: 0, x: -20 }}
-					transition={{ duration: 0.25 }}
-				>
-					<ProcessWidget onClose={onClose} />
-				</motion.div>
+				<ProcessWidget onClose={onClose} />
 			) : (
-				<motion.div
-					key="input"
-					initial={{ opacity: 0, x: -20 }}
-					animate={{ opacity: 1, x: 0 }}
-					exit={{ opacity: 0, x: 20 }}
-					transition={{ duration: 0.25 }}
-				>
-					<InputWidget onClose={onClose} />
-				</motion.div>
+				<InputWidget onClose={onClose} />
 			)}
-		</AnimatePresence>
+		</>
 	)
 }
 
