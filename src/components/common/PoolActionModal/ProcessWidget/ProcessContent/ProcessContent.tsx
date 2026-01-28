@@ -34,6 +34,8 @@ export const ProcessContent: FC = memo(() => {
 				return <Failure />
 			case PoolsActionStatus.PENDING:
 				return <Approval />
+			case PoolsActionStatus.SUCCESS:
+				return <Transaction />
 			default:
 				return null
 		}
