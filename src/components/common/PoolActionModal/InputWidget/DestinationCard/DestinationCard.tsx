@@ -10,6 +10,7 @@ import { WarningWidget } from './WarningWidget/WarningWidget'
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePoolsActionContext } from '../../Reducer/Provider'
 import './DestinationCard.pcss'
+import { InfoBoard } from './InfoBoard/InfoBoard'
 
 export const DestinationCard: FC = () => {
 	const { state: poolsState } = usePoolsActionContext()
@@ -68,12 +69,15 @@ export const DestinationCard: FC = () => {
 		[state.warning],
 	)
 
+	const info = useMemo(() => <InfoBoard />, [poolsState.type])
+
 	return (
 		<div className="pool_action_destination_card">
 			{panel}
 			{input}
 			{balance}
 			{warning}
+			{info}
 		</div>
 	)
 }
