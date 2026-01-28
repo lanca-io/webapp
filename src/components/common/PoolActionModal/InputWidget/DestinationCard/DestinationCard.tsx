@@ -9,8 +9,8 @@ import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 import { WarningWidget } from './WarningWidget/WarningWidget'
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePoolsActionContext } from '../../Reducer/Provider'
-import './DestinationCard.pcss'
 import { InfoBoard } from './InfoBoard/InfoBoard'
+import './DestinationCard.pcss'
 
 export const DestinationCard: FC = () => {
 	const { state: poolsState } = usePoolsActionContext()
@@ -69,7 +69,11 @@ export const DestinationCard: FC = () => {
 		[state.warning],
 	)
 
-	const info = useMemo(() => <InfoBoard />, [poolsState.type])
+	const info = useMemo(() => {
+		const hasValidAmount = parseFloat(amount) > 0
+		const noErrors = !state.error && !state.warning
+		return noErrors && hasValidAmount ? <InfoBoard /> : null
+	}, [amount, state.error, state.warning, poolsState.type])
 
 	return (
 		<div className="pool_action_destination_card">

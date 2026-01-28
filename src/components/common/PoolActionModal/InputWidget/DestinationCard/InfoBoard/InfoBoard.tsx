@@ -3,13 +3,14 @@ import { GasIcon } from '@/assets/GasIcon'
 import { TimeIcon } from '@/assets/TimeIcon'
 import { InfoTip } from '@/components/common/InfoTip'
 import { useEstimateActionGas } from './useEstimateActionGas'
+import { SkeletonLoader } from '@/components/common/SkeletonLoader'
 import { format } from '@/utils/format'
 import './InfoBoard.pcss'
 
 export const InfoBoard: FC = () => {
 	const { estimate, isLoading } = useEstimateActionGas()
 
-	const gasDisplay = estimate && !isLoading ? format(estimate.usd, 2, '$') : '–'
+	const gasDisplay = estimate ? format(estimate.usd, 2, '$') : '–'
 
 	return (
 		<div className="pool_action_info_board">
@@ -18,7 +19,11 @@ export const InfoBoard: FC = () => {
 					<GasIcon color="var(--color-gray-500)" />
 					<span className="pool_action_gas_info_text">Gas to pay</span>
 				</div>
-				<span className="pool_action_gas_info_value">{gasDisplay}</span>
+				{isLoading ? (
+					<SkeletonLoader width={43} height={20} />
+				) : (
+					<span className="pool_action_gas_info_value">{gasDisplay}</span>
+				)}
 			</div>
 			<div className="pool_action_eta_info">
 				<div className="pool_action_eta_info_description">
