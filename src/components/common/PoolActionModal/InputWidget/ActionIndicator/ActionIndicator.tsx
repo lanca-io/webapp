@@ -1,23 +1,45 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
 import { useInputWidgetContext } from '../Reducer/Provider'
+import { usePoolsActionContext } from '../../Reducer/Provider'
+import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
+import { PoolsActionType } from '../../Reducer/types'
 import { InfoIcon } from '@/assets/InfoIcon'
+import { format } from '@/utils/format'
 import './ActionIndicator.pcss'
 
 export const ActionIndicator: FC = () => {
-	const { state } = useInputWidgetContext()
+	const { state: poolsState } = usePoolsActionContext()
+	const { state: inputState } = useInputWidgetContext()
+	const { lpPrice } = usePoolsDataStore()
 
 	const conditions = useMemo(() => {
-		const hasWarning = Boolean(state.warning)
-		const hasError = Boolean(state.error) && !hasWarning
-		const showPrompt = !hasWarning && !hasError && state.rawInput === 0n
+		const hasWarning = Boolean(inputState.warning)
+		const hasError = Boolean(inputState.error) && !hasWarning
+		const showPrompt = !hasWarning && !hasError && inputState.rawInput === 0n
+		const showInputValue = !hasWarning && !hasError && inputState.rawInput > 0n
 
 		return {
 			showError: hasError,
 			showWarning: hasWarning,
 			showPrompt,
+			showInputValue,
 		}
-	}, [state.error, state.warning, state.rawInput])
+	}, [inputState.error, inputState.warning, inputState.rawInput])
+
+	const dollarTerms = useMemo(() => {
+		if (inputState.rawInput === 0n || !lpPrice) return null
+
+		let dollars: number
+
+		if (poolsState.type === PoolsActionType.WITHDRAWAL) {
+			dollars = (Number(inputState.rawInput) / 1e6) * lpPrice
+		} else {
+			dollars = Number(inputState.rawInput) / 1e6
+		}
+
+		return format(dollars, 2, '$')
+	}, [inputState.rawInput, poolsState.type, lpPrice])
 
 	return (
 		<div className="pool_action_indicator_container">
@@ -28,7 +50,7 @@ export const ActionIndicator: FC = () => {
 						className="pool_action_indicator_title pool_action_indicator_warning"
 						aria-live="polite"
 					>
-						{state.warning}
+						{inputState.warning}
 					</span>
 				</>
 			)}
@@ -41,7 +63,7 @@ export const ActionIndicator: FC = () => {
 						aria-live="assertive"
 						role="alert"
 					>
-						{state.error}
+						{inputState.error}
 					</span>
 				</>
 			)}
@@ -50,6 +72,15 @@ export const ActionIndicator: FC = () => {
 				<span className="pool_action_indicator_title" aria-label="Input prompt">
 					Enter amount
 				</span>
+			)}
+
+			{conditions.showInputValue && dollarTerms && (
+				<div className="pool_action_indicator_value_container">
+					<span className="pool_action_indicator_title">=</span>
+					<span className="pool_action_indicator_value">
+						{dollarTerms ? dollarTerms : '$0'}
+					</span>
+				</div>
 			)}
 		</div>
 	)
