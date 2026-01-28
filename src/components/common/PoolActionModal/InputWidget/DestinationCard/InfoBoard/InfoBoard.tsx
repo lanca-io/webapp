@@ -9,12 +9,7 @@ import './InfoBoard.pcss'
 export const InfoBoard: FC = () => {
 	const { estimate, isLoading } = useEstimateActionGas()
 
-	const gasDisplay =
-		estimate && !isLoading
-			? format(estimate.usd, 2, '$')
-			: isLoading
-				? 'Est...'
-				: '–'
+	const gasDisplay = estimate && !isLoading ? format(estimate.usd, 2, '$') : '–'
 
 	return (
 		<div className="pool_action_info_board">
