@@ -40,7 +40,7 @@ export const InfoBoard: FC = () => {
 					<span className="pool_action_eta_info_value">Queue</span>
 					<InfoTip
 						id="info-board-tooltip"
-						description="Queue holds pending transactions waiting for sequential pool processing"
+						description="Queue holds pending transactions waiting for batch pool processing"
 					/>
 				</div>
 			</div>

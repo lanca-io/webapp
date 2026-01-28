@@ -11,6 +11,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { usePoolsActionContext } from '../../Reducer/Provider'
 import { InfoBoard } from './InfoBoard/InfoBoard'
 import './DestinationCard.pcss'
+import { QuoteIndicator } from './QuoteIndicator/QuoteIndicator'
 
 export const DestinationCard: FC = () => {
 	const { state: poolsState } = usePoolsActionContext()
@@ -50,7 +51,14 @@ export const DestinationCard: FC = () => {
 		}
 
 		return output.toFixed(9)
-	}, [debouncedInput, lpPrice, poolsState.type, state.error, state.warning])
+	}, [
+		debouncedInput,
+		lpPrice,
+		poolsState.type,
+		state.error,
+		state.warning,
+		state.input,
+	])
 
 	const panel = useMemo(
 		() => <AssetPanel direction={Direction.To} />,
@@ -75,10 +83,13 @@ export const DestinationCard: FC = () => {
 		return noErrors && hasValidAmount ? <InfoBoard /> : null
 	}, [amount, state.error, state.warning, poolsState.type])
 
+	const quote = useMemo(() => <QuoteIndicator />, [])
+
 	return (
 		<div className="pool_action_destination_card">
 			{panel}
 			{input}
+			{quote}
 			{balance}
 			{warning}
 			{info}

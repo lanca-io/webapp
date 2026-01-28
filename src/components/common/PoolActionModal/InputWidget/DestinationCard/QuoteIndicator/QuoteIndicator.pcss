@@ -1,0 +1,33 @@
+.pool_action_quote_indicator {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--space-xs);
+	position: relative;
+}
+
+.pool_action_quote_indicator_info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-xxs);
+}
+
+.pool_action_quote_indicator_equal {
+	font-weight: 400;
+	color: var(--color-gray-500);
+}
+
+.pool_action_quote_indicator_value,
+.pool_action_quote_indicator_impact {
+	font-size: 0.875rem;
+	line-height: 18px;
+	font-style: normal;
+	font-weight: 400;
+	color: var(--color-gray-600);
+	transition:
+		color 0.2s ease,
+		font-weight 0.1s ease;
+}
