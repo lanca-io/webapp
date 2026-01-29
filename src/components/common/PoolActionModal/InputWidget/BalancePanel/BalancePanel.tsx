@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react'
-import { usePoolsUserBalancesStore } from '@/store/pools-positions/usePoolsPositionsStore'
+import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
 import { PoolsActionType } from '../../Reducer/types'
 import { usePoolsActionContext } from '../../Reducer/Provider'
 import './BalancePanel.pcss'
@@ -15,7 +15,7 @@ type BalancePanelProps = {
 
 export const BalancePanel: FC<BalancePanelProps> = ({ direction }) => {
 	const { state } = usePoolsActionContext()
-	const { usd, lp } = usePoolsUserBalancesStore()
+	const { usd, lp } = usePoolsPositions()
 
 	const { symbol, displayValue } = useMemo(() => {
 		const isDepositFrom =

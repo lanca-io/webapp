@@ -2,13 +2,13 @@ import { useInputWidgetContext } from './Reducer/Provider'
 import { InputActionType } from './Reducer/types'
 import { PoolsActionType } from '../Reducer/types'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
-import { usePoolsUserBalancesStore } from '@/store/pools-positions/usePoolsPositionsStore'
+import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
 import { formatUnits } from 'viem'
 
 export const useActionValidation = (type: PoolsActionType) => {
 	const { state, dispatch } = useInputWidgetContext()
 	const { tvl, cap } = usePoolsDataStore()
-	const { rawUsd, rawLp } = usePoolsUserBalancesStore()
+	const { rawUsd, rawLp } = usePoolsPositions()
 
 	const balance = type === PoolsActionType.Deposit ? rawUsd : rawLp
 
