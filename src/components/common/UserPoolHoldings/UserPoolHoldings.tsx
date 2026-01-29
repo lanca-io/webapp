@@ -144,14 +144,14 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 							<Button
 								variant="primary"
 								size="l"
-								onClick={() => openModal(PoolsActionType.DEPOSIT)}
+								onClick={() => openModal(PoolsActionType.Deposit)}
 							>
 								Add More
 							</Button>
 							<Button
 								variant="secondary_color"
 								size="l"
-								onClick={() => openModal(PoolsActionType.WITHDRAWAL)}
+								onClick={() => openModal(PoolsActionType.Withdraw)}
 							>
 								Withdraw
 							</Button>

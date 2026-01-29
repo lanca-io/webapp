@@ -18,7 +18,7 @@ const PoolActionContent: FC<PoolActionModalProps> = ({ onClose }) => {
 	const { allowance, queue } = state
 
 	const isProcess =
-		allowance !== PoolsActionStatus.IDLE || queue !== PoolsActionStatus.IDLE
+		allowance !== PoolsActionStatus.Idle || queue !== PoolsActionStatus.Idle
 
 	return (
 		<>

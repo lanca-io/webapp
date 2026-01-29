@@ -27,16 +27,16 @@ export const ProcessAction: FC<ProcessActionProps> = memo(({ onClose }) => {
 	)
 
 	const currentStatus =
-		actionState.queue !== PoolsActionStatus.IDLE
+		actionState.queue !== PoolsActionStatus.Idle
 			? actionState.queue
 			: actionState.allowance
 
 	const isFinalStage =
-		actionState.allowance === PoolsActionStatus.FAILED ||
-		actionState.allowance === PoolsActionStatus.REJECTED ||
-		actionState.queue === PoolsActionStatus.FAILED ||
-		actionState.queue === PoolsActionStatus.REJECTED ||
-		actionState.queue === PoolsActionStatus.SUCCESS
+		actionState.allowance === PoolsActionStatus.Failed ||
+		actionState.allowance === PoolsActionStatus.Rejected ||
+		actionState.queue === PoolsActionStatus.Failed ||
+		actionState.queue === PoolsActionStatus.Rejected ||
+		actionState.queue === PoolsActionStatus.Success
 
 	const handleReset = useCallback(() => {
 		dispatch({ type: PoolsStateActions.RESET })
@@ -47,8 +47,8 @@ export const ProcessAction: FC<ProcessActionProps> = memo(({ onClose }) => {
 	if (!isFinalStage) return null
 
 	if (
-		currentStatus === PoolsActionStatus.FAILED ||
-		currentStatus === PoolsActionStatus.REJECTED
+		currentStatus === PoolsActionStatus.Failed ||
+		currentStatus === PoolsActionStatus.Rejected
 	) {
 		return (
 			<div className="pool_action_process_action">
@@ -68,7 +68,7 @@ export const ProcessAction: FC<ProcessActionProps> = memo(({ onClose }) => {
 		)
 	}
 
-	if (currentStatus === PoolsActionStatus.SUCCESS) {
+	if (currentStatus === PoolsActionStatus.Success) {
 		return (
 			<div className="pool_action_process_action">
 				<Button

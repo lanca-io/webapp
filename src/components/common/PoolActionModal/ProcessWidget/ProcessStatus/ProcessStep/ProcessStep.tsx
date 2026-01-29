@@ -13,16 +13,16 @@ type PoolsStepProps = {
 }
 
 const statusIcons: Record<PoolsActionStatus, JSX.Element | null> = {
-	[PoolsActionStatus.IDLE]: null,
-	[PoolsActionStatus.PENDING]: <Spinner type="gray" />,
-	[PoolsActionStatus.SUCCESS]: <SuccessIcon />,
-	[PoolsActionStatus.FAILED]: <DangerIcon />,
-	[PoolsActionStatus.REJECTED]: <DangerIcon />,
+	[PoolsActionStatus.Idle]: null,
+	[PoolsActionStatus.Pending]: <Spinner type="gray" />,
+	[PoolsActionStatus.Success]: <SuccessIcon />,
+	[PoolsActionStatus.Failed]: <DangerIcon />,
+	[PoolsActionStatus.Rejected]: <DangerIcon />,
 }
 
 const stepTitles: Record<PoolsActionStages, string> = {
-	[PoolsActionStages.ALLOWANCE]: 'Allowance',
-	[PoolsActionStages.QUEUE]: 'Queue',
+	[PoolsActionStages.Allowance]: 'Allowance',
+	[PoolsActionStages.Queue]: 'Queue',
 }
 
 export const ProcessStep: FC<PoolsStepProps> = memo(({ step, status }) => {

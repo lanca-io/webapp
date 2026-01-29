@@ -19,7 +19,7 @@ const TOKEN_CONFIG = {
 export const Transaction: FC = memo(() => {
 	const { state } = usePoolsActionContext()
 
-	const isDeposit = state.type === PoolsActionType.DEPOSIT
+	const isDeposit = state.type === PoolsActionType.Deposit
 
 	const lpToken = useMemo(() => {
 		return (

@@ -32,7 +32,7 @@ export const ActionIndicator: FC = () => {
 
 		let dollars: number
 
-		if (poolsState.type === PoolsActionType.WITHDRAWAL) {
+		if (poolsState.type === PoolsActionType.Withdraw) {
 			dollars = (Number(inputState.rawInput) / 1e6) * lpPrice
 		} else {
 			dollars = Number(inputState.rawInput) / 1e6

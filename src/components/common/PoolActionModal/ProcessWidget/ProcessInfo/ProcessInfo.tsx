@@ -7,7 +7,7 @@ import { usePoolsActionContext } from '../../Reducer/Provider'
 import { PoolsActionStages, PoolsActionStatus } from '../../Reducer/types'
 import './ProcessInfo.pcss'
 
-export type FailureStage = PoolsActionStages.ALLOWANCE | PoolsActionStages.QUEUE
+export type FailureStage = PoolsActionStages.Allowance | PoolsActionStages.Queue
 
 export type FailureReason = 'rejected' | 'failed'
 
@@ -64,22 +64,22 @@ export const ProcessInfo: FC = memo(() => {
 	const { state } = usePoolsActionContext()
 	const { allowance, queue } = state
 
-	const isApprovalPending = allowance === PoolsActionStatus.PENDING
+	const isApprovalPending = allowance === PoolsActionStatus.Pending
 
 	const failureDetails = useMemo<FailureInfoProps | null>(() => {
 		const failedStatuses = [
-			PoolsActionStatus.FAILED,
-			PoolsActionStatus.REJECTED,
+			PoolsActionStatus.Failed,
+			PoolsActionStatus.Rejected,
 		]
 		if (failedStatuses.includes(queue)) {
 			const reason: FailureReason =
-				queue === PoolsActionStatus.REJECTED ? 'rejected' : 'failed'
-			return { stage: PoolsActionStages.QUEUE, reason }
+				queue === PoolsActionStatus.Rejected ? 'rejected' : 'failed'
+			return { stage: PoolsActionStages.Queue, reason }
 		}
 		if (failedStatuses.includes(allowance)) {
 			const reason: FailureReason =
-				allowance === PoolsActionStatus.REJECTED ? 'rejected' : 'failed'
-			return { stage: PoolsActionStages.ALLOWANCE, reason }
+				allowance === PoolsActionStatus.Rejected ? 'rejected' : 'failed'
+			return { stage: PoolsActionStages.Allowance, reason }
 		}
 		return null
 	}, [allowance, queue])

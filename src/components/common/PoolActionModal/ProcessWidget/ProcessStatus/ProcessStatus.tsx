@@ -12,8 +12,8 @@ export const ProcessStatus: FC = memo(() => {
 
 	const steps = useMemo(
 		() => [
-			{ type: PoolsActionStages.ALLOWANCE, status: allowance },
-			{ type: PoolsActionStages.QUEUE, status: queue },
+			{ type: PoolsActionStages.Allowance, status: allowance },
+			{ type: PoolsActionStages.Queue, status: queue },
 		],
 		[allowance, queue],
 	)
@@ -35,8 +35,8 @@ export const ProcessStatus: FC = memo(() => {
 	)
 
 	const isComplete =
-		queue === PoolsActionStatus.SUCCESS ||
-		(allowance === PoolsActionStatus.IDLE && queue === PoolsActionStatus.IDLE)
+		queue === PoolsActionStatus.Success ||
+		(allowance === PoolsActionStatus.Idle && queue === PoolsActionStatus.Idle)
 	if (isComplete) return null
 
 	return (

@@ -20,7 +20,7 @@ export const useActionExecution = (
 			const client = await getWalletClient(POOLS_CHAIN_ID)
 
 			switch (type) {
-				case PoolsActionType.DEPOSIT:
+				case PoolsActionType.Deposit:
 					await handleDeposit(
 						client,
 						POOLS_CHAIN_ID,
@@ -30,7 +30,7 @@ export const useActionExecution = (
 						dispatch,
 					)
 					break
-				case PoolsActionType.WITHDRAWAL:
+				case PoolsActionType.Withdraw:
 					await handleWithdrawal(
 						client,
 						POOLS_CHAIN_ID,

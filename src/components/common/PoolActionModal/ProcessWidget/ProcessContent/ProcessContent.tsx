@@ -14,27 +14,27 @@ export const ProcessContent: FC = memo(() => {
 	const { allowance, queue } = state
 
 	const currentContent = (() => {
-		if (queue !== PoolsActionStatus.IDLE) {
+		if (queue !== PoolsActionStatus.Idle) {
 			switch (queue) {
-				case PoolsActionStatus.FAILED:
+				case PoolsActionStatus.Failed:
 					return <Failure />
-				case PoolsActionStatus.REJECTED:
+				case PoolsActionStatus.Rejected:
 					return <Rejected />
-				case PoolsActionStatus.SUCCESS:
+				case PoolsActionStatus.Success:
 					return <Success />
-				case PoolsActionStatus.PENDING:
+				case PoolsActionStatus.Pending:
 					return <Transaction />
 			}
 		}
 
 		switch (allowance) {
-			case PoolsActionStatus.REJECTED:
+			case PoolsActionStatus.Rejected:
 				return <Rejected />
-			case PoolsActionStatus.FAILED:
+			case PoolsActionStatus.Failed:
 				return <Failure />
-			case PoolsActionStatus.PENDING:
+			case PoolsActionStatus.Pending:
 				return <Approval />
-			case PoolsActionStatus.SUCCESS:
+			case PoolsActionStatus.Success:
 				return <Transaction />
 			default:
 				return null

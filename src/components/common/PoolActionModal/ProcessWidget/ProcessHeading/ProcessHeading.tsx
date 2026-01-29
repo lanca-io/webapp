@@ -11,11 +11,11 @@ import { CloseIcon } from '@/assets/CloseIcon'
 import './ProcessHeading.pcss'
 
 type HeadingMap = {
-	[PoolsActionStatus.IDLE]: string
-	[PoolsActionStatus.PENDING]: Record<PoolsActionStages, string>
-	[PoolsActionStatus.SUCCESS]: Record<PoolsActionStages, string>
-	[PoolsActionStatus.FAILED]: Record<PoolsActionStages, string>
-	[PoolsActionStatus.REJECTED]: Record<PoolsActionStages, string>
+	[PoolsActionStatus.Idle]: string
+	[PoolsActionStatus.Pending]: Record<PoolsActionStages, string>
+	[PoolsActionStatus.Success]: Record<PoolsActionStages, string>
+	[PoolsActionStatus.Failed]: Record<PoolsActionStages, string>
+	[PoolsActionStatus.Rejected]: Record<PoolsActionStages, string>
 }
 
 type ProcessHeadingProps = {
@@ -26,47 +26,47 @@ export const ProcessHeading: FC<ProcessHeadingProps> = memo(({ onClose }) => {
 	const { state } = usePoolsActionContext()
 
 	const currentStage =
-		state.queue !== PoolsActionStatus.IDLE
-			? PoolsActionStages.QUEUE
-			: PoolsActionStages.ALLOWANCE
+		state.queue !== PoolsActionStatus.Idle
+			? PoolsActionStages.Queue
+			: PoolsActionStages.Allowance
 	const currentStatus =
-		currentStage === PoolsActionStages.ALLOWANCE ? state.allowance : state.queue
+		currentStage === PoolsActionStages.Allowance ? state.allowance : state.queue
 
 	const isFinalStage =
-		state.allowance === PoolsActionStatus.FAILED ||
-		state.allowance === PoolsActionStatus.REJECTED ||
-		state.queue === PoolsActionStatus.FAILED ||
-		state.queue === PoolsActionStatus.REJECTED ||
-		state.queue === PoolsActionStatus.SUCCESS
+		state.allowance === PoolsActionStatus.Failed ||
+		state.allowance === PoolsActionStatus.Rejected ||
+		state.queue === PoolsActionStatus.Failed ||
+		state.queue === PoolsActionStatus.Rejected ||
+		state.queue === PoolsActionStatus.Success
 
 	const headingMap: HeadingMap = useMemo(
 		() => ({
-			[PoolsActionStatus.IDLE]: 'Initializing...',
-			[PoolsActionStatus.PENDING]: {
-				[PoolsActionStages.ALLOWANCE]:
-					state.type === PoolsActionType.DEPOSIT
+			[PoolsActionStatus.Idle]: 'Initializing...',
+			[PoolsActionStatus.Pending]: {
+				[PoolsActionStages.Allowance]:
+					state.type === PoolsActionType.Deposit
 						? 'Preparing Deposit...'
 						: 'Preparing Withdrawal...',
-				[PoolsActionStages.QUEUE]:
-					state.type === PoolsActionType.DEPOSIT
+				[PoolsActionStages.Queue]:
+					state.type === PoolsActionType.Deposit
 						? 'Deposit...'
 						: 'Withdrawal...',
 			},
-			[PoolsActionStatus.SUCCESS]: {
-				[PoolsActionStages.ALLOWANCE]: 'Success!',
-				[PoolsActionStages.QUEUE]: 'Success!',
+			[PoolsActionStatus.Success]: {
+				[PoolsActionStages.Allowance]: 'Success!',
+				[PoolsActionStages.Queue]: 'Success!',
 			},
-			[PoolsActionStatus.FAILED]: {
-				[PoolsActionStages.ALLOWANCE]: 'Approval Failed',
-				[PoolsActionStages.QUEUE]:
-					state.type === PoolsActionType.DEPOSIT
+			[PoolsActionStatus.Failed]: {
+				[PoolsActionStages.Allowance]: 'Approval Failed',
+				[PoolsActionStages.Queue]:
+					state.type === PoolsActionType.Deposit
 						? 'Deposit Failed'
 						: 'Withdrawal Failed',
 			},
-			[PoolsActionStatus.REJECTED]: {
-				[PoolsActionStages.ALLOWANCE]: 'Approval Rejected',
-				[PoolsActionStages.QUEUE]:
-					state.type === PoolsActionType.DEPOSIT
+			[PoolsActionStatus.Rejected]: {
+				[PoolsActionStages.Allowance]: 'Approval Rejected',
+				[PoolsActionStages.Queue]:
+					state.type === PoolsActionType.Deposit
 						? 'Deposit Rejected'
 						: 'Withdrawal Rejected',
 			},
@@ -75,7 +75,7 @@ export const ProcessHeading: FC<ProcessHeadingProps> = memo(({ onClose }) => {
 	)
 
 	const heading =
-		currentStatus === PoolsActionStatus.IDLE
+		currentStatus === PoolsActionStatus.Idle
 			? headingMap[currentStatus]
 			: headingMap[currentStatus][currentStage]
 

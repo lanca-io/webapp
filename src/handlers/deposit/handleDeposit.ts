@@ -30,16 +30,16 @@ const onAllowance = async (
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.ALLOWANCE,
-				status: PoolsActionStatus.PENDING,
+				stage: PoolsActionStages.Allowance,
+				status: PoolsActionStatus.Pending,
 			},
 		})
 		await handleAllowance(client, chainId, token, address, amount)
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.ALLOWANCE,
-				status: PoolsActionStatus.SUCCESS,
+				stage: PoolsActionStages.Allowance,
+				status: PoolsActionStatus.Success,
 			},
 		})
 	} catch (e) {
@@ -52,8 +52,8 @@ const onAllowance = async (
 			dispatch({
 				type: PoolsStateActions.UPDATE_STEP,
 				payload: {
-					stage: PoolsActionStages.ALLOWANCE,
-					status: PoolsActionStatus.REJECTED,
+					stage: PoolsActionStages.Allowance,
+					status: PoolsActionStatus.Rejected,
 				},
 			})
 			throw e
@@ -61,8 +61,8 @@ const onAllowance = async (
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.ALLOWANCE,
-				status: PoolsActionStatus.FAILED,
+				stage: PoolsActionStages.Allowance,
+				status: PoolsActionStatus.Failed,
 			},
 		})
 		throw e
@@ -81,8 +81,8 @@ const onMinDepositCheck = async (
 			dispatch({
 				type: PoolsStateActions.UPDATE_STEP,
 				payload: {
-					stage: PoolsActionStages.QUEUE,
-					status: PoolsActionStatus.FAILED,
+					stage: PoolsActionStages.Queue,
+					status: PoolsActionStatus.Failed,
 				},
 			})
 			throw new Error(`Min deposit ${minDeposit}`)
@@ -91,8 +91,8 @@ const onMinDepositCheck = async (
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.QUEUE,
-				status: PoolsActionStatus.FAILED,
+				stage: PoolsActionStages.Queue,
+				status: PoolsActionStatus.Failed,
 			},
 		})
 		throw e
@@ -110,16 +110,16 @@ const onQueue = async (
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.QUEUE,
-				status: PoolsActionStatus.PENDING,
+				stage: PoolsActionStages.Queue,
+				status: PoolsActionStatus.Pending,
 			},
 		})
 		await queueDeposit(client, chainId, pool, amount)
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.QUEUE,
-				status: PoolsActionStatus.SUCCESS,
+				stage: PoolsActionStages.Queue,
+				status: PoolsActionStatus.Success,
 			},
 		})
 	} catch (e) {
@@ -132,8 +132,8 @@ const onQueue = async (
 			dispatch({
 				type: PoolsStateActions.UPDATE_STEP,
 				payload: {
-					stage: PoolsActionStages.QUEUE,
-					status: PoolsActionStatus.REJECTED,
+					stage: PoolsActionStages.Queue,
+					status: PoolsActionStatus.Rejected,
 				},
 			})
 			throw e
@@ -141,8 +141,8 @@ const onQueue = async (
 		dispatch({
 			type: PoolsStateActions.UPDATE_STEP,
 			payload: {
-				stage: PoolsActionStages.QUEUE,
-				status: PoolsActionStatus.FAILED,
+				stage: PoolsActionStages.Queue,
+				status: PoolsActionStatus.Failed,
 			},
 		})
 		throw e

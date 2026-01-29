@@ -31,10 +31,10 @@ export const QuoteIndicator: FC = () => {
 
 		let out
 		switch (poolsState.type) {
-			case PoolsActionType.DEPOSIT:
+			case PoolsActionType.Deposit:
 				out = (value / lpPrice) * (1 - fee)
 				break
-			case PoolsActionType.WITHDRAWAL:
+			case PoolsActionType.Withdraw:
 				out = value * lpPrice * (1 - fee)
 				break
 			default:
@@ -59,7 +59,7 @@ export const QuoteIndicator: FC = () => {
 		const num = parseFloat(amount)
 		if (num <= 0) return '$0'
 
-		return poolsState.type === PoolsActionType.DEPOSIT
+		return poolsState.type === PoolsActionType.Deposit
 			? num.toFixed(4)
 			: format(num, 4, '$')
 	}, [amount, poolsState.type])

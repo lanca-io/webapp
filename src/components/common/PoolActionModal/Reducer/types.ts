@@ -1,19 +1,19 @@
 export enum PoolsActionType {
-	DEPOSIT = 'DEPOSIT',
-	WITHDRAWAL = 'WITHDRAWAL',
+	Deposit = 'deposit',
+	Withdraw = 'withdraw',
 }
 
 export enum PoolsActionStages {
-	ALLOWANCE = 'ALLOWANCE',
-	QUEUE = 'QUEUE',
+	Allowance = 'allowance',
+	Queue = 'Queue',
 }
 
 export enum PoolsActionStatus {
-	IDLE = 'IDLE',
-	PENDING = 'PENDING',
-	SUCCESS = 'SUCCESS',
-	FAILED = 'FAILED',
-	REJECTED = 'REJECTED',
+	Idle = 'Idle',
+	Pending = 'Pending',
+	Success = 'Success',
+	Failed = 'Failed',
+	Rejected = 'Rejected',
 }
 
 export enum PoolsStateActions {

@@ -1,11 +1,11 @@
 import { useContext } from 'react'
-import { PoolsUserBalancesContext } from './PoolsUserBalancesContext'
+import { PoolsPositionsContext } from './PoolsPositionsContext'
 
 export const usePoolsUserBalancesStore = () => {
-	const useStore = useContext(PoolsUserBalancesContext)
+	const useStore = useContext(PoolsPositionsContext)
 	if (!useStore) {
 		throw new Error(
-			`You forgot to wrap your component in <RoutesStoreProvider>.`,
+			`You forgot to wrap your component in <PoolsPositionsProvider>.`,
 		)
 	}
 
@@ -13,17 +13,17 @@ export const usePoolsUserBalancesStore = () => {
 	const lp = useStore(state => state.lp)
 	const rawUsd = useStore(state => state.rawUsd)
 	const rawLp = useStore(state => state.rawLp)
-	const isLoading = useStore(state => state.isLoading)
+	const areBalancesLoading = useStore(state => state.areBalancesLoading)
 	const setBalances = useStore(state => state.setBalances)
-	const setIsLoading = useStore(state => state.setIsLoading)
+	const setBalancesLoading = useStore(state => state.setBalancesLoading)
 
 	return {
 		usd,
 		lp,
 		rawUsd,
 		rawLp,
-		isLoading,
+		areBalancesLoading,
 		setBalances,
-		setIsLoading,
+		setBalancesLoading,
 	}
 }

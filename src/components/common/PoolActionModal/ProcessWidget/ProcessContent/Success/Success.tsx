@@ -28,7 +28,7 @@ export const Success: FC = memo((): JSX.Element => {
 
 	refetchBalances()
 
-	const isDeposit = actionState.type === PoolsActionType.DEPOSIT
+	const isDeposit = actionState.type === PoolsActionType.Deposit
 	const token = isDeposit ? TOKEN_CONFIG.USDC : TOKEN_CONFIG.CLP
 
 	const amount = useMemo(() => {
@@ -41,10 +41,10 @@ export const Success: FC = memo((): JSX.Element => {
 
 		let output
 		switch (actionState.type) {
-			case PoolsActionType.DEPOSIT:
+			case PoolsActionType.Deposit:
 				output = (input / lpPrice) * (1 - FEE_BPS)
 				break
-			case PoolsActionType.WITHDRAWAL:
+			case PoolsActionType.Withdraw:
 				output = input * lpPrice * (1 - FEE_BPS)
 				break
 			default:
@@ -55,7 +55,7 @@ export const Success: FC = memo((): JSX.Element => {
 	}, [lpPrice, actionState.type])
 
 	const heading =
-		actionState.type === PoolsActionType.DEPOSIT
+		actionState.type === PoolsActionType.Deposit
 			? 'You Deposited'
 			: 'You will receive'
 	const imageSrc = '/Swap/Success.webp'

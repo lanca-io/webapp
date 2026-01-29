@@ -36,10 +36,10 @@ export const DestinationCard: FC = () => {
 
 		let output
 		switch (poolsState.type) {
-			case PoolsActionType.DEPOSIT:
+			case PoolsActionType.Deposit:
 				output = (input / lpPrice) * (1 - FEE_BPS)
 				break
-			case PoolsActionType.WITHDRAWAL:
+			case PoolsActionType.Withdraw:
 				output = input * lpPrice * (1 - FEE_BPS)
 				break
 			default:

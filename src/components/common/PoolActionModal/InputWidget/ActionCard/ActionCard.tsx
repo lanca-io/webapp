@@ -41,7 +41,7 @@ export const ActionCard: FC<ActionCardProps> = ({ type }) => {
 				isDisabled={isDisabled}
 				onClick={onAction}
 			>
-				{type === PoolsActionType.DEPOSIT ? 'Deposit' : 'Withdraw'}
+				{type === PoolsActionType.Deposit ? 'Deposit' : 'Withdraw'}
 			</Button>
 		</div>
 	)

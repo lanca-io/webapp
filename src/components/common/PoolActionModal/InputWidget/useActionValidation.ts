@@ -2,7 +2,7 @@ import { useInputWidgetContext } from './Reducer/Provider'
 import { InputActionType } from './Reducer/types'
 import { PoolsActionType } from '../Reducer/types'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
-import { usePoolsUserBalancesStore } from '@/store/pools-user-balances/usePoolsUserBalancesStore'
+import { usePoolsUserBalancesStore } from '@/store/pools-positions/usePoolsPositionsStore'
 import { formatUnits } from 'viem'
 
 export const useActionValidation = (type: PoolsActionType) => {
@@ -10,11 +10,11 @@ export const useActionValidation = (type: PoolsActionType) => {
 	const { tvl, cap } = usePoolsDataStore()
 	const { rawUsd, rawLp } = usePoolsUserBalancesStore()
 
-	const balance = type === PoolsActionType.DEPOSIT ? rawUsd : rawLp
+	const balance = type === PoolsActionType.Deposit ? rawUsd : rawLp
 
 	const checkCap = () => {
 		if (!cap || !tvl) return false
-		if (type === PoolsActionType.WITHDRAWAL) return false
+		if (type === PoolsActionType.Withdraw) return false
 
 		if (Number(tvl) + Number(state.input) > Number(cap)) {
 			dispatch({
@@ -33,7 +33,7 @@ export const useActionValidation = (type: PoolsActionType) => {
 		if (exceeds) {
 			dispatch({
 				type: InputActionType.SET_ERROR,
-				payload: `You do not have enough ${type === PoolsActionType.DEPOSIT ? 'USDC' : 'CLP'} on Arbitrum`,
+				payload: `You do not have enough ${type === PoolsActionType.Deposit ? 'USDC' : 'CLP'} on Arbitrum`,
 			})
 			return true
 		}
@@ -41,7 +41,7 @@ export const useActionValidation = (type: PoolsActionType) => {
 	}
 
 	const checkMinDeposit = () => {
-		if (type !== PoolsActionType.DEPOSIT) return false
+		if (type !== PoolsActionType.Deposit) return false
 
 		const inputDollars = Number(formatUnits(state.rawInput, 6))
 		if (inputDollars < 100 && inputDollars > 0) {
