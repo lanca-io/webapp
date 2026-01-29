@@ -6,6 +6,7 @@ import { PoolsActionType } from '../../../Reducer/types'
 import { useInputWidgetContext } from '../../../InputWidget/Reducer/Provider'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 import { useLoadPoolsUserBalances } from '@/hooks/Loadables/useLoadPoolsUserBalances'
+import { useLoadUserActions } from '@/hooks/Loadables/useLoadUserActions'
 import { format } from '@/utils/format'
 import './Success.pcss'
 
@@ -25,8 +26,10 @@ export const Success: FC = memo((): JSX.Element => {
 	const { state: inputState } = useInputWidgetContext()
 	const { lpPrice } = usePoolsDataStore()
 	const { refetchBalances } = useLoadPoolsUserBalances()
+	const { refetch } = useLoadUserActions()
 
 	refetchBalances()
+	refetch()
 
 	const isDeposit = actionState.type === PoolsActionType.Deposit
 	const token = isDeposit ? TOKEN_CONFIG.USDC : TOKEN_CONFIG.CLP

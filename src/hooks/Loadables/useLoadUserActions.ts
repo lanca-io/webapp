@@ -7,8 +7,6 @@ export const useLoadUserActions = () => {
 	const { address } = useAccount()
 	const {
 		actions,
-		initialActionsLoading,
-		dataActionsLoading,
 		actionsPagination,
 		setActions,
 		setActionsLoading,
@@ -91,9 +89,6 @@ export const useLoadUserActions = () => {
 	}, [address, setActionsPagination, resetActions])
 
 	return {
-		loading: initialActionsLoading || dataActionsLoading,
 		refetch,
-		data,
-		hasMore: hasMore.current,
 	}
 }
