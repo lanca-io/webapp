@@ -1,6 +1,7 @@
 :root {
 	--font-family-primary: 'DM_Sans', sans-serif;
 	--header-height: 56px;
+	--footer-height: 148px;
 
 	--background_desktop_neutral: linear-gradient(
 		180deg,
