@@ -5,6 +5,7 @@ import { routes } from './constants/routes'
 import { ScreenLoader } from '@/components/common/ScreenLoader/ScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
+import { Footer } from './components/footer/Footer'
 
 const PoolScreen = lazy(
 	async () =>
@@ -65,6 +66,7 @@ export const Navigator = () => {
 				/>
 				<Route path={'/*'} element={<Navigate to={routes.home} />} />
 			</Routes>
+			<Footer />
 		</BrowserRouter>
 	)
 }
