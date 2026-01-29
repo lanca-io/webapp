@@ -25,7 +25,7 @@ export const SourceCard: FC<SourceCardProps> = ({ onClose }) => {
 		() => (
 			<Header
 				title={
-					poolsState.type === PoolsActionType.DEPOSIT ? 'Deposit' : 'Withdrawal'
+					poolsState.type === PoolsActionType.Deposit ? 'Deposit' : 'Withdrawal'
 				}
 				onClose={onClose}
 			/>

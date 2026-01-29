@@ -25,7 +25,7 @@ const TOKEN_CONFIG = {
 
 export const AssetPanel: FC<AssetPanelProps> = ({ direction }) => {
 	const { state } = usePoolsActionContext()
-	const isDeposit = state.type === PoolsActionType.DEPOSIT
+	const isDeposit = state.type === PoolsActionType.Deposit
 	const isFrom = direction === Direction.From
 
 	const token = useMemo(() => {

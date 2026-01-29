@@ -15,15 +15,15 @@ export const Pointer = (): JSX.Element => {
 	const isTablet = useIsTablet()
 
 	const handleSwap = useCallback(() => {
-		if (state.type === PoolsActionType.DEPOSIT) {
+		if (state.type === PoolsActionType.Deposit) {
 			dispatch({
 				type: PoolsStateActions.CHANGE_TYPE,
-				payload: PoolsActionType.WITHDRAWAL,
+				payload: PoolsActionType.Withdraw,
 			})
 		} else {
 			dispatch({
 				type: PoolsStateActions.CHANGE_TYPE,
-				payload: PoolsActionType.DEPOSIT,
+				payload: PoolsActionType.Deposit,
 			})
 		}
 	}, [dispatch, state.type])
