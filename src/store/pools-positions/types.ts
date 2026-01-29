@@ -23,27 +23,42 @@ export type PoolAction = {
 	status: PoolActionStatus
 }
 
-export type PoolsPositionsState = {
+export type PoolActionPagination = {
+	take: number
+	skip: number
+}
+
+export type PoolActionsStateSlice = {
+	actions: PoolAction[]
+	initialActionsLoading: boolean
+	dataActionsLoading: boolean
+	actionsPagination: PoolActionPagination
+}
+
+export type BalancesStateSlice = {
 	rawUsd: bigint | null
 	rawLp: bigint | null
 	usd: number | null
 	lp: number | null
-	areBalancesLoading: boolean
-	actions: PoolAction[]
-	areActionsLoading: boolean
+	balancesLoading: boolean
 }
 
 export type PoolsPositionsActions = {
 	setBalances: (rawUsd: bigint, rawLp: bigint) => void
 	setBalancesLoading: (loading: boolean) => void
 	setActions: (actions: PoolAction[]) => void
-	setActionsLoading: (loading: boolean) => void
-	clearActions: () => void
+	addActions: (actions: PoolAction[]) => void
+	setActionsLoading: (loading: boolean, initial?: boolean) => void
+	setActionsPagination: (pagination: PoolActionPagination) => void
+	resetActions: () => void
 }
 
-export type PoolsPositionsStateAndActions = PoolsPositionsState &
+export type PoolsPositionsState = BalancesStateSlice &
+	PoolActionsStateSlice &
 	PoolsPositionsActions
 
+export type PoolsPositionsStateAndActions = PoolsPositionsState
+
 export type PoolsPositionsStore = UseBoundStoreWithEqualityFn<
-	StoreApi<PoolsPositionsStateAndActions>
+	StoreApi<PoolsPositionsState>
 >

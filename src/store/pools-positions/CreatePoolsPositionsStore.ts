@@ -1,20 +1,24 @@
 import type {
 	PoolAction,
-	PoolsPositionsStateAndActions,
+	PoolActionPagination,
+	PoolsPositionsState,
 	PoolsPositionsStore,
 } from './types'
 import { createWithEqualityFn } from 'zustand/traditional'
 import { formatUnits } from 'viem'
 
 export const CreatePoolsPositionsStore = (): PoolsPositionsStore =>
-	createWithEqualityFn<PoolsPositionsStateAndActions>(set => ({
+	createWithEqualityFn<PoolsPositionsState>(set => ({
 		rawUsd: null,
 		rawLp: null,
 		usd: null,
 		lp: null,
-		areBalancesLoading: false,
+		balancesLoading: false,
+
 		actions: [],
-		areActionsLoading: false,
+		initialActionsLoading: true,
+		dataActionsLoading: false,
+		actionsPagination: { take: 20, skip: 0 },
 
 		setBalances: (rawUsd: bigint, rawLp: bigint) => {
 			set({
@@ -25,13 +29,31 @@ export const CreatePoolsPositionsStore = (): PoolsPositionsStore =>
 			})
 		},
 
-		setBalancesLoading: (loading: boolean) =>
-			set({ areBalancesLoading: loading }),
+		setBalancesLoading: (loading: boolean) => set({ balancesLoading: loading }),
 
 		setActions: (actions: PoolAction[]) => set({ actions }),
 
-		setActionsLoading: (loading: boolean) =>
-			set({ areActionsLoading: loading }),
+		addActions: (actions: PoolAction[]) => {
+			set(state => ({ actions: [...state.actions, ...actions] }))
+		},
 
-		clearActions: () => set({ actions: [] }),
+		setActionsLoading: (loading: boolean, initial = false) => {
+			if (initial) {
+				set({ initialActionsLoading: loading })
+			} else {
+				set({ dataActionsLoading: loading })
+			}
+		},
+
+		setActionsPagination: (pagination: PoolActionPagination) =>
+			set({ actionsPagination: pagination }),
+
+		resetActions: () => {
+			set({
+				actions: [],
+				initialActionsLoading: true,
+				dataActionsLoading: false,
+				actionsPagination: { take: 20, skip: 0 },
+			})
+		},
 	}))

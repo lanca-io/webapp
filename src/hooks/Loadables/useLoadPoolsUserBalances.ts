@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
 import { getPublicClient } from '@/providers/Web3Provider/Web3Provider'
 import { erc20Abi } from 'viem'
-import { usePoolsUserBalancesStore } from '@/store/pools-positions/usePoolsPositionsStore'
+import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
 import {
 	POOLS_CHAIN_ID,
 	POOLS_LP_TOKEN_ADDRESS,
@@ -12,7 +12,7 @@ import {
 
 export const useLoadPoolsUserBalances = () => {
 	const { isConnected, address } = useAccount()
-	const { setBalances, setBalancesLoading } = usePoolsUserBalancesStore()
+	const { setBalances, setBalancesLoading } = usePoolsPositions()
 
 	const {
 		data: balances,
