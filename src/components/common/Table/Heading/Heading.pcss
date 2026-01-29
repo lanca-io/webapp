@@ -1,12 +1,22 @@
 .table_heading {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	min-width: fit-content;
 	position: sticky;
 	top: 0;
 	background: var(--color-gray-25);
 	z-index: 10;
-	padding: var(--space-m) 0 0 0;
+	gap: var(--space-m);
+	padding: var(--space-l) 0 0 0;
+
+	& .table_heading_text {
+		font-size: 1.5rem;
+		line-height: 1.125rem;
+		font-weight: 500;
+		color: var(--color-gray-700);
+		letter-spacing: -0.48px;
+	}
 
 	& .table_heading_container {
 		display: grid;
