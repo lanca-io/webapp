@@ -3,7 +3,11 @@ import type { Column } from '../Table/Body/Row/Row'
 import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
 import { Table } from '../Table/Table'
 import { SkeletonLoader } from '../SkeletonLoader'
+import { Action } from './Data/Action/Action'
+import { Amount } from './Data/Amount/Amount'
+import { Fees } from './Data/Fees/Fees'
 import './ActionsTable.pcss'
+import { Time } from './Data/Time/Time'
 
 type Columns = {
 	action: ReactElement
@@ -13,7 +17,6 @@ type Columns = {
 }
 
 const LOADING_ROWS = 10
-const FEE_BASIS_POINTS = 0.05
 
 export const ActionsTable = (): ReactElement => {
 	const { actions, initialActionsLoading, dataActionsLoading } =
@@ -27,21 +30,25 @@ export const ActionsTable = (): ReactElement => {
 	]
 
 	const data: Columns[] = actions.map(action => {
-		const rawAmount = action.amount ? Number(action.amount) : 0
-		const displayAmount = rawAmount / 1e6
-		const computedFee = (rawAmount * FEE_BASIS_POINTS) / 1e6
-
 		return {
-			action: <span className="action-type">{action.type.toUpperCase()}</span>,
-			amount: <span>{displayAmount > 0 ? displayAmount.toFixed(4) : '-'}</span>,
-			fees: <span>{computedFee > 0 ? computedFee.toFixed(6) : '-'}</span>,
-			time: (
-				<span>
-					{action.created_at
-						? new Date(action.created_at * 1000).toLocaleString()
-						: '-'}
-				</span>
+			action: <Action type={action.type} status={action.status} />,
+			amount: (
+				<Amount
+					type={action.type}
+					amount={action.amount}
+					lpAmount={action.lp_amount}
+				/>
 			),
+			fees: (
+				<Fees
+					type={action.type}
+					amount={action.amount}
+					withdrawnLpAmount={action.withdrawn_amount}
+					processedAmount={action.processed_amount}
+					processedLpAmount={action.processed_lp_amount}
+				/>
+			),
+			time: <Time completedAt={action.completed_at} />,
 		}
 	})
 
