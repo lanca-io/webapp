@@ -7,6 +7,7 @@ import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
 import { UserPoolHoldings } from '../UserPoolHoldings/UserPoolHoldings'
 import { REWARDS_DATA, VOLUME_DATA } from './mock'
 import './PoolOverview.pcss'
+import { ActionsTable } from '../ActionsTable/ActionsTable'
 
 const USDC_TOKEN = {
 	src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
@@ -109,6 +110,7 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 						}}
 					/>
 				</div>
+				<ActionsTable />
 			</div>
 		</div>
 	)

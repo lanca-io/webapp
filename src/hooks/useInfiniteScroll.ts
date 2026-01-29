@@ -1,37 +1,45 @@
-import { useCallback, useRef, useEffect } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 
-type ScrollOptions = {
-	disabled: boolean
-	onLoadMore: () => void
-	threshold?: number
+type Pagination = {
+	take: number
+	skip: number
 }
 
-export const useInfiniteScroll = ({
-	disabled,
-	onLoadMore,
-	threshold = 1,
-}: ScrollOptions) => {
-	const ref = useRef<HTMLDivElement>(null)
+export const useInfiniteScroll = (
+	containerRef: React.RefObject<HTMLElement | null>,
+	pagination: Pagination,
+	setPagination: (newPagination: Pagination) => void,
+	threshold = 0,
+) => {
+	const lastScrollTop = useRef(0)
+	const hasReachedBottom = useRef(false)
 
-	const checkScroll = useCallback(() => {
-		if (disabled || !ref.current) return
+	const handleScroll = useCallback(() => {
+		if (!containerRef.current) return
+		const { scrollTop, clientHeight, scrollHeight } = containerRef.current
 
-		const el = ref.current
-		const atBottom =
-			Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < threshold
+		const scrollingDown = scrollTop > lastScrollTop.current
+		const atBottom = scrollTop + clientHeight >= scrollHeight - threshold
 
-		if (atBottom) {
-			onLoadMore()
+		if (scrollingDown && atBottom) {
+			if (!hasReachedBottom.current) {
+				hasReachedBottom.current = true
+				setPagination({
+					take: pagination.take,
+					skip: pagination.skip + pagination.take,
+				})
+			}
+		} else if (!atBottom) {
+			hasReachedBottom.current = false
 		}
-	}, [disabled, onLoadMore, threshold])
+
+		lastScrollTop.current = scrollTop
+	}, [containerRef, pagination, setPagination, threshold])
 
 	useEffect(() => {
-		const el = ref.current
+		const el = containerRef.current
 		if (!el) return
-
-		el.addEventListener('scroll', checkScroll)
-		return () => el.removeEventListener('scroll', checkScroll)
-	}, [checkScroll])
-
-	return { ref }
+		el.addEventListener('scroll', handleScroll)
+		return () => el.removeEventListener('scroll', handleScroll)
+	}, [handleScroll])
 }

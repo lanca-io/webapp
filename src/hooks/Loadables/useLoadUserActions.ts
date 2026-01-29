@@ -19,6 +19,7 @@ export const useLoadUserActions = () => {
 	const { take, skip } = actionsPagination
 	const initialLoad = useMemo(() => skip === 0, [skip])
 	const hasMore = useRef(true)
+
 	const getUserActionsData = useCallback(async () => {
 		if (!address) return null
 
@@ -52,7 +53,7 @@ export const useLoadUserActions = () => {
 		isLoading: queryLoading,
 		refetch,
 	} = useQuery({
-		queryKey: ['poolsUserActions', { address, take, skip }],
+		queryKey: ['poolsUserActions', address, take, skip],
 		queryFn: getUserActionsData,
 		enabled: !!address,
 		staleTime: 5 * 60_000,
@@ -66,41 +67,31 @@ export const useLoadUserActions = () => {
 
 	useEffect(() => {
 		if (!data) return
-		if (data.length < take) hasMore.current = false
-		else hasMore.current = true
+		hasMore.current = data.length === take
 	}, [data, take])
 
 	useEffect(() => {
-		if (initialLoad && initialActionsLoading !== queryLoading) {
-			setActionsLoading(queryLoading, true)
-		}
-	}, [initialLoad, initialActionsLoading, queryLoading, setActionsLoading])
-
-	useEffect(() => {
-		if (!initialLoad && dataActionsLoading !== queryLoading) {
-			setActionsLoading(queryLoading, false)
-		}
-	}, [initialLoad, dataActionsLoading, queryLoading, setActionsLoading])
+		setActionsLoading(queryLoading, initialLoad)
+	}, [queryLoading, initialLoad, setActionsLoading])
 
 	useEffect(() => {
 		if (!data || data.length === 0) return
-
 		if (initialLoad) {
 			setActions(data)
 		} else {
 			setActions([...actions, ...data])
 		}
-	}, [data, initialLoad, setActions, actions])
+	}, [data, initialLoad, setActions])
 
 	useEffect(() => {
 		if (!address) return
-		setActionsPagination({ take, skip: 0 })
+		setActionsPagination({ take: 20, skip: 0 })
 		resetActions()
 		hasMore.current = true
-	}, [address, setActionsPagination, resetActions, take])
+	}, [address, setActionsPagination, resetActions])
 
 	return {
-		loading: initialLoad ? initialActionsLoading : dataActionsLoading,
+		loading: initialActionsLoading || dataActionsLoading,
 		refetch,
 		data,
 		hasMore: hasMore.current,
