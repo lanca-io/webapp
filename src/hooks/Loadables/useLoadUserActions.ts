@@ -57,7 +57,6 @@ export const useLoadUserActions = () => {
 		data,
 		isLoading: queryLoading,
 		refetch,
-		isError,
 	} = useQuery({
 		queryKey: ['poolsUserActions', address, take, skip],
 		queryFn: fetchUserActions,
@@ -104,9 +103,5 @@ export const useLoadUserActions = () => {
 
 	return {
 		refetch,
-		isLoading: queryLoading,
-		isError,
-		hasMore: hasMore.current,
-		initialLoad,
 	}
 }

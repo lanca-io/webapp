@@ -10,45 +10,21 @@ type ActionProps = {
 }
 
 export const Amount: FC<ActionProps> = ({ type, amount, lpAmount }) => {
-	const isDeposit = type === PoolsActionType.Deposit
-	const denomination = isDeposit ? 'USDC' : 'CLP'
-	const rawValue = isDeposit ? amount : lpAmount
+	const isDeposit: boolean = type === PoolsActionType.Deposit
+	const raw: string | null | undefined = isDeposit ? amount : lpAmount
+	const denomination: string = isDeposit ? 'USDC' : 'CLP'
 
-	if (
-		!rawValue ||
-		rawValue === null ||
-		rawValue === undefined ||
-		rawValue === '0' ||
-		rawValue.trim() === ''
-	) {
-		return (
-			<div className="actions_table_amount">
-				<span className="actions_table_amount_value">-</span>
-			</div>
-		)
-	}
+	const trimmed: string | null = typeof raw === 'string' ? raw.trim() : null
+	const isValid = trimmed && trimmed !== '0'
 
-	try {
-		const bigIntValue = BigInt(rawValue)
-		const parsedAmount = Number(formatUnits(bigIntValue, 6))
-		const sign = isDeposit ? '+' : '-'
+	const displayValue = isValid
+		? `${isDeposit ? '+' : '-'}${Number(formatUnits(BigInt(trimmed), 6)).toLocaleString()}`
+		: '-'
 
-		return (
-			<div className="actions_table_amount">
-				<span className="actions_table_amount_value">
-					{sign}
-					{parsedAmount.toLocaleString()}
-				</span>
-				<span className="actions_table_amount_denomination">
-					{denomination}
-				</span>
-			</div>
-		)
-	} catch (error) {
-		return (
-			<div className="actions_table_amount">
-				<span className="actions_table_amount_value">-</span>
-			</div>
-		)
-	}
+	return (
+		<div className="actions_table_amount">
+			<span className="actions_table_amount_value">{displayValue}</span>
+			<span className="actions_table_amount_denomination">{denomination}</span>
+		</div>
+	)
 }

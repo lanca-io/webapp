@@ -10,23 +10,26 @@ type ActionProps = {
 	status: PoolActionStatus
 }
 
+const QUEUED_DESCRIPTION =
+	'Your action is queued and will update to the next status once batch processing begins' as const
+
 export const Action: FC<ActionProps> = ({ type, status }) => {
-	const isDeposit = type === PoolsActionType.Deposit
-	const actionText = isDeposit ? 'Deposit' : 'Withdrawal'
-	const isQueued = status === PoolActionStatus.Queued
+	const showTag: boolean = type === PoolsActionType.Deposit
+	const actionText: string = showTag ? 'Deposit' : 'Withdrawal'
+	const showQueued: boolean = status === PoolActionStatus.Queued
+
+	const tooltipProps = {
+		id: 'queued-action' as const,
+		description: QUEUED_DESCRIPTION,
+	}
 
 	return (
 		<div className="actions_table_action">
 			<div className="actions_table_action_description">
 				<span className="actions_table_action_type">{actionText}</span>
-				{isQueued && <Tag size="s">Queued</Tag>}
+				{showQueued && <Tag size="s">Queued</Tag>}
 			</div>
-			{isQueued && (
-				<InfoTip
-					id="queued-action"
-					description="Your action is queued and will update to the next status once batch processing begins"
-				/>
-			)}
+			{showQueued && <InfoTip {...tooltipProps} />}
 		</div>
 	)
 }
