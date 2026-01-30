@@ -6,9 +6,9 @@ import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStor
 export const useLoadUserActions = () => {
 	const { address } = useAccount()
 	const {
-		actions,
 		actionsPagination,
 		setActions,
+		addActions,
 		setActionsLoading,
 		setActionsPagination,
 		resetActions,
@@ -18,22 +18,29 @@ export const useLoadUserActions = () => {
 	const initialLoad = useMemo(() => skip === 0, [skip])
 	const hasMore = useRef(true)
 
-	const getUserActionsData = useCallback(async () => {
+	const buildUrl = useCallback(
+		(address: string, take: number, skip: number) => {
+			const params = {
+				address,
+				is_testnet: true,
+				take,
+				skip,
+			}
+
+			const url = new URL('https://dev.concero.io/api/v1/pools/actions')
+			Object.entries(params).forEach(([key, value]) => {
+				url.searchParams.append(key, String(value))
+			})
+			return url.toString()
+		},
+		[],
+	)
+
+	const fetchUserActions = useCallback(async () => {
 		if (!address) return null
 
-		const params = {
-			address,
-			is_testnet: true,
-			take,
-			skip,
-		}
-
-		const url = new URL('https://dev.concero.io/api/v1/pools/actions')
-		Object.entries(params).forEach(([key, value]) => {
-			url.searchParams.append(key, String(value))
-		})
-
-		const response = await fetch(url.toString(), {
+		const url = buildUrl(address, take, skip)
+		const response = await fetch(url, {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json' },
 		})
@@ -44,28 +51,29 @@ export const useLoadUserActions = () => {
 
 		const json = await response.json()
 		return json.payload?.data ?? []
-	}, [address, take, skip])
+	}, [address, take, skip, buildUrl])
 
 	const {
 		data,
 		isLoading: queryLoading,
 		refetch,
+		isError,
 	} = useQuery({
 		queryKey: ['poolsUserActions', address, take, skip],
-		queryFn: getUserActionsData,
+		queryFn: fetchUserActions,
 		enabled: !!address,
 		staleTime: 5 * 60_000,
 		retry: 2,
 		refetchOnWindowFocus: false,
-		retryDelay: attempt => Math.min(1000 * 2 ** attempt, 30000),
-		retryOnMount: false,
 		refetchOnReconnect: false,
 		refetchOnMount: false,
+		retryDelay: attempt => Math.min(1000 * 2 ** attempt, 30000),
 	})
 
 	useEffect(() => {
-		if (!data) return
-		hasMore.current = data.length === take
+		if (data) {
+			hasMore.current = data.length === take
+		}
 	}, [data, take])
 
 	useEffect(() => {
@@ -73,16 +81,22 @@ export const useLoadUserActions = () => {
 	}, [queryLoading, initialLoad, setActionsLoading])
 
 	useEffect(() => {
-		if (!data || data.length === 0) return
+		if (!data?.length) return
+
 		if (initialLoad) {
 			setActions(data)
 		} else {
-			setActions([...actions, ...data])
+			addActions(data)
 		}
-	}, [data, initialLoad, setActions])
+	}, [data, initialLoad, setActions, addActions])
 
 	useEffect(() => {
-		if (!address) return
+		if (!address) {
+			resetActions()
+			hasMore.current = true
+			return
+		}
+
 		setActionsPagination({ take: 20, skip: 0 })
 		resetActions()
 		hasMore.current = true
@@ -90,5 +104,9 @@ export const useLoadUserActions = () => {
 
 	return {
 		refetch,
+		isLoading: queryLoading,
+		isError,
+		hasMore: hasMore.current,
+		initialLoad,
 	}
 }
