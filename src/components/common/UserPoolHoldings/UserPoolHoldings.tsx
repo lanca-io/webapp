@@ -17,9 +17,9 @@ type LastDeposit = {
 
 type UserPoolHoldingsProps = {
 	isLoading: boolean
-	usdBalance: number
-	lpBalance: number
-	principal: number
+	usdBalance: number | null
+	lpBalance: number | null
+	principal: number | null
 	lastDeposit?: LastDeposit | null
 }
 
@@ -37,8 +37,8 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 	const change = useMemo(() => {
 		if (!Number.isFinite(usdBalance) || !Number.isFinite(principal)) return 0
 		if (principal === 0) return 0
-		const safeDenom = Math.max(Math.abs(principal), 0.0001)
-		return ((usdBalance - principal) / safeDenom) * 100
+		const safeDenom = Math.max(Math.abs(principal ?? 0), 0.0001)
+		return ((usdBalance ?? 0 - (principal ?? 0)) / safeDenom) * 100
 	}, [usdBalance, principal])
 
 	const changeStr = useMemo(() => {
@@ -64,8 +64,8 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 		[showDeposit, lastDeposit?.timestamp],
 	)
 
-	const usdStr = useMemo(() => format(usdBalance, 2), [usdBalance])
-	const lpStr = useMemo(() => `= ${format(lpBalance, 2)} CLP`, [lpBalance])
+	const usdStr = useMemo(() => format(usdBalance ?? 0, 2), [usdBalance])
+	const lpStr = useMemo(() => `= ${format(lpBalance ?? 0, 2)} CLP`, [lpBalance])
 	const showChangeTag = Number.isFinite(change) && change !== 0
 
 	const openModal = (type: PoolsActionType) => setActiveModal(type)

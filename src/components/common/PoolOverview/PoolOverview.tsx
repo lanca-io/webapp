@@ -6,6 +6,7 @@ import { BarChart } from '../BarChart/BarChart'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
 import { UserPoolHoldings } from '../UserPoolHoldings/UserPoolHoldings'
 import { REWARDS_DATA, VOLUME_DATA } from './mock'
+import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
 import { ActionsTable } from '../ActionsTable/ActionsTable'
 import './PoolOverview.pcss'
 
@@ -29,11 +30,10 @@ type PoolOverviewProps = {
 }
 
 export const PoolOverview: FC<PoolOverviewProps> = ({
-	usdBalance,
-	lpBalance,
 	principal,
 	isLoading,
 }): ReactElement => {
+	const { usd, lp } = usePoolsPositions()
 	const heading = useMemo(
 		() => (
 			<div className="pool_overview_content_heading">
@@ -64,13 +64,13 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 	const holdings = useMemo(
 		() => (
 			<UserPoolHoldings
-				usdBalance={210}
-				lpBalance={0.12}
-				principal={190}
+				usdBalance={usd}
+				lpBalance={lp}
+				principal={0}
 				isLoading={isLoading}
 			/>
 		),
-		[usdBalance, lpBalance, principal, isLoading],
+		[usd, lp, principal, isLoading],
 	)
 
 	return (
