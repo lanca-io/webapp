@@ -3,25 +3,67 @@
 	justify-content: space-between;
 	align-items: flex-start;
 	width: 100%;
+	gap: var(--space-xs);
 
-	& .actions_table_compact_container {
+	& .actions_table_compact_column {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xs);
-		align-items: flex-start;
+		flex: 1;
 
-		& .actions_table_compact_action {
+		&:last-child {
+			align-items: flex-end;
+		}
+
+		& .actions_table_compact_row,
+		& .actions_table_compact_row_end {
 			display: flex;
-			height: 20px;
 			align-items: center;
+			height: 20px;
 			gap: var(--space-xs);
+		}
 
-			& .actions_table_compact_text {
-				font-size: 0.875rem;
-				line-height: 1.125rem;
-				font-weight: 500;
-				color: var(--color-gray-700);
-			}
+		& .actions_table_compact_row_end {
+			justify-content: flex-end;
+			width: 100%;
+		}
+
+		& .actions_table_compact_row .actions_table_compact_action_text,
+		&
+			.actions_table_compact_row_end
+			.actions_table_compact_amount
+			.actions_table_compact_amount_value {
+			font-size: 1rem;
+			line-height: 1.25rem;
+			font-weight: 500;
+			color: var(--color-gray-700);
+		}
+
+		& .actions_table_compact_row .actions_table_compact_time_text,
+		& .actions_table_compact_row .actions_table_compact_eta_label {
+			font-size: 0.875rem;
+			line-height: 1.125rem;
+			font-weight: 400;
+			color: var(--color-gray-500);
+		}
+
+		& .actions_table_compact_row .actions_table_compact_eta_value,
+		&
+			.actions_table_compact_row_end
+			.actions_table_compact_fees
+			.actions_table_compact_fees_value,
+		& .actions_table_compact_row_end .actions_table_compact_fees_value {
+			font-size: 0.875rem;
+			line-height: 1.125rem;
+			font-weight: 500;
+			color: var(--color-gray-700);
+		}
+
+		& .actions_table_compact_row_end .actions_table_compact_amount,
+		& .actions_table_compact_row_end .actions_table_compact_fees {
+			display: flex;
+			align-items: center;
+			gap: var(--space-xxs);
 		}
 	}
 }

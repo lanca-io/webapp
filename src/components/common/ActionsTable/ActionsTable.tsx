@@ -7,6 +7,8 @@ import { Action } from './Data/Action/Action'
 import { Amount } from './Data/Amount/Amount'
 import { Fees } from './Data/Fees/Fees'
 import { Time } from './Data/Time/Time'
+import { Compact } from './Data/Compact/Compact'
+import { useIsMobile } from '@/hooks'
 import './ActionsTable.pcss'
 
 type Columns = {
@@ -22,6 +24,8 @@ export const ActionsTable = (): ReactElement => {
 	const { actions, initialActionsLoading, dataActionsLoading } =
 		usePoolsPositions()
 
+	const isMobile = useIsMobile()
+
 	const columns: Column<Columns>[] = [
 		{ header: 'Action', accessor: 'action' },
 		{ header: 'Amount', accessor: 'amount' },
@@ -30,6 +34,26 @@ export const ActionsTable = (): ReactElement => {
 	]
 
 	const data: Columns[] = actions.map(action => {
+		if (isMobile) {
+			return {
+				action: (
+					<Compact
+						type={action.type}
+						status={action.status}
+						completedAt={action.completed_at}
+						amount={action.amount}
+						lpAmount={action.lp_amount}
+						withdrawnLpAmount={action.withdrawn_amount}
+						processedAmount={action.processed_amount}
+						processedLpAmount={action.processed_lp_amount}
+					/>
+				),
+				amount: <></>,
+				fees: <></>,
+				time: <></>,
+			}
+		}
+
 		return {
 			action: <Action type={action.type} status={action.status} />,
 			amount: (
@@ -52,13 +76,20 @@ export const ActionsTable = (): ReactElement => {
 		}
 	})
 
-	const skeletons: Columns[] = Array.from({ length: LOADING_ROWS }).map(
-		(_, i) => ({
-			action: <SkeletonLoader key={`action-${i}`} width="80px" height="20px" />,
-			amount: <SkeletonLoader key={`amount-${i}`} width="80px" height="20px" />,
-			fees: <SkeletonLoader key={`fees-${i}`} width="70px" height="20px" />,
-			time: <SkeletonLoader key={`time-${i}`} width="140px" height="20px" />,
-		}),
+	const skeletons: Columns[] = Array.from({ length: LOADING_ROWS }).map(_ =>
+		isMobile
+			? {
+					action: <SkeletonLoader width="100%" height="70px" />,
+					amount: <></>,
+					fees: <></>,
+					time: <></>,
+				}
+			: {
+					action: <SkeletonLoader width="80px" height="20px" />,
+					amount: <SkeletonLoader width="80px" height="20px" />,
+					fees: <SkeletonLoader width="70px" height="20px" />,
+					time: <SkeletonLoader width="140px" height="20px" />,
+				},
 	)
 
 	const rows =

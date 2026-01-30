@@ -29,6 +29,12 @@
 
 @media (max-width: 640px) {
 	.table_row {
-		grid-template-columns: repeat(2, 1fr);
+		height: 94px;
+		grid-template-columns: repeat(1, 1fr);
+	}
+
+	.table_row .table_cell {
+		height: 94px;
+		padding: var(--space-l) 0;
 	}
 }
