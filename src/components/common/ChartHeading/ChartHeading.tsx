@@ -4,6 +4,7 @@ import { ChartMenu, ChartRange } from '../ChartMenu'
 import { useMemo } from 'react'
 import { InfoTip } from '../InfoTip'
 import './ChartHeading.pcss'
+import { abbreviateNumber } from '@/utils/format'
 
 type HeadingProps = {
 	title: string
@@ -68,11 +69,11 @@ export const ChartHeading: FC<HeadingProps> = ({
 					<SkeletonLoader width={86} height={36} />
 				) : (
 					<>
-						<span className="chart_total_symbol">{`${denomination} ${total}`}</span>
+						<span className="chart_total_symbol">{`${denomination} ${abbreviateNumber(Number(total))}`}</span>
 						{suffix && (
 							<>
 								<span className="chart_total_suffix_divider">{'/'}</span>
-								<span className="chart_total_suffix">{`${denomination} ${suffix}`}</span>
+								<span className="chart_total_suffix">{`${denomination} ${abbreviateNumber(Number(suffix))}`}</span>
 							</>
 						)}
 					</>

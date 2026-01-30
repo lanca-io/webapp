@@ -5,8 +5,8 @@ import { Chart } from './Chart/Chart'
 import './RangeChart.pcss'
 
 export type Data = {
-	current: number
-	target: number
+	current: number | null
+	target: number | null
 }
 
 type RangedChartProps = {
@@ -24,10 +24,10 @@ export const RangeChart: FC<RangedChartProps> = memo(
 				<ChartHeading
 					title={title}
 					description={description}
-					total={data.current}
+					total={data.current ?? 0}
 					isLoading={isLoading}
 					denomination={denomination}
-					suffix={data.target}
+					suffix={data.target ?? 0}
 				/>
 				<Chart data={data} denomination={denomination} isLoading={isLoading} />
 			</div>
