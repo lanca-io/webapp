@@ -9,6 +9,7 @@ import { PoolCompact } from '../PoolCompact/PoolCompact'
 import { PoolExtended } from '../PoolExtended/PoolExtended'
 import { MetricsBanner } from '../MetricsBanner/MetricsBanner'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
+import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
 import { useAccount } from 'wagmi'
 import './PoolsDashboard.pcss'
 
@@ -16,20 +17,24 @@ export const PoolsDashboard: FC = () => {
 	const [volumeRange, setVolumeRange] = useState(ChartRange.ALL)
 	const [rewardsRange, setRewardsRange] = useState(ChartRange.ALL)
 
-	const { cap, tvl, isLoading } = usePoolsDataStore()
+	const { cap, tvl, lpPrice, isLoading: poolsLoading } = usePoolsDataStore()
+	const { lp, balancesLoading } = usePoolsPositions()
 	const { isConnected } = useAccount()
 
 	const isMobile = useIsMobile()
 	const isTablet = useIsTablet()
 	const showCompact = isMobile || isTablet
 
-	const volumeTotal = useMemo(
-		() => VOLUME_DATA.reduce((sum, d) => sum + d.value, 0),
-		[],
-	)
-	const rewardsTotal = useMemo(
-		() => REWARDS_DATA.reduce((sum, d) => sum + d.value, 0),
-		[],
+	const lpValue = useMemo(() => {
+		if (!Number.isFinite(lp ?? 0) || !Number.isFinite(lpPrice ?? 0)) {
+			return 0
+		}
+		return (lp ?? 0) * (lpPrice ?? 0)
+	}, [lp, lpPrice])
+
+	const isDataLoaded = useMemo(
+		() => !poolsLoading && !balancesLoading && Number.isFinite(lpValue),
+		[poolsLoading, balancesLoading, lpValue],
 	)
 
 	const volumeData = useMemo(() => VOLUME_DATA, [])
@@ -52,11 +57,11 @@ export const PoolsDashboard: FC = () => {
 						data={volumeData}
 						title="Pools volume"
 						description="Total trading volume across all liquidity pools"
-						total={volumeTotal}
+						total={'-'}
 						settings={{
 							isLoading: false,
 							isAdvanced: true,
-							denomination: '$',
+							leftDenomination: '$',
 							range: volumeRange,
 							onChange: handleVolumeRange,
 						}}
@@ -65,11 +70,11 @@ export const PoolsDashboard: FC = () => {
 						data={rewardsData}
 						title="Total rewards"
 						description="Total rewards distributed to liquidity providers across all pools"
-						total={rewardsTotal}
+						total={'-'}
 						settings={{
 							isLoading: false,
 							isAdvanced: true,
-							denomination: '$',
+							leftDenomination: '$',
 							range: rewardsRange,
 							onChange: handleRewardsRange,
 						}}
@@ -80,20 +85,20 @@ export const PoolsDashboard: FC = () => {
 				<span className="pools_list_title">Pools</span>
 				{showCompact ? (
 					<PoolCompact
-						isLoading={isLoading}
+						isLoading={!isDataLoaded}
 						isConnected={isConnected}
 						cap={cap}
 						tvl={tvl}
-						deposited={0}
+						deposited={lpValue}
 						earned={123.45}
 					/>
 				) : (
 					<PoolExtended
-						isLoading={isLoading}
+						isLoading={!isDataLoaded}
 						isConnected={isConnected}
 						cap={cap}
 						tvl={tvl}
-						deposited={0}
+						deposited={lpValue}
 						earned={123.45}
 					/>
 				)}

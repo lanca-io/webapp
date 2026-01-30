@@ -1,11 +1,15 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { abbreviateNumber } from '@/utils/format'
 import { SkeletonLoader } from '../SkeletonLoader'
 import { Heading } from './Heading'
 import { Loader } from './Loader'
 import { Info } from './Info'
 import { Button } from '@concero/ui-kit'
+import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
+import { PoolsActionType } from '../PoolActionModal/Reducer/types'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '@/constants'
 import './PoolCompact.pcss'
 
 type PoolCompactProps = {
@@ -24,8 +28,24 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 	deposited,
 	cap,
 }) => {
+	const [isDepositOpen, setIsDepositOpen] = useState<boolean>(false)
+
+	const navigate = useNavigate()
+
+	const handleOpenClick = () => {
+		navigate(routes.usdcPools)
+	}
+
 	const isActive = isConnected && deposited > 0
 	const isFull = tvl !== null && cap !== null && tvl >= cap
+
+	const handleDepositClick = () => {
+		setIsDepositOpen(true)
+	}
+
+	const handleDepositClose = () => {
+		setIsDepositOpen(false)
+	}
 
 	const heading = useMemo(
 		() => <Heading isLoading={isLoading} isActive={isActive} isFull={isFull} />,
@@ -109,10 +129,14 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 		() =>
 			!isLoading ? (
 				<div className="pool_compact_actions">
-					<Button size="l" variant="secondary_color">
+					<Button
+						size="l"
+						variant="secondary_color"
+						onClick={handleDepositClick}
+					>
 						Deposit
 					</Button>
-					<Button size="l" variant="secondary">
+					<Button size="l" variant="secondary" onClick={handleOpenClick}>
 						Open
 					</Button>
 				</div>
@@ -134,21 +158,30 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 	)
 
 	return (
-		<div className="pool_compact">
-			<div className="pool_compact_content">
-				{heading}
-				{loader}
-				{isLoading || tvl === null || cap === null ? (
-					dataSkeleton
-				) : (
-					<div className="pool_compact_data">
-						{apyInfo}
-						{tvlInfo}
-						{isConnected && connectedData}
-					</div>
-				)}
+		<>
+			<div className="pool_compact">
+				<div className="pool_compact_content">
+					{heading}
+					{loader}
+					{isLoading || tvl === null || cap === null ? (
+						dataSkeleton
+					) : (
+						<div className="pool_compact_data">
+							{apyInfo}
+							{tvlInfo}
+							{isConnected && connectedData}
+						</div>
+					)}
+				</div>
+				{actions}
 			</div>
-			{actions}
-		</div>
+
+			{isDepositOpen && (
+				<PoolActionModal
+					type={PoolsActionType.Deposit}
+					onClose={handleDepositClose}
+				/>
+			)}
+		</>
 	)
 }

@@ -1,10 +1,14 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { abbreviateNumber } from '@/utils/format'
 import { Heading } from './Heading/Heading'
 import { Info } from './Info/Info'
 import { Button } from '@concero/ui-kit'
 import { SkeletonLoader } from '../SkeletonLoader'
+import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
+import { PoolsActionType } from '../PoolActionModal/Reducer/types'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '@/constants'
 import './PoolExtended.pcss'
 
 type PoolExtendedProps = {
@@ -23,8 +27,24 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 	deposited,
 	cap,
 }) => {
+	const [isDepositOpen, setIsDepositOpen] = useState<boolean>(false)
+
+	const navigate = useNavigate()
+
 	const isActive = isConnected && deposited > 0
 	const isFull = tvl !== null && cap !== null && tvl >= cap
+
+	const handleDepositClick = () => {
+		setIsDepositOpen(true)
+	}
+
+	const handleDepositClose = () => {
+		setIsDepositOpen(false)
+	}
+
+	const handleOpenClick = () => {
+		navigate(routes.usdcPools)
+	}
 
 	const apyInfo = useMemo(
 		() => (
@@ -96,10 +116,15 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 				</div>
 			) : (
 				<div className="pool_extended_actions">
-					<Button variant="secondary_color" size="m" isDisabled={isFull}>
+					<Button
+						variant="secondary_color"
+						size="m"
+						isDisabled={isFull}
+						onClick={handleDepositClick}
+					>
 						Deposit
 					</Button>
-					<Button variant="secondary" size="m">
+					<Button variant="secondary" size="m" onClick={handleOpenClick}>
 						Open
 					</Button>
 				</div>
@@ -108,16 +133,25 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 	)
 
 	return (
-		<div className="pool_extended">
-			<Heading
-				isLoading={isLoading || tvl === null || cap === null}
-				isActive={isActive}
-				isFull={isFull}
-			/>
-			{apyInfo}
-			{tvlInfo}
-			{isConnected && connectedData}
-			{actions}
-		</div>
+		<>
+			<div className="pool_extended">
+				<Heading
+					isLoading={isLoading || tvl === null || cap === null}
+					isActive={isActive}
+					isFull={isFull}
+				/>
+				{apyInfo}
+				{tvlInfo}
+				{isConnected && connectedData}
+				{actions}
+			</div>
+
+			{isDepositOpen && (
+				<PoolActionModal
+					type={PoolsActionType.Deposit}
+					onClose={handleDepositClose}
+				/>
+			)}
+		</>
 	)
 }
