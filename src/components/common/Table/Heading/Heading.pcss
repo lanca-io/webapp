@@ -22,7 +22,7 @@
 		display: grid;
 		max-width: 1464px;
 		width: 100%;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(4, minmax(222px, 1fr));
 		height: 50px;
 		border-bottom: 1px solid var(--color-gray-100);
 		column-gap: var(--space-xs);
@@ -41,7 +41,7 @@
 @media (min-width: 641px) and (max-width: 1024px) {
 	.table_heading {
 		& .table_heading_container {
-			grid-template-columns: repeat(4, 1fr);
+			grid-template-columns: repeat(4, minmax(222px, 1fr));
 		}
 	}
 }
@@ -49,6 +49,7 @@
 @media (max-width: 640px) {
 	.table_heading {
 		padding: var(--space-l) 0 var(--space-m) 0;
+
 		& .table_heading_container {
 			grid-template-columns: repeat(1, 1fr);
 		}
