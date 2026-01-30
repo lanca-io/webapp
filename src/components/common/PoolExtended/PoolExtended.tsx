@@ -10,6 +10,7 @@ import { PoolsActionType } from '../PoolActionModal/Reducer/types'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '@/constants'
 import './PoolExtended.pcss'
+import { useAppKit } from '@reown/appkit/react'
 
 type PoolExtendedProps = {
 	isConnected: boolean
@@ -27,6 +28,7 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 	deposited,
 	cap,
 }) => {
+	const { open } = useAppKit()
 	const [isDepositOpen, setIsDepositOpen] = useState<boolean>(false)
 
 	const navigate = useNavigate()
@@ -116,20 +118,26 @@ export const PoolExtended: FC<PoolExtendedProps> = ({
 				</div>
 			) : (
 				<div className="pool_extended_actions">
-					<Button
-						variant="secondary_color"
-						size="m"
-						isDisabled={isFull}
-						onClick={handleDepositClick}
-					>
-						Deposit
-					</Button>
+					{isConnected ? (
+						<Button
+							variant="secondary_color"
+							size="m"
+							isDisabled={isFull}
+							onClick={handleDepositClick}
+						>
+							Deposit
+						</Button>
+					) : (
+						<Button variant="primary" size="m" onClick={() => open()}>
+							Connect
+						</Button>
+					)}
 					<Button variant="secondary" size="m" onClick={handleOpenClick}>
 						Open
 					</Button>
 				</div>
 			),
-		[isLoading, tvl, cap, isFull],
+		[isLoading, tvl, cap, isFull, isConnected],
 	)
 
 	return (

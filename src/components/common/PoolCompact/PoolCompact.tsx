@@ -10,6 +10,7 @@ import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
 import { PoolsActionType } from '../PoolActionModal/Reducer/types'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '@/constants'
+import { useAppKit } from '@reown/appkit/react'
 import './PoolCompact.pcss'
 
 type PoolCompactProps = {
@@ -28,13 +29,10 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 	deposited,
 	cap,
 }) => {
+	const { open } = useAppKit()
 	const [isDepositOpen, setIsDepositOpen] = useState<boolean>(false)
 
 	const navigate = useNavigate()
-
-	const handleOpenClick = () => {
-		navigate(routes.usdcPools)
-	}
 
 	const isActive = isConnected && deposited > 0
 	const isFull = tvl !== null && cap !== null && tvl >= cap
@@ -45,6 +43,10 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 
 	const handleDepositClose = () => {
 		setIsDepositOpen(false)
+	}
+
+	const handleOpenClick = () => {
+		navigate(routes.usdcPools)
 	}
 
 	const heading = useMemo(
@@ -129,13 +131,19 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 		() =>
 			!isLoading ? (
 				<div className="pool_compact_actions">
-					<Button
-						size="l"
-						variant="secondary_color"
-						onClick={handleDepositClick}
-					>
-						Deposit
-					</Button>
+					{isConnected ? (
+						<Button
+							size="l"
+							variant="secondary_color"
+							onClick={handleDepositClick}
+						>
+							Deposit
+						</Button>
+					) : (
+						<Button size="l" variant="primary" onClick={() => open()}>
+							Connect
+						</Button>
+					)}
 					<Button size="l" variant="secondary" onClick={handleOpenClick}>
 						Open
 					</Button>
@@ -154,7 +162,7 @@ export const PoolCompact: FC<PoolCompactProps> = ({
 					/>
 				</div>
 			),
-		[isLoading],
+		[isLoading, isConnected],
 	)
 
 	return (
