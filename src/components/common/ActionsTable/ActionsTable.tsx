@@ -20,9 +20,13 @@ type Columns = {
 
 const LOADING_ROWS = 10
 
-export const ActionsTable = (): ReactElement => {
+export const ActionsTable = (): ReactElement | null => {
 	const { actions, initialActionsLoading, dataActionsLoading } =
 		usePoolsPositions()
+
+	if (actions.length === 0 && !initialActionsLoading && !dataActionsLoading) {
+		return null
+	}
 
 	const isMobile = useIsMobile()
 
