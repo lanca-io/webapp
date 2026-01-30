@@ -3,18 +3,19 @@ import { SkeletonLoader } from '../SkeletonLoader'
 import { ChartMenu, ChartRange } from '../ChartMenu'
 import { useMemo } from 'react'
 import { InfoTip } from '../InfoTip'
-import './ChartHeading.pcss'
 import { abbreviateNumber } from '@/utils/format'
+import './ChartHeading.pcss'
 
 type HeadingProps = {
 	title: string
 	description: string
 	total: number | string
+	value?: number | string
 	isLoading: boolean
 	range?: ChartRange
 	isAdvanced?: boolean
-	denomination?: string
-	suffix?: number | string
+	leftDenomination?: string
+	rightDenomination?: string
 	onChange?: (range: ChartRange) => void
 }
 
@@ -25,9 +26,10 @@ export const ChartHeading: FC<HeadingProps> = ({
 	isLoading,
 	range,
 	isAdvanced = true,
-	denomination = '$',
+	leftDenomination = '',
+	rightDenomination = '$',
+	value,
 	onChange,
-	suffix,
 }) => {
 	const info = useMemo(
 		() => (
@@ -38,7 +40,7 @@ export const ChartHeading: FC<HeadingProps> = ({
 				alignment="left"
 			/>
 		),
-		[],
+		[title, description],
 	)
 
 	const menu = useMemo(
@@ -48,6 +50,22 @@ export const ChartHeading: FC<HeadingProps> = ({
 			) : null,
 		[range, onChange, isAdvanced],
 	)
+
+	const renderTotal = (
+		amount: number | string,
+		leftDenom: string,
+		rightDenom: string,
+	) => {
+		if (!Number.isFinite(Number(amount))) return '0'
+		const num = abbreviateNumber(Number(amount))
+		return leftDenom && rightDenom
+			? `${leftDenom} ${num} ${rightDenom}`
+			: leftDenom
+				? `${leftDenom} ${num}`
+				: rightDenom
+					? `${num} ${rightDenom}`
+					: num
+	}
 
 	return (
 		<div className="chart_heading">
@@ -62,18 +80,22 @@ export const ChartHeading: FC<HeadingProps> = ({
 						</>
 					)}
 				</div>
-				{isLoading ? <SkeletonLoader width={140} height={32} /> : menu || null}
+				{isLoading ? <SkeletonLoader width={140} height={32} /> : menu}
 			</div>
 			<div className="chart_total">
 				{isLoading ? (
 					<SkeletonLoader width={86} height={36} />
 				) : (
 					<>
-						<span className="chart_total_symbol">{`${denomination} ${abbreviateNumber(Number(total))}`}</span>
-						{suffix && (
+						<span className="chart_total_symbol">
+							{renderTotal(total, leftDenomination, rightDenomination)}
+						</span>
+						{value && (
 							<>
 								<span className="chart_total_suffix_divider">{'/'}</span>
-								<span className="chart_total_suffix">{`${denomination} ${abbreviateNumber(Number(suffix))}`}</span>
+								<span className="chart_total_suffix">
+									{renderTotal(value, leftDenomination, rightDenomination)}
+								</span>
 							</>
 						)}
 					</>

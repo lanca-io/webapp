@@ -13,23 +13,37 @@ type RangedChartProps = {
 	data: Data
 	title: string
 	description: string
-	denomination?: string
+	leftDenomination?: string
+	rightDenomination?: string
 	isLoading?: boolean
 }
 
 export const RangeChart: FC<RangedChartProps> = memo(
-	({ title, description, data, denomination = '$', isLoading = false }) => {
+	({
+		title,
+		description,
+		data,
+		leftDenomination = '',
+		rightDenomination = '',
+		isLoading = false,
+	}) => {
 		return (
 			<div className="range_chart">
 				<ChartHeading
 					title={title}
 					description={description}
 					total={data.current ?? 0}
+					value={data.target ?? 0}
 					isLoading={isLoading}
-					denomination={denomination}
-					suffix={data.target ?? 0}
+					leftDenomination={leftDenomination}
+					rightDenomination={rightDenomination}
 				/>
-				<Chart data={data} denomination={denomination} isLoading={isLoading} />
+				<Chart
+					data={data}
+					leftDenomination={leftDenomination}
+					rightDenomination={rightDenomination}
+					isLoading={isLoading}
+				/>
 			</div>
 		)
 	},

@@ -8,6 +8,7 @@ import { useAppKit } from '@reown/appkit/react'
 import { useAccount } from 'wagmi'
 import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
 import { PoolsActionType } from '../PoolActionModal/Reducer/types'
+import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 import './UserPoolHoldings.pcss'
 
 type LastDeposit = {
@@ -30,43 +31,67 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 	lastDeposit,
 	isLoading,
 }) => {
-	const { open } = useAppKit()
-	const { isConnected, isConnecting } = useAccount()
 	const [activeModal, setActiveModal] = useState<PoolsActionType | null>(null)
 
-	const change = useMemo(() => {
-		if (!Number.isFinite(usdBalance) || !Number.isFinite(principal)) return 0
-		if (principal === 0) return 0
-		const safeDenom = Math.max(Math.abs(principal ?? 0), 0.0001)
-		return ((usdBalance ?? 0 - (principal ?? 0)) / safeDenom) * 100
-	}, [usdBalance, principal])
+	const { open } = useAppKit()
+	const { lpPrice } = usePoolsDataStore()
+	const { isConnected, isConnecting } = useAccount()
 
-	const changeStr = useMemo(() => {
-		if (!Number.isFinite(change)) return '0%'
-		const abs = Math.abs(change)
-		const sign = change > 0 ? '+' : change < 0 ? '-' : ''
+	const holdings = useMemo(() => {
+		if (
+			Number.isFinite(lpBalance ?? 0) &&
+			Number.isFinite(lpPrice ?? 0) &&
+			(lpBalance ?? 0) > 0 &&
+			(lpPrice ?? 0) > 0
+		) {
+			return (lpBalance ?? 0) * (lpPrice ?? 0)
+		}
+		return Number.isFinite(usdBalance ?? 0) ? usdBalance! : 0
+	}, [lpBalance, lpPrice, usdBalance])
+
+	const pnlPercent = useMemo(() => {
+		if (
+			!Number.isFinite(holdings) ||
+			!Number.isFinite(principal ?? 0) ||
+			(principal ?? 0) === 0
+		)
+			return 0
+		const safeDenom = Math.max(Math.abs(principal!), 0.0001)
+		return ((holdings - (principal ?? 0)) / safeDenom) * 100
+	}, [holdings, principal])
+
+	const pnlText = useMemo(() => {
+		if (!Number.isFinite(pnlPercent)) return '0%'
+		const abs = Math.abs(pnlPercent)
+		const sign = pnlPercent > 0 ? '+' : pnlPercent < 0 ? '-' : ''
 		return abs % 1 === 0
 			? `${sign}${Math.round(abs)}%`
 			: `${sign}${format(abs, 1)}%`
-	}, [change])
+	}, [pnlPercent])
 
-	const showDeposit = useMemo(
-		() =>
-			!!lastDeposit &&
-			Number.isFinite(lastDeposit.timestamp) &&
-			Number.isFinite(lastDeposit.amountUsd) &&
-			lastDeposit.timestamp > 0,
-		[lastDeposit],
+	const holdingsText = useMemo(() => format(holdings ?? 0, 2), [holdings])
+	const lpTokensText = useMemo(
+		() => `= ${format(lpBalance ?? 0, 2)} CLP`,
+		[lpBalance],
 	)
+	const showPnlTag = Number.isFinite(pnlPercent) && pnlPercent !== 0
 
-	const depositStr = useMemo(
-		() => (showDeposit ? getRelativeTime(lastDeposit!.timestamp) : null),
-		[showDeposit, lastDeposit?.timestamp],
+	const safeDeposit = useMemo(() => {
+		if (
+			!lastDeposit ||
+			!Number.isFinite(lastDeposit.timestamp) ||
+			!Number.isFinite(lastDeposit.amountUsd) ||
+			lastDeposit.timestamp <= 0
+		) {
+			return null
+		}
+		return lastDeposit
+	}, [lastDeposit])
+
+	const depositTimeText = useMemo(
+		() => (safeDeposit ? getRelativeTime(safeDeposit.timestamp) : null),
+		[safeDeposit],
 	)
-
-	const usdStr = useMemo(() => format(usdBalance ?? 0, 2), [usdBalance])
-	const lpStr = useMemo(() => `= ${format(lpBalance ?? 0, 2)} CLP`, [lpBalance])
-	const showChangeTag = Number.isFinite(change) && change !== 0
 
 	const openModal = (type: PoolsActionType) => setActiveModal(type)
 	const closeModal = () => setActiveModal(null)
@@ -105,33 +130,36 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 						) : (
 							<div className="user_pool_holdings_value">
 								<span className="user_pool_holding_denomination">USDC</span>
-								<span className="user_pool_holding_amount">{usdStr}</span>
-								{showChangeTag && (
+								<span className="user_pool_holding_amount">{holdingsText}</span>
+								{showPnlTag && (
 									<Tag
 										className="user_pool_holdings_tag"
-										variant={change >= 0 ? 'positive' : 'negative'}
+										variant={pnlPercent >= 0 ? 'positive' : 'negative'}
 										size="s"
 									>
-										{changeStr}
+										{pnlText}
 									</Tag>
 								)}
 							</div>
 						)}
-
 						<div className="user_pool_holdings_lp">
-							{isLoading ? <SkeletonLoader height={18} width={68} /> : lpStr}
+							{isLoading ? (
+								<SkeletonLoader height={18} width={68} />
+							) : (
+								lpTokensText
+							)}
 						</div>
 					</div>
-					{!isLoading && showDeposit ? (
+					{safeDeposit && !isLoading && (
 						<div className="user_pool_holdings_last_action">
 							<span className="user_pool_holding_last_action_timestamp">
-								{depositStr}
+								{depositTimeText}
 							</span>
 							<span className="user_pool_holding_last_action_amount">
-								Deposit {format(lastDeposit!.amountUsd, 2)} USDC
+								Deposit {format(safeDeposit.amountUsd, 2)} USDC
 							</span>
 						</div>
-					) : null}
+					)}
 				</div>
 				<div className="user_pool_holdings_actions">
 					{isLoading ? (
@@ -161,7 +189,11 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 			</div>
 
 			{activeModal && (
-				<PoolActionModal type={activeModal} onClose={closeModal} />
+				<PoolActionModal
+					key={activeModal}
+					type={activeModal}
+					onClose={closeModal}
+				/>
 			)}
 		</>
 	)

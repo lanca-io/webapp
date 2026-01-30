@@ -11,8 +11,8 @@ type Settings = {
 	isLoading: boolean
 	isAdvanced?: boolean
 	range?: ChartRange
-	denomination?: string
-	suffix?: number | string
+	leftDenomination?: string
+	rightDenomination?: string
 	onChange?: (range: ChartRange) => void
 }
 
@@ -34,12 +34,12 @@ export const BarChart: FC<BarChartProps> = memo(
 			isLoading,
 			isAdvanced = true,
 			range,
-			denomination = '$',
-			suffix = '',
+			leftDenomination = '',
+			rightDenomination = '',
 			onChange,
 		},
 	}) => {
-		const chartClass: string = useMemo(
+		const chartClass = useMemo(
 			() => `bar_chart${!isAdvanced ? ' bar_chart_compact' : ''}`,
 			[isAdvanced],
 		)
@@ -53,8 +53,8 @@ export const BarChart: FC<BarChartProps> = memo(
 					isLoading={isLoading}
 					range={range}
 					isAdvanced={isAdvanced}
-					denomination={denomination}
-					suffix={suffix}
+					leftDenomination={leftDenomination}
+					rightDenomination={rightDenomination}
 					onChange={onChange}
 				/>
 				<Chart data={data} isAdvanced={isAdvanced} isLoading={isLoading} />
