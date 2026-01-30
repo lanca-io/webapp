@@ -9,7 +9,6 @@ import { getWalletClient } from '@/providers/Web3Provider/Web3Provider'
 import { handleDeposit } from '@/handlers/deposit'
 import { handleWithdrawal } from '@/handlers/withdrawal'
 import { PoolsActionType } from '../Reducer/types'
-import { switchChain } from 'viem/actions'
 
 export const useActionExecution = (
 	amount: bigint,
@@ -19,9 +18,6 @@ export const useActionExecution = (
 	const execute = async (): Promise<void> => {
 		try {
 			const client = await getWalletClient(POOLS_CHAIN_ID)
-			if (client.chain?.id !== POOLS_CHAIN_ID) {
-				await switchChain(client, { id: POOLS_CHAIN_ID })
-			}
 
 			switch (type) {
 				case PoolsActionType.Deposit:

@@ -4,6 +4,9 @@ import { PoolsActionType } from '../../Reducer/types'
 import { useInputWidgetContext } from '../Reducer/Provider'
 import { usePoolsActionContext } from '../../Reducer/Provider'
 import { useActionExecution } from '../useActionExecution'
+import { useAppKitNetwork } from '@reown/appkit/react'
+import { POOLS_CHAIN_ID } from '@/configuration/pools'
+import { useSwitchChain } from '@/hooks/useSwitchChain'
 import './ActionCard.pcss'
 
 type ActionCardProps = {
@@ -18,19 +21,32 @@ export const ActionCard: FC<ActionCardProps> = ({ type }) => {
 		poolsDispatch,
 		type,
 	)
+	const { chainId } = useAppKitNetwork()
+	const { switchChain } = useSwitchChain()
 
 	const isWarning = !!inputState.warning
 	const isError = !!inputState.error
 	const isDisabled =
 		isWarning || isError || !inputState.input || inputState.rawInput === 0n
+	const isWrongChain = chainId !== POOLS_CHAIN_ID
 
 	const onAction = async () => {
 		try {
-			await execute()
+			if (isWrongChain) {
+				await switchChain(POOLS_CHAIN_ID)
+			} else {
+				await execute()
+			}
 		} catch (error) {
 			console.error('Action failed:', error)
 		}
 	}
+
+	const buttonText = isWrongChain
+		? 'Switch Chain'
+		: type === PoolsActionType.Deposit
+			? 'Deposit'
+			: 'Withdraw'
 
 	return (
 		<div className="pool_action_action_card">
@@ -41,7 +57,7 @@ export const ActionCard: FC<ActionCardProps> = ({ type }) => {
 				isDisabled={isDisabled}
 				onClick={onAction}
 			>
-				{type === PoolsActionType.Deposit ? 'Deposit' : 'Withdraw'}
+				{buttonText}
 			</Button>
 		</div>
 	)
