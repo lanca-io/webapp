@@ -6,8 +6,8 @@ import { SkeletonLoader } from '../SkeletonLoader'
 import { Action } from './Data/Action/Action'
 import { Amount } from './Data/Amount/Amount'
 import { Fees } from './Data/Fees/Fees'
-import './ActionsTable.pcss'
 import { Time } from './Data/Time/Time'
+import './ActionsTable.pcss'
 
 type Columns = {
 	action: ReactElement
