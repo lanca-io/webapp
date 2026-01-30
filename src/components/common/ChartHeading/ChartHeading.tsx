@@ -56,8 +56,18 @@ export const ChartHeading: FC<HeadingProps> = ({
 		leftDenom: string,
 		rightDenom: string,
 	) => {
-		if (!Number.isFinite(Number(amount))) return '0'
-		const num = abbreviateNumber(Number(amount))
+		if (typeof amount === 'string') {
+			return leftDenom && rightDenom
+				? `${leftDenom} ${amount} ${rightDenom}`
+				: leftDenom
+					? `${leftDenom} ${amount}`
+					: rightDenom
+						? `${amount} ${rightDenom}`
+						: amount
+		}
+
+		if (!Number.isFinite(amount)) return '-'
+		const num = abbreviateNumber(amount)
 		return leftDenom && rightDenom
 			? `${leftDenom} ${num} ${rightDenom}`
 			: leftDenom

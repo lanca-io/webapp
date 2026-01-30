@@ -93,7 +93,7 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 						data={REWARDS_DATA}
 						title="Rewards"
 						description="Rewards earned by liquidity providers"
-						total={1234.56}
+						total={'-'}
 						settings={{
 							isLoading: false,
 							isAdvanced: false,
@@ -104,7 +104,7 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 						data={VOLUME_DATA}
 						title="Weekly APY"
 						description="Weekly Annual Percentage Yield"
-						total={0.15}
+						total={'-'}
 						settings={{
 							isLoading: false,
 							isAdvanced: false,
