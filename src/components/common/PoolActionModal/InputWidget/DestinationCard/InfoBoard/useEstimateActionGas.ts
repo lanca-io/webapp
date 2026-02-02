@@ -46,7 +46,7 @@ export const useEstimateActionGas = () => {
 	const { state: poolsState } = usePoolsActionContext()
 	const { state: inputState } = useInputWidgetContext()
 
-	const isDeposit = poolsState.type === PoolsActionType.DEPOSIT
+	const isDeposit = poolsState.type === PoolsActionType.Deposit
 	const token = isDeposit ? POOLS_USDC_ADDRESS : POOLS_LP_TOKEN_ADDRESS
 	const amount = inputState.rawInput
 
