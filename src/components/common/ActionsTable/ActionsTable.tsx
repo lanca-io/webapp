@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import type { Column } from '../Table/Body/Row/Row'
+import { useAccount } from 'wagmi'
 import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
 import { Table } from '../Table/Table'
 import { SkeletonLoader } from '../SkeletonLoader'
@@ -21,14 +22,18 @@ type Columns = {
 const LOADING_ROWS = 10
 
 export const ActionsTable = (): ReactElement | null => {
+	const { isConnected } = useAccount()
 	const { actions, initialActionsLoading, dataActionsLoading } =
 		usePoolsPositions()
+	const isMobile = useIsMobile()
+
+	if (!isConnected) {
+		return null
+	}
 
 	if (actions.length === 0 && !initialActionsLoading && !dataActionsLoading) {
 		return null
 	}
-
-	const isMobile = useIsMobile()
 
 	const columns: Column<Columns>[] = [
 		{ header: 'Action', accessor: 'action' },
@@ -37,50 +42,45 @@ export const ActionsTable = (): ReactElement | null => {
 		{ header: 'Time', accessor: 'time' },
 	]
 
-	const data: Columns[] = actions.map(action => {
-		if (isMobile) {
-			return {
-				action: (
-					<Compact
-						type={action.type}
-						status={action.status}
-						completedAt={action.completed_at}
-						amount={action.amount}
-						lpAmount={action.lp_amount}
-						withdrawnLpAmount={action.withdrawn_amount}
-						processedAmount={action.processed_amount}
-						processedLpAmount={action.processed_lp_amount}
-					/>
-				),
-				amount: <></>,
-				fees: <></>,
-				time: <></>,
-			}
-		}
+	const data: Columns[] = actions.map(action => ({
+		action: isMobile ? (
+			<Compact
+				type={action.type}
+				status={action.status}
+				completedAt={action.completed_at}
+				amount={action.amount}
+				lpAmount={action.lp_amount}
+				withdrawnLpAmount={action.withdrawn_amount}
+				processedAmount={action.processed_amount}
+				processedLpAmount={action.processed_lp_amount}
+			/>
+		) : (
+			<Action type={action.type} status={action.status} />
+		),
+		amount: isMobile ? (
+			<></>
+		) : (
+			<Amount
+				type={action.type}
+				amount={action.amount}
+				lpAmount={action.lp_amount}
+			/>
+		),
+		fees: isMobile ? (
+			<></>
+		) : (
+			<Fees
+				type={action.type}
+				amount={action.amount}
+				withdrawnLpAmount={action.withdrawn_amount}
+				processedAmount={action.processed_amount}
+				processedLpAmount={action.processed_lp_amount}
+			/>
+		),
+		time: isMobile ? <></> : <Time completedAt={action.completed_at} />,
+	}))
 
-		return {
-			action: <Action type={action.type} status={action.status} />,
-			amount: (
-				<Amount
-					type={action.type}
-					amount={action.amount}
-					lpAmount={action.lp_amount}
-				/>
-			),
-			fees: (
-				<Fees
-					type={action.type}
-					amount={action.amount}
-					withdrawnLpAmount={action.withdrawn_amount}
-					processedAmount={action.processed_amount}
-					processedLpAmount={action.processed_lp_amount}
-				/>
-			),
-			time: <Time completedAt={action.completed_at} />,
-		}
-	})
-
-	const skeletons: Columns[] = Array.from({ length: LOADING_ROWS }).map(_ =>
+	const skeletons: Columns[] = Array.from({ length: LOADING_ROWS }).map(() =>
 		isMobile
 			? {
 					action: <SkeletonLoader width="100%" height="70px" />,

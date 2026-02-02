@@ -51,7 +51,7 @@ export const CreatePoolsPositionsStore = (): PoolsPositionsStore =>
 		resetActions: () => {
 			set({
 				actions: [],
-				initialActionsLoading: true,
+				initialActionsLoading: false,
 				dataActionsLoading: false,
 				actionsPagination: { take: 20, skip: 0 },
 			})
