@@ -18,83 +18,38 @@ type LastDeposit = {
 
 type UserPoolHoldingsProps = {
 	isLoading: boolean
-	usdBalance: number | null
 	lpBalance: number | null
 	principal: number | null
 	lastDeposit?: LastDeposit | null
 }
 
 export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
-	usdBalance,
 	lpBalance,
 	principal,
 	lastDeposit,
 	isLoading,
 }) => {
-	const [activeModal, setActiveModal] = useState<PoolsActionType | null>(null)
+	const [modal, setModal] = useState<PoolsActionType | null>(null)
 
 	const { open } = useAppKit()
 	const { lpPrice } = usePoolsDataStore()
 	const { isConnected, isConnecting } = useAccount()
 
-	const holdings = useMemo(() => {
-		if (
-			Number.isFinite(lpBalance ?? 0) &&
-			Number.isFinite(lpPrice ?? 0) &&
-			(lpBalance ?? 0) > 0 &&
-			(lpPrice ?? 0) > 0
-		) {
-			return (lpBalance ?? 0) * (lpPrice ?? 0)
-		}
-		return Number.isFinite(usdBalance ?? 0) ? usdBalance! : 0
-	}, [lpBalance, lpPrice, usdBalance])
+	const value = useMemo(() => {
+		const lp = lpBalance ?? 0
+		const price = lpPrice ?? 0
+		return lp > 0 && price > 0 ? lp * price : 0
+	}, [lpBalance, lpPrice])
 
-	const pnlPercent = useMemo(() => {
-		if (
-			!Number.isFinite(holdings) ||
-			!Number.isFinite(principal ?? 0) ||
-			(principal ?? 0) === 0
-		)
-			return 0
-		const safeDenom = Math.max(Math.abs(principal!), 0.0001)
-		return ((holdings - (principal ?? 0)) / safeDenom) * 100
-	}, [holdings, principal])
+	const pnl = useMemo(() => {
+		const p = principal ?? 0
+		return p === 0 ? 0 : ((value - p) / Math.abs(p)) * 100
+	}, [value, principal])
 
-	const pnlText = useMemo(() => {
-		if (!Number.isFinite(pnlPercent)) return '0%'
-		const abs = Math.abs(pnlPercent)
-		const sign = pnlPercent > 0 ? '+' : pnlPercent < 0 ? '-' : ''
-		return abs % 1 === 0
-			? `${sign}${Math.round(abs)}%`
-			: `${sign}${format(abs, 1)}%`
-	}, [pnlPercent])
+	const deposit = lastDeposit && lastDeposit.timestamp > 0 ? lastDeposit : null
 
-	const holdingsText = useMemo(() => format(holdings ?? 0, 2), [holdings])
-	const lpTokensText = useMemo(
-		() => `= ${format(lpBalance ?? 0, 2)} CLP`,
-		[lpBalance],
-	)
-	const showPnlTag = Number.isFinite(pnlPercent) && pnlPercent !== 0
-
-	const safeDeposit = useMemo(() => {
-		if (
-			!lastDeposit ||
-			!Number.isFinite(lastDeposit.timestamp) ||
-			!Number.isFinite(lastDeposit.amountUsd) ||
-			lastDeposit.timestamp <= 0
-		) {
-			return null
-		}
-		return lastDeposit
-	}, [lastDeposit])
-
-	const depositTimeText = useMemo(
-		() => (safeDeposit ? getRelativeTime(safeDeposit.timestamp) : null),
-		[safeDeposit],
-	)
-
-	const openModal = (type: PoolsActionType) => setActiveModal(type)
-	const closeModal = () => setActiveModal(null)
+	const openModal = (type: PoolsActionType) => setModal(type)
+	const closeModal = () => setModal(null)
 
 	if (!isConnected) {
 		return (
@@ -130,14 +85,22 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 						) : (
 							<div className="user_pool_holdings_value">
 								<span className="user_pool_holding_denomination">USDC</span>
-								<span className="user_pool_holding_amount">{holdingsText}</span>
-								{showPnlTag && (
+								<span className="user_pool_holding_amount">
+									{format(value, 2)}
+								</span>
+								{pnl !== 0 && (
 									<Tag
 										className="user_pool_holdings_tag"
-										variant={pnlPercent >= 0 ? 'positive' : 'negative'}
+										variant={pnl >= 0 ? 'positive' : 'negative'}
 										size="s"
 									>
-										{pnlText}
+										{(() => {
+											const abs = Math.abs(pnl)
+											const sign = pnl > 0 ? '+' : pnl < 0 ? '-' : ''
+											return abs % 1 === 0
+												? `${sign}${Math.round(abs)}%`
+												: `${sign}${format(abs, 1)}%`
+										})()}
 									</Tag>
 								)}
 							</div>
@@ -146,17 +109,17 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 							{isLoading ? (
 								<SkeletonLoader height={18} width={68} />
 							) : (
-								lpTokensText
+								`= ${format(lpBalance ?? 0, 2)} CLP`
 							)}
 						</div>
 					</div>
-					{safeDeposit && !isLoading && (
+					{deposit && !isLoading && (
 						<div className="user_pool_holdings_last_action">
 							<span className="user_pool_holding_last_action_timestamp">
-								{depositTimeText}
+								{getRelativeTime(deposit.timestamp)}
 							</span>
 							<span className="user_pool_holding_last_action_amount">
-								Deposit {format(safeDeposit.amountUsd, 2)} USDC
+								Deposit {format(deposit.amountUsd, 2)} USDC
 							</span>
 						</div>
 					)}
@@ -188,12 +151,8 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 				</div>
 			</div>
 
-			{activeModal && (
-				<PoolActionModal
-					key={activeModal}
-					type={activeModal}
-					onClose={closeModal}
-				/>
+			{modal && (
+				<PoolActionModal key={modal} type={modal} onClose={closeModal} />
 			)}
 		</>
 	)
