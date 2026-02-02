@@ -9,30 +9,26 @@ import { useAccount } from 'wagmi'
 import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
 import { PoolsActionType } from '../PoolActionModal/Reducer/types'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
+import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStore'
+import { PoolActionStatus } from '@/store/pools-positions/types'
 import './UserPoolHoldings.pcss'
-
-type LastDeposit = {
-	timestamp: number
-	amountUsd: number
-}
 
 type UserPoolHoldingsProps = {
 	isLoading: boolean
 	lpBalance: number | null
 	principal: number | null
-	lastDeposit?: LastDeposit | null
 }
 
 export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 	lpBalance,
 	principal,
-	lastDeposit,
 	isLoading,
 }) => {
 	const [modal, setModal] = useState<PoolsActionType | null>(null)
 
 	const { open } = useAppKit()
 	const { lpPrice } = usePoolsDataStore()
+	const { actions } = usePoolsPositions()
 	const { isConnected, isConnecting } = useAccount()
 
 	const value = useMemo(() => {
@@ -46,7 +42,28 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 		return p === 0 ? 0 : ((value - p) / Math.abs(p)) * 100
 	}, [value, principal])
 
-	const deposit = lastDeposit && lastDeposit.timestamp > 0 ? lastDeposit : null
+	const lastAction = useMemo(() => {
+		const completed = actions?.filter(
+			action =>
+				action.status === PoolActionStatus.Processed ||
+				action.status === PoolActionStatus.Completed,
+		)[0]
+
+		if (!completed) return null
+
+		const timestamp = completed.completed_at ?? 0
+		const isDeposit = completed.type === 'deposit'
+		const rawAmount = isDeposit
+			? (completed.amount ?? '0')
+			: (completed.lp_amount ?? '0')
+
+		return {
+			timestamp,
+			amount: Number(rawAmount) / 1e6,
+			type: isDeposit ? 'deposit' : 'withdraw',
+			unit: isDeposit ? 'CLP' : 'USDC',
+		}
+	}, [actions])
 
 	const openModal = (type: PoolsActionType) => setModal(type)
 	const closeModal = () => setModal(null)
@@ -113,13 +130,15 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 							)}
 						</div>
 					</div>
-					{deposit && !isLoading && (
+					{lastAction && !isLoading && (
 						<div className="user_pool_holdings_last_action">
 							<span className="user_pool_holding_last_action_timestamp">
-								{getRelativeTime(deposit.timestamp)}
+								{getRelativeTime(lastAction.timestamp)}
 							</span>
 							<span className="user_pool_holding_last_action_amount">
-								Deposit {format(deposit.amountUsd, 2)} USDC
+								{lastAction.type === 'deposit'
+									? `Deposit ${format(lastAction.amount, 2)} ${lastAction.unit}`
+									: `Withdraw ${format(lastAction.amount, 2)} ${lastAction.unit}`}
 							</span>
 						</div>
 					)}
