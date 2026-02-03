@@ -8,9 +8,11 @@ export const usePoolsDataStore = () => {
 	}
 
 	return {
-		supply: useStore(s => s.supply),
+		lp_supply: useStore(s => s.lp_supply),
 		cap: useStore(s => s.cap),
 		tvl: useStore(s => s.tvl),
+		minDeposit: useStore(s => s.minDeposit),
+		minWithdrawal: useStore(s => s.minWithdrawal),
 		lpPrice: useStore(s => s.lpPrice),
 		isLoading: useStore(s => s.isLoading),
 		setMetrics: useStore(s => s.setMetics),

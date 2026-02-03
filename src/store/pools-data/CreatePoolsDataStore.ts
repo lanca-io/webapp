@@ -4,19 +4,27 @@ import { createWithEqualityFn } from 'zustand/traditional'
 export const CreatePoolsDataStore = (): PoolsStore =>
 	createWithEqualityFn<PoolsDataState & PoolsDataActions>((set, get) => {
 		const computeLpPrice = () => {
-			const { supply, tvl } = get()
-			set({ lpPrice: (tvl ?? 0) / (supply ?? 1) || null })
+			const { lp_supply, tvl } = get()
+			set({ lpPrice: (tvl ?? 0) / (lp_supply ?? 1) || null })
 		}
 
 		return {
-			supply: null,
+			lp_supply: null,
 			cap: null,
 			tvl: null,
+			minDeposit: null,
+			minWithdrawal: null,
 			lpPrice: null,
 			isLoading: false,
 
-			setMetics: (supply: number, cap: number, tvl: number) => {
-				set({ supply, cap, tvl })
+			setMetics: (
+				lp_supply: number,
+				cap: number,
+				tvl: number,
+				minDeposit: number,
+				minWithdrawal: number,
+			) => {
+				set({ lp_supply, cap, tvl, minDeposit, minWithdrawal })
 				computeLpPrice()
 			},
 

@@ -27,7 +27,13 @@ export const useLoadPoolsData = () => {
 	useEffect(() => {
 		setIsLoading(queryLoading)
 		if (data) {
-			setMetrics(data.supply, data.cap, data.tvl)
+			setMetrics(
+				data.lp_supply,
+				data.cap,
+				data.tvl,
+				data.minDeposit,
+				data.minWithdrawal,
+			)
 		}
 	}, [data, queryLoading, setMetrics, setIsLoading])
 

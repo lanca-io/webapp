@@ -7,7 +7,7 @@ import { formatUnits } from 'viem'
 
 export const useActionValidation = (type: PoolsActionType) => {
 	const { state, dispatch } = useInputWidgetContext()
-	const { tvl, cap } = usePoolsDataStore()
+	const { tvl, cap, minDeposit, minWithdrawal } = usePoolsDataStore()
 	const { rawUsd, rawLp } = usePoolsPositions()
 
 	const balance = type === PoolsActionType.Deposit ? rawUsd : rawLp
@@ -44,10 +44,29 @@ export const useActionValidation = (type: PoolsActionType) => {
 		if (type !== PoolsActionType.Deposit) return false
 
 		const inputDollars = Number(formatUnits(state.rawInput, 6))
-		if (inputDollars < 100 && inputDollars > 0) {
+		if (minDeposit !== null && inputDollars < minDeposit && inputDollars > 0) {
 			dispatch({
 				type: InputActionType.SET_ERROR,
-				payload: `Minimum amount is $100 USDC`,
+				payload: `Minimum amount is ${minDeposit} USDC`,
+			})
+			return true
+		}
+		return false
+	}
+
+	const checkMinWithdrawal = () => {
+		if (type !== PoolsActionType.Withdraw) return false
+
+		const inputCLP = Number(formatUnits(state.rawInput, 6))
+		if (
+			minDeposit !== null &&
+			minWithdrawal !== null &&
+			inputCLP < minWithdrawal &&
+			inputCLP > 0
+		) {
+			dispatch({
+				type: InputActionType.SET_ERROR,
+				payload: `Minimum amount is ${minWithdrawal} CLP`,
 			})
 			return true
 		}
@@ -68,6 +87,7 @@ export const useActionValidation = (type: PoolsActionType) => {
 		if (checkCap()) return
 		if (checkBalance()) return
 		if (checkMinDeposit()) return
+		if (checkMinWithdrawal()) return
 
 		clearValidations()
 	}

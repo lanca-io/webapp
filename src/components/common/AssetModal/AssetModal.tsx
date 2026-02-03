@@ -8,7 +8,7 @@ import { TokenMenu } from '../TokenMenu/TokenMenu'
 import { TokenNotFound } from '../TokenNotFound/TokenNotFound'
 import { useAssetSearch } from '../../../hooks/useAssetSearch'
 import { useTokenSelection } from '../../../hooks/useTokenSelection'
-import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll'
+import { useScroll } from './useScroll'
 import './AssetModal.pcss'
 
 interface ModalProps {
@@ -43,7 +43,7 @@ export const AssetsModal = memo(
 			[isActive, loadMore],
 		)
 
-		const { ref } = useInfiniteScroll(config)
+		const { ref } = useScroll(config)
 
 		const search = useMemo(
 			() => (
