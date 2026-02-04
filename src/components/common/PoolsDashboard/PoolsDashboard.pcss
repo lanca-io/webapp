@@ -9,27 +9,34 @@
 	padding: var(--space-xl) 0 0 0;
 	gap: var(--space-xl);
 
-	& .pools_analytics {
+	& .pools_content {
 		display: flex;
-		min-height: 396px;
-		align-items: flex-start;
+		flex-direction: column;
 		width: 100%;
 		gap: var(--space-m);
 
-		& .pools_charts {
+		& .pools_analytics {
 			display: flex;
-			flex-direction: row;
-			flex: 1 0 0;
-			gap: var(--space-m);
+			min-height: 396px;
+			align-items: flex-start;
 			width: 100%;
-		}
+			gap: var(--space-m);
 
-		& .pools_statistics {
-			display: flex;
-			flex-direction: column;
-			max-width: 138px;
-			width: 100%;
-			gap: var(--space-m);
+			& .pools_charts {
+				display: flex;
+				flex-direction: row;
+				flex: 1 0 0;
+				gap: var(--space-m);
+				width: 100%;
+			}
+
+			& .pools_statistics {
+				display: flex;
+				flex-direction: column;
+				max-width: 138px;
+				width: 100%;
+				gap: var(--space-m);
+			}
 		}
 	}
 

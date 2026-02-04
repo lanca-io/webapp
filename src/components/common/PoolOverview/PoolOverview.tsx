@@ -65,12 +65,7 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 
 	const holdings = useMemo(
 		() => (
-			<UserPoolHoldings
-				usdBalance={usd}
-				lpBalance={lp}
-				principal={0}
-				isLoading={isLoading}
-			/>
+			<UserPoolHoldings lpBalance={lp} principal={0} isLoading={isLoading} />
 		),
 		[usd, lp, principal, isLoading],
 	)

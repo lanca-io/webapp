@@ -50,35 +50,37 @@ export const PoolsDashboard: FC = () => {
 
 	return (
 		<div className="pools_dashboard">
-			<MetricsBanner />
-			<div className="pools_analytics">
-				<div className="pools_charts">
-					<AreaChart
-						data={volumeData}
-						title="Pools volume"
-						description="Total trading volume across all liquidity pools"
-						total={'-'}
-						settings={{
-							isLoading: false,
-							isAdvanced: true,
-							leftDenomination: '$',
-							range: volumeRange,
-							onChange: handleVolumeRange,
-						}}
-					/>
-					<BarChart
-						data={rewardsData}
-						title="Total rewards"
-						description="Total rewards distributed to liquidity providers across all pools"
-						total={'-'}
-						settings={{
-							isLoading: false,
-							isAdvanced: true,
-							leftDenomination: '$',
-							range: rewardsRange,
-							onChange: handleRewardsRange,
-						}}
-					/>
+			<div className="pools_content">
+				<MetricsBanner />
+				<div className="pools_analytics">
+					<div className="pools_charts">
+						<AreaChart
+							data={volumeData}
+							title="Pools volume"
+							description="Total trading volume across all liquidity pools"
+							total={'-'}
+							settings={{
+								isLoading: false,
+								isAdvanced: true,
+								leftDenomination: '$',
+								range: volumeRange,
+								onChange: handleVolumeRange,
+							}}
+						/>
+						<BarChart
+							data={rewardsData}
+							title="Total rewards"
+							description="Total rewards distributed to liquidity providers across all pools"
+							total={'-'}
+							settings={{
+								isLoading: false,
+								isAdvanced: true,
+								leftDenomination: '$',
+								range: rewardsRange,
+								onChange: handleRewardsRange,
+							}}
+						/>
+					</div>
 				</div>
 			</div>
 			<div className="pools_list">
