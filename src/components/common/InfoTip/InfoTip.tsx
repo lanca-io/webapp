@@ -34,15 +34,19 @@ export const InfoTip: FC<InfoTipProps> = ({
 	const content: JSX.Element = useMemo(
 		() => (
 			<div className="info_tooltip_content">
-				<span className="info_tooltip_title" style={{ textAlign: alignment }}>
-					{title}
-				</span>
-				<span
-					className="info_tooltip_description"
-					style={{ textAlign: alignment }}
-				>
-					{description}
-				</span>
+				{title && (
+					<span className="info_tooltip_title" style={{ textAlign: alignment }}>
+						{title}
+					</span>
+				)}
+				{description && (
+					<span
+						className="info_tooltip_description"
+						style={{ textAlign: alignment }}
+					>
+						{description}
+					</span>
+				)}
 			</div>
 		),
 		[title, description],

@@ -30,7 +30,7 @@ export const ChartMenu: FC<MenuProps> = ({ range, onChange }) => {
 					onClick={() => onChange(value)}
 					className="chart_menu_option"
 				>
-					{value}
+					<span className="chart_menu_option_text">{value}</span>
 				</IconButton>
 			))}
 		</div>
