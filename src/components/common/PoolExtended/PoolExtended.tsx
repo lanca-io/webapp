@@ -9,8 +9,8 @@ import { PoolActionModal } from '../PoolActionModal/PoolActionModal'
 import { PoolsActionType } from '../PoolActionModal/Reducer/types'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '@/constants'
-import './PoolExtended.pcss'
 import { useAppKit } from '@reown/appkit/react'
+import './PoolExtended.pcss'
 
 type PoolExtendedProps = {
 	isConnected: boolean

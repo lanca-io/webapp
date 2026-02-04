@@ -86,14 +86,14 @@ export const abbreviateNumber = (value: number): string => {
 	if (value >= 1_000_000) {
 		return (
 			(value / 1_000_000).toLocaleString('en-US', {
-				maximumFractionDigits: 2,
+				maximumFractionDigits: 1,
 			}) + 'M'
 		)
 	}
 	if (value >= 1_000) {
 		return (
 			(value / 1_000).toLocaleString('en-US', {
-				maximumFractionDigits: 4,
+				maximumFractionDigits: 2,
 			}) + 'K'
 		)
 	}
