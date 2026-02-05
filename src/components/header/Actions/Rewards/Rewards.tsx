@@ -37,7 +37,7 @@ export const Rewards: FC<RewardsProps> = ({ isOpen }): JSX.Element => {
 					window.open(externalRoutes.rewards, '_blank', 'noopener,noreferrer')
 				}
 			>
-				<RewardsIcon />
+				<RewardsIcon color="var(--color-gray-600)" />
 			</IconButton>
 		</Tooltip>
 	)

@@ -1,4 +1,12 @@
-export const ArrowLeftIcon = () => {
+import type { FC } from 'react'
+
+type ArrowLeftIconProps = {
+	color?: string
+}
+
+export const ArrowLeftIcon: FC<ArrowLeftIconProps> = ({
+	color = 'currentColor',
+}) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -14,13 +22,13 @@ export const ArrowLeftIcon = () => {
 				height="1.6"
 				rx="0.8"
 				transform="rotate(-180 16 8.79999)"
-				fill="#344054"
+				fill={color}
 			/>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
 				d="M6.96588 14.1657C6.65346 14.4781 6.14693 14.4781 5.83451 14.1657L0.23451 8.56571C-0.0779095 8.25329 -0.0779095 7.74676 0.23451 7.43434L5.83451 1.83434C6.14693 1.52192 6.65346 1.52192 6.96588 1.83434C7.2783 2.14676 7.2783 2.65329 6.96588 2.96571L1.93157 8.00002L6.96588 13.0343C7.2783 13.3468 7.2783 13.8533 6.96588 14.1657Z"
-				fill="#344054"
+				fill={color}
 			/>
 		</svg>
 	)

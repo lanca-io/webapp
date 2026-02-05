@@ -1,6 +1,12 @@
 import type { FC } from 'react'
 
-export const RewardsIcon: FC = () => {
+type RewardsIconProps = {
+	color?: string
+}
+
+export const RewardsIcon: FC<RewardsIconProps> = ({
+	color = 'currentColor',
+}) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -13,19 +19,19 @@ export const RewardsIcon: FC = () => {
 				fill-rule="evenodd"
 				clip-rule="evenodd"
 				d="M11.2 1.6H4.80001V9.6C4.80001 10.4837 5.51636 11.2 6.40001 11.2H9.60001C10.4837 11.2 11.2 10.4837 11.2 9.6V1.6ZM3.20001 0V9.6C3.20001 11.3673 4.6327 12.8 6.40001 12.8H9.60001C11.3673 12.8 12.8 11.3673 12.8 9.6V0H3.20001Z"
-				fill="#66767D"
+				fill={color}
 			/>
 			<path
 				fill-rule="evenodd"
 				clip-rule="evenodd"
 				d="M12.8 7.99998L13.6 7.99998C14.0418 7.99998 14.4 7.6418 14.4 7.19998L14.4 3.99998C14.4 3.55815 14.0418 3.19998 13.6 3.19998L12.8 3.19998L12.8 1.59998L13.6 1.59998C14.9255 1.59998 16 2.67449 16 3.99998L16 7.19998C16 8.52546 14.9255 9.59998 13.6 9.59998L12.8 9.59998L12.8 7.99998Z"
-				fill="#66767D"
+				fill={color}
 			/>
 			<path
 				fill-rule="evenodd"
 				clip-rule="evenodd"
 				d="M3.20001 3.19998L2.40001 3.19998C1.95818 3.19998 1.60001 3.55815 1.60001 3.99998L1.60001 7.19998C1.60001 7.6418 1.95818 7.99998 2.40001 7.99998L3.20001 7.99998L3.20001 9.59998L2.40001 9.59998C1.07453 9.59998 1.1983e-05 8.52546 1.20409e-05 7.19998L1.21808e-05 3.99998C1.22387e-05 2.67449 1.07453 1.59998 2.40001 1.59998L3.20001 1.59998L3.20001 3.19998Z"
-				fill="#66767D"
+				fill={color}
 			/>
 			<rect
 				x="7.20001"
@@ -33,7 +39,7 @@ export const RewardsIcon: FC = () => {
 				width="1.6"
 				height="4.8"
 				rx="0.8"
-				fill="#66767D"
+				fill={color}
 			/>
 			<rect
 				x="12.8"
@@ -42,7 +48,7 @@ export const RewardsIcon: FC = () => {
 				height="9.6"
 				rx="0.8"
 				transform="rotate(90 12.8 14.4)"
-				fill="#66767D"
+				fill={color}
 			/>
 		</svg>
 	)

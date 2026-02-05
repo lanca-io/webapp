@@ -1,4 +1,10 @@
-export const IconBurger = () => {
+import type { FC } from 'react'
+
+type IconBurgerProps = {
+	color?: string
+}
+
+export const IconBurger: FC<IconBurgerProps> = ({ color = 'currentColor' }) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -11,19 +17,19 @@ export const IconBurger = () => {
 				fillRule="evenodd"
 				clipRule="evenodd"
 				d="M1.6001 8.00001C1.6001 7.55818 1.95827 7.20001 2.4001 7.20001H13.6001C14.0419 7.20001 14.4001 7.55818 14.4001 8.00001C14.4001 8.44184 14.0419 8.80001 13.6001 8.80001H2.4001C1.95827 8.80001 1.6001 8.44184 1.6001 8.00001Z"
-				fill="#344054"
+				fill={color}
 			/>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
 				d="M1.6001 4.00001C1.6001 3.55818 1.95827 3.20001 2.4001 3.20001H13.6001C14.0419 3.20001 14.4001 3.55818 14.4001 4.00001C14.4001 4.44184 14.0419 4.80001 13.6001 4.80001H2.4001C1.95827 4.80001 1.6001 4.44184 1.6001 4.00001Z"
-				fill="#344054"
+				fill={color}
 			/>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
 				d="M1.6001 12C1.6001 11.5582 1.95827 11.2 2.4001 11.2H13.6001C14.0419 11.2 14.4001 11.5582 14.4001 12C14.4001 12.4418 14.0419 12.8 13.6001 12.8H2.4001C1.95827 12.8 1.6001 12.4418 1.6001 12Z"
-				fill="#344054"
+				fill={color}
 			/>
 		</svg>
 	)

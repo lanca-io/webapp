@@ -5,7 +5,11 @@ import { IconBurger } from '@/assets/IconBurger'
 import { CloseIcon } from '@/assets/CloseIcon'
 
 export const Toggle: FC<BurgerProps> = ({ isOpen, onToggle }): JSX.Element => {
-	const icon: JSX.Element = isOpen ? <CloseIcon /> : <IconBurger />
+	const icon: JSX.Element = isOpen ? (
+		<CloseIcon color="var(--color-gray-600)" />
+	) : (
+		<IconBurger color="var(--color-gray-600)" />
+	)
 
 	return (
 		<IconButton

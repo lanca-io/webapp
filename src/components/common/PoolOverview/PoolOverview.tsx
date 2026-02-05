@@ -10,6 +10,10 @@ import { usePoolsPositions } from '@/store/pools-positions/usePoolsPositionsStor
 import { ActionsTable } from '../ActionsTable/ActionsTable'
 import { usePoolsDataStore } from '@/store/pools-data/usePoolsDataStore'
 import './PoolOverview.pcss'
+import { Link } from 'react-router-dom'
+import { routes } from '@/constants'
+import { IconButton } from '@concero/ui-kit'
+import { ArrowLeftIcon } from '@/assets/ArrowLeftIcon'
 
 const USDC_TOKEN = {
 	src: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
@@ -36,6 +40,18 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 }): ReactElement => {
 	const { usd, lp } = usePoolsPositions()
 	const { cap, tvl } = usePoolsDataStore()
+
+	const backBtn = useMemo(
+		() => (
+			<Link to={routes.pools} className="pool_overview_back_btn">
+				<IconButton variant="secondary">
+					<ArrowLeftIcon color="var(--color-gray-600)" />
+				</IconButton>
+			</Link>
+		),
+		[],
+	)
+
 	const heading = useMemo(
 		() => (
 			<div className="pool_overview_content_heading">
@@ -72,6 +88,7 @@ export const PoolOverview: FC<PoolOverviewProps> = ({
 
 	return (
 		<div className="pool_overview">
+			{backBtn}
 			<div className="pool_overview_content">
 				{heading}
 				{holdings}
