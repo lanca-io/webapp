@@ -38,10 +38,23 @@
 	}
 }
 
+@media (min-width: 1025px) and (max-width: 1920px) {
+	.table_heading {
+		& .table_heading_container {
+			max-width: 806px;
+			grid-template-columns:
+				minmax(222px, 1fr) minmax(184px, 1fr) minmax(184px, 1fr)
+				minmax(184px, 1fr);
+		}
+	}
+}
+
 @media (min-width: 641px) and (max-width: 1024px) {
 	.table_heading {
 		& .table_heading_container {
-			grid-template-columns: repeat(4, minmax(222px, 1fr));
+			grid-template-columns:
+				minmax(222px, 1fr) minmax(184px, 1fr) minmax(184px, 1fr)
+				minmax(184px, 1fr);
 		}
 	}
 }

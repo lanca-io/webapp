@@ -87,6 +87,30 @@ export const UserPoolHoldings: FC<UserPoolHoldingsProps> = ({
 		)
 	}
 
+	if (isConnected && value === 0 && !isLoading) {
+		return (
+			<>
+				<div className="user_pool_holdings_disconnected">
+					<span className="user_pool_holdings_disconnected_title">
+						Start earning by making your first deposit
+					</span>
+					<Button
+						variant="primary"
+						size="l"
+						isDisabled={isConnecting}
+						isLoading={isConnecting}
+						onClick={() => openModal(PoolsActionType.Deposit)}
+					>
+						Deposit
+					</Button>
+				</div>
+				{modal && (
+					<PoolActionModal key={modal} type={modal} onClose={closeModal} />
+				)}
+			</>
+		)
+	}
+
 	return (
 		<>
 			<div className="user_pool_holdings">
