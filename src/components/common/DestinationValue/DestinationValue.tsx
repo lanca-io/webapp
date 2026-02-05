@@ -19,10 +19,18 @@ export const DestinationValue = memo(() => {
 		<div className="dest_value_indicator">
 			<div className="dest_value_info">
 				<span className="dest_value_indicator_equal">=</span>
-				<span className="dest_value_indicator_value">{valueText ? valueText : '$0'}</span>
-				{impact && <span className={`dest_value_indicator_impact ${severity}`}>({impact.text})</span>}
+				<span className="dest_value_indicator_value">
+					{valueText ? valueText : '$0'}
+				</span>
+				{impact && (
+					<span className={`dest_value_indicator_impact ${severity}`}>
+						({impact.text})
+					</span>
+				)}
 			</div>
-			{valueText && <FeesDropdown severity={severity || ImpactSeverity.NORMAL} />}
+			{valueText && (
+				<FeesDropdown severity={severity || ImpactSeverity.NORMAL} />
+			)}
 		</div>
 	)
 })

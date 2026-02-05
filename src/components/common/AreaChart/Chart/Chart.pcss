@@ -1,0 +1,38 @@
+.area_chart_visual {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-xs);
+	flex: 1 0 0;
+	width: 100%;
+}
+
+@media (min-width: 1025px) and (max-width: 1920px) {
+	.area_chart_visual {
+		height: 196px;
+	}
+}
+
+@media (max-width: 640px) {
+	.area_chart_visual {
+		height: 138px;
+	}
+}
+
+@media (min-width: 1025px) and (max-width: 1920px) {
+	.area_chart_visual_compact {
+		height: 144px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+	.area_chart_visual_compact {
+		height: 102px;
+	}
+}
+
+@media (max-width: 640px) {
+	.area_chart_visual_compact {
+		height: 78px;
+	}
+}

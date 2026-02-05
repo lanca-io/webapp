@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useCallback, useMemo } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import { TrailArrowLeftIcon } from '../../../../assets/icons/TrailArrowLeftIcon'
+import { TrailArrowLeftIcon } from '@/assets/TrailArrowLeftIcon'
 import './ModalHeader.pcss'
 
 export type ModalHeaderProps = {

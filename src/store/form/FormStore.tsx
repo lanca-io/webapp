@@ -9,5 +9,9 @@ export function FormStoreProvider({ children }: PropsWithChildren<{}>) {
 	if (!storeRef.current) {
 		storeRef.current = CreateFormStore()
 	}
-	return <FormContext.Provider value={storeRef.current}>{children}</FormContext.Provider>
+	return (
+		<FormContext.Provider value={storeRef.current}>
+			{children}
+		</FormContext.Provider>
+	)
 }

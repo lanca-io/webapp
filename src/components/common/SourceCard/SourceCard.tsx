@@ -12,9 +12,15 @@ export const SourceCard = memo((): JSX.Element => {
 	const { openFromAssetModal } = useModalsStore()
 
 	return (
-		<div className={`source_card_wrapper ${severity ? ` severity_${severity}` : ''}`}>
+		<div
+			className={`source_card_wrapper ${severity ? ` severity_${severity}` : ''}`}
+		>
 			<div className="source_card">
-				<AssetSelection token={fromToken} chain={fromChain} openModal={openFromAssetModal} />
+				<AssetSelection
+					token={fromToken}
+					chain={fromChain}
+					openModal={openFromAssetModal}
+				/>
 				<SourcePanel />
 			</div>
 		</div>

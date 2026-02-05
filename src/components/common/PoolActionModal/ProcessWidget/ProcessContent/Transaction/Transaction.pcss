@@ -1,0 +1,96 @@
+.pool_action_transaction_content {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--space-xs);
+	align-self: stretch;
+}
+
+.pool_action_token_with_chain,
+.pool_action_token {
+	position: relative;
+	display: flex;
+}
+
+.pool_action_transaction_content_from,
+.pool_action_transaction_content_to {
+	display: flex;
+	height: 160px;
+	min-width: 157px;
+	width: 100%;
+	padding: var(--space-xxxl);
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	flex: 1 0 0;
+	border-radius: var(--space-m);
+	background-color: var(--color-gray-50);
+}
+
+.pool_action_transaction_content_arrow {
+	display: flex;
+	width: 24px;
+	height: 24px;
+	padding: var(--space-xxs);
+	justify-content: center;
+	align-items: center;
+	background-color: var(--color-gray-50);
+	border-radius: var(--space-xs);
+}
+
+.pool_action_transaction_chain_image {
+	background-color: var(--color-gray-25);
+	border-radius: var(--space-xxs);
+	box-shadow:
+		0 0 6px 0 rgba(52, 64, 84, 0.3),
+		0 2px 3px 0 rgba(52, 64, 84, 0.15);
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.pool_action_transaction_content_image {
+	width: 48px;
+	height: 48px;
+	border-radius: var(--space-xxxl);
+}
+
+.pool_action_transaction_chain_image {
+	width: 24px;
+	height: 24px;
+	border-radius: var(--space-xs);
+}
+
+& .pool_action_logo_chain {
+	width: 40px;
+	height: 40px;
+	border-radius: 16px;
+	transform: rotate(15deg);
+	margin-left: -5px;
+	z-index: 1;
+}
+
+& .pool_action_token_image {
+	width: 48px;
+	height: 48px;
+	transform: rotate(-15deg);
+	z-index: 1;
+}
+
+& .pool_action_chain_image {
+	width: 48px;
+	height: 48px;
+	border-radius: 16px;
+	transform: rotate(15deg);
+	margin-left: -5px;
+	z-index: 2;
+}
+
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+	.pool_action_transaction_content_from,
+	.pool_action_transaction_content_to {
+		max-width: 100%;
+		width: 100%;
+	}
+}

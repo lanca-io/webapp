@@ -1,38 +1,32 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { AppScreen } from './components/screens/AppScreen/AppScreen'
 import { Header } from './components/header/Header'
 import { routes } from './constants/routes'
-import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
+import { ScreenLoader } from '@/components/common/ScreenLoader/ScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
-// import { AdminRoutesGuard } from './components/common/RouteGuards/RouteGuards'
+import { Footer } from './components/footer/Footer'
 
 const PoolScreen = lazy(
 	async () =>
-		await import('./components/screens/PoolScreen/PoolScreen').then(module => ({ default: module.PoolScreen })),
+		await import('./pages/Pools').then(module => ({
+			default: module.PoolsPage,
+		})),
 )
 
 const USDCPoolScreen = lazy(
 	async () =>
-		await import('./components/screens/PoolScreen/USDCPoolScreen').then(module => ({
-			default: module.USDCPoolScreen,
+		await import('./pages/USDCPool').then(module => ({
+			default: module.USDCPoolPage,
 		})),
 )
 
-const V2Screen = lazy(
+const SwapScreen = lazy(
 	async () =>
 		await import('./pages/Swap').then(module => ({
 			default: module.SwapPage,
 		})),
 )
-
-// const SwapScreen = lazy(
-// 	async () =>
-// 		await import('./components/screens/SwapScreen/SwapScreen').then(module => ({
-// 			default: module.SwapScreen,
-// 		})),
-// )
 
 export const Navigator = () => {
 	const { address } = useAccount()
@@ -44,46 +38,35 @@ export const Navigator = () => {
 
 	return (
 		<BrowserRouter>
-			<AppScreen>
-				<Header />
-				<Routes>
-					<Route
-						path={routes.home}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<V2Screen />
-							</Suspense>
-						}
-					/>
-					<Route
-						path={routes.pools}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<PoolScreen />
-							</Suspense>
-						}
-					/>
-					<Route
-						path={routes.usdcPools}
-						element={
-							<Suspense fallback={<FullScreenLoader />}>
-								<USDCPoolScreen />
-							</Suspense>
-						}
-					/>
-					{/* <Route path={routes.v2} element={<AdminRoutesGuard />}>
-						<Route
-							path={routes.v2}
-							element={
-								<Suspense fallback={<FullScreenLoader />}>
-									<V2Screen />
-								</Suspense>
-							}
-						/>
-					</Route> */}
-					<Route path={'/*'} element={<Navigate to={routes.home} />} />
-				</Routes>
-			</AppScreen>
+			<Header />
+			<Routes>
+				<Route
+					path={routes.home}
+					element={
+						<Suspense fallback={<ScreenLoader />}>
+							<SwapScreen />
+						</Suspense>
+					}
+				/>
+				<Route
+					path={routes.pools}
+					element={
+						<Suspense fallback={<ScreenLoader />}>
+							<PoolScreen />
+						</Suspense>
+					}
+				/>
+				<Route
+					path={routes.usdcPools}
+					element={
+						<Suspense fallback={<ScreenLoader />}>
+							<USDCPoolScreen />
+						</Suspense>
+					}
+				/>
+				<Route path={'/*'} element={<Navigate to={routes.home} />} />
+			</Routes>
+			<Footer />
 		</BrowserRouter>
 	)
 }

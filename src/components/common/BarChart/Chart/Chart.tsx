@@ -1,0 +1,57 @@
+import type { FC } from 'react'
+import type { Data } from '../BarChart'
+import { ResponsiveContainer, BarChart, Bar } from 'recharts'
+import { Spinner } from '@concero/ui-kit'
+import { useMemo } from 'react'
+import './Chart.pcss'
+
+type ChartProps = {
+	data: Data
+	isAdvanced: boolean
+	isLoading: boolean
+}
+
+export const Chart: FC<ChartProps> = ({ data, isAdvanced, isLoading }) => {
+	const containerClass: string = useMemo(
+		() => `bar_chart_visual${!isAdvanced ? ' bar_chart_visual_compact' : ''}`,
+		[isAdvanced],
+	)
+
+	const loader = useMemo(
+		() => (
+			<div className="bar_chart_loader">
+				<Spinner type="gray" />
+			</div>
+		),
+		[],
+	)
+
+	return (
+		<div className={containerClass}>
+			{isLoading ? (
+				loader
+			) : (
+				<ResponsiveContainer height="100%" width="100%">
+					<BarChart
+						data={data}
+						maxBarSize={86.6}
+						style={{
+							paddingTop: 0,
+							paddingBottom: 16,
+							paddingLeft: 8,
+							paddingRight: 8,
+						}}
+					>
+						<Bar
+							dataKey="value"
+							fill="var(--color-gray-50)"
+							radius={[8, 8, 8, 8]}
+							barSize={74}
+							activeBar={{ fill: 'var(--color-gray-100)' }}
+						/>
+					</BarChart>
+				</ResponsiveContainer>
+			)}
+		</div>
+	)
+}

@@ -1,0 +1,83 @@
+.pools_dashboard {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	max-width: 1388px;
+	width: 100%;
+	margin: 0 auto;
+	padding: var(--space-xl) 0 0 0;
+	gap: var(--space-xl);
+
+	& .pools_content {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		gap: var(--space-m);
+
+		& .pools_analytics {
+			display: flex;
+			min-height: 396px;
+			align-items: flex-start;
+			width: 100%;
+			gap: var(--space-m);
+
+			& .pools_charts {
+				display: flex;
+				flex-direction: row;
+				flex: 1 0 0;
+				gap: var(--space-m);
+				width: 100%;
+			}
+
+			& .pools_statistics {
+				display: flex;
+				flex-direction: column;
+				max-width: 138px;
+				width: 100%;
+				gap: var(--space-m);
+			}
+		}
+	}
+
+	& .pools_list {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		gap: var(--space-m);
+
+		& .pools_list_title {
+			font-size: 1.5rem;
+			line-height: 1.75rem;
+			color: var(--color-gray-700);
+			font-weight: 500;
+			letter-spacing: -0.48px;
+		}
+	}
+}
+
+@media (min-width: 1025px) and (max-width: 1920px) {
+	.pools_dashboard {
+		max-width: 908px;
+	}
+
+	.pools_dashboard {
+		& .pools_content {
+			& .pools_analytics {
+				min-height: 320px;
+			}
+		}
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.pools_dashboard {
+		& .pools_content {
+			& .pools_analytics {
+				& .pools_charts {
+					flex-direction: column;
+				}
+			}
+		}
+	}
+}

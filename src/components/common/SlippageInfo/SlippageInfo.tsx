@@ -1,10 +1,10 @@
 import { memo, useCallback, useState, useEffect, useRef } from 'react'
 import { Tag, IconButton } from '@concero/ui-kit'
-import { SlippageIcon } from '../../../assets/icons/SlippageIcon'
-import { SettingsIcon } from '../../../assets/icons/SettingsIcon'
+import { SlippageIcon } from '@/assets/SlippageIcon'
+import { SettingsIcon } from '@/assets/SettingsIcon'
 import { SlippageMenu } from '../SlippageMenu/SlippageMenu'
 import { useSettingsStore } from '../../../store/settings/useSettings'
-import { format } from '../../../utils/new/format'
+import { format } from '../../../utils/format'
 import { useFormStore } from '../../../store/form/useFormStore'
 import { SlippageMode } from '../../../store/form/types'
 import './SlippageInfo.pcss'
@@ -36,9 +36,13 @@ export const SlippageInfo = memo((): JSX.Element => {
 
 		const handleClickOutside = (event: MouseEvent) => {
 			const menuElement = document.querySelector('.slippage_menu')
-			const isInSlippageMenu = menuElement ? menuElement.contains(event.target as Node) : false
+			const isInSlippageMenu = menuElement
+				? menuElement.contains(event.target as Node)
+				: false
 
-			const isInSlippageInfo = slippageRef.current ? slippageRef.current.contains(event.target as Node) : false
+			const isInSlippageInfo = slippageRef.current
+				? slippageRef.current.contains(event.target as Node)
+				: false
 
 			if (!isInSlippageMenu && !isInSlippageInfo) {
 				setIsMenuOpen(false)

@@ -1,7 +1,6 @@
-import type { TokenBalance } from '../api/concero/types'
-import { get } from '../api/client'
+import axios from 'axios'
 
-export async function handleFetchBalances(chainId: string, address: string): Promise<TokenBalance | null> {
+export async function handleFetchBalances(chainId: string, address: string) {
 	if (!address) return null
 
 	const url = `https://api.v2.concero.io/api/v1/balances`
@@ -11,7 +10,7 @@ export async function handleFetchBalances(chainId: string, address: string): Pro
 	}
 
 	try {
-		const response = await get(url, params)
+		const response = await axios.get(url, { params })
 		return response.data.payload?.data?.[chainId] || null
 	} catch (error) {
 		return null
@@ -24,22 +23,23 @@ export const handleFetchTokens = async (
 	limit?: number,
 	search?: string,
 	address?: string,
-) => {
-	const params = new URLSearchParams({
+): Promise<any[]> => {
+	const params: Record<string, string> = {
 		chain_id: chainId || '',
 		offset: offset?.toString() || '0',
 		limit: limit?.toString() || '15',
 		address: address?.toLowerCase() || '',
-	})
-
-	if (search) {
-		params.append('search', search)
 	}
 
-	const url = `https://api.v2.concero.io/api/v1/tokens?${params.toString()}`
+	if (search) {
+		params.search = search
+	}
 
 	try {
-		const response = await get(url)
+		const response = await axios.get(
+			`https://api.v2.concero.io/api/v1/tokens`,
+			{ params },
+		)
 		if (response.status !== 200) throw new Error(response.statusText)
 		return response.data.payload.tokens
 	} catch (error) {

@@ -1,0 +1,19 @@
+:root {
+	--font-family-primary: 'DM_Sans', sans-serif;
+	--header-height: 56px;
+	--footer-height: 148px;
+
+	--background_desktop_neutral: linear-gradient(
+		180deg,
+		var(--color-gray-25) 8%,
+		var(--color-gray-50) 22%
+	);
+
+	font-size: 16px;
+	font-family: var(--font-family-primary);
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-text-size-adjust: 100%;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+}

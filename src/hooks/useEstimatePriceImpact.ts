@@ -1,9 +1,9 @@
 import { useMemo, useEffect } from 'react'
 import { useRouteStore } from '../store/route/useRouteStore'
 import { useFormStore } from '../store/form/useFormStore'
-import { format } from '../utils/new/format'
-import { formatTokenAmount } from '../utils/new/tokens'
-import { tokenAmountToUsd } from '../utils/new/input'
+import { format } from '../utils/format'
+import { formatTokenAmount } from '../utils/tokens'
+import { tokenAmountToUsd } from '../utils/input'
 import { Decimal } from 'decimal.js'
 
 export enum ImpactSeverity {
@@ -30,10 +30,19 @@ export const useEstimatePriceImpact = () => {
 		if (!ready) return { inUsd: null, outUsd: null }
 
 		const inAmount = formatTokenAmount(fromAmount, fromToken?.decimals ?? 18)
-		const outAmount = formatTokenAmount(route?.to.amount, toToken?.decimals ?? 18)
+		const outAmount = formatTokenAmount(
+			route?.to.amount,
+			toToken?.decimals ?? 18,
+		)
 
-		const inUsdVal = tokenAmountToUsd(new Decimal(inAmount), new Decimal(fromToken?.price_usd || 0))
-		const outUsdVal = tokenAmountToUsd(new Decimal(outAmount), new Decimal(toToken?.price_usd || 0))
+		const inUsdVal = tokenAmountToUsd(
+			new Decimal(inAmount),
+			new Decimal(fromToken?.price_usd || 0),
+		)
+		const outUsdVal = tokenAmountToUsd(
+			new Decimal(outAmount),
+			new Decimal(toToken?.price_usd || 0),
+		)
 
 		return { inUsd: inUsdVal, outUsd: outUsdVal }
 	}, [fromAmount, route?.to?.amount, fromToken, toToken])

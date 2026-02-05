@@ -23,20 +23,23 @@ type LiquidityResult = {
 }
 
 export const useCheckLiquidity = () => {
-	const getPoolLiquidity = useCallback(async (chainId: string): Promise<string> => {
-		const conceroContract = poolAddresses[chainId]
-		const usdcContract = usdcAddresses[chainId]
-		const client = getPublicClient(Number(chainId))
+	const getPoolLiquidity = useCallback(
+		async (chainId: string): Promise<string> => {
+			const conceroContract = poolAddresses[chainId]
+			const usdcContract = usdcAddresses[chainId]
+			const client = getPublicClient(Number(chainId))
 
-		const data = await client.readContract({
-			address: usdcContract,
-			abi: erc20Abi,
-			functionName: 'balanceOf',
-			args: [conceroContract],
-		})
+			const data = await client.readContract({
+				address: usdcContract,
+				abi: erc20Abi,
+				functionName: 'balanceOf',
+				args: [conceroContract],
+			})
 
-		return formatUnits(data, USDC_DECIMALS)
-	}, [])
+			return formatUnits(data, USDC_DECIMALS)
+		},
+		[],
+	)
 
 	const checkLiquidity = useCallback(
 		async (params: LiquidityCheckParams): Promise<LiquidityResult> => {
@@ -55,7 +58,8 @@ export const useCheckLiquidity = () => {
 				const poolAmount = await getPoolLiquidity(String(toChain.id))
 				const decimals = Number(fromToken.decimals)
 				const normalizedAmount = Number(fromAmount) / 10 ** decimals
-				const fromAmountUsd = normalizedAmount * (Number(fromToken.price_usd) ?? 0)
+				const fromAmountUsd =
+					normalizedAmount * (Number(fromToken.price_usd) ?? 0)
 
 				if (fromAmountUsd > Number(poolAmount)) {
 					return {
@@ -81,9 +85,15 @@ export const useCheckLiquidity = () => {
 		[getPoolLiquidity],
 	)
 
-	const isBridge = useCallback((fromChainId: string | undefined, toChainId: string | undefined): boolean => {
-		return !!fromChainId && !!toChainId && fromChainId !== toChainId
-	}, [])
+	const isBridge = useCallback(
+		(
+			fromChainId: string | undefined,
+			toChainId: string | undefined,
+		): boolean => {
+			return !!fromChainId && !!toChainId && fromChainId !== toChainId
+		},
+		[],
+	)
 
 	return {
 		checkLiquidity,

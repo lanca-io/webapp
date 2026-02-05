@@ -4,8 +4,20 @@ import { useModalsStore } from '../../../store/modals/useModalsStore'
 import { useAssetModals } from '../../../hooks/useAssetModals'
 
 export const ModalManager = memo((): JSX.Element | null => {
-	const { isFromAssetModalOpen, isToAssetModalOpen, closeFromAssetModal, closeToAssetModal } = useModalsStore()
-	const { fromChain, toChain, selectFromChain, selectToChain, selectFromAsset, selectToAsset } = useAssetModals()
+	const {
+		isFromAssetModalOpen,
+		isToAssetModalOpen,
+		closeFromAssetModal,
+		closeToAssetModal,
+	} = useModalsStore()
+	const {
+		fromChain,
+		toChain,
+		selectFromChain,
+		selectToChain,
+		selectFromAsset,
+		selectToAsset,
+	} = useAssetModals()
 
 	return (
 		<>

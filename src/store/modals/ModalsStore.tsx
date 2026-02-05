@@ -9,5 +9,9 @@ export function ModalsStoreProvider({ children }: PropsWithChildren<{}>) {
 	if (!storeRef.current) {
 		storeRef.current = CreateModalsStore()
 	}
-	return <ModalsContext.Provider value={storeRef.current}>{children}</ModalsContext.Provider>
+	return (
+		<ModalsContext.Provider value={storeRef.current}>
+			{children}
+		</ModalsContext.Provider>
+	)
 }

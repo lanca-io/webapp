@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useMemo, memo } from 'react'
 import { useFormStore } from '../../../../../store/form/useFormStore'
-import { RightIcon } from '../../../../../assets/icons/RightIcon'
+import { RightIcon } from '@/assets/RightIcon'
 import './Transaction.pcss'
 
 export const Transaction: FC = memo(() => {
@@ -20,7 +20,11 @@ export const Transaction: FC = memo(() => {
 						className="transaction_content_image"
 						data-testid="source-token-logo"
 					/>
-					<img src={fromChain?.logo || ''} alt="Source Chain" className="transaction_chain_image" />
+					<img
+						src={fromChain?.logo || ''}
+						alt="Source Chain"
+						className="transaction_chain_image"
+					/>
 				</div>
 			</div>
 			<div className="transaction_content_arrow">
@@ -28,8 +32,16 @@ export const Transaction: FC = memo(() => {
 			</div>
 			<div className="transaction_content_to">
 				<div className="token_with_chain">
-					<img src={destinationLogo} alt="Destination Token" className="transaction_content_image" />
-					<img src={toChain?.logo || ''} alt="Destination Chain" className="transaction_chain_image" />
+					<img
+						src={destinationLogo}
+						alt="Destination Token"
+						className="transaction_content_image"
+					/>
+					<img
+						src={toChain?.logo || ''}
+						alt="Destination Chain"
+						className="transaction_chain_image"
+					/>
 				</div>
 			</div>
 		</div>

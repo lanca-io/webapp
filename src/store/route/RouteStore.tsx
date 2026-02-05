@@ -11,5 +11,9 @@ export function RoutesStoreProvider({ children }: PropsWithChildren) {
 		storeRef.current = CreateRoutesStore()
 	}
 
-	return <RoutesContext.Provider value={storeRef.current}>{children}</RoutesContext.Provider>
+	return (
+		<RoutesContext.Provider value={storeRef.current}>
+			{children}
+		</RoutesContext.Provider>
+	)
 }

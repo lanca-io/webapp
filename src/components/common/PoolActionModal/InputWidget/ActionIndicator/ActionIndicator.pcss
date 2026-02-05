@@ -1,0 +1,38 @@
+.pool_action_indicator_container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	height: 18px;
+	gap: var(--space-xs);
+
+	& .pool_action_indicator_title {
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.125rem;
+		color: var(--color-gray-500);
+	}
+
+	& .pool_action_indicator_warning {
+		color: var(--color-warning-600);
+	}
+
+	& .pool_action_indicator_error {
+		color: var(--color-danger-600);
+	}
+
+	& .pool_action_indicator_value_container {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		gap: var(--space-xxs);
+
+		& .pool_action_indicator_value {
+			font-size: 0.875rem;
+			font-weight: 500;
+			line-height: 1.125rem;
+			color: var(--color-gray-600);
+		}
+	}
+}

@@ -1,10 +1,14 @@
 import type { FC, PropsWithChildren } from 'react'
-import type { LancaClient as Client, ILancaClientConfig, IChainWithProvider } from '@lanca/sdk'
+import type {
+	LancaClient as Client,
+	ILancaClientConfig,
+	IChainWithProvider,
+} from '@lanca/sdk'
 import { createContext } from 'react'
 import { LancaClient } from '@lanca/sdk'
 import { fallback, http } from 'viem'
 import { useChainsStore } from '../../store/chains/useChainsStore'
-import { convertToViemChains } from '../../utils/new/chains'
+import { convertToViemChains } from '../../utils/chains'
 
 export type SDKContext = {
 	client: Client
@@ -51,5 +55,7 @@ export const SDKProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
 	const client = new LancaClient(sdkConfiguration)
 
-	return <SDKContext.Provider value={{ client }}>{children}</SDKContext.Provider>
+	return (
+		<SDKContext.Provider value={{ client }}>{children}</SDKContext.Provider>
+	)
 }

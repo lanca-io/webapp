@@ -34,7 +34,10 @@ export const useLoadTxExecutionTime = () => {
 		}
 	}
 
-	const fetchBlockTimestamp = async (client: PublicClient, blockNumber: bigint) => {
+	const fetchBlockTimestamp = async (
+		client: PublicClient,
+		blockNumber: bigint,
+	) => {
 		try {
 			const block = await client.getBlock({ blockNumber })
 			if (!block?.timestamp) throw new Error('Missing block timestamp')
@@ -44,9 +47,14 @@ export const useLoadTxExecutionTime = () => {
 		}
 	}
 
-	const calculateExecutionTime = (srcTimestamp: bigint, dstTimestamp?: bigint) => {
+	const calculateExecutionTime = (
+		srcTimestamp: bigint,
+		dstTimestamp?: bigint,
+	) => {
 		const now = Math.floor(Date.now() / 1000)
-		return !dstTimestamp ? now - Number(srcTimestamp) : Number(dstTimestamp) - Number(srcTimestamp)
+		return !dstTimestamp
+			? now - Number(srcTimestamp)
+			: Number(dstTimestamp) - Number(srcTimestamp)
 	}
 
 	const handleEstimation = useCallback(async () => {
@@ -66,7 +74,10 @@ export const useLoadTxExecutionTime = () => {
 			}
 
 			// @ts-ignore
-			const srcTimestamp = await fetchBlockTimestamp(srcClient, srcTx.blockNumber)
+			const srcTimestamp = await fetchBlockTimestamp(
+				srcClient,
+				srcTx.blockNumber,
+			)
 			if (!srcTimestamp) {
 				setExecutionTime(isSwap ? SWAP_ESTIMATE : BRIDGE_ESTIMATE)
 				return
@@ -92,7 +103,10 @@ export const useLoadTxExecutionTime = () => {
 			}
 
 			// @ts-ignore
-			const dstTimestamp = await fetchBlockTimestamp(dstClient, dstTx.blockNumber)
+			const dstTimestamp = await fetchBlockTimestamp(
+				dstClient,
+				dstTx.blockNumber,
+			)
 			if (!dstTimestamp) {
 				setExecutionTime(BRIDGE_ESTIMATE)
 				return

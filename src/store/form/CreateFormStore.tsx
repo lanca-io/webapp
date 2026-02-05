@@ -20,7 +20,8 @@ const initToToken: ExtendedToken = {
 	name: 'USD Coin',
 	symbol: 'USDC',
 	address: '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359',
-	logo_url: 'https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png',
+	logo_url:
+		'https://static.debank.com/image/coin/logo_url/usdc/e87790bfe0b3f2ea855dc29069b38818.png',
 	decimals: 6,
 	price_usd: String(1),
 }
@@ -143,7 +144,8 @@ export const CreateFormStore = () =>
 			setSlippageInput: value => set({ slippageInput: value }),
 			setSlippageInputError: error => set({ slippageInputError: error }),
 			setSlippageMode: mode => set({ slippageInputMode: mode }),
-			setSlippageInputFocused: focused => set({ slippageInputFocused: focused }),
+			setSlippageInputFocused: focused =>
+				set({ slippageInputFocused: focused }),
 			clearInputs: () =>
 				set({
 					fromAmount: null,

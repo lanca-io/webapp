@@ -8,7 +8,7 @@ import { TokenMenu } from '../TokenMenu/TokenMenu'
 import { TokenNotFound } from '../TokenNotFound/TokenNotFound'
 import { useAssetSearch } from '../../../hooks/useAssetSearch'
 import { useTokenSelection } from '../../../hooks/useTokenSelection'
-import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll'
+import { useScroll } from './useScroll'
 import './AssetModal.pcss'
 
 interface ModalProps {
@@ -20,9 +20,17 @@ interface ModalProps {
 }
 
 export const AssetsModal = memo(
-	({ isOpen, onClose, onSelect, onChainSelect, selectedChain }: ModalProps): JSX.Element => {
-		const { isActive, hasResults, setActive, setResults, updateSearch } = useAssetSearch(selectedChain)
-		const { tokens, searchTokens, isLoading, offset, setOffset } = useTokenSelection(selectedChain)
+	({
+		isOpen,
+		onClose,
+		onSelect,
+		onChainSelect,
+		selectedChain,
+	}: ModalProps): JSX.Element => {
+		const { isActive, hasResults, setActive, setResults, updateSearch } =
+			useAssetSearch(selectedChain)
+		const { tokens, searchTokens, isLoading, offset, setOffset } =
+			useTokenSelection(selectedChain)
 		const loadMore = useCallback(() => {
 			setOffset(offset + 15)
 		}, [offset, setOffset])
@@ -35,7 +43,7 @@ export const AssetsModal = memo(
 			[isActive, loadMore],
 		)
 
-		const { ref } = useInfiniteScroll(config)
+		const { ref } = useScroll(config)
 
 		const search = useMemo(
 			() => (
@@ -56,7 +64,10 @@ export const AssetsModal = memo(
 		)
 
 		const chains = useMemo(
-			() => (!isActive ? <ChainMenu activeChain={selectedChain} onChainClick={onChainSelect} /> : null),
+			() =>
+				!isActive ? (
+					<ChainMenu activeChain={selectedChain} onChainClick={onChainSelect} />
+				) : null,
 			[isActive, selectedChain, onChainSelect],
 		)
 
@@ -75,7 +86,12 @@ export const AssetsModal = memo(
 		)
 
 		return (
-			<Modal title="Select a token and chain" isOpen={isOpen} onClose={onClose} onBackdropClick={onClose}>
+			<Modal
+				title="Select a token and chain"
+				isOpen={isOpen}
+				onClose={onClose}
+				onBackdropClick={onClose}
+			>
 				{search}
 				{notFound}
 				<div className="scroll_content" ref={ref}>

@@ -1,11 +1,14 @@
 import { useCallback, useMemo } from 'react'
-import { textToAmount } from '../utils/new/input'
+import { textToAmount } from '../utils/input'
 import { useFormStore } from '../store/form/useFormStore'
 import { ExtendedToken } from '../store/tokens/types'
-import { preciseDivide, preciseMultiply } from '../utils/new/operations'
+import { preciseDivide, preciseMultiply } from '../utils/operations'
 import { Decimal } from 'decimal.js'
 
-export const useTextInputValidator = (input: string, token: ExtendedToken | null) => {
+export const useTextInputValidator = (
+	input: string,
+	token: ExtendedToken | null,
+) => {
 	const { setAmountInputError, setFromAmount } = useFormStore()
 	const balanceStr = token?.balance ?? '0'
 	const symbol = token?.symbol ?? ''
@@ -24,7 +27,11 @@ export const useTextInputValidator = (input: string, token: ExtendedToken | null
 
 			const humanAmt = textToAmount(input, balanceDec)
 			if (!humanAmt) {
-				return { valid: false, error: 'Invalid amount format', machineAmt: null }
+				return {
+					valid: false,
+					error: 'Invalid amount format',
+					machineAmt: null,
+				}
 			}
 
 			const humanDec = new Decimal(humanAmt.toString())

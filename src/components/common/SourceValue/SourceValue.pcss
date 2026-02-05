@@ -3,7 +3,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	gap: var(--sp-xs);
+	gap: var(--space-xxs);
 	cursor: pointer;
 	transition: background-color 0.2s ease;
 	position: relative;
@@ -17,25 +17,25 @@
 
 .src_value_indicator_equal {
 	font-weight: 400;
-	color: var(--color-grey-500);
+	color: var(--color-gray-500);
 }
 
 .src_value_indicator_value {
 	font-weight: 400;
-	color: var(--color-grey-600);
+	color: var(--color-gray-600);
 	transition:
 		color 0.2s ease,
 		font-weight 0.1s ease;
 }
 
 .src_value_indicator:hover .src_value_indicator_value {
-	color: var(--color-grey-700);
+	color: var(--color-gray-700);
 	font-weight: 500;
 }
 
 .src_value_indicator_icon {
 	position: absolute;
-	left: calc(100% + var(--sp-xs));
+	left: calc(100% + var(--space-xxs));
 	top: 50%;
 	transform: translateY(-50%);
 	width: 0;
@@ -59,6 +59,6 @@
 }
 
 .src_value_indicator:focus-visible {
-	outline: 2px solid var(--color-primary-300);
+	outline: 2px solid var(--color-accent-300);
 	outline-offset: 1px;
 }

@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { InfoIcon } from '../../../assets/icons/InfoIcon'
+import { InfoIcon } from '@/assets/InfoIcon'
 import { FeesContent } from './FeesContent/FeesContent'
 import { ImpactSeverity } from '../../../hooks/useEstimatePriceImpact'
 import './FeesDropdown.pcss'
@@ -10,7 +10,10 @@ type FeesDropdownProps = {
 }
 
 export const FeesDropdown = memo(({ severity }: FeesDropdownProps) => {
-	const tooltipContent = useMemo(() => <FeesContent severity={severity} />, [severity])
+	const tooltipContent = useMemo(
+		() => <FeesContent severity={severity} />,
+		[severity],
+	)
 
 	return (
 		<Tooltip

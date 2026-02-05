@@ -11,7 +11,10 @@ export const RouteSection: FC = () => {
 		<div className="route_section">
 			<p className="route_section_heading">Route</p>
 			<div className="route_section_content">
-				{!isLoading && route?.steps.map((step, index) => <RouteStep key={index} step={step} />)}
+				{!isLoading &&
+					route?.steps.map((step, index) => (
+						<RouteStep key={index} step={step} />
+					))}
 				{isLoading && (
 					<div className="route_section_loader">
 						<Spinner type="gray" />

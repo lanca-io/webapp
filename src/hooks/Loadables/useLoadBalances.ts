@@ -8,7 +8,7 @@ import { useAccount } from 'wagmi'
 import { useChainsStore } from '../../store/chains/useChainsStore'
 import { useTxProcess } from '../useTxProcess'
 import { Status } from '@lanca/sdk'
-import { areTokensEqual } from '../../utils/new/tokens'
+import { areTokensEqual } from '../../utils/tokens'
 
 const REFRESH_INTERVAL_MS = 300_000
 const MAX_RETRIES = 2
@@ -22,7 +22,10 @@ export const useLoadBalances = () => {
 
 	const chainsArray = useMemo(() => Object.values(chains), [chains])
 
-	const chainIdsKey = useMemo(() => Object.keys(chains).sort().join(','), [chains])
+	const chainIdsKey = useMemo(
+		() => Object.keys(chains).sort().join(','),
+		[chains],
+	)
 
 	const fetchBalancesForChain = useCallback(
 		async (chainId: number): Promise<ExtendedToken[]> => {
@@ -50,10 +53,15 @@ export const useLoadBalances = () => {
 	const fetchAllBalances = useCallback(async () => {
 		if (!address || chainsArray.length === 0) return []
 
-		const results = await Promise.allSettled(chainsArray.map(chain => fetchBalancesForChain(chain.id)))
+		const results = await Promise.allSettled(
+			chainsArray.map(chain => fetchBalancesForChain(chain.id)),
+		)
 
 		return results
-			.filter((result): result is PromiseFulfilledResult<ExtendedToken[]> => result.status === 'fulfilled')
+			.filter(
+				(result): result is PromiseFulfilledResult<ExtendedToken[]> =>
+					result.status === 'fulfilled',
+			)
 			.flatMap(result => result.value)
 	}, [address, chainsArray, fetchBalancesForChain])
 
@@ -75,13 +83,16 @@ export const useLoadBalances = () => {
 				fromToken &&
 				balances.find(
 					token =>
-						token.address === fromToken.address && Number(token.chain_id) === Number(fromToken.chain_id),
+						token.address === fromToken.address &&
+						Number(token.chain_id) === Number(fromToken.chain_id),
 				)
 
 			const updatedToToken =
 				toToken &&
 				balances.find(
-					token => token.address === toToken.address && Number(token.chain_id) === Number(toToken.chain_id),
+					token =>
+						token.address === toToken.address &&
+						Number(token.chain_id) === Number(toToken.chain_id),
 				)
 
 			if (fromToken) {

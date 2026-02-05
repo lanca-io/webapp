@@ -3,11 +3,15 @@ import { memo, useMemo } from 'react'
 import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'
 import { Status, StepType } from '@lanca/sdk'
 import { Alert } from '../../Alert/Alert'
-import { SignIcon } from '../../../../assets/icons/SignIcon'
-import { DangerIcon } from '../../../../assets/icons/DangerIcon'
+import { SignIcon } from '@/assets/SignIcon'
+import { DangerIcon } from '@/assets/DangerIcon'
 import './ProcessInfo.pcss'
 
-export type FailureStep = StepType.ALLOWANCE | StepType.BRIDGE | StepType.SRC_SWAP | StepType.DST_SWAP
+export type FailureStep =
+	| StepType.ALLOWANCE
+	| StepType.BRIDGE
+	| StepType.SRC_SWAP
+	| StepType.DST_SWAP
 
 export type FailureReason = 'rejected' | 'failed'
 
@@ -58,17 +62,29 @@ export const ProcessInfo: FC = memo(() => {
 
 	const currentStep = useMemo(() => {
 		return steps.find(
-			step => step.status === Status.PENDING || step.status === Status.REJECTED || step.status === Status.FAILED,
+			step =>
+				step.status === Status.PENDING ||
+				step.status === Status.REJECTED ||
+				step.status === Status.FAILED,
 		)?.type
 	}, [steps])
 
 	const isFailureStep = (step?: StepType): step is FailureStep => {
-		return !!step && [StepType.ALLOWANCE, StepType.BRIDGE, StepType.SRC_SWAP, StepType.DST_SWAP].includes(step)
+		return (
+			!!step &&
+			[
+				StepType.ALLOWANCE,
+				StepType.BRIDGE,
+				StepType.SRC_SWAP,
+				StepType.DST_SWAP,
+			].includes(step)
+		)
 	}
 
 	const failureDetails = useMemo<FailureInfoProps | null>(() => {
 		if ([Status.REJECTED, Status.FAILED].includes(overallStatus)) {
-			const reason: FailureReason = overallStatus === Status.REJECTED ? 'rejected' : 'failed'
+			const reason: FailureReason =
+				overallStatus === Status.REJECTED ? 'rejected' : 'failed'
 			if (isFailureStep(currentStep)) {
 				return { step: currentStep, reason }
 			}
@@ -76,7 +92,9 @@ export const ProcessInfo: FC = memo(() => {
 		return null
 	}, [overallStatus, currentStep])
 
-	const isApprovalPending = steps.some(s => s.type === StepType.ALLOWANCE && s.status === Status.PENDING)
+	const isApprovalPending = steps.some(
+		s => s.type === StepType.ALLOWANCE && s.status === Status.PENDING,
+	)
 
 	return (
 		<>

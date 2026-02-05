@@ -3,15 +3,17 @@
 	height: 100%;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 10;
 	background: rgba(51, 59, 63, 0.25);
 	backdrop-filter: blur(18px) saturate(120%);
-	padding: var(--sp-xxxl) var(--sp-lg);
+	padding: var(--space-xxxl) var(--space-m);
 	will-change: opacity;
-	animation: modal-backdrop-fade-in 200ms cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
+	animation: modal-backdrop-fade-in 200ms cubic-bezier(0.39, 0.575, 0.565, 1)
+		forwards;
 	overflow-y: auto;
 }
 
@@ -32,17 +34,18 @@
 	width: 100%;
 	max-height: 860px;
 	height: 100%;
-	padding: var(--sp-lg);
-	gap: var(--sp-lg);
+	padding: var(--space-m);
+	gap: var(--space-m);
 	flex-shrink: 0;
 	align-self: center;
-	background: var(--color-grey-25);
-	border-radius: var(--sp-xl);
+	background: var(--color-gray-25);
+	border-radius: var(--space-l);
 	overflow: hidden;
 	position: relative;
 	opacity: 0;
 	transform: translateY(40px) scale(0.98);
-	animation: modal-slide-fade-in 220ms cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
+	animation: modal-slide-fade-in 220ms cubic-bezier(0.39, 0.575, 0.565, 1)
+		forwards;
 }
 
 .modal_secondary {

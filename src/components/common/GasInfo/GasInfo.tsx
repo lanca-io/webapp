@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { GasIcon } from '../../../assets/icons/GasIcon'
+import { GasIcon } from '@/assets/GasIcon'
 import { useEstimateGas } from '../../../hooks/useEstimateGas'
-import { format } from '../../../utils/new/format'
+import { format } from '../../../utils/format'
 import { useRouteStore } from '../../../store/route/useRouteStore'
 import './GasInfo.pcss'
 

@@ -4,7 +4,9 @@ import { RoutesContext } from './RouteContext'
 export const useRouteStore = () => {
 	const useStore = useContext(RoutesContext)
 	if (!useStore) {
-		throw new Error(`You forgot to wrap your component in <RoutesStoreProvider>.`)
+		throw new Error(
+			`You forgot to wrap your component in <RoutesStoreProvider>.`,
+		)
 	}
 
 	const route = useStore(state => state.route)

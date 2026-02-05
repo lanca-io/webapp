@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import { SwapIcon } from '../../../assets/icons/SwapIcon'
+import { SwapIcon } from '@/assets/SwapIcon'
 import { useFormStore } from '../../../store/form/useFormStore'
 import { useIsMobile, useIsTablet } from '../../../hooks/useMediaQuery'
 import './CardSwitcher.pcss'
@@ -55,7 +55,11 @@ export const CardSwitcher = (): JSX.Element => {
 	}, [setupObserver])
 
 	return (
-		<div className="card_switcher" style={{ top: `${top}px` }} role="presentation">
+		<div
+			className="card_switcher"
+			style={{ top: `${top}px` }}
+			role="presentation"
+		>
 			<IconButton
 				size="s"
 				variant="secondary"

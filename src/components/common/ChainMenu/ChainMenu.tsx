@@ -9,37 +9,39 @@ type MenuProps = {
 	onChainClick: (chain: ConceroChain) => void
 }
 
-export const ChainMenu = memo(({ activeChain, onChainClick }: MenuProps): JSX.Element => {
-	const { chains } = useChainsStore()
+export const ChainMenu = memo(
+	({ activeChain, onChainClick }: MenuProps): JSX.Element => {
+		const { chains } = useChainsStore()
 
-	const chainsArray = useMemo(() => Object.values(chains), [chains])
+		const chainsArray = useMemo(() => Object.values(chains), [chains])
 
-	const handleChainClick = useCallback(
-		(chain: ConceroChain) => {
-			return (e: React.MouseEvent) => {
-				e.preventDefault()
-				onChainClick(chain)
-			}
-		},
-		[onChainClick],
-	)
+		const handleChainClick = useCallback(
+			(chain: ConceroChain) => {
+				return (e: React.MouseEvent) => {
+					e.preventDefault()
+					onChainClick(chain)
+				}
+			},
+			[onChainClick],
+		)
 
-	return (
-		<div className="chain_menu">
-			<h4 className="chain_menu_title">Chains</h4>
-			<div className="chain_menu_container">
-				<div className="chain_menu_grid">
-					{chainsArray.map(chain => (
-						<Chain
-							key={chain.id}
-							name={chain.name}
-							logoURL={chain.logo || ''}
-							onClick={handleChainClick(chain)}
-							isActive={activeChain?.id === chain.id}
-						/>
-					))}
+		return (
+			<div className="chain_menu">
+				<h4 className="chain_menu_title">Chains</h4>
+				<div className="chain_menu_container">
+					<div className="chain_menu_grid">
+						{chainsArray.map(chain => (
+							<Chain
+								key={chain.id}
+								name={chain.name}
+								logoURL={chain.logo || ''}
+								onClick={handleChainClick(chain)}
+								isActive={activeChain?.id === chain.id}
+							/>
+						))}
+					</div>
 				</div>
 			</div>
-		</div>
-	)
-})
+		)
+	},
+)

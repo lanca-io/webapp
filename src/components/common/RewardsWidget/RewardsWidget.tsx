@@ -1,6 +1,6 @@
 import { useMemo, type FC } from 'react'
 import { Button } from '@concero/ui-kit'
-import { RewardIcon } from '../../../assets/icons/RewardIcon'
+import { RewardIcon } from '@/assets/RewardIcon'
 import './RewardsWidget.pcss'
 
 export const RewardsWidget: FC = (): JSX.Element => {
@@ -15,8 +15,16 @@ export const RewardsWidget: FC = (): JSX.Element => {
 						Claim your<span> CERs reward</span>
 					</p>
 				</div>
-				<a href="https://app.concero.io/rewards" target="_blank" rel="noopener noreferrer">
-					<Button variant="secondary_color" size="m" className="reward_widget_button">
+				<a
+					href="https://app.concero.io/rewards"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<Button
+						variant="secondary_color"
+						size="m"
+						className="reward_widget_button"
+					>
 						Claim
 					</Button>
 				</a>

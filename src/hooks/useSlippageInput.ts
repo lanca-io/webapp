@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { defaultSlippage } from '../store/settings/CreateSettingsStore'
-import { normalizeSlippageInput } from '../utils/new/input'
+import { normalizeSlippageInput } from '../utils/input'
 import { useDebounce } from './useDebounce'
 import { useSettingsStore } from '../store/settings/useSettings'
 import { useFormStore } from '../store/form/useFormStore'
@@ -14,10 +14,18 @@ const MAX_PERCENT = 99
 
 export const useSlippageInput = () => {
 	const { slippage, setSlippage } = useSettingsStore()
-	const { slippageInput, slippageInputMode, setSlippageInput, setSlippageMode, setSlippageInputFocused } =
-		useFormStore()
+	const {
+		slippageInput,
+		slippageInputMode,
+		setSlippageInput,
+		setSlippageMode,
+		setSlippageInputFocused,
+	} = useFormStore()
 
-	const isAutoMode = useMemo(() => slippageInputMode === SlippageMode.Auto, [slippageInputMode])
+	const isAutoMode = useMemo(
+		() => slippageInputMode === SlippageMode.Auto,
+		[slippageInputMode],
+	)
 	const defaultDisplay = useMemo(() => `${Number(defaultSlippage) * 100}%`, [])
 	const debouncedInput = useDebounce(slippageInput, DEBOUNCE_MS)
 
@@ -72,7 +80,10 @@ export const useSlippageInput = () => {
 			const cleanValue = normalizeSlippageInput(e.target.value)
 
 			if (VALID_INPUT_REGEX.test(cleanValue.replace('%', ''))) {
-				const numericValue = Math.min(Number(cleanValue.replace('%', '')), MAX_PERCENT)
+				const numericValue = Math.min(
+					Number(cleanValue.replace('%', '')),
+					MAX_PERCENT,
+				)
 				setSlippageInput(numericValue === MAX_PERCENT ? '99%' : cleanValue)
 			}
 		},
@@ -94,7 +105,13 @@ export const useSlippageInput = () => {
 			}
 		}
 		setSlippageInputFocused(false)
-	}, [slippageInput, setSlippage, setSlippageMode, setSlippageInput, setSlippageInputFocused])
+	}, [
+		slippageInput,
+		setSlippage,
+		setSlippageMode,
+		setSlippageInput,
+		setSlippageInputFocused,
+	])
 
 	const handleFocus = useCallback(() => {
 		setSlippageMode(SlippageMode.Custom)

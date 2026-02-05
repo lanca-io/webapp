@@ -10,10 +10,12 @@ export const CreateModalsStore = () =>
 			fromChain: null,
 			toChain: null,
 			openFromAssetModal: () => set({ isFromAssetModalOpen: true }),
-			closeFromAssetModal: () => set({ isFromAssetModalOpen: false, fromChain: null }),
+			closeFromAssetModal: () =>
+				set({ isFromAssetModalOpen: false, fromChain: null }),
 			setFromChain: (chain: ConceroChain | null) => set({ fromChain: chain }),
 			openToAssetModal: () => set({ isToAssetModalOpen: true }),
-			closeToAssetModal: () => set({ isToAssetModalOpen: false, toChain: null }),
+			closeToAssetModal: () =>
+				set({ isToAssetModalOpen: false, toChain: null }),
 			setToChain: (chain: ConceroChain | null) => set({ toChain: chain }),
 		}),
 		Object.is,

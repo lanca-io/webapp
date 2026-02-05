@@ -6,7 +6,8 @@ import { AddressInfo } from '../AddressInfo/AddressInfo'
 import './AddressCard.pcss'
 
 export const AddressCard: FC = () => {
-	const { addressInput, amountInputFocused, addressInputFocused } = useFormStore()
+	const { addressInput, amountInputFocused, addressInputFocused } =
+		useFormStore()
 	const { onChange, onFocus, onBlur } = useAddressInputHandlers()
 
 	const isCompact = amountInputFocused && !addressInputFocused

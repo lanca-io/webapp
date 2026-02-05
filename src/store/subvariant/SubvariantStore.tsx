@@ -11,5 +11,9 @@ export function SubvariantStoreProvider({ children }: PropsWithChildren) {
 		storeRef.current = CreateSubvariantStore()
 	}
 
-	return <SubvariantContext.Provider value={storeRef.current}>{children}</SubvariantContext.Provider>
+	return (
+		<SubvariantContext.Provider value={storeRef.current}>
+			{children}
+		</SubvariantContext.Provider>
+	)
 }

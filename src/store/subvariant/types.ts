@@ -15,4 +15,6 @@ export type SubvariantActions = {
 }
 
 export type SubvariantState = SubvariantStateSlice & SubvariantActions
-export type SubvariantStore = UseBoundStoreWithEqualityFn<StoreApi<SubvariantState>>
+export type SubvariantStore = UseBoundStoreWithEqualityFn<
+	StoreApi<SubvariantState>
+>

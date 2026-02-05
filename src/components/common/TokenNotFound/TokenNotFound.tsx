@@ -3,7 +3,12 @@ import './TokenNotFound.pcss'
 
 export const TokenNotFound = memo(
 	(): JSX.Element => (
-		<div className="token_not_found" role="status" aria-live="polite" aria-label="No tokens found">
+		<div
+			className="token_not_found"
+			role="status"
+			aria-live="polite"
+			aria-label="No tokens found"
+		>
 			<img
 				src="/NotFound.png"
 				alt=""

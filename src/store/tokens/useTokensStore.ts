@@ -4,7 +4,9 @@ import { TokensContext } from './TokensContext'
 export const useTokensStore = () => {
 	const useStore = useContext(TokensContext)
 	if (!useStore) {
-		throw new Error(`You forgot to wrap your component in <TokensStoreProvider>.`)
+		throw new Error(
+			`You forgot to wrap your component in <TokensStoreProvider>.`,
+		)
 	}
 
 	const tokens = useStore(state => state.tokens)

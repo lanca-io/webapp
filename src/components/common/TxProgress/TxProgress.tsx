@@ -1,5 +1,5 @@
 import { FC, memo, useMemo, Fragment } from 'react'
-import { RightIcon } from '../../../assets/icons/RightIcon'
+import { RightIcon } from '@/assets/RightIcon'
 import { TxStep } from '../TxStep/TxStep'
 import { useTxExecutionStore } from '../../../store/tx-execution/useTxExecutionStore'
 import { Status } from '@lanca/sdk'
@@ -14,7 +14,9 @@ export const TxProgress: FC = memo((): JSX.Element | null => {
 				{steps.map((step, index) => (
 					<Fragment key={`${step.type}-${index}`}>
 						<TxStep step={step.type} status={step.status} />
-						{index < steps.length - 1 && <RightIcon color="var(--color-grey-300)" />}
+						{index < steps.length - 1 && (
+							<RightIcon color="var(--color-gray-300)" />
+						)}
 					</Fragment>
 				))}
 			</>

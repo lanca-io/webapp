@@ -20,6 +20,7 @@ export type ConceroChain = {
 	testnet: boolean
 	contracts: {
 		orchestrator: string
+		bridge_lbf?: string
 	}
 }
 
@@ -35,4 +36,6 @@ export type ChainsActions = {
 	setLoading: (loading: boolean) => void
 }
 
-export type ChainsStore = UseBoundStoreWithEqualityFn<StoreApi<ChainsState & ChainsActions>>
+export type ChainsStore = UseBoundStoreWithEqualityFn<
+	StoreApi<ChainsState & ChainsActions>
+>

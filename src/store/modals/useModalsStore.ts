@@ -4,7 +4,9 @@ import { ModalsContext } from './ModalsContext'
 export const useModalsStore = () => {
 	const useStore = useContext(ModalsContext)
 	if (!useStore) {
-		throw new Error(`You forgot to wrap your component in <ModalsStoreProvider>.`)
+		throw new Error(
+			`You forgot to wrap your component in <ModalsStoreProvider>.`,
+		)
 	}
 
 	const isFromAssetModalOpen = useStore(state => state.isFromAssetModalOpen)

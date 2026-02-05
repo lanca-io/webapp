@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { memo, useCallback } from 'react'
 import { IconButton } from '@concero/ui-kit'
-import { LeftIcon } from '../../../../assets/icons/LeftIcon'
+import { LeftIcon } from '@/assets/LeftIcon'
 import { useTxProcess } from '../../../../hooks/useTxProcess'
 import { useProcessHeading } from '../../../../hooks/useProcessHeading'
 import { useTxExecutionStore } from '../../../../store/tx-execution/useTxExecutionStore'
@@ -20,9 +20,16 @@ export const ProcessHeading: FC = memo(() => {
 	}, [reset, clearInputs])
 
 	return (
-		<div className={`process_card_heading ${!isTerminalStage ? 'process_card_heading_no_button' : ''}`}>
+		<div
+			className={`process_card_heading ${!isTerminalStage ? 'process_card_heading_no_button' : ''}`}
+		>
 			{isTerminalStage && (
-				<IconButton onClick={handleReset} variant="secondary" size="m" aria-label="Back to swap">
+				<IconButton
+					onClick={handleReset}
+					variant="secondary"
+					size="m"
+					aria-label="Back to swap"
+				>
 					<LeftIcon />
 				</IconButton>
 			)}

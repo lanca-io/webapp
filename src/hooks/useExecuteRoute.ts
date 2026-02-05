@@ -19,7 +19,9 @@ export const useExecuteRoute = (route: IRouteType | null) => {
 	const sdk = useLancaSDK()
 	const updateHandler = useExecutionListener()
 
-	const configRef = useRef<IExecutionConfig>({ updateRouteStatusHook: updateHandler })
+	const configRef = useRef<IExecutionConfig>({
+		updateRouteStatusHook: updateHandler,
+	})
 
 	const executeRoute = useCallback(async () => {
 		if (!route) return null
@@ -37,7 +39,12 @@ export const useExecuteRoute = (route: IRouteType | null) => {
 
 			if (state === SplitSubvariantType.SEND && toAddress) {
 				// @ts-ignore
-				return await sdk.executeRoute(route, client, configRef.current, toAddress as Address)
+				return await sdk.executeRoute(
+					route,
+					client,
+					configRef.current,
+					toAddress as Address,
+				)
 			}
 			// @ts-ignore
 			return await sdk.executeRoute(route, client, configRef.current)

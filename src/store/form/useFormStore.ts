@@ -42,7 +42,9 @@ export const useFormStore = () => {
 	const setSlippageInput = useStore(state => state.setSlippageInput)
 	const setSlippageInputError = useStore(state => state.setSlippageInputError)
 	const setSlippageMode = useStore(state => state.setSlippageMode)
-	const setSlippageInputFocused = useStore(state => state.setSlippageInputFocused)
+	const setSlippageInputFocused = useStore(
+		state => state.setSlippageInputFocused,
+	)
 	const clearInputs = useStore(state => state.clearInputs)
 	const swap = useStore(state => state.swap)
 

@@ -4,7 +4,9 @@ import { TxExecutionContext } from './TxExecutionContext'
 export const useTxExecutionStore = () => {
 	const useStore = useContext(TxExecutionContext)
 	if (!useStore) {
-		throw new Error('You forgot to wrap your component in <TxExecutionStoreProvider>.')
+		throw new Error(
+			'You forgot to wrap your component in <TxExecutionStoreProvider>.',
+		)
 	}
 
 	const steps = useStore(state => state.steps)

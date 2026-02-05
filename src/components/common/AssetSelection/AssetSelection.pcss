@@ -1,26 +1,26 @@
 .asset_selection {
 	display: flex;
 	flex-direction: row;
-	padding: var(--sp-xs) var(--sp-md);
+	padding: var(--space-xxs) var(--space-s);
 	align-items: center;
-	gap: var(--sp-sm);
-	border-radius: var(--sp-md);
+	gap: var(--space-xs);
+	border-radius: var(--space-s);
 	transition: 300ms ease-in;
 	cursor: pointer;
 }
 
 .asset_selection:focus {
 	box-shadow:
-		0px 0px 0px 2px var(--color-grey-25),
-		0px 0px 0px 4px var(--color-primary-500);
+		0px 0px 0px 2px var(--color-gray-25),
+		0px 0px 0px 4px var(--color-accent-500);
 }
 
 .asset_selection:hover {
-	background-color: var(--color-grey-100);
+	background-color: var(--color-gray-100);
 }
 
 .asset_selection:active {
-	background-color: var(--color-grey-200);
+	background-color: var(--color-gray-200);
 }
 
 .asset_selection_pointer {
@@ -36,7 +36,7 @@
 }
 
 .asset_selection--disabled {
-	color: var(--color-grey-400, #bbbbbb);
+	color: var(--color-gray-400, #bbbbbb);
 	cursor: not-allowed;
 	pointer-events: none;
 }
@@ -44,6 +44,6 @@
 .asset_selection--disabled:hover,
 .asset_selection--disabled:focus,
 .asset_selection--disabled:active {
-	background: var(--color-grey-50, #f7f7f7);
+	background: var(--color-gray-50, #f7f7f7);
 	box-shadow: none;
 }

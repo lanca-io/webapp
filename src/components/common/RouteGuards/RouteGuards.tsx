@@ -12,7 +12,8 @@ export const AdminRoutesGuard: FC = (): JSX.Element => {
 
 	useEffect(() => {
 		if (!isConnecting) {
-			const adminCheck = isConnected && address ? isAdminAddress(address) : false
+			const adminCheck =
+				isConnected && address ? isAdminAddress(address) : false
 			setIsAdmin(adminCheck)
 			setIsLoading(false)
 		}
@@ -22,5 +23,9 @@ export const AdminRoutesGuard: FC = (): JSX.Element => {
 		return <FullScreenLoader />
 	}
 
-	return isConnected && isAdmin ? <Outlet /> : <Navigate to={routes.home} replace />
+	return isConnected && isAdmin ? (
+		<Outlet />
+	) : (
+		<Navigate to={routes.home} replace />
+	)
 }

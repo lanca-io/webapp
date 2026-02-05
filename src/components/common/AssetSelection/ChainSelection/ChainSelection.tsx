@@ -7,15 +7,21 @@ type ChainSelectionProps = {
 	onClick?: () => void
 }
 
-export const ChainSelection = memo(({ logoURI, name, onClick }: ChainSelectionProps): JSX.Element => {
-	const handleClick = useCallback(() => {
-		onClick?.()
-	}, [onClick])
+export const ChainSelection = memo(
+	({ logoURI, name, onClick }: ChainSelectionProps): JSX.Element => {
+		const handleClick = useCallback(() => {
+			onClick?.()
+		}, [onClick])
 
-	return (
-		<div className="chain_selection" onClick={handleClick}>
-			<img src={logoURI} alt={name || 'Chain logo'} className="chain_selection_logo" />
-			<p className="chain_selection_name">{name}</p>
-		</div>
-	)
-})
+		return (
+			<div className="chain_selection" onClick={handleClick}>
+				<img
+					src={logoURI}
+					alt={name || 'Chain logo'}
+					className="chain_selection_logo"
+				/>
+				<p className="chain_selection_name">{name}</p>
+			</div>
+		)
+	},
+)

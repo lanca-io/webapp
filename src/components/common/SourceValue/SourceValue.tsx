@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react'
 import { useValueConversion } from '../../../hooks/useValueConversion'
 import { useFormStore } from '../../../store/form/useFormStore'
-import { SwapIcon } from '../../../assets/icons/SwapIcon'
+import { SwapIcon } from '@/assets/SwapIcon'
 import { Mode } from '../../../store/form/types'
-import { format } from '../../../utils/new/format'
+import { format } from '../../../utils/format'
 import './SourceValue.pcss'
 
 export const SourceValue = memo((): JSX.Element => {

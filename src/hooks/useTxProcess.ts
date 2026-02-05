@@ -3,7 +3,13 @@ import { useTxExecutionStore } from '../store/tx-execution/useTxExecutionStore'
 import { Status } from '@lanca/sdk'
 
 export const useTxProcess = () => {
-	const { overallStatus: txStatus, steps, srcHash, dstHash, executionTime } = useTxExecutionStore()
+	const {
+		overallStatus: txStatus,
+		steps,
+		srcHash,
+		dstHash,
+		executionTime,
+	} = useTxExecutionStore()
 
 	const currentStage = useMemo(() => {
 		switch (txStatus) {
@@ -21,7 +27,9 @@ export const useTxProcess = () => {
 	}, [txStatus])
 
 	const currentStep = useMemo(() => {
-		const activeStep = steps.find(step => [Status.PENDING, Status.REJECTED, Status.FAILED].includes(step.status))
+		const activeStep = steps.find(step =>
+			[Status.PENDING, Status.REJECTED, Status.FAILED].includes(step.status),
+		)
 		return activeStep?.type || null
 	}, [steps])
 

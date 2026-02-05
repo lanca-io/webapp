@@ -1,0 +1,39 @@
+.pool_action_asset_panel {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--space-xs);
+	padding: var(--space-xxs) var(--space-xs);
+
+	& .pool_action_panel_pointer {
+		color: var(--color-gray-500);
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.125rem;
+	}
+
+	& .pool_action_panel_container {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+
+		& .pool_action_asset_img {
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+		}
+
+		& .pool_action_chain_img {
+			width: 32px;
+			height: 32px;
+			border-radius: 12px;
+		}
+
+		& .pool_action_panel_text {
+			font-size: 1rem;
+			font-weight: 500;
+			line-height: 1.125rem;
+			color: var(--color-gray-700);
+		}
+	}
+}

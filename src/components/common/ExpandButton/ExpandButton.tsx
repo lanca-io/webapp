@@ -15,7 +15,12 @@ export const ExpandButton: FC<ExpandProps> = ({ isExpanded, onToggle }) => {
 
 	const button = useMemo(
 		() => (
-			<Button size="s" variant="secondary" onClick={handleToggle} className="expand_button">
+			<Button
+				size="s"
+				variant="secondary"
+				onClick={handleToggle}
+				className="expand_button"
+			>
 				{isExpanded ? 'Show Less' : 'Show More'}
 			</Button>
 		),

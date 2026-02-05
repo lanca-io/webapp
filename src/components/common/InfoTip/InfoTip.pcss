@@ -1,0 +1,33 @@
+.info_tooltip {
+	display: flex;
+	flex-direction: column;
+	max-width: 224px;
+	width: 100%;
+
+	& .info_tooltip_content {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xxs);
+		width: 100%;
+
+		& .info_tooltip_title {
+			font-size: 1rem;
+			font-weight: 500;
+			color: var(--color-gray-100);
+			line-height: 1.25rem;
+		}
+
+		& .info_tooltip_description {
+			font-size: 0.875rem;
+			font-weight: 500;
+			color: var(--color-gray-300);
+			line-height: 1.125rem;
+		}
+	}
+}
+
+& .info_tooltip_icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

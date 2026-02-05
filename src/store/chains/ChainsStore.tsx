@@ -10,5 +10,9 @@ export function ChainsStoreProvider({ children }: PropsWithChildren<{}>) {
 		storeRef.current = CreateChainsStore()
 	}
 
-	return <ChainsContext.Provider value={storeRef.current}>{children}</ChainsContext.Provider>
+	return (
+		<ChainsContext.Provider value={storeRef.current}>
+			{children}
+		</ChainsContext.Provider>
+	)
 }

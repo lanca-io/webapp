@@ -18,7 +18,11 @@ export const ValueInfo = memo((): JSX.Element => {
 	return (
 		<div className="value_info_container" role="status" aria-live="polite">
 			{showError && (
-				<span className="value_info_title value_info_error" aria-live="assertive" role="alert">
+				<span
+					className="value_info_title value_info_error"
+					aria-live="assertive"
+					role="alert"
+				>
 					{amountInputError}
 				</span>
 			)}

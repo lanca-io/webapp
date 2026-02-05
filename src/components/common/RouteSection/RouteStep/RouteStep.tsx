@@ -1,7 +1,7 @@
 import type { IRouteStep, IRouteBaseStep } from '@lanca/sdk'
 import { memo } from 'react'
 import { RouteDirection } from '../RouteDirection/RouteDirection'
-import { getStepTitle, getToolName } from '../../../../utils/new/step'
+import { getStepTitle, getToolName } from '../../../../utils/step'
 import './RouteStep.pcss'
 
 type InnerStepCardProps = {

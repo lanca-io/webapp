@@ -1,0 +1,56 @@
+.chart_heading {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: var(--space-m) var(--space-m) 0 var(--space-m);
+	gap: var(--space-xs);
+	width: 100%;
+
+	& .chart_toolbar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+
+		& .chart_description {
+			display: flex;
+			align-items: center;
+			gap: var(--space-xs);
+
+			& .chart_label {
+				font-size: 1.125rem;
+				font-weight: 500;
+				line-height: 1.375rem;
+				color: var(--color-gray-700);
+			}
+
+			& .chart_tooltip_icon {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+	}
+
+	& .chart_total {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+
+		& .chart_total_symbol,
+		& .chart_total_value {
+			font-size: 2rem;
+			font-weight: 500;
+			line-height: 2.25rem;
+			color: var(--color-gray-700);
+		}
+
+		& .chart_total_suffix_divider,
+		& .chart_total_suffix {
+			font-size: 1.5rem;
+			font-weight: 500;
+			line-height: 1.75rem;
+			color: var(--color-gray-300);
+		}
+	}
+}

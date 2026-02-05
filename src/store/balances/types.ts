@@ -16,5 +16,7 @@ export type BalancesSelectors = {
 	getBalancesByChainId: (chainId: string) => ExtendedToken[]
 }
 
-export type BalancesState = BalancesStateSlice & BalancesActions & BalancesSelectors
+export type BalancesState = BalancesStateSlice &
+	BalancesActions &
+	BalancesSelectors
 export type BalancesStore = UseBoundStoreWithEqualityFn<StoreApi<BalancesState>>

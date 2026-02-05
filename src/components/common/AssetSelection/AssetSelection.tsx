@@ -2,7 +2,7 @@ import type { ExtendedToken } from '../../../store/tokens/types'
 import { memo } from 'react'
 import { TokenSelection } from './TokenSelection/TokenSelection'
 import { ChainSelection } from './ChainSelection/ChainSelection'
-import { TrailArrowRightIcon } from '../../../assets/icons/TrailArrowRightIcon'
+import { TrailRight } from '@/assets/TrailRight'
 import { ConceroChain } from '../../../store/chains/types'
 import './AssetSelection.pcss'
 
@@ -14,7 +14,12 @@ type AssetSelectionProps = {
 }
 
 export const AssetSelection = memo(
-	({ token, chain, openModal, disabled = false }: AssetSelectionProps): JSX.Element => {
+	({
+		token,
+		chain,
+		openModal,
+		disabled = false,
+	}: AssetSelectionProps): JSX.Element => {
 		const isDisabled = disabled || !openModal
 		const hasInteractiveElement = !isDisabled
 
@@ -34,7 +39,7 @@ export const AssetSelection = memo(
 
 				{hasInteractiveElement && (
 					<div className="asset_selection_arrow">
-						<TrailArrowRightIcon aria-hidden="true" />
+						<TrailRight aria-hidden="true" />
 					</div>
 				)}
 			</div>

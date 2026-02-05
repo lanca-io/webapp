@@ -44,7 +44,13 @@ export const useAddressInputHandlers = () => {
 			setAddressInputMode(mode)
 		}
 		validateInput()
-	}, [addressInput, addressInputMode, determineAddressMode, setAddressInputMode, validateInput])
+	}, [
+		addressInput,
+		addressInputMode,
+		determineAddressMode,
+		setAddressInputMode,
+		validateInput,
+	])
 
 	const onChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {

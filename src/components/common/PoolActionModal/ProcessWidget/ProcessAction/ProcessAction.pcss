@@ -1,0 +1,26 @@
+.pool_action_process_action {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 394px;
+	background-color: var(--color-gray-25);
+	border-bottom: 1px solid var(--color-gray-100);
+	border-radius: var(--space-l);
+	gap: var(--space-xs);
+	padding: var(--space-m);
+	position: relative;
+	z-index: 5;
+}
+
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+	.pool_action_process_action {
+		width: 448px;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.pool_action_process_action {
+		max-width: 100%;
+		width: 100%;
+	}
+}

@@ -29,10 +29,13 @@ const computeOverallStatus = (steps: StepExecution[]): Status => {
 	if (!steps.length) return Status.NOT_STARTED
 	const priorities = steps.map(s => STATUS_PRIORITY[s.status])
 	const minPriority = Math.min(...priorities)
-	return Object.entries(STATUS_PRIORITY).find(([_, value]) => value === minPriority)?.[0] as Status
+	return Object.entries(STATUS_PRIORITY).find(
+		([_, value]) => value === minPriority,
+	)?.[0] as Status
 }
 
-const arraysEqual = (a: StepType[], b: StepType[]) => a.length === b.length && a.every((val, i) => val === b[i])
+const arraysEqual = (a: StepType[], b: StepType[]) =>
+	a.length === b.length && a.every((val, i) => val === b[i])
 
 export const CreateTxExecutionStore = () =>
 	createWithEqualityFn<TxExecutionStateAndActions>(
@@ -83,7 +86,9 @@ export const CreateTxExecutionStore = () =>
 
 			setStepStatus: (type, status) => {
 				set(state => {
-					const steps = state.steps.map(s => (s.type === type ? { ...s, status } : s))
+					const steps = state.steps.map(s =>
+						s.type === type ? { ...s, status } : s,
+					)
 					return {
 						steps,
 						overallStatus: computeOverallStatus(steps),
@@ -93,7 +98,9 @@ export const CreateTxExecutionStore = () =>
 
 			setStepHash: (index, hash) => {
 				set(state => ({
-					steps: state.steps.map((s, i) => (i === index ? { ...s, txHash: hash } : s)),
+					steps: state.steps.map((s, i) =>
+						i === index ? { ...s, txHash: hash } : s,
+					),
 				}))
 			},
 

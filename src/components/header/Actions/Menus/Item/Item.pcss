@@ -1,0 +1,123 @@
+.dropdown_item {
+	display: flex;
+	flex-direction: row;
+	padding: var(--space-xs) var(--space-s);
+	align-items: center;
+	gap: var(--space-xxs);
+	width: 100%;
+	min-height: 40px;
+	cursor: pointer;
+	border-radius: 16px;
+
+	&:hover {
+		background: var(--color-gray-50);
+	}
+
+	& .dropdown_item_description {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+		flex: 1 0 0;
+
+		& .dropdown_item_icon {
+			width: 16px;
+			height: 16px;
+		}
+
+		& .dropdown_item_label {
+			font-size: 1rem;
+			line-height: 1.125rem;
+			font-weight: 400;
+			color: var(--color-gray-600);
+		}
+	}
+}
+
+.dropdown_item_expanded {
+	display: flex;
+	flex-direction: row;
+	padding: 0;
+	align-items: center;
+	gap: var(--space-xs);
+	width: 100%;
+	min-height: 48px;
+	cursor: pointer;
+	border-radius: 16px;
+
+	& .dropdown_item_expanded_description {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+		flex: 1 0 0;
+
+		& .dropdown_item_expanded_icon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 48px;
+			height: 48px;
+			border-radius: 16px;
+			background-color: var(--color-gray-50);
+			margin-right: var(--space-xxs);
+		}
+
+		& .dropdown_item_expanded_label {
+			font-size: 1rem;
+			line-height: 1.125rem;
+			font-weight: 400;
+			color: var(--color-gray-600);
+		}
+	}
+
+	&:hover {
+		& .dropdown_item_expanded_icon {
+			background-color: var(--color-accent-50);
+		}
+
+		& .dropdown_item_expanded_label {
+			color: var(--color-accent-600);
+		}
+
+		& .dropdown_item_expanded_icon svg,
+		& .dropdown_item_expanded_icon * svg,
+		& .dropdown_item_expanded_icon svg * {
+			fill: var(--color-accent-600) !important;
+		}
+	}
+}
+
+.dropdown_item_profile {
+	display: flex;
+	flex-direction: row;
+	padding: 0;
+	align-items: center;
+	gap: var(--space-xs);
+	width: 100%;
+	min-height: 48px;
+	cursor: pointer;
+	border-radius: 16px;
+
+	&:hover {
+		background: var(--color-gray-50);
+	}
+
+	& .dropdown_item_profile_description {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+		flex: 1 0 0;
+
+		& .dropdown_item_profile_icon {
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+		}
+
+		& .dropdown_item_profile_label {
+			font-size: 1rem;
+			line-height: 1.125rem;
+			font-weight: 400;
+			color: var(--color-gray-700);
+		}
+	}
+}
