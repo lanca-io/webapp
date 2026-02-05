@@ -73,7 +73,10 @@
 }
 
 @media (max-width: 640px) {
-	.pool_overview_charts {
-		flex-direction: column;
+	.pool_overview {
+		& .pool_overview_charts {
+			flex-direction: column;
+			gap: var(--space-m);
+		}
 	}
 }
