@@ -78,7 +78,7 @@ export const PoolCard = ({
 				disabledDepositButton
 			) : (
 				<Button
-					isDisabled={false}
+					isDisabled={true}
 					className={depositButtonClasses}
 					onClick={async () => {
 						await open()
@@ -92,7 +92,7 @@ export const PoolCard = ({
 
 		return (
 			<Button
-				isDisabled={false}
+				isDisabled={true}
 				className={depositButtonClasses}
 				size="lg"
 				isFull

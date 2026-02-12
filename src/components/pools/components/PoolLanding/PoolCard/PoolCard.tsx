@@ -136,7 +136,7 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 					isLoading={isLoading}
 				/>
 				<div className={classNames.buttons}>
-					{!isDisabled ? (
+					{!true ? (
 						<PoolButton
 							poolIsFilled={isPoolFilled}
 							depositButtonClasses={classNames.button}
@@ -148,7 +148,7 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 							size="md"
 							className={classNames.button}
 							variant="secondaryColor"
-							isDisabled={isDisabled}
+							isDisabled={true}
 						>
 							Deposit
 						</Button>
