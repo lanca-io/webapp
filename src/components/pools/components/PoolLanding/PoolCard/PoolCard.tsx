@@ -33,7 +33,7 @@ const PoolStatus = ({ isDisabled, isPoolFilled }: { isDisabled: boolean; isPoolF
 			)
 		) : (
 			<Tag className={classNames.poolStatus} size="sm" variant="neutral">
-				Coming soon
+				Depreciating soon
 			</Tag>
 		)}
 	</div>
@@ -159,7 +159,7 @@ export const PoolCard = ({ title, fees, icon, isDisabled }: PoolCardProps): JSX.
 							size="md"
 							className={classNames.button}
 							variant="secondaryColor"
-							isDisabled={isDisabled}
+							isDisabled={false}
 						>
 							Open Earnings
 						</Button>

@@ -7,9 +7,9 @@ import { RewardsCard } from './RewardsCard/RewardsCard'
 import { StatCard } from './StatCard/StatCard'
 import { PoolCard } from './PoolCard/PoolCard'
 import { PoolUSDC } from '../../../../assets/icons/PoolUSDC'
-import { PoolETH } from '../../../../assets/icons/PoolETH'
 import { RefreshIcon } from '../../../../assets/icons/RefreshIcon'
 import { LPIcon } from '../../../../assets/icons/LPIcon'
+import { DepreciationBanner } from '../../../layout/DepreciationBanner/DepreciationBanner'
 
 export const PoolLanding = (): JSX.Element => {
 	const { fees, isLoading: feesLoading } = useGetFees()
@@ -19,6 +19,7 @@ export const PoolLanding = (): JSX.Element => {
 	return (
 		<div className={classNames.container}>
 			<div className="gap-xxl">
+				<DepreciationBanner />
 				<div className="gap-lg">
 					<div className={classNames.section}>
 						<VolumeCard fees={fees} isLoading={feesLoading} />
@@ -43,8 +44,7 @@ export const PoolLanding = (): JSX.Element => {
 					<div className="gap-sm">
 						<h6 className={classNames.sectionHeading}>Pools</h6>
 						<div className={classNames.section}>
-							<PoolCard title="USDC" fees={fees} isDisabled={false} icon={<PoolUSDC />} />
-							<PoolCard title="ETH" fees={fees} isDisabled={true} icon={<PoolETH />} />
+							<PoolCard title="USDC" fees={fees} isDisabled={true} icon={<PoolUSDC />} />
 						</div>
 					</div>
 				</div>
