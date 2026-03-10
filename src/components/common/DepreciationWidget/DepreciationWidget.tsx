@@ -3,12 +3,15 @@ import { Lanca } from '../../../assets/icons/Lanca'
 import { PoolCard } from '../../pools/components/Pool/Pool'
 
 import classNames from './DepreciationWidget.module.pcss'
+import { UserActions } from '../../pools/components/ConceroPool/UserActions/UserActions'
+import { useAccount } from 'wagmi'
 
 type DepreciationWidgetProps = {
 	description: string
 }
 
 export const DepreciationWidget: FC<DepreciationWidgetProps> = ({ description }) => {
+	const { isConnected } = useAccount()
 	return (
 		<div className={classNames.container}>
 			<div className={classNames.icon}>
@@ -21,6 +24,7 @@ export const DepreciationWidget: FC<DepreciationWidgetProps> = ({ description })
 				</div>
 				<div className={classNames.action}>
 					<PoolCard isWithdrawOnly />
+					{isConnected && <UserActions />}
 				</div>
 			</div>
 		</div>

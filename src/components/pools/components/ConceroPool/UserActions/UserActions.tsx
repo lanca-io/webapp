@@ -4,12 +4,11 @@ import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { UserAction } from './Action/Action'
 import { Modal } from '../../../../modals/Modal/Modal'
-import { Button } from '../../../../layout/buttons/Button/Button'
-import { useQuery } from '../../../../../hooks/useQuery'
 import { IconButton } from '../../../../layout/buttons/IconButton/IconButton'
 import { CrossIcon } from '../../../../../assets/icons/CrossIcon'
 import { useGetUserActions } from '../../../hooks/useGetUserActions'
 import { getRemainingTime } from './timeCalculation'
+import { Button } from '@concero/ui-kit'
 
 export enum UserActionStatus {
 	ActiveRequestWithdraw = 'ActiveRequestWithdraw',
@@ -33,7 +32,6 @@ export function UserActions() {
 	const { address } = useAccount()
 	const [isOpen, setIsOpen] = useState(false)
 	const [retryTimeLeft, setRetryTimeLeft] = useState<number>(0)
-	const isMobile = useQuery('ipad')
 
 	const { actions, isLoading, error } = useGetUserActions(address, retryTimeLeft)
 
@@ -60,11 +58,11 @@ export function UserActions() {
 				onClick={() => {
 					setIsOpen(!isOpen)
 				}}
-				size="lg"
-				variant="secondary"
+				size="m"
+				variant="secondary_color"
 				className={classNames.actionButton}
 			>
-				{isMobile ? '' : 'Actions'} History
+				Actions History
 			</Button>
 			<Modal
 				position="top"
