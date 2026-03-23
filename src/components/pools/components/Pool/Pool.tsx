@@ -5,16 +5,18 @@ import { usePoolCardEffects } from './usePoolCardEffects'
 import { SwapInput } from './SwapInput/SwapInput'
 import { SwapProgress } from './SwapProgress/SwapProgress'
 import { PoolActionType, PoolCardStage } from './poolReducer/types'
-import { Button } from '../../../layout/buttons/Button/Button'
+import { Button as CustomButton } from '../../../layout/buttons/Button/Button'
 import { useAccount } from 'wagmi'
 import { useAppKit } from '@reown/appkit/react'
 import { TooltipWrapper } from '../../../wrappers/WithTooltip/TooltipWrapper'
 import { LancaSwap } from './Popups/LancaSwap/LancaSwap'
 import classNames from './Pool.module.pcss'
+import { Button } from '@concero/ui-kit'
 import { LPStreak } from './Popups/LPStreak/LPStreak'
 
 interface Props {
 	isDepositOnly?: boolean
+	isWithdrawOnly?: boolean
 	depositButtonClasses?: string
 	withdrawalButtonClasses?: string
 	poolIsFilled?: boolean
@@ -25,6 +27,7 @@ const poolDescription = 'The pool has reached its max capacity and you cannot de
 
 export const PoolCard = ({
 	isDepositOnly = false,
+	isWithdrawOnly = false,
 	depositButtonClasses,
 	withdrawalButtonClasses,
 	poolIsFilled,
@@ -64,9 +67,9 @@ export const PoolCard = ({
 					</div>
 				}
 			>
-				<Button className={depositButtonClasses} isFull isDisabled={true} size="lg">
+				<CustomButton className={depositButtonClasses} isFull isDisabled={true} size="lg">
 					Deposit
-				</Button>
+				</CustomButton>
 			</TooltipWrapper>
 		),
 		[depositButtonClasses],
@@ -77,7 +80,7 @@ export const PoolCard = ({
 			return isConnected ? (
 				disabledDepositButton
 			) : (
-				<Button
+				<CustomButton
 					isDisabled={true}
 					className={depositButtonClasses}
 					onClick={async () => {
@@ -86,12 +89,12 @@ export const PoolCard = ({
 					size="lg"
 				>
 					Connect wallet
-				</Button>
+				</CustomButton>
 			)
 		}
 
 		return (
-			<Button
+			<CustomButton
 				isDisabled={true}
 				className={depositButtonClasses}
 				size="lg"
@@ -102,27 +105,38 @@ export const PoolCard = ({
 				}}
 			>
 				Deposit
-			</Button>
+			</CustomButton>
 		)
 	}, [poolIsFilled, isConnected, depositButtonClasses, disabledDepositButton, open, poolDispatch])
 
-	const withdrawalButton = useMemo(
-		() => (
+	const withdrawalButton = useMemo(() => {
+		if (!isConnected) {
+			return (
+				<Button
+					className={withdrawalButtonClasses}
+					onClick={async () => {
+						await open()
+					}}
+					variant="primary"
+				>
+					Connect Wallet
+				</Button>
+			)
+		}
+
+		return (
 			<Button
-				isDisabled={!address || !userHasDeposited}
 				className={withdrawalButtonClasses}
 				onClick={() => {
 					poolDispatch({ type: PoolActionType.TOGGLE_POOL_MODE, payload: 'withdraw' })
 					setIsOpen(true)
 				}}
-				size="lg"
-				variant="secondaryColor"
+				variant="primary"
 			>
-				Withdraw
+				Withdraw Liquidity
 			</Button>
-		),
-		[address, userHasDeposited, withdrawalButtonClasses, poolDispatch],
-	)
+		)
+	}, [address, userHasDeposited, isConnected, withdrawalButtonClasses, open, poolDispatch])
 
 	const showPopup = useMemo(() => {
 		if (poolState.stage === PoolCardStage.input && poolState.poolMode === 'deposit' && poolState.inputError === 2) {
@@ -135,7 +149,9 @@ export const PoolCard = ({
 
 	return (
 		<>
-			{isDepositOnly ? (
+			{isWithdrawOnly ? (
+				withdrawalButton
+			) : isDepositOnly ? (
 				depositButton
 			) : (
 				<div className={classNames.buttons}>

@@ -1,6 +1,5 @@
 import type { FC } from 'react'
-import { SwapWidget } from '../common/SwapWidget/SwapWidget'
-import { ModalManager } from '../common/ModalManager/ModalManager'
+import { DepreciationWidget } from '../common/DepreciationWidget/DepreciationWidget'
 import { config } from '../../constants/config'
 import { TechWorksScreen } from '../screens/TechWorksScreen/TechWorksScreen'
 import './Swap.pcss'
@@ -11,8 +10,7 @@ export const Swap: FC = () => {
 	}
 	return (
 		<div className="swap">
-			<SwapWidget />
-			<ModalManager />
+			<DepreciationWidget description="We’re sunsetting the current pools and pausing swaps and bridges. If you provided liquidity, please withdraw it — pool support will end soon." />
 		</div>
 	)
 }

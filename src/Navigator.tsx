@@ -6,18 +6,10 @@ import { routes } from './constants/routes'
 import { FullScreenLoader } from './components/layout/FullScreenLoader/FullScreenLoader'
 import { useAccount } from 'wagmi'
 import posthog from 'posthog-js'
-// import { AdminRoutesGuard } from './components/common/RouteGuards/RouteGuards'
 
 const PoolScreen = lazy(
 	async () =>
 		await import('./components/screens/PoolScreen/PoolScreen').then(module => ({ default: module.PoolScreen })),
-)
-
-const USDCPoolScreen = lazy(
-	async () =>
-		await import('./components/screens/PoolScreen/USDCPoolScreen').then(module => ({
-			default: module.USDCPoolScreen,
-		})),
 )
 
 const V2Screen = lazy(
@@ -26,13 +18,6 @@ const V2Screen = lazy(
 			default: module.SwapPage,
 		})),
 )
-
-// const SwapScreen = lazy(
-// 	async () =>
-// 		await import('./components/screens/SwapScreen/SwapScreen').then(module => ({
-// 			default: module.SwapScreen,
-// 		})),
-// )
 
 export const Navigator = () => {
 	const { address } = useAccount()
@@ -67,20 +52,10 @@ export const Navigator = () => {
 						path={routes.usdcPools}
 						element={
 							<Suspense fallback={<FullScreenLoader />}>
-								<USDCPoolScreen />
+								<PoolScreen />
 							</Suspense>
 						}
 					/>
-					{/* <Route path={routes.v2} element={<AdminRoutesGuard />}>
-						<Route
-							path={routes.v2}
-							element={
-								<Suspense fallback={<FullScreenLoader />}>
-									<V2Screen />
-								</Suspense>
-							}
-						/>
-					</Route> */}
 					<Route path={'/*'} element={<Navigate to={routes.home} />} />
 				</Routes>
 			</AppScreen>

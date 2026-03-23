@@ -1,0 +1,72 @@
+.depreciation_banner {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+	padding: var(--space-s);
+	gap: var(--space-xs);
+	border-radius: 24px;
+	max-width: 608px;
+	margin: 0 auto;
+	background-color: var(--color-accent-50);
+}
+
+.depreciation_banner_content {
+	display: flex;
+	flex-direction: row;
+	padding-right: var(--sp-md);
+	align-items: flex-start;
+	gap: var(--space-xs);
+	flex: 1 0 0;
+}
+
+.depreciation_banner_icon {
+	display: flex;
+	min-width: 48px;
+	min-height: 48px;
+	align-items: center;
+	justify-content: center;
+	padding: var(--space-md);
+	border-radius: 12px;
+	background-color: var(--color-accent-25);
+}
+
+.deprectiation_banner_description {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	gap: var(--space-xxs);
+	flex: 1 0 0;
+}
+
+.depreciation_banner_title {
+	color: var(--color-accent-700);
+	font-size: 1.125rem;
+	font-weight: 500;
+	line-height: 22px;
+}
+
+.depreciation_banner_subtitle {
+	color: var(--color-accent-600);
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+.depreciation_banner_action {
+	flex-direction: row;
+	align-items: center;
+}
+
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+	.depreciation_banner {
+		max-width: 446px;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.depreciation_banner {
+		max-width: 100%;
+	}
+}
